@@ -1,0 +1,21 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`explainSentence (L3) > redacts the leaked reading in every form and says so 1`] = `
+{
+  "grammar": [
+    {
+      "note": "The polite past: the introducing is done. 紹介 is read as […] here.",
+      "pattern": "〜ました",
+    },
+  ],
+  "meaning": "Someone introduced a new friend to the teacher. 紹介 is the act of introducing, and します turns it into a verb; this recorded reply leaks the reading on purpose, also as […], so the no-spoil filter can be seen working.",
+  "readings": [
+    {
+      "reading": "せんせい",
+      "surface": "先生",
+      "verified": true,
+    },
+  ],
+  "redacted": true,
+}
+`;

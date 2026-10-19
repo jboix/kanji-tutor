@@ -1,0 +1,60 @@
+/* Settings → About → Credits: one ruled row per work, what it is over who made it, and its
+   licence as a small tag. */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 12px;
+  row-gap: 2px;
+  align-items: baseline;
+  padding: 12px 0;
+}
+
+.item + .item {
+  border-top: 1px solid var(--rule);
+}
+
+.what {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.by {
+  grid-column: 1;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+.by a,
+a.licence {
+  color: var(--accent);
+}
+
+.licence {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--paper-soft);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+/* The download is a link drawn as the section's pill button. */
+.download {
+  align-self: flex-start;
+  text-decoration: none;
+}

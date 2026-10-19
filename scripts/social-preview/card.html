@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Kanji Tutor social preview</title>
+    <link rel="stylesheet" href="{{fonts}}/klee-one/600.css" />
+    <link rel="stylesheet" href="{{fonts}}/zen-kaku-gothic-new/400.css" />
+    <link rel="stylesheet" href="{{fonts}}/zen-kaku-gothic-new/500.css" />
+    <link rel="stylesheet" href="{{fonts}}/zen-kaku-gothic-new/700.css" />
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+
+      /* 1280 by 640, GitHub's social preview. The colours are the app's Paper tokens
+         (src/ui/tokens.css): washi paper, sumi ink, 藍 indigo, and the hanko crimson that the app
+         keeps for its AI tutor. */
+      .card {
+        position: relative;
+        width: 1280px;
+        height: 640px;
+        overflow: hidden;
+        background:
+          radial-gradient(640px 520px at 1010px 360px, rgb(30 77 122 / 0.16), transparent 70%),
+          radial-gradient(420px 320px at 1180px 600px, rgb(179 36 58 / 0.1), transparent 70%),
+          #f7f8f6;
+        color: #14202b;
+        font-family: 'Zen Kaku Gothic New', sans-serif;
+      }
+
+      .words {
+        position: absolute;
+        left: 80px;
+        top: 64px;
+        width: 680px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+
+      .brand img {
+        width: 64px;
+        height: 64px;
+        border-radius: 15px;
+        box-shadow: 0 10px 24px -10px rgb(30 77 122 / 0.6);
+      }
+
+      .brand span {
+        font-size: 34px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+
+      h1 {
+        margin: 40px 0 0;
+        font-size: 58px;
+        font-weight: 700;
+        line-height: 1.12;
+        letter-spacing: -0.015em;
+      }
+
+      h1 em {
+        font-style: normal;
+        color: #b3243a;
+      }
+
+      .lead {
+        margin: 22px 0 0;
+        font-size: 25px;
+        line-height: 1.5;
+        color: #3d4a55;
+      }
+
+      .lead [lang='ja'] {
+        font-family: 'Klee One', serif;
+        font-weight: 600;
+        color: #14202b;
+      }
+
+      /* Three plain facts, the first with the tutor's seal. */
+      .facts {
+        display: flex;
+        gap: 12px;
+        margin: 30px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .facts li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 18px;
+        border-radius: 999px;
+        background: rgb(20 32 43 / 0.06);
+        font-size: 21px;
+        font-weight: 500;
+        color: #14202b;
+        white-space: nowrap;
+      }
+
+      .seal {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 7px;
+        background: #b3243a;
+        color: #fff;
+        font-family: 'Klee One', serif;
+        font-size: 18px;
+        font-weight: 600;
+        transform: rotate(-4deg);
+      }
+
+      .url {
+        position: absolute;
+        left: 80px;
+        bottom: 44px;
+        font-size: 21px;
+        font-weight: 500;
+        color: #1e4d7a;
+      }
+
+      /* The phone, coming in from the right, tilted towards the words. It runs off the bottom
+         edge, so the card shows the sentence, the miss and the tutor's note. */
+      .phone {
+        position: absolute;
+        left: 830px;
+        top: 6px;
+        width: 372px;
+        padding: 14px;
+        border-radius: 58px;
+        background: #14202b;
+        box-shadow:
+          0 50px 90px -30px rgb(20 32 43 / 0.55),
+          0 0 0 2px rgb(255 255 255 / 0.06) inset;
+        transform: perspective(1800px) rotateY(-16deg) rotateX(6deg) rotateZ(5deg);
+        transform-origin: 30% 20%;
+      }
+
+      /* The screen from below its top bar, so the tutor's note is in the card. */
+      .screen {
+        height: 720px;
+        overflow: hidden;
+        border-radius: 44px;
+        background: #f7f8f6;
+      }
+
+      .phone img {
+        display: block;
+        width: 100%;
+        margin-top: -92px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="words">
+        <div class="brand">
+          <img src="{{icon}}" alt="" />
+          <span>Kanji Tutor</span>
+        </div>
+        <h1>Read Japanese with<br />an <em>AI tutor</em> at your side.</h1>
+        <p class="lead">
+          Miss <span lang="ja">待</span> for <span lang="ja">持</span>, and it shows you why: the
+          kanji, its parts, in real sentences up to JLPT N3.
+        </p>
+        <ul class="facts">
+          <li><span class="seal" lang="ja">解</span>Your own Gemini key</li>
+          <li>Works offline</li>
+          <li>No account</li>
+        </ul>
+      </div>
+      <div class="url">github.com/jboix/kanji-reader</div>
+      <div class="phone">
+        <div class="screen"><img src="{{screen}}" alt="" /></div>
+      </div>
+    </div>
+  </body>
+</html>

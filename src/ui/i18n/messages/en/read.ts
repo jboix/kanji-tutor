@@ -1,0 +1,25 @@
+/** English messages: the reading session screens. */
+export const read = {
+  backToUnit: 'Back to the unit',
+  nextSection: 'Next: {section} · {name}',
+  partDone: '{section} · part {part} of {parts} done',
+  backToToday: 'Back to Home',
+  noFocusSentence: 'No sentence with {kanji} read {reading} fits what you know yet.',
+  nothingToRead:
+    "Nothing to read right now: no sentence fits what you know yet. Add this week's words, or {link}.",
+  markKnownWords: 'mark words you already know',
+  title: 'Read',
+  choosing: 'Choosing sentences…',
+  answerByVoice: 'Answer by voice',
+  newGrammarChip: 'New grammar: {pattern}',
+  newGrammarLabel: 'New grammar: {pattern}',
+  endSession: 'End session',
+  furiganaAll: 'Show furigana on known words',
+  tapToAsk: 'tap any word to ask about it',
+  tapToLookUp: 'tap any word to look it up',
+  tapToAskFirst: 'Tap any word to ask about it',
+  tapToLookUpFirst: 'Tap any word to look it up',
+  playSentence: 'Play the sentence',
+  inDictionary: '{word} in the dictionary',
+  notInDictionary: 'Not in the dictionary.',
+} as const;

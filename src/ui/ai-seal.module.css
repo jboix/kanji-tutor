@@ -1,0 +1,54 @@
+.seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--seal-radius);
+  background: var(--ai);
+  color: var(--on-ai);
+  font-family: var(--font-ja);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  transform: rotate(-4deg);
+}
+
+.seal::before {
+  content: attr(data-seal);
+}
+
+/* The mark on a press that sends a request (A18, D64). */
+.s16 {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  font-size: 10px;
+}
+
+/* kanji.html inline note */
+.s22 {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+/* notes.html section divider */
+.s28 {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  font-size: 17px;
+}
+
+/* compose.html: a style note rather than an error. Outline, upright, 〜. */
+.outline {
+  box-sizing: border-box;
+  background: transparent;
+  border: 1.5px solid var(--ai);
+  color: var(--ai);
+  font-size: 13px;
+  transform: none;
+}

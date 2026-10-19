@@ -1,0 +1,220 @@
+/* handwrite.html: drawing pad, candidate row, detail strip and the describe panel. */
+
+.pad {
+  position: relative;
+  flex-shrink: 0;
+  height: 300px;
+  background: var(--paper-raised);
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.guide {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.guideBox {
+  fill: none;
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+
+.guideLine {
+  stroke: var(--paper-soft);
+  stroke-width: 1;
+  stroke-dasharray: 4 6;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--ink);
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.undo,
+.clear {
+  position: absolute;
+  bottom: 10px;
+}
+
+.undo {
+  right: 10px;
+}
+
+.clear {
+  left: 10px;
+}
+
+/* Five 58px circles across the column; they shrink (to 44px) on narrow phones. */
+.candidates {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(var(--tap), 58px));
+  justify-content: space-between;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.candidate {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-ja);
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.picked {
+  background: var(--ink);
+  color: var(--on-ink);
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 72px;
+  padding-top: 4px;
+  border-top: 1px solid var(--rule);
+}
+
+.detailHead {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-height: var(--tap);
+  padding-top: 12px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.detailChar {
+  font-family: var(--font-ja);
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.meaning {
+  font-size: var(--text-md);
+  font-weight: 700;
+}
+
+.readings {
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+
+.open {
+  align-self: center;
+  display: inline-flex;
+  margin-left: auto;
+  color: var(--ink-muted);
+}
+
+.words {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+.status {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
+.link {
+  color: var(--accent);
+  text-underline-offset: 3px;
+}
+
+/* The whole "Can't draw it? Describe it." panel is the button's touch target. */
+.hint {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--paper-soft);
+  border-radius: 18px;
+  padding: 14px 16px;
+}
+
+.hintDetail {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
+.hintButton {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.hintButton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+}
+
+.describe {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Klee One: descriptions mix English with kanji like 寺 (as the lesson tag field, D16). */
+.description {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 132px;
+  padding: 16px 18px;
+  border: 0;
+  border-radius: 24px;
+  background: var(--paper-raised);
+  color: var(--ink);
+  font-family: var(--font-ja);
+  font-size: var(--text-md);
+  line-height: 1.6;
+  resize: none;
+}
+
+.description::placeholder {
+  color: var(--ink-faint);
+}
+
+.unchecked {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-muted);
+}
+
+.claim {
+  white-space: nowrap;
+}

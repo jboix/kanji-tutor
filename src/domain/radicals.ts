@@ -1,0 +1,97 @@
+/**
+ * Meanings of the KRADFILE parts that are not kanji of their own in KANJIDIC (彳, 扌, 氵…), so a
+ * part can still be named in a hint or a hook. Kanji parts (寺, 日, 門) use their KANJIDIC meaning.
+ */
+export const PART_MEANINGS: Readonly<Record<string, string>> = {
+  ノ: 'slash',
+  ハ: 'eight, divide',
+  マ: 'hook',
+  ユ: 'hook',
+  ヨ: 'hand',
+  '｜': 'line',
+  丶: 'dot',
+  乙: 'hook',
+  亅: 'hook',
+  亠: 'lid',
+  个: 'person',
+  儿: 'legs',
+  冂: 'frame',
+  冖: 'cover',
+  冫: 'ice',
+  凵: 'open box',
+  勹: 'wrap',
+  卜: 'divining',
+  卩: 'kneel',
+  厂: 'cliff',
+  厶: 'private',
+  囗: 'enclosure',
+  夂: 'walk slowly',
+  宀: 'roof',
+  尸: 'body',
+  并: 'two horns',
+  幺: 'short thread',
+  广: 'building',
+  廴: 'stride',
+  廾: 'two hands',
+  彡: 'hair',
+  彳: 'going',
+  扎: 'hand',
+  扌: 'hand',
+  攵: 'strike',
+  杰: 'fire',
+  灬: 'fire',
+  歹: 'death',
+  气: 'steam',
+  爿: 'split wood',
+  疔: 'sickness',
+  疒: 'sickness',
+  癶: 'footsteps',
+  禾: 'grain',
+  聿: 'brush',
+  艾: 'grass',
+  艹: 'grass',
+  虍: 'tiger',
+  釆: 'sort',
+  隶: 'reach',
+  隹: 'bird',
+  韋: 'leather',
+  氵: 'water',
+  汁: 'water',
+  亻: 'person',
+  化: 'person',
+  忄: 'heart',
+  忙: 'heart',
+  辶: 'road',
+  込: 'road',
+  阝: 'hill',
+  阡: 'hill',
+  邦: 'village',
+  礻: 'altar',
+  礼: 'altar',
+  衤: 'clothing',
+  初: 'clothing',
+  犭: 'animal',
+  犯: 'animal',
+  刂: 'knife',
+  刈: 'knife',
+  '⺌': 'small',
+  尚: 'small',
+  訁: 'words',
+  糹: 'thread',
+  釒: 'metal',
+  飠: 'food',
+  𠂉: 'person',
+  乞: 'beg',
+};
+
+/** "one radical (no.1)" → "one"; KANJIDIC adds radical notes to some meanings. */
+export function plainMeaning(meaning: string | undefined): string | undefined {
+  const plain = meaning?.replace(/\s*radical \(no\.\s*\d+\)/u, '').trim();
+  return plain === '' ? undefined : plain;
+}
+
+/** Up to `max` meanings without radical notes or repeats ("one", "one radical (no.1)" → "one"). */
+export function plainMeanings(meanings: readonly string[], max = 3): string[] {
+  const plain = meanings.flatMap((m) => plainMeaning(m) ?? []);
+  return [...new Set(plain)].slice(0, max);
+}

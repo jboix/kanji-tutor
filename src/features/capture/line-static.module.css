@@ -1,0 +1,17 @@
+/* What the app knows about the tapped line, before any AI (A13). */
+.lineStatic {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.glossList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+  line-height: 1.5;
+}

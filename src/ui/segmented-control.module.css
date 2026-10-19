@@ -1,0 +1,48 @@
+.group {
+  display: inline-flex;
+  margin: 0;
+  padding: 3px;
+  border: 0;
+  border-radius: 20px;
+  min-inline-size: 0;
+  background: var(--paper-soft);
+}
+
+.option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 34px;
+  padding: 0 16px;
+  border-radius: 17px;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+/* 34px drawn, 44px to the touch (N6). */
+.option::before {
+  content: "";
+  position: absolute;
+  inset: -5px 0;
+}
+
+.option:has(:checked) {
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.option:has(:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  pointer-events: none;
+}

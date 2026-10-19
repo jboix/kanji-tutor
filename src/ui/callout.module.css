@@ -1,0 +1,8 @@
+.callout {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 20px 20px;
+  border-radius: var(--radius-panel);
+  background: var(--paper-soft);
+}

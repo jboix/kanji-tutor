@@ -1,0 +1,154 @@
+/* Teaching cards (L1, L2, L3, L5): paper, ink and ruled lines. Vermilion only inside AI notes. */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 0;
+}
+
+.under {
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.word {
+  margin: 0;
+  font-family: var(--font-ja);
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.meaning {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.55;
+}
+
+.muted {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* One kanji per row, on a ruled line. */
+.kanjiList {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kanjiRow {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 4px 12px;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.kanjiRow:first-child {
+  border-top: 1px solid var(--rule);
+}
+
+.kanjiHead {
+  grid-row: span 4;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.kanjiChar {
+  font-family: var(--font-ja);
+  font-size: 34px;
+  line-height: 1.1;
+}
+
+.kanjiLine {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.para {
+  margin: 0;
+}
+
+.para + .para {
+  margin-top: 8px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* "Explain this sentence" under the sentence, before answering (L3). */
+.help {
+  display: flex;
+  margin-top: -8px;
+}
+
+.grammarList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pattern {
+  font-family: var(--font-ja);
+  font-size: 17px;
+}
+
+/* After the sentence (L5): translation and one grammar line, between rules. */
+/* "About this sentence" (W-answered): a panel on the quiet surface. */
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 16px 18px;
+  border-radius: var(--radius-panel);
+  background: var(--paper-soft);
+}
+
+.translation {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.55;
+}
+
+/* "Ask the tutor": AI only when the learner asks (D41). */
+.ask {
+  display: flex;
+}

@@ -1,0 +1,53 @@
+/** Spanish messages: what you've learned (P3): counts, never praise. */
+import type { Messages } from '../../types.ts';
+
+export const learned = {
+  heading: 'Lo que has aprendido',
+  intro: 'Aprendiendo: visto en una sesión; conocido: lo leíste entre palabras familiares.',
+  show: 'Mostrar',
+  kindKanji: 'Kanji',
+  kindWords: 'Palabras',
+  kindGrammar: 'Gramática',
+  emptyKanji: 'Todavía no hay kanji.',
+  emptyWords: 'Todavía no hay palabras.',
+  emptyGrammar:
+    'Todavía no hay puntos de gramática. Aquí aparece la gramática de clase y del catálogo.',
+  showNotStarted: 'Mostrar no empezados',
+  counting: 'Contando…',
+  allGrammar: 'Todos los puntos de gramática, por nivel y familia',
+  units: 'Lecciones y niveles',
+  unitsDetail: 'El recorrido de unidades de N5 a N3',
+  stateKnown: 'Conocido',
+  stateLearning: 'Aprendiendo',
+  stateNotStarted: 'Sin empezar',
+  cellLabel: '{text}, {state}',
+  levelKanji: 'Kanji N{level}',
+  levelWords: 'Palabras N{level}',
+  levelGrammar: 'Puntos de gramática N{level}',
+  otherKanji: 'Otros kanji',
+  otherWords: 'Otras palabras',
+  otherGrammar: 'Otros puntos de gramática',
+  coverage: '{head}: {known} de {total} conocidos{learning}',
+  coverageOther: '{head}: {known} conocidos{learning}',
+  learningSuffix: ', {learning} aprendiendo',
+  nothingStarted: 'Nada empezado en este nivel todavía.',
+  showMore: 'Mostrar más ({shown} de {rest})',
+  applyHeading: 'Marcar una lista como conocida',
+  applyHint:
+    'Puedes repetirlo sin problema: las palabras ya conocidas conservan su progreso y nada se añade dos veces. Para lecciones de Minna o tu propia lista, usa {link}.',
+  importPage: 'la página de importación',
+  markList: 'Marcar las palabras {list} como conocidas',
+  marking: 'Marcando las palabras {list}…',
+  failed: 'No se aplicó la lista. No se perdió nada; inténtalo de nuevo.',
+  result: '{list}: {text}',
+  marked: {
+    one: '{n} palabra marcada como conocida',
+    other: '{n} palabras marcadas como conocidas',
+  },
+  nothingNew: 'Nada nuevo que marcar',
+  applyAlready: {
+    one: '{head}; {n} palabra ya era conocida.',
+    other: '{head}; {n} palabras ya eran conocidas.',
+  },
+  applyDone: '{head}.',
+} satisfies Messages['learned'];

@@ -1,0 +1,196 @@
+/*
+ * compose.html: pattern 30px Klee One 600 over a 15px/1.6 prompt, 8px apart. The meaning has a
+ * line of its own, quoted, so it never runs into the instruction after it.
+ */
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.meaning {
+  margin: 0 0 -6px;
+  font-size: var(--text-md);
+  line-height: 1.6;
+}
+
+.pattern {
+  margin: 0;
+  font-family: var(--font-ja);
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.prompt {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.6;
+  color: var(--ink-muted);
+}
+
+/* "YOUR SENTENCE" and the sentence, 10px apart. */
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* The draft: the kanji popup is laid out against it (C6). */
+.typing {
+  position: relative;
+}
+
+.labelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 18px;
+}
+
+/* The あ switch and the mic, side by side at the label's end. */
+.tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* The learner's sentence: Klee One 23px / 2.3 on ruled lines (compose.html). */
+.sentence,
+.editor {
+  margin: 0;
+  font-family: var(--font-ja);
+  font-size: 23px;
+  line-height: 2.3;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+  background-image: linear-gradient(var(--rule) 1px, transparent 1px);
+  background-size: 100% 2.3em;
+  background-position: 0 2em;
+}
+
+.editor {
+  display: block;
+  width: 100%;
+  min-height: calc(3 * 2.3em);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  resize: none;
+  field-sizing: content;
+  background-color: transparent;
+  background-attachment: local;
+}
+
+/* The placeholder is the sentence's own type (D111): Klee One at 23px / 2.3, so it starts where
+   the caret blinks and sits on the same ruled line as the first character typed. */
+.editor::placeholder {
+  font: inherit;
+  letter-spacing: inherit;
+  color: var(--ink-muted);
+  opacity: 1;
+}
+
+.editor:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+/* Red pen: the struck original with the replacement above, in Klee One 18px AI red. */
+.ruby {
+  ruby-position: over;
+  ruby-align: center;
+}
+
+.struck {
+  text-decoration: line-through 2px var(--ai);
+}
+
+.fix {
+  font-family: var(--font-ja);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ai);
+}
+
+.wavy {
+  text-decoration: underline wavy var(--ai);
+  text-underline-offset: 6px;
+}
+
+/* One note per mark, then the summary line, 16px apart. */
+.notes {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.muted {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-muted);
+}
+
+.muted a {
+  color: var(--accent);
+}
+
+/* The add-a-grammar-point form. */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--ink-muted);
+  letter-spacing: 0.04em;
+}
+
+.input {
+  height: 46px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 23px;
+  background: var(--paper-soft);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: var(--text-md);
+  letter-spacing: normal;
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.ja {
+  font-family: var(--font-ja);
+  font-size: var(--text-lg);
+}
+
+/* "Use it · grammar 3 of 6": the top bar's 13px muted line, as a heading. */
+.title {
+  margin: 0;
+  font-size: inherit;
+  font-weight: 400;
+  color: inherit;
+}
+
+/* A red-pen note inside the AI box (D57): an error, or a 〜 style note. */
+.errorMark,
+.styleMark {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.styleMark::before {
+  content: "〜 ";
+  color: var(--ai);
+  font-family: var(--font-ja);
+}

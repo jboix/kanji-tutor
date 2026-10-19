@@ -1,0 +1,23 @@
+node_modules
+dist
+dev-dist
+coverage
+*.lcov
+*.log
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+.DS_Store
+.idea
+.vscode
+.cache
+*.pem
+# Raw data downloads for the pack pipeline: never committed (licences, size)
+data/raw/
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+# Parallel workstream worktrees (kept inside the project folder)
+.worktrees/

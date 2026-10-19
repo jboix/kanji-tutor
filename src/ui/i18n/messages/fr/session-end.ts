@@ -1,0 +1,35 @@
+/** French messages: the session's end, its counts, what was new, and the retry round. */
+import type { Messages } from '../../types.ts';
+
+export const sessionEnd = {
+  subtitle: {
+    one: 'Session terminée · environ {n} minute',
+    other: 'Session terminée · environ {n} minutes',
+  },
+  counts: 'Bilan',
+  sentences: { one: 'phrase', other: 'phrases' },
+  exercises: { one: 'exercice', other: 'exercices' },
+  both: { one: 'phrase ou exercice', other: 'phrases et exercices' },
+  readRight: { one: 'lue juste', other: 'lues juste' },
+  right: { one: 'juste', other: 'justes' },
+  again: { one: 'à revoir', other: 'à revoir' },
+  newToday: 'Nouveau aujourd’hui',
+  kanji: 'kanji',
+  word: 'mot',
+  grammar: 'grammaire',
+  andMore: { one: 'et {n} autre : {list}', other: 'et {n} autres : {list}' },
+  lookAgain: 'À revoir',
+  youWrote: 'Vous avez écrit {answer}',
+  becauseOf: '{wrote} · {reason}',
+  longVowel: 'une voyelle longue',
+  sokuon: 'un petit っ',
+  rendaku: 'le voisement',
+  wrongKanji: 'la lecture d’un autre kanji',
+  didntKnow: 'Vous ne le saviez pas',
+  missedExercise: 'Un exercice, pas juste cette fois',
+  missedQuestion: 'Une question, pas juste cette fois',
+  missedPassage: 'Un texte à lire, pas juste cette fois',
+  seeAll: 'Tout voir ({n})',
+  retry: { one: 'Refaire {n} manqué', other: 'Refaire {n} manqués' },
+  nextSession: 'Session suivante',
+} satisfies Messages['sessionEnd'];

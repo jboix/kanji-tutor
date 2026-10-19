@@ -1,0 +1,332 @@
+.back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  flex-shrink: 0;
+  width: var(--tap);
+  height: var(--tap);
+  margin: -10px 0 -10px -12px;
+  border-radius: 50%;
+  color: var(--ink);
+}
+
+.title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.section {
+  margin: 0;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 0 20px;
+}
+
+/* The last section or fold closes the screen: no rule under it. */
+.section:last-child {
+  border-bottom: 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.field + .field {
+  padding-top: 8px;
+}
+
+.label {
+  padding: 0;
+  font-size: 12px;
+  color: var(--ink-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0;
+  font-weight: 400;
+}
+
+.hint {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: var(--tap);
+  border: 0;
+  border-radius: 22px;
+  background: var(--paper-soft);
+  color: var(--ink);
+  padding: 0 16px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+/* Lesson tags mix Latin and kanji, so the whole field uses Klee One (N7). */
+.jaInput {
+  composes: input;
+  font-family: var(--font-ja);
+  font-size: var(--text-md);
+}
+
+.input::placeholder {
+  color: var(--ink-faint);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-height: var(--tap);
+  padding: 0 18px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 14px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* The Import label wraps a hidden file input: show its focus on the pill. */
+.button:has(:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.primary {
+  composes: button;
+  border: 0;
+  background: var(--ink);
+  color: var(--on-ink);
+  font-weight: 500;
+}
+
+.status {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+/* The Share symbol inside the iOS install steps (N1b). */
+.inlineIcon {
+  display: inline-flex;
+  vertical-align: -3px;
+  color: var(--accent);
+}
+
+.confirm {
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: var(--radius-panel);
+  background: var(--paper-soft);
+}
+
+.confirm .button:not(.primary) {
+  background: var(--paper);
+}
+
+/* AI use: a disclosure row like today.html's list rows. */
+.details {
+  border-bottom: 1px solid var(--rule);
+}
+
+.details:last-child {
+  border-bottom: 0;
+}
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  min-height: var(--tap);
+  padding-bottom: 12px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  margin: 0 6px 3px 0;
+  border-right: 1.5px solid var(--ink-muted);
+  border-bottom: 1.5px solid var(--ink-muted);
+  transform: rotate(45deg);
+}
+
+.details[open] > .summary::after {
+  margin-bottom: -3px;
+  transform: rotate(225deg);
+}
+
+.meta {
+  margin-left: auto;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.detailsBody {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding-bottom: 20px;
+}
+
+.stats {
+  align-self: stretch;
+  margin: 0;
+}
+
+.stat {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 14px;
+}
+
+.stat:last-child {
+  border-bottom: 0;
+}
+
+.stat dt {
+  color: var(--ink-muted);
+}
+
+.stat dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Single buttons and the segmented controls keep their own width inside a section column. */
+.section > .button,
+.section > fieldset,
+.field > fieldset {
+  align-self: flex-start;
+}
+
+/* The wizard's "Advanced: models" fold (P6). */
+.advanced {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  min-height: var(--tap);
+  font-size: var(--text-sm);
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Test key outcome: plain words carry it; the colour only underlines it. */
+.status[data-outcome="works"] {
+  color: var(--accent);
+}
+
+/* Settings → Tutor (A13): two plain radio choices, full sentences. */
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: var(--tap);
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.choice input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.choice:has(input:focus-visible) {
+  border-radius: 6px;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* A category sub-screen slides in from the right (IA5); still with reduced motion. */
+.slide {
+  display: flex;
+  flex-direction: column;
+  gap: var(--screen-gap, 24px);
+  animation: slide-in 220ms ease-out;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(24px);
+    opacity: 0;
+  }
+
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide {
+    animation: none;
+  }
+}

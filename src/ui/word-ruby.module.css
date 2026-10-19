@@ -1,0 +1,7 @@
+/* Furigana over a large word heading: a size up from the sentence's, still the UI font as in
+   read.html, and a little room between the reading and the kanji. */
+.word rt {
+  font-size: var(--text-md);
+  font-weight: 600;
+  padding-bottom: 2px;
+}

@@ -1,0 +1,38 @@
+.bar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-shrink: 0;
+  padding: 12px 20px max(32px, calc(env(safe-area-inset-bottom) + 12px));
+  border-top: 1px solid var(--rule);
+  background: var(--paper);
+}
+
+/* compose.html "Rewrite | Accept corrections", capture.html camera + add. */
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+.row > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.row > .fixed {
+  flex: none;
+}
+
+.hint {
+  margin: 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+/* Keyboard open (U1): the keyboard covers the home indicator, so no bottom inset. */
+:global(:root[data-keyboard="open"]) .bar {
+  gap: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}

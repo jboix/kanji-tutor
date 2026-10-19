@@ -1,0 +1,45 @@
+{
+  "fixtures": [
+    {
+      "inputTokens": 664,
+      "outputTokens": 242,
+      "response": {
+        "translation": "While I was waiting for a friend at the station, I read a book.",
+        "chunks": [
+          { "text": "駅で", "gloss": "at the station", "focus": false },
+          { "text": "友達を待っている", "gloss": "waiting for a friend", "focus": false },
+          { "text": "間に", "gloss": "during that time", "focus": true },
+          { "text": "、本を読みました。", "gloss": "I read a book", "focus": false }
+        ],
+        "readings": [
+          { "surface": "駅", "reading": "えき" },
+          { "surface": "友達", "reading": "ともだち" },
+          { "surface": "待っている", "reading": "まっている" },
+          { "surface": "間", "reading": "あいだ" },
+          { "surface": "本", "reading": "ほん" },
+          { "surface": "読みました", "reading": "よみました" }
+        ]
+      }
+    },
+    {
+      "match": "方言",
+      "inputTokens": 671,
+      "outputTokens": 230,
+      "response": {
+        "translation": "However, it isn't that fewer people speak dialects.",
+        "chunks": [
+          { "text": "しかし、", "gloss": "however", "focus": false },
+          { "text": "方言を話す人が", "gloss": "people who speak dialects", "focus": false },
+          { "text": "減っている", "gloss": "are decreasing", "focus": false },
+          { "text": "わけではない。", "gloss": "it isn't that…", "focus": true }
+        ],
+        "readings": [
+          { "surface": "方言", "reading": "ほうげん" },
+          { "surface": "話す", "reading": "はなす" },
+          { "surface": "人", "reading": "ひと" },
+          { "surface": "減っている", "reading": "へっている" }
+        ]
+      }
+    }
+  ]
+}

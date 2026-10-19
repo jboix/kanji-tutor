@@ -1,0 +1,195 @@
+/* The lesson path (T3, T4): ruled rows and quiet counts in the kit's type and tokens. */
+.title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.titleJa {
+  margin: 0;
+  font-family: var(--font-ja);
+  font-size: 34px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.intro,
+.text {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.6;
+}
+
+.muted {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
+.theme {
+  color: var(--ink-muted);
+}
+
+.level,
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* A level group folds (T7); the summary is the section header with a turning chevron. */
+.summary {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+  list-style: none;
+  cursor: pointer;
+}
+
+/* The section header inside takes the row; the summary carries its rule. */
+.summary > :first-child {
+  flex: 1;
+  min-width: 0;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.foldIcon {
+  display: flex;
+  align-self: center;
+  color: var(--ink-muted);
+  transform: rotate(90deg);
+  transition: transform 160ms ease;
+}
+
+.fold:not([open]) .foldIcon {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .foldIcon {
+    transition: none;
+  }
+}
+
+/* The level's words, kanji and grammar known, compact, above its units. */
+.known {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  padding: 12px 0 10px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.knownCell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.knownHead {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+.knownCount {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* A unit row's state and counts, with its thin line under them. */
+.rowDetail {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 4px;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step[aria-current="step"] {
+  font-weight: 600;
+}
+
+.words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-md);
+}
+
+.reading {
+  margin-inline-start: 4px;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.passage {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.english {
+  margin: 0 0 8px;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pattern {
+  margin: 0;
+  font-family: var(--font-ja);
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.example {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.link {
+  color: var(--accent);
+  font-size: var(--text-sm);
+  text-underline-offset: 3px;
+}
+
+.summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}

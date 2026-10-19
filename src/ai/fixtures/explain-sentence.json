@@ -1,0 +1,89 @@
+{
+  "fixtures": [
+    {
+      "inputTokens": 640,
+      "outputTokens": 120,
+      "toolCalls": [
+        [
+          {
+            "id": "call_1",
+            "name": "get_learner_profile",
+            "args": {}
+          }
+        ]
+      ],
+      "response": {
+        "meaning": "The sentence makes one plain statement. Find the verb at the end first, then read back to the particles to see who does what.",
+        "grammar": [],
+        "readings": []
+      }
+    },
+    {
+      "match": "Blank exercise.",
+      "inputTokens": 668,
+      "outputTokens": 131,
+      "response": {
+        "meaning": "Hint: look at the words right around the blank. The particle before it tells you what role the missing part plays, and what comes after it tells you which form it must take. Picture the situation the sentence describes, then choose the option that completes it naturally.",
+        "grammar": [],
+        "readings": []
+      }
+    },
+    {
+      "match": "紹介",
+      "inputTokens": 702,
+      "outputTokens": 188,
+      "toolCalls": [
+        [
+          {
+            "id": "call_1",
+            "name": "get_learner_profile",
+            "args": {}
+          }
+        ],
+        [
+          {
+            "id": "call_2",
+            "name": "check_known",
+            "args": {
+              "words": ["先生", "友達"]
+            }
+          }
+        ]
+      ],
+      "response": {
+        "meaning": "Someone introduced a new friend to the teacher. 紹介 (しょうかい) is the act of introducing, and します turns it into a verb; this recorded reply leaks the reading on purpose, also as shoukai, so the no-spoil filter can be seen working.",
+        "grammar": [
+          {
+            "pattern": "〜ました",
+            "note": "The polite past: the introducing is done. 紹介 is read as しょうかい here."
+          }
+        ],
+        "readings": [
+          {
+            "surface": "紹介",
+            "reading": "しょうかい"
+          },
+          {
+            "surface": "先生",
+            "reading": "せんせい"
+          }
+        ]
+      }
+    },
+    {
+      "match": "待つしかない",
+      "inputTokens": 655,
+      "outputTokens": 142,
+      "response": {
+        "meaning": "There is nothing to do but wait. しか with a negative ending says \"only\": the only thing left is the waiting.",
+        "grammar": [
+          {
+            "pattern": "〜しかない",
+            "note": "しか takes the negative ない, and together they mean there is no choice but this."
+          }
+        ],
+        "readings": []
+      }
+    }
+  ]
+}

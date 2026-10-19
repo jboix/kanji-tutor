@@ -1,0 +1,59 @@
+/* The frame follows the visual viewport (U1): above the on-screen keyboard, and moved down by
+   any amount iOS scrolled the page, so the top bar and the sentence stay in view. */
+.frame {
+  position: relative;
+  top: var(--vv-top, 0px);
+  width: 100%;
+  max-width: 480px;
+  height: var(--vvh, 100dvh);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+.body {
+  flex: 1;
+  overflow-y: auto;
+  /* Its own bounce stays; the scroll never chains to the page (U13). */
+  overscroll-behavior-y: contain;
+  scroll-padding-top: 16px;
+  /* The safe area (status bar, notch) plus a little air; no fixed 56px on top of it (U11). */
+  padding: max(16px, calc(env(safe-area-inset-top) + 8px)) var(--gutter) var(--gutter);
+  display: flex;
+  flex-direction: column;
+  gap: var(--screen-gap, 24px);
+}
+
+/* Above the bottom bar, the page ends 56px up: clear of the raised Start disc (32px over the
+   bar) with some air. Scrolling to a focused element stops clear of the disc and the top edge,
+   so focus is never hidden (WCAG 2.4.11). */
+.frame:has([data-bottom-nav]) .body {
+  padding-bottom: 56px;
+  scroll-padding-bottom: 56px;
+}
+
+/* The body scrolls: its sections keep their height instead of shrinking to fit. */
+.body > * {
+  flex-shrink: 0;
+}
+
+/* Under a top bar (read.html): 24px top, 16px bottom before the action bar. */
+.underBar {
+  padding-top: var(--screen-top, 24px);
+  padding-bottom: 16px;
+}
+
+/* Keyboard open: less padding, so the sentence and the input share the short viewport. */
+:global(:root[data-keyboard="open"]) .body {
+  padding-top: calc(env(safe-area-inset-top) + 12px);
+  padding-bottom: 8px;
+}
+
+:global(:root[data-keyboard="open"]) .frame:has([data-bottom-nav]) .body {
+  padding-bottom: 8px;
+}
+
+:global(:root[data-keyboard="open"]) .underBar {
+  padding-top: 4px;
+}
