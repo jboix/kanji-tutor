@@ -1,0 +1,309 @@
+/* W-today: the date in Klee One above the title, both at the left. */
+.header {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+  gap: 2px;
+  margin-top: 4px;
+  padding: 0 4px;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-ja);
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.date {
+  font-family: var(--font-ja);
+  font-size: var(--text-md);
+  color: var(--ink-muted);
+}
+
+.lead {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.text {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.6;
+}
+
+.text b {
+  font-weight: 700;
+}
+
+.muted {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.firstTitle {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.class {
+  display: flex;
+  flex-direction: column;
+}
+
+/* The level-up suggestion (P4): a quiet ruled block, no colour of its own. */
+.levelUp {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-block: 14px;
+  border-block: 1px solid var(--rule);
+}
+
+.levelUpActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* "Where you are" (IA2): a soft panel with the level bars and the last-time line. */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 18px;
+  border-radius: var(--radius-panel);
+  background: var(--paper-soft);
+}
+
+.panelHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.panelTitle {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.small {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+a.small {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: var(--tap);
+  color: var(--accent);
+  text-underline-offset: 3px;
+  /* 13px text with a 44px hit area that does not push the layout (N6). */
+  padding: 13px 0;
+  margin: -13px 0;
+}
+
+.bars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.barsWaiting {
+  composes: bars;
+  visibility: hidden;
+}
+
+.bar {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--text-sm);
+}
+
+.barValue {
+  min-width: 56px;
+  text-align: end;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* "Next up" (IA2, W-today): the inverted card, with the unit, its five sections as bars and
+   where the learner is. */
+.outlined {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+  border-radius: var(--radius-panel);
+  background: var(--hero);
+  color: var(--on-hero);
+}
+
+.outlined .muted {
+  color: var(--hero-muted);
+}
+
+.outlined :focus-visible {
+  outline-color: var(--hero-fill);
+}
+
+.kicker {
+  margin: 0;
+  font-size: 12px;
+  color: var(--hero-muted);
+}
+
+.unitTitle {
+  align-self: flex-start;
+  color: var(--on-hero);
+  font-size: 22px;
+  text-decoration: none;
+}
+
+.unitTitle:hover {
+  color: var(--on-hero);
+}
+
+.unitTitle:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.sections {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+  text-align: center;
+  font-family: var(--font-ja);
+  font-size: 14px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--hero-muted);
+}
+
+.sectionBar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--hero-track);
+}
+
+.done .sectionBar {
+  background: var(--hero-fill);
+}
+
+/* The section in progress: half a bar, its name in full ink (W-today). */
+.now {
+  color: var(--on-hero);
+  font-weight: 600;
+}
+
+.now .sectionBar {
+  background: linear-gradient(90deg, var(--hero-fill) 50%, var(--hero-track) 50%);
+}
+
+/* "What to practise" (IA2): the choice Start follows. */
+.practice {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.choice[aria-pressed="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--on-ink);
+}
+
+.planLine {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+
+.planLine .text {
+  font-size: var(--text-sm);
+  color: var(--ink);
+}
+
+/* This week's plan (IA6): one line and Change. */
+.planRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: var(--radius-panel);
+  background: var(--paper-soft);
+}
+
+.planText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.planTitle {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.change {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--tap);
+  min-height: var(--tap);
+  font-size: var(--text-sm);
+  color: var(--accent);
+  text-underline-offset: 3px;
+}
+
+/* Details and Change: small text on a 44px target. Keyboard focus rings the words, not the whole
+   target, which would look like a halo around them. */
+.change:focus-visible,
+a.small:focus-visible {
+  outline: none;
+}
+
+.change:focus-visible > span {
+  border-radius: 4px;
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+a.small:focus-visible > span {
+  border-radius: 4px;
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.mixNow {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  min-height: var(--tap);
+  color: var(--accent);
+  text-underline-offset: 3px;
+}

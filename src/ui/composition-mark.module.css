@@ -1,0 +1,46 @@
+/* The IME-style marks over the sentence field (D112): a zero-height layer at the top of the
+   field's positioned parent, the mirror laid out against it. Its text is transparent: only the
+   underlines and the fill show, over the field's own text. Not the AI red (CLAUDE.md). */
+.layer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 0;
+}
+
+.mirror {
+  position: absolute;
+  z-index: 1;
+  margin: 0;
+  overflow: hidden;
+  border-color: transparent;
+  background: transparent;
+  color: transparent;
+  white-space: pre-wrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+.mirror[data-single] {
+  white-space: pre;
+}
+
+.pending,
+.selected {
+  text-decoration-line: underline;
+  text-decoration-skip-ink: none;
+  text-underline-offset: 0.18em;
+}
+
+.pending {
+  text-decoration-color: var(--ink-muted);
+  text-decoration-thickness: 1px;
+}
+
+.selected {
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  text-decoration-color: var(--ink);
+  text-decoration-thickness: 2px;
+}

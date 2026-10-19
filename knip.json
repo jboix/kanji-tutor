@@ -1,0 +1,24 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": [
+    "scripts/*.ts",
+    "scripts/questions/sample.ts",
+    "src/domain/index.ts",
+    "src/lang/index.ts",
+    "src/lang/node.ts",
+    "src/lang/tokenizer-worker.ts",
+    "src/lang/testing/fake-dictionary.ts",
+    "src/ai/index.ts",
+    "src/data/index.ts",
+    "src/ui/index.ts",
+    "tests/e2e/**/*.ts",
+    "src/test/render.tsx",
+    "src/test/i18n.ts",
+    "src/test/memory-repos.ts",
+    "src/lang/voice/index.ts"
+  ],
+  "project": ["src/**/*.{ts,tsx}", "scripts/**/*.ts", "tests/**/*.ts"],
+  "ignore": ["scripts/arch-fixture/**"],
+  "ignoreExportsUsedInFile": true,
+  "ignoreDependencies": []
+}

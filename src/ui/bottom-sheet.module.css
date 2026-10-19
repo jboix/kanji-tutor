@@ -1,0 +1,121 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  background: var(--scrim);
+  color: var(--ink);
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: default;
+}
+
+.context {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  padding: max(96px, calc(env(safe-area-inset-top) + 52px)) var(--gutter) var(--gutter);
+  pointer-events: none;
+}
+
+.sheet {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 480px;
+  max-height: calc(100% - 48px);
+  overflow-y: auto;
+  padding: 10px var(--gutter) max(32px, calc(env(safe-area-inset-bottom) + 12px));
+  border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
+  background: var(--paper);
+  outline: none;
+  /* A pull past the top drags the sheet (U10), it does not bounce or scroll the page. */
+  overscroll-behavior: contain;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sheet {
+    animation: rise 180ms ease-out;
+  }
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(24px);
+    opacity: 0.6;
+  }
+}
+
+/* With a context sentence above it, the sheet fills the rest of the screen (explain.html). */
+.fill {
+  flex: 1;
+  max-height: none;
+}
+
+.handle {
+  position: relative;
+  align-self: center;
+  touch-action: none;
+  flex-shrink: 0;
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+}
+
+/* The handle is the drag's grip: a 44px tall band around the bar (U10). */
+.handle::before {
+  content: "";
+  position: absolute;
+  inset: -20px -40px;
+}
+
+.head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.headMain {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.word {
+  font-family: var(--font-ja);
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.gloss {
+  font-size: var(--text-md);
+}
+
+/* No header (the hint, sentence help): the close button sits beside the content's first line
+   instead of on a row of its own, which left an empty band under the handle. */
+.bare {
+  position: relative;
+  z-index: 1;
+  justify-content: flex-end;
+  margin-bottom: calc(-20px - var(--tap));
+  pointer-events: none;
+}
+
+.bare button {
+  pointer-events: auto;
+}

@@ -1,0 +1,220 @@
+/* Drills (R8): the prompt line, choices, word rows and the family row, on read.html's grid. */
+.prompt {
+  margin: -8px 0 -8px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+/* Choices are a fieldset (a named group): no border, margin or padding of its own. */
+.choices,
+.stack {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.choices {
+  display: flex;
+  gap: 10px;
+}
+
+.choices > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.choice {
+  font-family: var(--font-ja);
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.pattern {
+  font-family: var(--font-ja);
+  font-size: var(--text-lg);
+}
+
+/* After a choice: each kanji with its dictionary readings. */
+.readings {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reading {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.kanji {
+  font-family: var(--font-ja);
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.kana {
+  font-family: var(--font-ja);
+  font-size: var(--text-lg);
+  color: var(--ink-muted);
+}
+
+/* One kanji, several readings: one row per word, the current one underlined. */
+.words {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.word {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 12px;
+  min-height: 56px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.form {
+  font-family: var(--font-ja);
+  font-size: var(--ja-sentence);
+  line-height: 1.8;
+}
+
+.current .form {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 8px;
+}
+
+.answer {
+  font-family: var(--font-ja);
+  font-size: 20px;
+}
+
+/* kanji.html "SAME PART, SAME SOUND": members 34px, a muted label under each. */
+.family {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  align-items: baseline;
+}
+
+.member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.memberChar {
+  font-family: var(--font-ja);
+  font-size: 34px;
+  font-weight: 600;
+}
+
+.guess .memberChar {
+  color: var(--ink-faint);
+}
+
+.memberLabel {
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.text {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.6;
+}
+
+/* S4 exercises: the word or verb to work on, large, in Klee One. */
+.cue {
+  margin: 0;
+  font-family: var(--font-ja);
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+/* A meaning as the cue (a reversed meaning check, a sentence to build). */
+.meaningCue {
+  margin: 0;
+  font-size: var(--text-lg);
+  line-height: 1.5;
+}
+
+/* A meaning on a choice button: the interface font, wrapping when long. */
+.meaningChoice {
+  font-size: var(--text-md);
+  line-height: 1.35;
+  white-space: normal;
+  text-align: center;
+}
+
+/* The model line of a pattern drill (練習 A): 例 見る → 見てもいいですか. */
+.example {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.6;
+}
+
+.outcome {
+  font-size: var(--text-md);
+}
+
+.struckText {
+  color: var(--ink-muted);
+  text-decoration: line-through var(--ink);
+  text-decoration-thickness: 2px;
+}
+
+/* Sentence building: the sentence so far, then the pieces left, as 44 px tiles. */
+.built,
+.bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+  min-height: 52px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  list-style: none;
+}
+
+.built {
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.tile {
+  min-height: 44px;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-ja);
+  font-size: var(--text-lg);
+  cursor: pointer;
+}
+
+.tile:hover {
+  border-color: var(--ink-faint);
+}

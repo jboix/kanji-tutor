@@ -1,0 +1,27 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      actions:
+        update-types: [minor, patch]
+  - package-ecosystem: bun
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      react:
+        patterns: [react, react-dom, '@types/react', '@types/react-dom']
+      minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      # TypeScript 7 (the native compiler) has no stable JS API yet, which dependency-cruiser
+      # needs to parse TypeScript. Stay on 6.x until dependency-cruiser supports 7.
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']

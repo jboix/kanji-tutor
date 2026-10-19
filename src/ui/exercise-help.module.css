@@ -1,0 +1,29 @@
+/* U6: the help under every exercise; chips wrap, the quiet skip sits at the end of the row. */
+.help {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+}
+
+.row:empty {
+  display: none;
+}
+
+.meaning {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+/* The slot's chip and the skip bring their own top margins for other layouts: none in the row. */
+.help .row > * {
+  margin-top: 0;
+}

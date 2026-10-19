@@ -1,0 +1,26 @@
+{
+  "fixtures": [
+    {
+      "inputTokens": 610,
+      "outputTokens": 74,
+      "toolCalls": [[{ "id": "call_1", "name": "get_learner_profile", "args": {} }]],
+      "response": {
+        "hook": "Look at the parts of each kanji, say the meaning out loud while you trace them, then read the word once more in this sentence.",
+        "readings": []
+      }
+    },
+    {
+      "match": "Target: 待つ",
+      "inputTokens": 668,
+      "outputTokens": 96,
+      "toolCalls": [
+        [{ "id": "call_1", "name": "get_learner_profile", "args": {} }],
+        [{ "id": "call_2", "name": "known_examples", "args": { "query": "寺" } }]
+      ],
+      "response": {
+        "hook": "待 is 彳, someone on the move, beside 寺, a temple: you go to the temple and wait there. You read 時 (とき) with the same 寺 inside.",
+        "readings": [{ "surface": "時", "reading": "とき" }]
+      }
+    }
+  ]
+}

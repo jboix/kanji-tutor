@@ -1,0 +1,92 @@
+{
+  "fixtures": [
+    {
+      "match": "待って",
+      "inputTokens": 742,
+      "outputTokens": 214,
+      "toolCalls": [
+        [{ "id": "call_1", "name": "get_learner_profile", "args": {} }],
+        [
+          {
+            "id": "call_2",
+            "name": "check_known",
+            "args": { "words": ["待つ", "持つ", "駅"], "kanji": ["待", "持"] }
+          },
+          { "id": "call_3", "name": "lookup_word", "args": { "text": "待つ" } }
+        ]
+      ],
+      "response": {
+        "explanation": "You read it as 持, to hold. Look at the left side: 待 has 彳, a person walking, while 持 has 扌, a hand. Here someone walked to the station and is waiting.",
+        "confusedWith": { "kanji": "持", "meaning": "to hold" },
+        "chips": [
+          { "kind": "compare", "label": "待 and 持 side by side" },
+          { "kind": "example", "label": "One more with 待" },
+          { "kind": "simpler", "label": "Break down the sentence" }
+        ],
+        "readings": [
+          { "surface": "待って", "reading": "まって" },
+          { "surface": "持って", "reading": "もって" },
+          { "surface": "待つ", "reading": "まつ" },
+          { "surface": "持つ", "reading": "もつ" }
+        ]
+      }
+    },
+    {
+      "match": "紹介",
+      "inputTokens": 698,
+      "outputTokens": 176,
+      "response": {
+        "explanation": "Right kanji, short vowel. 紹 is しょう, held for two beats. You know the kanji; this one is your ear. Listen, then try once more.",
+        "chips": [
+          { "kind": "example", "label": "Hear しょうかい" },
+          { "kind": "compare", "label": "しょ vs しょう pairs" }
+        ],
+        "readings": [
+          { "surface": "紹介", "reading": "しょうかい" },
+          { "surface": "紹", "reading": "しょう" }
+        ]
+      }
+    },
+    {
+      "match": "一生",
+      "inputTokens": 721,
+      "outputTokens": 168,
+      "response": {
+        "explanation": "You dropped the long vowel at the end. 生 here is しょう, so 一生 is いっしょう, one beat longer than いっしょ.",
+        "hook": "You already read 一緒 as いっしょ. 一生 is いっしょう: together, for a whole life, and one sound longer.",
+        "chips": [
+          { "kind": "compare", "label": "一緒 and 一生 side by side" },
+          { "kind": "example", "label": "One more with 一生" }
+        ],
+        "readings": [
+          { "surface": "一生", "reading": "いっしょう" },
+          { "surface": "一緒", "reading": "いっしょ" }
+        ]
+      }
+    },
+    {
+      "match": "Immersion: japanese",
+      "inputTokens": 801,
+      "outputTokens": 236,
+      "toolCalls": [
+        [{ "id": "call_1", "name": "get_learner_profile", "args": {} }],
+        [
+          {
+            "id": "call_2",
+            "name": "check_known",
+            "args": { "words": ["持つ", "手", "待つ", "駅", "友達", "差"] }
+          }
+        ]
+      ],
+      "response": {
+        "explanation": "「持つ」の漢字は「手」と同じです。「待つ」は駅で友達を待つときに使います。漢字の差を見てください。",
+        "chips": [
+          { "kind": "compare", "label": "待 and 持 side by side" },
+          { "kind": "example", "label": "One more with 待" }
+        ],
+        "readings": [],
+        "summaryNative": "持 has the hand on its left, like 手; 待 is the waiting one. Look at the left side of each kanji."
+      }
+    }
+  ]
+}

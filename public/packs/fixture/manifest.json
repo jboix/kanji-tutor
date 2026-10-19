@@ -1,0 +1,71 @@
+{
+  "version": "fixture-de7d1122",
+  "files": [
+    {
+      "store": "words",
+      "url": "words-00.json.gz",
+      "bytes": 35104,
+      "count": 644
+    },
+    {
+      "store": "kanji",
+      "url": "kanji-00.json.gz",
+      "bytes": 26729,
+      "count": 565
+    },
+    {
+      "store": "sentences",
+      "url": "sentences-00.json.gz",
+      "bytes": 47223,
+      "count": 426
+    },
+    {
+      "store": "grammar",
+      "url": "grammar-00.json.gz",
+      "bytes": 7346,
+      "count": 265
+    },
+    {
+      "store": "clusters",
+      "url": "clusters-00.json.gz",
+      "bytes": 1740,
+      "count": 39
+    },
+    {
+      "store": "units",
+      "url": "units-00.json.gz",
+      "bytes": 598,
+      "count": 4
+    }
+  ],
+  "languages": {
+    "fr": [
+      {
+        "store": "glosses",
+        "url": "fr-glosses-00.json.gz",
+        "bytes": 10928,
+        "count": 574
+      },
+      {
+        "store": "translations",
+        "url": "fr-translations-00.json.gz",
+        "bytes": 2182,
+        "count": 110
+      }
+    ],
+    "es": [
+      {
+        "store": "glosses",
+        "url": "es-glosses-00.json.gz",
+        "bytes": 13226,
+        "count": 590
+      },
+      {
+        "store": "translations",
+        "url": "es-translations-00.json.gz",
+        "bytes": 1788,
+        "count": 97
+      }
+    ]
+  }
+}

@@ -1,0 +1,115 @@
+/* The result card after an answer (U2, D30, D105; W-answered, W-error): a soft tinted card with
+   a 34px circle. Green (--ok) is for a right answer only; the miss crimson is a correction. */
+.state {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-card);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+  /* The circle is 34px: a one-line card centres its text on it. */
+  min-height: 34px;
+  justify-content: center;
+}
+
+.title {
+  font-size: var(--text-md);
+  font-weight: 700;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+}
+
+.correct {
+  background: var(--ok-surface);
+  color: var(--ok-ink);
+  box-shadow: 0 8px 22px var(--ok-shadow);
+}
+
+.correct .badge {
+  background: var(--ok);
+  color: var(--on-ok);
+}
+
+.wrong {
+  background: var(--miss-surface);
+  color: var(--miss-ink);
+  box-shadow: 0 8px 22px var(--miss-shadow);
+  animation: shake 250ms ease-in-out;
+}
+
+/* The expected reading in ink, its differing kana in crimson (W-error); the struck answer keeps
+   its own muted look. */
+.wrong :global([lang="ja"]:not(del)) {
+  color: var(--ink);
+}
+
+.wrong .badge {
+  background: var(--miss);
+  color: var(--on-miss);
+}
+
+/* "I don't know" (L4): the reading, plainly, on the quiet surface. */
+.skipped {
+  background: var(--paper-soft);
+  color: var(--ink);
+}
+
+.check {
+  width: 18px;
+  height: 18px;
+}
+
+.cross {
+  width: 16px;
+  height: 16px;
+}
+
+.check path {
+  stroke-dasharray: 24;
+  stroke-dashoffset: 0;
+  animation: draw 300ms ease-out both;
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 24;
+  }
+}
+
+@keyframes shake {
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+}
+
+/* Reduced motion: the colour and the marks stay, the motion goes. */
+@media (prefers-reduced-motion: reduce) {
+  .check path,
+  .wrong {
+    animation: none;
+  }
+}

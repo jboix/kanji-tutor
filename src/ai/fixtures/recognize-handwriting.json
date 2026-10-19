@@ -1,0 +1,9 @@
+{
+  "fixtures": [
+    {
+      "inputTokens": 803,
+      "outputTokens": 31,
+      "response": { "candidates": ["待", "持", "特", "時", "詩"] }
+    }
+  ]
+}

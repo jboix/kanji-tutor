@@ -1,0 +1,45 @@
+name: 🐛 Bug Report
+description: Report a possible bug or regression
+title: "🐛 <TITLE>"
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a bug. Describe it clearly; a bug that cannot be reproduced takes
+        much longer to fix. Report a security problem privately, as docs/SECURITY.md describes,
+        never in an issue.
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: >
+        The build id (Settings → About), the device and its OS version, the browser, and whether
+        the app runs in the browser or installed on the home screen. Never paste your API key.
+    validations:
+      required: true
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: What happened?
+      description: The steps that reproduce the issue, with the screen and the sentence or word shown.
+      placeholder: |
+        1.
+        2.
+    validations:
+      required: true
+  - type: textarea
+    id: expected-result
+    attributes:
+      label: Expected result
+      description: What you expected to happen.
+    validations:
+      required: true
+  - type: checkboxes
+    id: coc
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/jboix/kanji-tutor/blob/main/docs/CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow the Code of Conduct
+          required: true

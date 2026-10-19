@@ -1,0 +1,32 @@
+/** French messages: the kanji index and the kanji page (K3, I1). */
+import type { Messages } from '../../types.ts';
+
+export const kanji = {
+  markedKnown: 'Marqué comme connu',
+  markedKnownLesson: 'Marqué comme connu · {lesson}',
+  knownSince: 'Connu depuis {since}',
+  notInWords: 'Pas encore dans vos mots',
+  readings: { one: '{n} lecture', other: '{n} lectures' },
+  inWords: { one: 'dans {n} de vos mots', other: 'dans {n} de vos mots' },
+  countLine: '{readings} · {words}',
+  family: 'Même élément, même son',
+  familyLabel: 'Même élément, même son : {sound}',
+  memberKnown: 'connu',
+  memberGuess: 'à deviner',
+  practise: 'Lire 5 phrases avec {reading}',
+  kanaOnly: 'S’écrit uniquement en kana.',
+  lookUp: 'Recherche',
+  lookUpLabel: 'Chercher un kanji ou une lecture',
+  lookUpPlaceholder: 'Kanji ou lecture (le romaji fonctionne)',
+  thisWeek: 'Cette semaine',
+  thisWeekEmpty: 'Les kanji des mots lus cette semaine apparaissent ici.',
+  draw: 'Dessiner un kanji',
+  drawDetail: 'Dans n’importe quel ordre de traits',
+  lookingUp: 'Recherche…',
+  notFound: '{char} n’est pas dans le dictionnaire.',
+  another: 'Chercher un autre kanji',
+  newThisWeek: 'nouveau cette semaine',
+  seenOnce: 'vu une fois',
+  unmet: 'Aucun de vos mots ne l’utilise encore. Lectures du dictionnaire : {readings}',
+  howWell: 'Votre lecture',
+} satisfies Messages['kanji'];

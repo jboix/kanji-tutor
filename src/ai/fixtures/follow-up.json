@@ -1,0 +1,62 @@
+{
+  "fixtures": [
+    {
+      "inputTokens": 731,
+      "outputTokens": 205,
+      "response": {
+        "text": "待 has 彳 on the left, a person walking: you go somewhere and wait, as in 待つ. 持 has 扌, a hand: you hold something, as in 持つ. The right side, 寺, is shared by both, so look left to tell them apart.",
+        "readings": [
+          { "surface": "待つ", "reading": "まつ" },
+          { "surface": "持つ", "reading": "もつ" },
+          { "surface": "寺", "reading": "てら" }
+        ]
+      }
+    },
+    {
+      "match": "Follow-up: example",
+      "inputTokens": 719,
+      "outputTokens": 141,
+      "response": {
+        "text": "Same 待, same reading まつ, this time in the past.",
+        "example": {
+          "text": "駅で三十分待ちました。",
+          "translation": "I waited thirty minutes at the station."
+        },
+        "readings": [
+          { "surface": "駅", "reading": "えき" },
+          { "surface": "三十分", "reading": "さんじゅっぷん" },
+          { "surface": "待ちました", "reading": "まちました" }
+        ]
+      }
+    },
+    {
+      "match": "Follow-up: simpler",
+      "inputTokens": 708,
+      "outputTokens": 96,
+      "response": {
+        "text": "間に means \"at some point while\". 間 alone means \"the whole time\".",
+        "readings": [{ "surface": "間", "reading": "あいだ" }]
+      }
+    },
+    {
+      "match": "Follow-up: quiz",
+      "inputTokens": 712,
+      "outputTokens": 128,
+      "response": {
+        "text": "Pick the one that fits.",
+        "quiz": {
+          "question": "電車を待っている（　）、ずっと音楽を聞いていた。",
+          "options": ["間", "間に"],
+          "answerIndex": 0
+        },
+        "readings": [
+          { "surface": "電車", "reading": "でんしゃ" },
+          { "surface": "待っている", "reading": "まっている" },
+          { "surface": "間", "reading": "あいだ" },
+          { "surface": "音楽", "reading": "おんがく" },
+          { "surface": "聞いていた", "reading": "きいていた" }
+        ]
+      }
+    }
+  ]
+}

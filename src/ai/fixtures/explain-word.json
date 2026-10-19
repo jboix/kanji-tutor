@@ -1,0 +1,114 @@
+{
+  "fixtures": [
+    {
+      "match": "間に",
+      "inputTokens": 688,
+      "outputTokens": 251,
+      "response": {
+        "surface": "間に",
+        "reading": { "surface": "間に", "reading": "あいだに" },
+        "meaning": "while, at some point during",
+        "nuance": "With 間に, the reading happened at some point while you waited. Drop the に and it means you read the whole time.",
+        "contrast": {
+          "text": "待っている間、本を読んでいた。",
+          "meaning": "I was reading the whole time I waited."
+        },
+        "chips": [
+          { "kind": "quiz", "label": "Quiz me: 間 or 間に?" },
+          { "kind": "simpler", "label": "Simpler, please" },
+          { "kind": "keep", "label": "Keep in my notes" }
+        ],
+        "readings": [
+          { "surface": "間", "reading": "あいだ" },
+          { "surface": "待っている", "reading": "まっている" },
+          { "surface": "本", "reading": "ほん" },
+          { "surface": "読んでいた", "reading": "よんでいた" }
+        ]
+      }
+    },
+    {
+      "match": "わけではない",
+      "inputTokens": 705,
+      "outputTokens": 233,
+      "response": {
+        "surface": "わけではない",
+        "reading": { "surface": "わけではない", "reading": "わけではない" },
+        "meaning": "it isn't that…, it doesn't mean that…",
+        "nuance": "わけではない denies a conclusion the reader might draw, not the fact itself. ではない alone would just say something is not so.",
+        "contrast": {
+          "text": "方言を話す人が減っていない。",
+          "meaning": "The number of dialect speakers is not falling."
+        },
+        "chips": [
+          { "kind": "example", "label": "One more with わけではない" },
+          { "kind": "simpler", "label": "Simpler, please" },
+          { "kind": "keep", "label": "Keep in my notes" }
+        ],
+        "readings": [
+          { "surface": "方言", "reading": "ほうげん" },
+          { "surface": "話す", "reading": "はなす" },
+          { "surface": "人", "reading": "ひと" },
+          { "surface": "減っていない", "reading": "へっていない" }
+        ]
+      }
+    },
+    {
+      "match": "紹介",
+      "inputTokens": 676,
+      "outputTokens": 198,
+      "response": {
+        "surface": "紹介",
+        "reading": { "surface": "紹介", "reading": "しょかい" },
+        "meaning": "introducing someone",
+        "nuance": "紹介する is for introducing a person or a thing to someone. This recorded reply claims a wrong reading on purpose: verification must mark it unverified.",
+        "chips": [
+          { "kind": "example", "label": "One more with 紹介" },
+          { "kind": "keep", "label": "Keep in my notes" }
+        ],
+        "readings": [
+          { "surface": "紹介", "reading": "しょかい" },
+          { "surface": "先生", "reading": "せんせい" },
+          { "surface": "友達", "reading": "ともだち" }
+        ]
+      }
+    },
+    {
+      "match": "French (fr)",
+      "inputTokens": 712,
+      "outputTokens": 262,
+      "response": {
+        "surface": "間に",
+        "reading": { "surface": "間に", "reading": "あいだに" },
+        "meaning": "pendant que, à un moment pendant",
+        "nuance": "Avec 間に, la lecture a eu lieu à un moment pendant que tu attendais. Sans le に, tu as lu pendant toute l’attente.",
+        "contrast": {
+          "text": "待っている間、本を読んでいた。",
+          "meaning": "J’ai lu pendant toute l’attente."
+        },
+        "chips": [
+          { "kind": "quiz", "label": "Quiz : 間 ou 間に ?" },
+          { "kind": "simpler", "label": "Plus simple, s’il te plaît" },
+          { "kind": "keep", "label": "Garder dans mes notes" }
+        ],
+        "readings": [
+          { "surface": "間", "reading": "あいだ" },
+          { "surface": "待っている", "reading": "まっている" },
+          { "surface": "本", "reading": "ほん" }
+        ]
+      }
+    },
+    {
+      "match": "日本人",
+      "inputTokens": 640,
+      "outputTokens": 180,
+      "response": {
+        "surface": "日本人",
+        "reading": { "surface": "日本人", "reading": "にっぽんじん" },
+        "meaning": "a Japanese person",
+        "nuance": "日本人 (にっぽんじん) is a person from Japan; 人 after a country name means a person from it.",
+        "chips": [{ "kind": "simpler", "label": "Simpler, please" }],
+        "readings": [{ "surface": "日本人", "reading": "にっぽんじん" }]
+      }
+    }
+  ]
+}

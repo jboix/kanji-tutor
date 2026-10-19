@@ -1,0 +1,30 @@
+name: Playwright browsers
+description: >-
+  Restore Chromium for Playwright from the Actions cache, or download it on a miss. Keyed on the
+  installed Playwright version, so a bump refreshes it. Runs after `bun install`.
+runs:
+  using: composite
+  steps:
+    - name: Playwright version
+      id: playwright
+      shell: bash
+      run: echo "version=$(jq -r .version node_modules/@playwright/test/package.json)" >> "$GITHUB_OUTPUT"
+
+    - name: Cache browsers
+      id: cache
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ~/.cache/ms-playwright
+        key: playwright-chromium-${{ runner.os }}-${{ steps.playwright.outputs.version }}
+
+    - name: Download Chromium and its system packages
+      if: steps.cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: bunx playwright install --with-deps chromium
+
+    # The runner image is fresh each run, so the shared libraries still need installing even
+    # when the browser came from the cache.
+    - name: Install the system packages only
+      if: steps.cache.outputs.cache-hit == 'true'
+      shell: bash
+      run: bunx playwright install-deps chromium

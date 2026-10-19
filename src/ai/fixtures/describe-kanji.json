@@ -1,0 +1,15 @@
+{
+  "fixtures": [
+    {
+      "inputTokens": 512,
+      "outputTokens": 118,
+      "response": {
+        "candidates": [
+          { "char": "待", "reason": "寺 on the right, means to wait" },
+          { "char": "持", "reason": "寺 on the right, means to hold" },
+          { "char": "特", "reason": "寺 on the right, means special" }
+        ]
+      }
+    }
+  ]
+}

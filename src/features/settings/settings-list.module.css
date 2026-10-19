@@ -1,0 +1,104 @@
+.title {
+  margin: 4px 0 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* Settings.dc.html: two grouped lists of 60px rows, each with a square icon and a chevron. */
+.group {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-radius: var(--radius-panel);
+  background: var(--paper-soft);
+  overflow: hidden;
+}
+
+.group > li + li {
+  border-top: 1px solid var(--rule);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 60px;
+  padding: 8px 16px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.row:hover {
+  background: var(--rule);
+}
+
+/* Keyboard focus: a ring drawn inside the row, since the rounded list clips anything outside
+   it. The end rows follow the list's corners. */
+.row:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
+}
+
+.group > li:first-child .row {
+  border-radius: var(--radius-panel) var(--radius-panel) 0 0;
+}
+
+.group > li:last-child .row {
+  border-radius: 0 0 var(--radius-panel) var(--radius-panel);
+}
+
+.group > li:only-child .row {
+  border-radius: var(--radius-panel);
+}
+
+.icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  color: var(--on-ink);
+}
+
+.accent {
+  background: var(--accent);
+}
+
+.ink {
+  background: var(--ink);
+}
+
+.muted {
+  background: var(--ink-muted);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.name {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.detail {
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+.chevron {
+  display: flex;
+  color: var(--ink-muted);
+}
+
+.build {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ink-muted);
+  text-align: center;
+}

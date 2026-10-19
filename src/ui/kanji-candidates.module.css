@@ -1,0 +1,131 @@
+/*
+ * The kanji popup (C6): a small card right above the kana being typed, laid out against a zero-
+ * height layer at the top of the field's positioned parent. Never wider than that parent, so the
+ * page never scrolls sideways; more candidates scroll inside it.
+ */
+.layer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 0;
+}
+
+.popup {
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  max-width: 100%;
+  border-radius: 8px;
+  background: var(--paper-raised);
+  box-shadow:
+    0 0 0 1px var(--rule),
+    0 6px 18px rgb(0 0 0 / 0.14);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.popup::-webkit-scrollbar {
+  display: none;
+}
+
+/* A stream of characters with thin rules between words: 44px tall targets (N6), Klee One. */
+.option {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 10px;
+  color: var(--ink);
+  font-family: var(--font-ja);
+  font-size: 20px;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+.option + .option::before {
+  content: "";
+  position: absolute;
+  top: 13px;
+  bottom: 13px;
+  left: 0;
+  width: 1px;
+  background: var(--rule);
+}
+
+/* The highlight that Enter picks, on the first candidate from the start: a soft fill with an ink
+   bar under the word. */
+.option[aria-selected="true"] {
+  background: var(--paper-soft);
+  box-shadow: inset 0 -2px 0 var(--ink);
+}
+
+@media (hover: hover) {
+  .option:hover {
+    background: var(--paper-soft);
+  }
+}
+
+/* A word the learner already tracks: a quiet dotted underline, not a colour. */
+.known {
+  text-decoration: underline dotted 1px var(--ink-muted);
+  text-underline-offset: 7px;
+}
+
+.toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* The あ switch: drawn at 36px, its touch target reaches 44px. */
+.toggle {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  box-shadow: inset 0 0 0 1px var(--rule);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-muted);
+  font-family: var(--font-ja);
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.toggle::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+}
+
+/* あ and ア fill the circle in ink; A (romaji as typed) and IME (the device's Japanese keyboard)
+   are the quiet outline, in the UI font. The Ask box's switch shows あ either way. */
+.toggle[data-mode="off"]:not([aria-pressed]),
+.toggle[data-mode="native"] {
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.toggle[data-mode="native"] {
+  font-size: 11px;
+  letter-spacing: 0.02em;
+}
+
+.toggle[data-mode="hiragana"],
+.toggle[data-mode="katakana"] {
+  box-shadow: none;
+  background: var(--ink);
+  color: var(--paper);
+}

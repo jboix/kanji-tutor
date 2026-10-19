@@ -1,0 +1,138 @@
+.gallery {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  width: 100%;
+  min-height: 100dvh;
+}
+
+@media (min-width: 820px) {
+  .gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.pane {
+  display: flex;
+  justify-content: center;
+  background: var(--scrim);
+  color: var(--ink);
+  padding: 24px 0;
+}
+
+.phone {
+  width: 100%;
+  max-width: 390px;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+}
+
+.paneTitle {
+  margin: 0;
+  padding: 20px var(--gutter) 0;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 24px var(--gutter) 28px;
+  border-bottom: 8px solid var(--scrim);
+}
+
+.name {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--ink-faint);
+  font-family: ui-monospace, monospace;
+}
+
+.flush {
+  margin: 0 calc(-1 * var(--gutter));
+}
+
+.hero {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.heroWord {
+  font-family: var(--font-ja);
+  font-size: 44px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.muted {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.small {
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+.wrote {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.lead {
+  font-size: var(--text-md);
+  line-height: 1.6;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.stack16 {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.readingRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.readingKana {
+  width: 84px;
+  font-family: var(--font-ja);
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.readingWords {
+  flex: 1;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+}
+
+.toolbar {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  padding: 16px var(--gutter);
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+}

@@ -1,0 +1,31 @@
+/* Sticks to the bottom of the screen body (S6): out to the gutters and down over the body's
+   bottom padding, on paper, clear of the home indicator. No rule above: in the flow, mid-screen,
+   it read as a footer; content scrolling under it fades out instead. */
+.sticky {
+  position: sticky;
+  bottom: -16px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  margin: 0 calc(-1 * var(--gutter)) -16px;
+  padding: 12px var(--gutter) max(16px, calc(env(safe-area-inset-bottom) + 8px));
+  background: var(--paper);
+}
+
+.sticky::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  left: 0;
+  height: 16px;
+  background: linear-gradient(transparent, var(--paper));
+  pointer-events: none;
+}
+
+/* Keyboard open (U1): the keyboard covers the home indicator. */
+:global(:root[data-keyboard="open"]) .sticky {
+  padding-bottom: 8px;
+}

@@ -1,0 +1,20 @@
+/** English messages: drills in the reading session (R8). */
+export const drills = {
+  promptLookalike: 'Which kanji fits?',
+  promptCloze: 'Which pattern fits?',
+  promptReadings: 'One kanji, several readings',
+  promptFamily: 'Same part, same sound',
+  read: 'Read',
+  asWord: 'As a word',
+  known: 'known',
+  guessIt: 'guess it',
+  familyHint: "{guess} shares {part} with kanji you read. Guess its on'yomi.",
+  youChose: 'You chose',
+  fits: 'Fits',
+  readings: 'Readings',
+  swappedRecently: 'swapped recently',
+  choices: 'Choices',
+  onyomiOf: "On'yomi of {kanji}",
+  readingOf: 'Reading of {word}',
+  guessReading: 'Guess the reading',
+} as const;

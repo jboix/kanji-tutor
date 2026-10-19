@@ -1,0 +1,170 @@
+name: Release
+
+# Manual only, from main. semantic-release reads the Conventional Commits since the last tag,
+# bumps package.json, commits it, tags vX.Y.Z and writes the GitHub Release. When it cut a
+# release, the site is built at that tag, so the app shows that version (Settings → About), and
+# deployed to GitHub Pages. With no release-worthy commits, nothing is tagged or deployed.
+#
+# semantic-release pushes the version commit to main with the release bot's token, a GitHub App
+# allowed past main's ruleset. The release job runs in the `release` environment, which holds
+# its secrets (RELEASE_APP_ID, RELEASE_APP_PRIVATE_KEY) and deploys from main only. Checkout
+# keeps no credentials: semantic-release pushes with the token in its environment.
+#
+# The Quality workflow gates every commit on main; the release runs the checks once more, and the
+# full end-to-end suite (the Quality workflow runs only a quick subset). The
+# repository's Pages source must be "GitHub Actions" (Settings → Pages). The build uses the real
+# Gemini provider, which stays inert until a user types a key on their device: no key is ever in
+# the build. Nothing is published to npm (`npmPublish: false`).
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    environment: release
+    permissions:
+      contents: read
+    outputs:
+      released: ${{ steps.version.outputs.released }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: '.tool-versions'
+
+      - name: Setup Node (semantic-release runs on Node)
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        env:
+          CI: true
+          HUSKY: "0"
+        run: bun install --frozen-lockfile
+
+      - name: Check
+        run: bun run check
+
+      - name: Playwright browsers
+        uses: ./.github/actions/playwright-browsers
+
+      # The full suite at both phone sizes, against a mock-AI build: nothing is released without it.
+      - name: Playwright (full suite)
+        run: bun run test:e2e
+
+      - name: Upload report
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-report-release
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Record the latest tag
+        id: before
+        run: echo "tag=$(git describe --tags --abbrev=0 --match 'v*' 2>/dev/null || true)" >> "$GITHUB_OUTPUT"
+
+      - name: Mint the release bot token
+        id: bot-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-issues: write
+          permission-pull-requests: write
+
+      - name: Semantic Release (version commit + tag + GitHub Release)
+        env:
+          GITHUB_TOKEN: ${{ steps.bot-token.outputs.token }}
+        run: bunx semantic-release
+
+      - name: Resolve the released version
+        id: version
+        env:
+          PREVIOUS: ${{ steps.before.outputs.tag }}
+        run: |
+          git fetch --tags --force --quiet
+          latest="$(git describe --tags --abbrev=0 --match 'v*' 2>/dev/null || true)"
+          if [ -n "$latest" ] && [ "$latest" != "$PREVIOUS" ]; then
+            echo "released $latest"
+            echo "released=true" >> "$GITHUB_OUTPUT"
+            echo "version=$latest" >> "$GITHUB_OUTPUT"
+          else
+            echo "nothing to release"
+            echo "released=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    needs: release
+    if: needs.release.outputs.released == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout the released tag
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.release.outputs.version }}
+          persist-credentials: false
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: '.tool-versions'
+
+      - name: Install dependencies
+        env:
+          CI: true
+          HUSKY: "0"
+        run: bun install --frozen-lockfile
+
+      - name: Read the Pages address
+        id: pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+
+      - name: Build
+        env:
+          VITE_BASE: ${{ steps.pages.outputs.base_path }}/
+        run: bun run build
+
+      # Pages has no SPA fallback: serve the app shell for deep links such as /kanji/生.
+      - name: SPA fallback
+        run: cp dist/index.html dist/404.html
+
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

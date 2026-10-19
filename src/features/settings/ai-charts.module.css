@@ -1,0 +1,92 @@
+/* AI use charts (A16). The series colours are tokens (--series-1 to 3); every chart has a text
+   table too. The AI crimson is not used: it belongs to the tutor's own notes. */
+.chart {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+}
+
+.title {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.s1 {
+  fill: var(--series-1);
+  background: var(--series-1);
+}
+
+.s2 {
+  fill: var(--series-2);
+  background: var(--series-2);
+}
+
+.s3 {
+  fill: var(--series-3);
+  background: var(--series-3);
+}
+
+.track {
+  fill: var(--paper-soft);
+}
+
+.hit {
+  fill: transparent;
+}
+
+.axis {
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+
+.tick,
+.label {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  fill: var(--ink-muted);
+}
+
+.label {
+  font-size: 11px;
+  fill: var(--ink);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+/* The details body lines its parts up at the start; the charts take its whole width. */
+.charts {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

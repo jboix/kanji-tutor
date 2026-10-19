@@ -1,0 +1,31 @@
+.title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.intro,
+.result {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.6;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hint {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--ink-muted);
+}

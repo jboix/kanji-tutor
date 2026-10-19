@@ -1,0 +1,118 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`prompts > answerQuestion is versioned, calm and asks for JSON 1`] = `
+"Target: 間に
+Question (about the word): Why に?
+Sentence: 駅で友達を待っている間に、本を読みました。
+Translation: While…
+From: 第4課
+Words the learner reads well: 一緒、駅、友達
+Recent error types: long-vowel, wrong-kanji
+Current lesson: Tobira 第4課"
+`;
+
+exports[`prompts > breakdownSentence is versioned, calm and asks for JSON 1`] = `
+"Sentence: 駅で友達を待っている間に、本を読みました。
+Translation: While…
+Words the learner reads well: 一緒、駅、友達
+Recent error types: long-vowel, wrong-kanji
+Current lesson: Tobira 第4課"
+`;
+
+exports[`prompts > correctSentence is versioned, calm and asks for JSON 1`] = `
+"Grammar: 〜わけではない (it's not that…)
+Learner sentence: 日本語が嫌いわけではない。
+Words the learner reads well: 一緒、駅、友達
+Recent error types: long-vowel, wrong-kanji
+Current lesson: Tobira 第4課"
+`;
+
+exports[`prompts > describeKanji is versioned, calm and asks for JSON 1`] = `
+"Description: temple on the right
+Words the learner reads well: 一緒、駅、友達
+Recent error types: long-vowel, wrong-kanji
+Current lesson: Tobira 第4課"
+`;
+
+exports[`prompts > explainMistake is versioned, calm and asks for JSON 1`] = `
+"Target: 待って
+Correct reading: まって
+Error type (from grading): wrong-kanji
+Words the learner reads well: 一緒、駅、友達
+Recent error types: long-vowel, wrong-kanji
+Current lesson: Tobira 第4課"
+`;
+
+exports[`prompts > explainSentence is versioned, calm and asks for JSON 1`] = `
+"Hidden: 待って (never write: まって, まつ)
+Sentence: 駅で友達を待っている間に、本を読みました。
+Translation: While…
+From: 第4課
+Grammar in it: 〜ている (ongoing action)
+Words the learner reads well: 一緒、駅、友達
+Recent error types: long-vowel, wrong-kanji
+Current lesson: Tobira 第4課"
+`;
+
+exports[`prompts > explainWord is versioned, calm and asks for JSON 1`] = `
+"Target: 間に
+Words the learner reads well: 一緒、駅、友達
+Recent error types: long-vowel, wrong-kanji
+Current lesson: Tobira 第4課"
+`;
+
+exports[`prompts > extractFromImage is versioned, calm and asks for JSON 1`] = `"Transcribe the Japanese text in this photo."`;
+
+exports[`prompts > followUp is versioned, calm and asks for JSON 1`] = `
+"Follow-up: quiz
+Write one multiple-choice question that checks the point, in "quiz", with a one-line lead-in.
+Target: 間に
+Sentence: 駅で友達を待っている間に、本を読みました。
+Translation: While…
+From: 第4課
+Previous explanation: P
+Words the learner reads well: 一緒、駅、友達
+Recent error types: long-vowel, wrong-kanji
+Current lesson: Tobira 第4課"
+`;
+
+exports[`prompts > generateSentences is versioned, calm and asks for JSON 1`] = `
+"Count: 2
+Target: 待つ (まつ) to wait
+Known words: 駅"
+`;
+
+exports[`prompts > memoryHook is versioned, calm and asks for JSON 1`] = `
+"Target: 待つ
+Reading: まつ
+Meaning: to wait
+待: wait (parts: 彳 + 寺 temple)
+Sentence: 駅で友達を待っている間に、本を読みました。
+Translation: While…
+From: 第4課
+Words the learner reads well: 一緒、駅、友達
+Recent error types: long-vowel, wrong-kanji
+Current lesson: Tobira 第4課"
+`;
+
+exports[`prompts > paraphraseQuestion is versioned, calm and asks for JSON 1`] = `
+"Phrase: 待っている間に
+Sentence: 駅で友達を待っている間に、本を読みました。
+Translation: While…
+From: 第4課
+Words the learner reads well: 一緒、駅、友達
+Recent error types: long-vowel, wrong-kanji
+Current lesson: Tobira 第4課"
+`;
+
+exports[`prompts > recognizeHandwriting is versioned, calm and asks for JSON 1`] = `"Which kanji is drawn in this image?"`;
+
+exports[`prompts > transcribeReading is versioned, calm and asks for JSON 1`] = `"Transcribe this recording in hiragana, exactly as pronounced."`;
+
+exports[`prompts > weeklyNotes is versioned, calm and asks for JSON 1`] = `
+"Week: 11–17 October
+Stats: {"week":"11–17 October","sentencesRead":212,"correct":186,"byErrorType":{},"missExamples":[],"unusedGrammar":[]}
+Words the learner reads well: 一緒、駅、友達
+Recent error types: long-vowel, wrong-kanji
+Current lesson: Tobira 第4課"
+`;

@@ -1,0 +1,167 @@
+.nav {
+  /* Above the page so the raised Start disc is never under scrolled content; sheets (10) stay above. */
+  position: relative;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: end;
+  background: var(--paper);
+  border-top: 1px solid var(--rule);
+  /* The labels may sit over the top of the home-indicator area; only its lower part stays clear (U11). */
+  padding: 4px 8px max(6px, calc(env(safe-area-inset-bottom) - 14px));
+}
+
+.link,
+.start {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-height: 50px;
+  min-width: 0;
+  text-decoration: none;
+  color: var(--ink-muted);
+  font-size: var(--text-xs);
+}
+
+/* A tab: a 26px icon box right over a 16px label, its label on Start's line, so the sliding
+   highlight sits centred behind both at one height (D123, D131). Painted above the highlight. */
+.link {
+  position: relative;
+  justify-content: flex-end;
+  gap: 0;
+  padding-bottom: 10px;
+  transition: color 300ms ease-out;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 26px;
+}
+
+.label {
+  max-width: 100%;
+  overflow: hidden;
+  line-height: 16px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.link:hover {
+  color: var(--ink);
+}
+
+/* Keyboard focus: the ring takes the highlight's rounded square, not the tall tap target. */
+.link:focus-visible {
+  outline: none;
+}
+
+.link:focus-visible::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  width: 64px;
+  max-width: calc(100% - 6px);
+  height: 54px;
+  border-radius: 14px;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+/* The active tab (D123): its icon in the accent on the soft square, its label in ink and bold. */
+.active {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.active .icon {
+  color: var(--accent);
+}
+
+/* One highlight for the bar, placed in the grid row and moved a column at a time: a rounded
+   square behind the whole tab, icon and label (D131). */
+.indicator {
+  position: absolute;
+  grid-row: 1 / 2;
+  grid-column: 1 / -1;
+  left: 0;
+  bottom: 4px;
+  width: 20%;
+  height: 54px;
+  transform: translateX(calc(var(--column) * 100%));
+  transition:
+    transform 420ms cubic-bezier(0.3, 0.7, 0.2, 1),
+    opacity 250ms ease-out;
+  pointer-events: none;
+}
+
+.indicator::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 64px;
+  max-width: calc(100% - 6px);
+  margin: 0 auto;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--accent) 16%, var(--paper));
+}
+
+/* No tab owns the screen (Start, a session's end): no highlight. */
+.indicator[data-hidden] {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link,
+  .indicator {
+    transition: none;
+  }
+}
+
+/* Start (IA3): a 60px disc raised over the bar's top rule, ringed with the paper colour. Above
+   the sliding highlight, which passes behind it between Learn and Add. */
+.start {
+  position: relative;
+  z-index: 1;
+  gap: 4px;
+  color: var(--accent);
+  font-weight: 700;
+  padding-bottom: 10px;
+}
+
+.disc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  margin-top: -26px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--on-ink);
+  box-shadow: 0 0 0 6px var(--paper);
+}
+
+.start:hover .disc {
+  filter: brightness(1.08);
+}
+
+.start:focus-visible {
+  outline: none;
+}
+
+.start:focus-visible .disc {
+  outline: 2px solid var(--ink);
+  outline-offset: 8px;
+}
+
+/* Keyboard open (U1): the nav would sit on the keyboard and push the content up. */
+:global(:root[data-keyboard="open"]) .nav {
+  display: none;
+}

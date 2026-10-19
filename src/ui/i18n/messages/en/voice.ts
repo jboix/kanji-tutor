@@ -1,0 +1,21 @@
+/** English messages: answering by voice (I2). */
+export const voice = {
+  prompt: 'Say the underlined word out loud',
+  hint: 'Hold to speak · transcribed as you said it, not corrected',
+  tooShort: 'Hold the button while you speak, then let go.',
+  nothingHeard: 'No reading was heard. Try again, a little closer to the microphone.',
+  noRecorder: 'This browser cannot record audio. You can type the reading instead.',
+  offline: 'Answering aloud needs a connection. You can type the reading instead.',
+  noKey: 'Answering aloud needs a Gemini key, added in Settings. You can type the reading instead.',
+  rateLimit: 'Too many requests just now. Try again in a minute, or type the reading.',
+  invalid: 'That could not be written down as kana. Try again, or type the reading.',
+  provider: 'Transcription did not work this time. Try again, or type the reading.',
+  failed: 'Something went wrong. Try again.',
+  starting: 'Starting the microphone…',
+  recording: 'Listening… let go when you have said it',
+  transcribing: 'Writing down what you said…',
+  typeReadingInstead: 'Type the reading instead',
+  sentToTutor: 'Each answer is sent to the tutor',
+  hold: 'Hold to speak',
+  typeInstead: 'Type instead',
+} as const;

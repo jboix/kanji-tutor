@@ -1,0 +1,8 @@
+/* The question pill; the kanji popup is laid out against it, above the kana typed (C6). */
+.typing {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}

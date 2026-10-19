@@ -1,0 +1,31 @@
+.ja {
+  font-family: var(--font-ja);
+}
+
+/* A kanji called out inside English prose (read.html: 18px, 600 in 15px text). */
+.emph {
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+/* A Japanese example line inside an explanation (explain.html: 17px). */
+.line {
+  display: block;
+  font-size: 17px;
+}
+
+/* Struck-through wrong answer (read.html "You wrote"): the app's own grading, so ink, not the AI
+   red, which only the tutor's corrections use (D64). */
+.struck {
+  font-family: var(--font-ja);
+  font-size: 20px;
+  color: var(--ink-muted);
+  text-decoration: line-through var(--ink);
+  text-decoration-thickness: 2px;
+}
+
+/* The corrected part of an expected reading (voice.html: しょ<b>う</b>かい): accent, as static. */
+.fix {
+  color: var(--accent);
+  font-weight: 700;
+}

@@ -1,0 +1,19 @@
+/* "Written by the tutor": the small seal and a muted line, the same in every list and exercise. */
+.mark {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-xs, 12px);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  color: var(--ink-muted);
+}
+
+.inline {
+  display: inline-flex;
+  margin-inline-start: 8px;
+  vertical-align: middle;
+}

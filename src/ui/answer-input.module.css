@@ -1,0 +1,70 @@
+/* W-read: the answer field is a filled pill, 54px; the ask field (.outlined) a bordered 48px one. */
+.pill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 54px;
+  padding: 0 4px 0 18px;
+  border-radius: var(--radius-pill);
+  background: var(--paper-soft);
+}
+
+.outlined {
+  height: 48px;
+  border: 1px solid var(--border);
+  background: transparent;
+}
+
+.pill:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  /* 16px or more, or iOS zooms the page on focus (U1). */
+  font-size: 16px;
+}
+
+.input::placeholder {
+  color: var(--ink-muted);
+  opacity: 1;
+}
+
+/* Typing a reading: kana in Klee One. The placeholder stays in the UI font. */
+.kana {
+  font-family: var(--font-ja);
+  font-size: 22px;
+}
+
+/* While empty, the field takes the placeholder's font, so the caret is the placeholder's height
+   and centred on it; the kana size comes with the first letter. 16px keeps iOS from zooming. */
+.kana:placeholder-shown {
+  font-family: var(--font-ui);
+  font-size: 16px;
+}
+
+.kana::placeholder {
+  font-family: var(--font-ui);
+  font-size: 15px;
+}
+
+.end {
+  display: flex;
+  align-items: center;
+}
+
+/* The submit arrow (U9, W-read): a bare arrow, no shape around it; accent once there is
+   something to send, faint before. */
+.send:not(:disabled) {
+  color: var(--accent);
+}
