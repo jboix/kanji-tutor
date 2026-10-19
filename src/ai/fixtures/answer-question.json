@@ -1,0 +1,28 @@
+{
+  "fixtures": [
+    {
+      "inputTokens": 702,
+      "outputTokens": 164,
+      "response": {
+        "answer": "間に marks a point inside a stretch of time: the reading happened at some point while you were waiting. Without に, 間 covers the whole stretch, so the verb usually describes an ongoing state, like 読んでいた.",
+        "readings": [
+          { "surface": "間", "reading": "あいだ" },
+          { "surface": "読んでいた", "reading": "よんでいた" }
+        ]
+      }
+    },
+    {
+      "match": "わけではない",
+      "inputTokens": 713,
+      "outputTokens": 152,
+      "response": {
+        "answer": "\"However, it isn't that fewer people speak dialects.\" The writer is pushing back on the previous line. That's the job わけではない does, and it's this week's grammar.",
+        "readings": [
+          { "surface": "方言", "reading": "ほうげん" },
+          { "surface": "話す", "reading": "はなす" },
+          { "surface": "減っている", "reading": "へっている" }
+        ]
+      }
+    }
+  ]
+}

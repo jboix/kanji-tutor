@@ -1,0 +1,7 @@
+.mark {
+  margin-inline-start: 0.25em;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}

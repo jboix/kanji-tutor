@@ -1,0 +1,20 @@
+/* Listening: ink mic on paper, so it shows inside the paper-soft input pill (read.html). */
+.listening,
+.listening[aria-pressed="true"] {
+  color: var(--ink);
+  background: var(--paper);
+  animation: listen 1.6s ease-in-out infinite;
+}
+
+@keyframes listen {
+  50% {
+    box-shadow: 0 0 0 3px var(--border);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .listening {
+    animation: none;
+    box-shadow: 0 0 0 2px var(--border);
+  }
+}

@@ -1,0 +1,141 @@
+/**
+ * The lesson path over the `Repos` port (T3, T4, V1, D49): unit states, the stored progress per
+ * unit, and the words, sentences and grammar a session takes from the active lesson.
+ */
+import type { Repos } from '../repos.ts';
+import { UNITS } from '../themes/index.ts';
+import type { LearnerLevel, LessonSection, Settings, UnitProgress, Word } from '../types.ts';
+import { learnerLevelOf } from './learner-level.ts';
+import { currentSection, finishPart, nextPart } from './lesson-sections.ts';
+import { newlyDone, type PathInput, type UnitView, unitPathOf } from './unit-path.ts';
+
+export type { UnitCounts, UnitState, UnitStep, UnitView } from './unit-path.ts';
+
+/** The path, the learner's level and the current unit (T4). */
+export interface UnitPath {
+  level: LearnerLevel;
+  units: UnitView[];
+  current?: UnitView;
+}
+
+async function grammarRight(repos: Repos, ids: readonly string[]): Promise<Set<string>> {
+  const unique = [...new Set(ids)];
+  const reviews = await Promise.all(unique.map((id) => repos.reviews.byItem(`grammar:${id}`)));
+  return new Set(unique.filter((_, i) => reviews[i]?.some((r) => r.verdict === 'correct')));
+}
+
+async function pathInput(repos: Repos, settings: Settings): Promise<PathInput> {
+  const packs = new Map((await repos.units.all()).map((pack) => [pack.id, pack]));
+  const status = settings.unitStatus ?? {};
+  const ids = [...packs.values()].flatMap((pack) => pack.wordIds);
+  const entries = (await repos.dictionary.words(ids)).flatMap((w): [string, Word][] =>
+    w ? [[w.id, w]] : [],
+  );
+  const items = await repos.items.byKind('word');
+  const pending = UNITS.filter((u) => status[u.id]?.doneAt === undefined).flatMap((u) => u.grammar);
+  return {
+    level: learnerLevelOf(settings),
+    units: UNITS,
+    packs,
+    words: new Map(entries),
+    levels: new Map(items.map((item) => [item.ref, item.level])),
+    grammarRight: await grammarRight(repos, pending),
+    status,
+    activeUnit: settings.activeUnit,
+  };
+}
+
+/** Stores a patch to one unit's progress. */
+async function patchUnit(repos: Repos, id: string, patch: UnitProgress): Promise<void> {
+  const { unitStatus = {} } = await repos.settings.get();
+  await repos.settings.patch({
+    unitStatus: { ...unitStatus, [id]: { ...unitStatus[id], ...patch } },
+  });
+}
+
+/**
+ * Every unit with its state, step and counts, in path order (T4). A unit that now meets the done
+ * rule is stored as done, so it stays done when a word lapses later.
+ */
+export async function unitPath(repos: Repos, now: number): Promise<UnitPath> {
+  const settings = await repos.settings.get();
+  const input = await pathInput(repos, settings);
+  const path = unitPathOf(input);
+  for (const view of newlyDone(path.units)) await patchUnit(repos, view.unit.id, { doneAt: now });
+  return { level: input.level, ...path };
+}
+
+/** The current unit (T4), read only: unlike `unitPath`, nothing is stored (A10's tools only read). */
+export async function currentUnitView(repos: Repos): Promise<UnitView | undefined> {
+  const settings = await repos.settings.get();
+  return unitPathOf(await pathInput(repos, settings)).current;
+}
+
+/** One unit's view, or undefined for an unknown id. */
+export async function unitView(repos: Repos, id: string, now: number) {
+  return (await unitPath(repos, now)).units.find((view) => view.unit.id === id);
+}
+
+/** Opens a unit (T3): its Introduce step is done and it is the active lesson until done. */
+export async function startUnit(repos: Repos, id: string, now: number): Promise<void> {
+  const { unitStatus = {} } = await repos.settings.get();
+  const introducedAt = unitStatus[id]?.introducedAt ?? now;
+  await patchUnit(repos, id, { introducedAt });
+  await repos.settings.patch({ activeUnit: id });
+}
+
+/** The unit's passage was read (the Read step). */
+export function markUnitRead(repos: Repos, id: string, now: number): Promise<void> {
+  return patchUnit(repos, id, { readAt: now });
+}
+
+/** A review unit below the learner's level, marked done (`skip` false) or skipped. */
+export function markUnitDone(repos: Repos, id: string, now: number, skip = false) {
+  return patchUnit(repos, id, skip ? { skippedAt: now } : { doneAt: now });
+}
+
+/**
+ * A lesson section is started (S3): the unit is opened and becomes the active lesson, and the
+ * section keeps its part count, with the parts already done.
+ */
+export async function startLessonSection(
+  repos: Repos,
+  id: string,
+  section: LessonSection,
+  parts: number,
+  now: number,
+): Promise<void> {
+  await startUnit(repos, id, now);
+  const { unitStatus = {} } = await repos.settings.get();
+  const sections = unitStatus[id]?.sections ?? {};
+  const done = Math.min(sections[section]?.done ?? 0, parts);
+  await patchUnit(repos, id, {
+    sections: { ...sections, [section]: { ...sections[section], parts, done } },
+  });
+}
+
+/** A part of a lesson section is finished (S3); finishing 読み物 is the Read step too. */
+export async function finishLessonPart(
+  repos: Repos,
+  id: string,
+  section: LessonSection,
+  part: number,
+  now: number,
+): Promise<void> {
+  const { unitStatus = {} } = await repos.settings.get();
+  const sections = unitStatus[id]?.sections ?? {};
+  const progress = sections[section];
+  const next = finishPart(progress, part, progress?.parts ?? part, now);
+  const read = section === 'reading' ? { readAt: unitStatus[id]?.readAt ?? now } : {};
+  await patchUnit(repos, id, { ...read, sections: { ...sections, [section]: next } });
+}
+
+/** Where a unit lesson goes on: the first section not done and its next part (S3). */
+export async function lessonNext(
+  repos: Repos,
+  id: string,
+): Promise<{ section: LessonSection; part: number } | undefined> {
+  const progress = (await repos.settings.get()).unitStatus?.[id] ?? {};
+  const section = currentSection(progress);
+  return section && { section, part: nextPart(progress.sections?.[section]) };
+}

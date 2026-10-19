@@ -1,0 +1,51 @@
+import type { ReactNode } from 'react';
+import styles from './progress-line.module.css';
+
+const clamp = (value: number) => Math.min(1, Math.max(0, value));
+
+export interface ProgressLineProps {
+  /** 0 to 1. */
+  value: number;
+  label: string;
+  /** Spans instead of divs, for a line inside phrasing content such as a link (T7). */
+  inline?: boolean;
+}
+
+/** A 6px accent bar on the rule colour (W-today; capture, units, learned). */
+export function ProgressLine({ value, label, inline = false }: ProgressLineProps) {
+  const percent = Math.round(clamp(value) * 100);
+  const Tag = inline ? 'span' : 'div';
+  return (
+    <Tag
+      className={styles.track}
+      role="progressbar"
+      aria-label={label}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={percent}
+    >
+      <Tag className={styles.fill} style={{ width: `${percent}%` }} />
+    </Tag>
+  );
+}
+
+export interface ProgressRowProps {
+  label: ReactNode;
+  /** e.g. "19 of 28". */
+  valueText: string;
+  done: number;
+  total: number;
+}
+
+/** Label, count and line in one ruled row (today.html "This week in class"). */
+export function ProgressRow({ label, valueText, done, total }: ProgressRowProps) {
+  return (
+    <div className={styles.row}>
+      <div className={styles.head}>
+        <span>{label}</span>
+        <span className={styles.value}>{valueText}</span>
+      </div>
+      <ProgressLine value={total > 0 ? done / total : 0} label={valueText} />
+    </div>
+  );
+}

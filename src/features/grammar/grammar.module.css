@@ -1,0 +1,219 @@
+/* The grammar pages (G4, P3), modelled on kanji.html: a big pattern in Klee One, quiet meta,
+   ruled rows, and example sentences with the grammar span picked out on paper. No vermilion:
+   everything here is app data, not AI. */
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pattern {
+  margin: 0;
+  font-family: var(--font-ja);
+  font-size: clamp(40px, 13vw, 56px);
+  font-weight: 600;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.meaning {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.meta {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
+.title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.section,
+.family {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.prose {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.65;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+}
+
+/* "V-て + もいい": slots in a dashed box, the fixed grammar in ink. */
+.formation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 2px;
+  margin: 0;
+  font-size: var(--text-md);
+}
+
+.slot {
+  padding: 4px 10px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  color: var(--ink-muted);
+}
+
+.fixed {
+  font-family: var(--font-ja);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.plus {
+  padding: 0 6px;
+  color: var(--ink-faint);
+}
+
+.examples {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Ruled rows on paper, the grammar span underlined in ink, like a page of the book. No rounded
+   tinted cards: those read as chat bubbles, and so as the tutor (D64). */
+.example {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 0 12px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.example:first-child {
+  border-top: 1px solid var(--rule);
+}
+
+.translation {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+.fallback {
+  color: var(--ink-muted);
+}
+
+.search {
+  display: flex;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: 46px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 23px;
+  background: var(--paper-soft);
+  font-family: var(--font-ja);
+  font-size: 16px;
+  color: var(--ink);
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.level {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.levelHead {
+  margin: 0;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--rule);
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+}
+
+.introPattern {
+  margin: 0;
+  font-family: var(--font-ja);
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.about {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+}
+
+.aboutHead {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.5;
+}
+
+.aboutPattern {
+  font-family: var(--font-ja);
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  color: var(--accent);
+  font-size: var(--text-sm);
+  text-underline-offset: 3px;
+}
+
+.useLabel {
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.useExample {
+  margin: 0;
+  font-family: var(--font-ja);
+  font-size: 20px;
+  line-height: 1.6;
+}

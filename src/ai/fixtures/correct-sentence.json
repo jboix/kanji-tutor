@@ -1,0 +1,111 @@
+{
+  "fixtures": [
+    {
+      "match": "Learner sentence: 私が犬はあまり好きじゃない",
+      "inputTokens": 652,
+      "outputTokens": 171,
+      "response": {
+        "corrected": "私は犬があまり好きじゃない。",
+        "marks": [
+          {
+            "kind": "replace",
+            "severity": "error",
+            "before": "私",
+            "original": "が",
+            "start": 2,
+            "end": 3,
+            "text": "は",
+            "title": "Use は instead of が.",
+            "note": "は marks you as the topic: as for me, dogs are not something I like much."
+          },
+          {
+            "kind": "replace",
+            "severity": "error",
+            "before": "私が犬",
+            "original": "は",
+            "start": 4,
+            "end": 5,
+            "text": "が",
+            "title": "Use が instead of は.",
+            "note": "好き takes its object with が: 犬が好き."
+          }
+        ],
+        "summary": "Otherwise natural.",
+        "usesTarget": true,
+        "readings": [
+          {
+            "surface": "私",
+            "reading": "わたし"
+          },
+          {
+            "surface": "犬",
+            "reading": "いぬ"
+          },
+          {
+            "surface": "好き",
+            "reading": "すき"
+          }
+        ]
+      }
+    },
+    {
+      "inputTokens": 684,
+      "outputTokens": 268,
+      "response": {
+        "corrected": "日本語が嫌いなわけではないが、漢字を書くのは好きではない。",
+        "marks": [
+          {
+            "kind": "insert",
+            "severity": "error",
+            "before": "が嫌い",
+            "original": "",
+            "start": 6,
+            "end": 6,
+            "text": "な",
+            "title": "Needed: な.",
+            "note": "嫌い is a na-adjective, so it takes な before わけ, the same way you'd say 嫌いな物."
+          },
+          {
+            "kind": "replace",
+            "severity": "style",
+            "before": "のは",
+            "original": "好きじゃない",
+            "start": 21,
+            "end": 27,
+            "text": "好きではない",
+            "title": "Correct, but casual.",
+            "note": "After ではないが, written style flows better with 好きではない."
+          }
+        ],
+        "summary": "Otherwise natural. That's how you'd explain your relationship with kanji.",
+        "usesTarget": true,
+        "readings": [
+          {
+            "surface": "日本語",
+            "reading": "にほんご"
+          },
+          {
+            "surface": "嫌い",
+            "reading": "きらい"
+          },
+          {
+            "surface": "嫌いな物",
+            "reading": "きらいなもの"
+          },
+          {
+            "surface": "漢字",
+            "reading": "かんじ"
+          },
+          {
+            "surface": "書く",
+            "reading": "かく"
+          },
+          {
+            "surface": "好き",
+            "reading": "すき"
+          }
+        ]
+      }
+    }
+  ]
+}

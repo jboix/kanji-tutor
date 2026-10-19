@@ -1,0 +1,73 @@
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--tap);
+  height: var(--tap);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.muted {
+  color: var(--ink-muted);
+}
+
+/* read.html mic inside the input pill: drawn at 36px, touch target still 44px (N6). */
+.s36 {
+  width: 36px;
+  height: 36px;
+}
+
+.s36::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+}
+
+/* voice.html "Type instead" */
+.s48 {
+  width: 48px;
+  height: 48px;
+}
+
+/* capture.html "Take another photo" */
+.s52 {
+  width: 52px;
+  height: 52px;
+}
+
+.soft {
+  background: var(--paper-soft);
+}
+
+.outline {
+  border: 1px solid var(--border);
+}
+
+/* A kana glyph instead of an icon (read.html ふ, voice.html あ). */
+.glyph {
+  font-family: var(--font-ja);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.s48.glyph {
+  font-size: var(--text-lg);
+}
+
+.button[aria-pressed="true"] {
+  color: var(--ink);
+  background: var(--paper-soft);
+}
+
+.button:disabled {
+  color: var(--ink-faint);
+  cursor: default;
+}

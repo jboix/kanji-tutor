@@ -1,0 +1,383 @@
+/* capture.html, plus the Capture tab start screen and its saved-captures list. */
+
+.hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.muted {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.alert {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.inlineLink,
+.textLink {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (hover: hover) {
+  .inlineLink:hover,
+  .textLink:hover {
+    color: var(--link-hover);
+  }
+
+  .recentRow:hover {
+    color: var(--ink);
+  }
+
+  /* U4: a captured line answers the pointer before it is tapped. */
+  .line:hover {
+    background: var(--paper-soft);
+    color: var(--ink);
+  }
+}
+
+.line:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.textLink {
+  align-self: flex-start;
+  height: var(--tap);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+/* ── Start screen ─────────────────────────────────────────── */
+
+.homeHeader,
+.reviewHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.homeHeader {
+  gap: 10px;
+}
+
+.lead {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--ink-muted);
+}
+
+.start,
+.startActions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.start {
+  gap: 4px;
+}
+
+.paste {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.fieldRow {
+  display: flex;
+  gap: 8px;
+}
+
+.fieldLabel {
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+.textarea,
+.input {
+  width: 100%;
+  min-height: var(--tap);
+  box-sizing: border-box;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-ja);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.textarea {
+  resize: vertical;
+}
+
+.smallButton {
+  flex: none;
+  min-width: 64px;
+  height: var(--tap);
+  padding: 0 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.recentList {
+  display: flex;
+  flex-direction: column;
+}
+
+.recentRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.recentRow:last-child {
+  border-bottom: 0;
+}
+
+.thumb {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--paper-soft);
+  color: var(--ink-muted);
+  font-size: 18px;
+  object-fit: cover;
+}
+
+.recentMain {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.recentLine {
+  overflow: hidden;
+  font-family: var(--font-ja);
+  font-size: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recentDetail {
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+.chevron {
+  display: flex;
+  color: var(--ink-muted);
+}
+
+/* ── Review (capture.html) ────────────────────────────────── */
+
+.kicker {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.line {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 4px 10px;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  color: var(--ink-muted);
+  font-family: var(--font-ja);
+  font-size: var(--text-lg);
+  line-height: 1.8;
+  text-align: start;
+  cursor: pointer;
+}
+
+/* Lines are 40px tall in the mockup; the hit area reaches 44px across the 4px gaps (N6). */
+.line::after {
+  content: "";
+  position: absolute;
+  inset: -2px 0;
+}
+
+.lineOn {
+  padding: 8px 10px;
+  background: var(--paper-soft);
+  color: var(--ink);
+}
+
+.unknown {
+  border-bottom: 1.5px dotted var(--ink-muted);
+  color: var(--ink);
+}
+
+.lineOn .unknown {
+  border-bottom: 0;
+}
+
+/* The phrase the AI explanation is about. */
+.cited {
+  border-bottom: 2px solid var(--ai);
+}
+
+.noteBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.readings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+
+.readingPair {
+  white-space: nowrap;
+}
+
+.exerciseStatus {
+  margin: 0 0 0 36px;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.candidates {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--rule);
+}
+
+.candidatesHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 52px;
+  border-bottom: 1px solid var(--rule);
+  font-size: 14px;
+}
+
+.candidatesHead b {
+  font-weight: 700;
+}
+
+.candidatesHead .textLink {
+  align-self: center;
+}
+
+.preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 12px 0;
+  font-family: var(--font-ja);
+  font-size: var(--text-lg);
+}
+
+.previewMore {
+  align-self: center;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.pickList {
+  display: flex;
+  flex-direction: column;
+}
+
+.pickRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  border-bottom: 1px solid var(--rule);
+  cursor: pointer;
+}
+
+.pickRow input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.pickMain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  padding: 8px 0;
+}
+
+.pickWord {
+  font-family: var(--font-ja);
+  font-size: var(--text-lg);
+}
+
+.pickGloss {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.note {
+  margin: 0;
+  padding: 12px 0 0;
+  font-size: 12px;
+  color: var(--ink-muted);
+}

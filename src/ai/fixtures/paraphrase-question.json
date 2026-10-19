@@ -1,0 +1,36 @@
+{
+  "fixtures": [
+    {
+      "inputTokens": 690,
+      "outputTokens": 210,
+      "toolCalls": [[{ "id": "call_1", "name": "get_learner_profile", "args": {} }]],
+      "response": {
+        "options": [
+          {
+            "text": "待つほかない。",
+            "why": "ほかない says the same as しかない: there is no other way."
+          },
+          {
+            "text": "待たなくてもいい。",
+            "why": "This says you do not have to wait, the opposite."
+          },
+          {
+            "text": "待ちたくない。",
+            "why": "This is about not wanting to wait, not about having no choice."
+          },
+          {
+            "text": "待ってもいい。",
+            "why": "This only allows waiting; it does not say there is no other way."
+          }
+        ],
+        "answerIndex": 0,
+        "readings": [
+          { "surface": "待つ", "reading": "まつ" },
+          { "surface": "待たなくても", "reading": "またなくても" },
+          { "surface": "待ちたくない", "reading": "まちたくない" },
+          { "surface": "待っても", "reading": "まっても" }
+        ]
+      }
+    }
+  ]
+}

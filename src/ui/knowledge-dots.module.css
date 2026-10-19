@@ -1,0 +1,22 @@
+.dots {
+  display: flex;
+  gap: 4px;
+}
+
+.dot {
+  box-sizing: border-box;
+  width: 7px;
+  height: 7px;
+  border-radius: 4px;
+  border: 1.5px solid var(--dot-empty);
+}
+
+.filled {
+  border: 0;
+  background: var(--accent);
+}
+
+/* kanji.html: a reading that is recognised but often misread; ink, not AI red (D57). */
+.misread .filled {
+  background: var(--ink);
+}

@@ -1,0 +1,51 @@
+/* The backup reminder's quiet panel (N5), sitting just above the bottom nav. */
+.banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  margin: 0 var(--gutter) 8px;
+  padding: 10px 4px 10px 16px;
+  border-radius: var(--radius-panel);
+  background: var(--paper-soft);
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 4px;
+}
+
+.lead,
+.text {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+.lead {
+  color: var(--ink);
+}
+
+.text {
+  color: var(--ink-muted);
+}
+
+.icon {
+  display: inline-flex;
+  vertical-align: -3px;
+  color: var(--accent);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/* Typing: the keyboard needs the room. */
+:global(:root[data-keyboard="open"]) .banner {
+  display: none;
+}

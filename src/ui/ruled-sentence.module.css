@@ -1,0 +1,207 @@
+.sentence {
+  margin: 0;
+  font-family: var(--font-ja);
+  font-size: var(--ja-sentence);
+  line-height: 2.1;
+  overflow-wrap: anywhere;
+}
+
+/* read.html: one rule per line, under the text (U7). Klee One's content area is 1.448em tall
+   (hhea ascent 1.16 + descent 0.288, used by Chrome and Safari alike), centred in the line, so its
+   bottom sits at (line-height + 1.448) / 2: 1.774em of a 2.1em line, 0.29em under the baseline
+   and clear of every descender. The target's 2px underline (a border at that same edge) lies on
+   the rule instead of a pixel or two off it. */
+.ruled {
+  background-image: linear-gradient(var(--rule) 1px, transparent 1px);
+  background-size: 100% 2.1em;
+  background-position: 0 calc(1.774em + 0.5px);
+}
+
+/* Furigana must not grow a ruled line, or every rule below it lands in the text (U7): iOS
+   Safari makes a line taller for its annotations while the rules keep their pitch, and WebKit
+   lays an <rt> out in the flow whatever its position. So in a ruled sentence the ruby is a plain
+   inline, its <rt> takes no room (still read out by screen readers), and the reading is drawn by
+   ::after over the base, inside the line's leading, just above the kanji's ink. The same goes
+   for a run inside other ruled text (a question stem). */
+.ruled ruby,
+.inline ruby {
+  position: relative;
+  display: inline;
+}
+
+.ruled rt,
+.inline rt {
+  display: inline;
+  font-size: 0;
+  line-height: 0;
+}
+
+.ruled rp,
+.inline rp {
+  display: none;
+}
+
+.ruled ruby::after,
+.inline ruby::after {
+  /* Drawn for the eye only: "/ ''" keeps it out of the accessible name, which the <rt> gives once. */
+  content: attr(data-reading) / "";
+  position: absolute;
+  bottom: calc(100% - 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-ja);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--ink);
+  pointer-events: none;
+}
+
+/* An inserted correction (compose.html): Klee One, vermilion. */
+.ruled ruby[data-insert]::after,
+.inline ruby[data-insert]::after {
+  font-family: var(--font-ja);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ai);
+}
+
+/* compose.html: 23px / 2.3. */
+.compose {
+  font-size: 23px;
+  line-height: 2.3;
+}
+
+/* Content-area bottom of a 2.3em line: (2.3 + 1.448) / 2. */
+.compose.ruled {
+  background-size: 100% 2.3em;
+  background-position: 0 calc(1.874em + 0.5px);
+}
+
+/* today.html callout: 22px / 1.7, no rules. */
+.callout {
+  font-size: 22px;
+  line-height: 1.7;
+}
+
+/* explain.html, above the sheet: muted sentence, the word picked out on paper. */
+.context {
+  font-size: 24px;
+  line-height: 1.9;
+  color: var(--ink-muted);
+}
+
+/* Inside other Japanese text: the parent's size and line height. */
+.inline {
+  font-family: var(--font-ja);
+}
+
+.tap {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  /* Buttons lay out as inline-blocks; a normal line height keeps the underline at the text
+     like a plain span, instead of at the bottom of the tall ruled line. */
+  line-height: normal;
+  letter-spacing: inherit;
+  vertical-align: baseline;
+  cursor: pointer;
+}
+
+/* Tappable words and targets: a soft paper wash on hover (pointer devices only), and a visible
+   ring for keyboard focus. */
+@media (hover: hover) {
+  .tap:hover {
+    border-radius: 4px;
+    background: var(--paper-soft);
+    box-shadow: 0 0 0 2px var(--paper-soft);
+  }
+}
+
+.tap:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* The word to read (W-read): accent text on a 2px accent underline. The underline is a border at
+   the content area's bottom, so it lies on the ruled line (see .ruled). */
+.target {
+  border-bottom: 2px solid var(--accent);
+  color: var(--accent);
+}
+
+/* Once answered (U2, D105): the word keeps its place on the baseline and only changes colour,
+   with its furigana above in the same colour. No box, background, shadow or movement. */
+.correct {
+  border-bottom-color: var(--ok);
+  color: var(--ok);
+}
+
+.missed {
+  border-bottom-color: var(--miss);
+  color: var(--miss);
+}
+
+.shown {
+  border-bottom-color: var(--ink);
+  color: var(--ink);
+}
+
+.correct ruby::after,
+.missed ruby::after,
+.shown ruby::after {
+  color: inherit;
+}
+
+.correct,
+.missed,
+.shown {
+  transition:
+    color 200ms ease-out,
+    border-color 200ms ease-out;
+}
+
+/* An answered target is still a word to tap, but no hover wash: it stays plain text. */
+.correct .tap,
+.missed .tap,
+.shown .tap {
+  background: none;
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .correct,
+  .missed,
+  .shown {
+    transition: none;
+  }
+}
+
+.ask {
+  border-bottom: 1.5px dotted var(--ink-muted);
+}
+
+/* A correction: wavy vermilion underline (compose.html). */
+.wavy {
+  text-decoration: underline wavy var(--ai);
+  text-underline-offset: 6px;
+}
+
+.context .target {
+  border-bottom: 0;
+  border-radius: 6px;
+  padding: 2px 4px;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.keep {
+  white-space: nowrap;
+}

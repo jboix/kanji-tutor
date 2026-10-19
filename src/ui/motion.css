@@ -1,0 +1,41 @@
+/* The entrance (D124): a screen's sections fade in and settle from 8px above, top to bottom,
+   100ms apart (D131), so a screen and the content that arrives after a load ease in instead of popping.
+   The whole screen settles within about 850ms. Nothing moves with reduced motion.
+
+   Opting out: `<Screen enter={false}>` (data-enter="off" on the body) turns it off for a screen,
+   and data-enter="off" on one of the body's children turns it off for that child. The selectors
+   have no specificity, so any component that sets its own `animation` keeps it. */
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :where([data-screen-body]:not([data-enter="off"])) > :where(:not([data-enter="off"])),
+  :where(.enter) {
+    animation: enter 450ms cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+  }
+
+  :where([data-screen-body]) > :where(:nth-child(2)) {
+    animation-delay: 100ms;
+  }
+
+  :where([data-screen-body]) > :where(:nth-child(3)) {
+    animation-delay: 200ms;
+  }
+
+  :where([data-screen-body]) > :where(:nth-child(4)) {
+    animation-delay: 300ms;
+  }
+
+  :where([data-screen-body]) > :where(:nth-child(5)) {
+    animation-delay: 400ms;
+  }
+
+  :where([data-screen-body]) > :where(:nth-child(n + 6)) {
+    animation-delay: 400ms;
+  }
+}

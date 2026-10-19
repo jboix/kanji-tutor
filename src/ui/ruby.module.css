@@ -1,0 +1,26 @@
+.ruby {
+  ruby-position: over;
+  ruby-align: center;
+}
+
+/* Klee One like all Japanese text (D105; W-answered draws the target's reading so). */
+.rt {
+  font-family: var(--font-ja);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1;
+}
+
+/* An inserted correction, e.g. the missing な in compose.html: Klee One, vermilion. */
+.correction {
+  font-family: var(--font-ja);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ai);
+}
+
+.caret {
+  color: var(--ai);
+  font-weight: 600;
+}

@@ -1,0 +1,198 @@
+/** French messages: settings (screen, key, models, tutor, language, reading, backup, about). */
+import type { Messages } from '../../types.ts';
+
+export const settings = {
+  back: 'Retour',
+  title: 'Réglages',
+
+  keyHeading: 'Clé API Gemini',
+  keySaved: 'Une clé est enregistrée sur cet appareil.',
+  keyNone:
+    'Pas encore de clé. Les explications IA restent désactivées tant que vous n’en ajoutez pas.',
+  keyTesting: 'Test de la clé…',
+  keyField: 'Clé API',
+  keyPlaceholder: 'Coller la clé',
+  keyShowLabel: 'Afficher la clé',
+  keyHideLabel: 'Masquer la clé',
+  keyShow: 'Afficher',
+  keyHide: 'Masquer',
+  save: 'Enregistrer',
+  cancel: 'Annuler',
+  keyRemove: 'Supprimer la clé',
+  keyRemoveConfirm: 'Supprimer',
+  keyRemoveQuestion:
+    'Supprimer la clé de cet appareil ? Les explications IA s’arrêtent jusqu’à ce que vous en ajoutiez une.',
+  keyNoticeSaved: 'Clé enregistrée.',
+  keyNoticeRemoved: 'Clé supprimée.',
+  keyTest: 'Tester la clé',
+  keyHint:
+    'Gardée uniquement dans ce navigateur, jamais dans les sauvegardes. « Tester la clé » fait un seul petit appel réel.',
+
+  models: 'Modèles',
+  modelUse: 'Utiliser',
+  advancedModels: 'Avancé : modèles',
+  fastModel: 'Modèle rapide',
+  fastHint: 'Explications courantes, photos et voix. « Tester la clé » vérifie celui-ci.',
+  teacherModel: 'Modèle professeur',
+  teacherHint: 'Explications qui vérifient d’abord ce que vous savez. Par défaut {model}.',
+  priceUnknown: 'Inconnu de la page des coûts : les estimations utilisent le prix de Flash-Lite.',
+  price: 'Environ {input} en entrée et {output} en sortie par million de jetons.',
+  priceChange:
+    'Environ {input} en entrée et {output} en sortie par million de jetons jusqu’au {date}, puis {nextInput} et {nextOutput}.',
+
+  tutor: 'Tuteur',
+  tutorOnAsk: 'Seulement quand je le demande',
+  tutorAuto: 'Expliquer aussi mes erreurs automatiquement',
+  tutorMark:
+    'Les boutons avec le sceau {seal} et « 1 requête » envoient une requête à Gemini ; « Enregistré » ouvre une réponse déjà reçue, sans requête. Un texte marqué « Écrit par le tuteur » vient de l’IA.',
+  tutorHint:
+    'Les notes de l’application s’affichent toujours en premier. Chaque explication du tuteur est une requête à Gemini ; une clé gratuite en permet environ dix par minute.',
+
+  explanationsIn: 'Explications en',
+  immersionAuto: 'Auto',
+  immersionNative: 'Ma langue',
+  immersionMixed: 'Mixte',
+  immersionJapanese: 'Japonais',
+  autoNative: 'en {language}',
+  autoMixed: 'en mixte : du japonais, puis une ligne en {language}',
+  autoJapanese: 'en japonais à votre niveau',
+  autoLine:
+    'Auto suit votre niveau et les mots que vous connaissez. En N{level} pour l’instant, les explications sont {where}.',
+  immersionHint:
+    'En japonais, le tuteur utilise des mots que vous connaissez ; un mot nouveau a des furigana et son sens au toucher.',
+  languageEn: 'anglais',
+  languageFr: 'français',
+  languageEs: 'espagnol',
+
+  language: 'Langue',
+  languageHint:
+    'L’interface et les explications du tuteur utilisent cette langue. Le japonais reste tel quel.',
+
+  reading: 'Lecture',
+  furigana: 'Furigana',
+  furiganaNew: 'Mots nouveaux seulement',
+  furiganaAll: 'Tous les mots',
+  sessionLength: 'Durée d’une séance',
+  sessionMinutes: '{n} min',
+  sessionLengthHint:
+    'À peu près cette durée, selon l’estimation, avec seulement quelques mots nouveaux à la fois.',
+  explainFirst: 'Expliquer d’abord les nouveautés',
+  explainFirstOn: 'Oui',
+  explainFirstOff: 'Non',
+  explainFirstHint:
+    'Non : pas de fiche d’introduction. Une pastille « Nouveau » sur l’exercice ouvre la même explication.',
+  sounds: 'Son',
+  soundHint:
+    'Les tons des réponses et le japonais lu à voix haute. Désactivé, l’app reste silencieuse : les boutons haut-parleur disparaissent et les séances n’ont plus d’écoute.',
+  on: 'Activés',
+  off: 'Désactivés',
+  lesson: 'Leçon en cours',
+  lessonNone: 'Les nouveaux éléments n’ont pas d’étiquette de leçon.',
+  lessonTagged: 'Les nouveaux éléments sont étiquetés {lesson}.',
+
+  level: 'Votre niveau',
+  levelHint: 'Les mots nouveaux viennent de ce niveau du JLPT.',
+  findLevel: 'Trouver mon niveau',
+  knownWords: 'Mots connus',
+  knownHint:
+    'Marquez comme déjà connus les mots du JLPT N5 et N4, des leçons de Minna ou votre propre liste.',
+  markKnown: 'Marquer ce que vous savez déjà',
+  learned: 'Ce que vous avez appris',
+
+  theme: 'Thème',
+  themeSystem: 'Système',
+  themeLight: 'Clair',
+  themeDark: 'Sombre',
+
+  backup: 'Sauvegarde',
+  backupNone: 'Pas encore de sauvegarde.',
+  backupLast: 'Dernière sauvegarde le {date}.',
+  backupExport: 'Exporter',
+  backupImport: 'Importer',
+  backupReplace: 'Remplacer',
+  backupReplaceQuestion:
+    'Votre historique de lecture sur cet appareil sera remplacé par {name}. Votre clé reste. Exportez d’abord si vous voulez garder ce qui est ici.',
+  backupRestored: 'Sauvegarde restaurée.',
+  backupHint: 'Un fichier JSON avec tout, sauf la clé et le cache de l’IA.',
+
+  install: 'Installer Kanji Tutor',
+  installLead:
+    'Depuis l’écran d’accueil, elle s’ouvre en plein écran, fonctionne hors ligne, et l’appareil risque moins d’effacer ses données.',
+  installButton: 'Installer',
+  installShare: 'Partager',
+  installIos: 'Touchez Partager {icon}, puis Sur l’écran d’accueil.',
+  installMenu:
+    'Passez par le menu du navigateur : Installer l’application, ou Ajouter à l’écran d’accueil.',
+
+  storage: 'Stockage',
+  storagePersistent: 'Persistant : le navigateur gardera vos données.',
+  storageNotPersistent:
+    'Pas encore persistant : le navigateur peut effacer les données après une longue pause. Installez l’application sur l’écran d’accueil et gardez des sauvegardes.',
+  storageAsk: 'Demander à garder les données',
+  storageUsed: '{used} utilisés sur cet appareil.',
+  storageUsedOf: '{used} utilisés sur environ {quota} que cet appareil accorde à l’application.',
+  sizeKb: '{size} Ko',
+  sizeMb: '{size} Mo',
+  sizeGb: '{size} Go',
+
+  erase: 'Supprimer toutes mes données',
+  eraseHint:
+    "Efface tout ce que l'application garde sur cet appareil : votre progression, vos révisions, vos notes, vos captures, vos réglages, votre clé Gemini, le cache de l'IA et le dictionnaire. C'est définitif.",
+  eraseStart: 'Supprimer toutes mes données…',
+  eraseConfirm:
+    "Tout supprimer sur cet appareil ? Exportez d'abord une sauvegarde si vous voulez pouvoir la récupérer. L'application recommencera à l'accueil.",
+  eraseExportFirst: "Exporter d'abord une sauvegarde",
+  eraseDo: 'Tout supprimer',
+  erasing: 'Suppression…',
+  eraseFailed:
+    "La suppression a été bloquée. Fermez les autres onglets de l'application et réessayez.",
+
+  about: 'À propos',
+  aboutApp: 'Kanji Tutor : les kanji lus dans de vraies phrases, jusqu’au JLPT N3.',
+  welcomeAgain: 'Relancer l’accueil',
+  version: 'Version',
+  versionLine: '{version}, build {id}, {when}',
+  updateCheck: 'Chercher une mise à jour',
+  updateChecking: 'Recherche…',
+  updateFound: 'Une nouvelle version s’installe. L’app se recharge d’elle-même dans un instant.',
+  updateLatest: 'C’est la dernière version.',
+  updateUnavailable: 'Pas de mises à jour ici (pas de service hors ligne).',
+  updateFailed: 'Serveur injoignable. « Recharger à neuf » fonctionne quand même.',
+  reloadFresh: 'Recharger à neuf',
+  reloadFreshHint:
+    '« Recharger à neuf » supprime la copie enregistrée de l’app et la recharge depuis le serveur. Ta progression et tes réglages restent.',
+  aboutPrivacy: 'Ni statistiques ni télémétrie : vos données restent sur cet appareil.',
+  credits: 'Crédits',
+  creditsDictionary: 'Dictionnaire',
+  creditsDictionaryBy: '{jmdict} et {kanjidic}, propriété de l’{edrdg}',
+  creditsJlpt: 'Niveaux JLPT',
+  creditsJlptBy: 'Listes JLPT de Jonathan Waller (CC BY), associées à JMdict par {link}',
+  creditsSentences: 'Phrases d’exemple',
+  creditsHandwriting: 'Reconnaissance de l’écriture',
+  creditsHandwritingBy: 'Adaptée de {link}, par Dominik Klein et Seth Clydesdale',
+  creditsFonts: 'Polices',
+  creditsLibraries: 'Bibliothèques',
+  creditsApp: 'Cette app',
+  creditsAppBy: 'Code source sur {link}',
+  creditsDownload: 'Télécharger les licences complètes',
+  backToList: 'Réglages',
+  buildLine: 'Kanji Tutor {version} · build {id}',
+  catSessions: 'Séances',
+  catSessionsLine: '{minutes} · {explain}',
+  catExplainFirst: 'expliquer d’abord les nouveautés',
+  catSkipFirst: 'nouveautés sur une pastille',
+  catTutor: 'Tuteur IA',
+  catTutorDetail: 'Clé, modèle, façon d’expliquer, usage',
+  catLanguage: 'Langue',
+  catLanguageDetail: 'L’app et les explications',
+  catAppearance: 'Apparence',
+  catSoundOff: 'Son désactivé',
+  catWords: 'Vos mots',
+  catWordsDetail: 'Votre niveau, les mots connus, votre cours',
+  catBackup: 'Sauvegarde et stockage',
+  catBackupDetail: 'Exporter, importer, espace utilisé, effacer',
+  catInstall: 'Installer',
+  catInstallDetail: 'Ajouter à l’écran d’accueil',
+  catAbout: 'À propos et version',
+  catAboutDetail: 'Mises à jour, recharger à neuf, crédits',
+} satisfies Messages['settings'];

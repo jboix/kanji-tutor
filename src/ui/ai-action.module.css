@@ -1,0 +1,130 @@
+/* A press that sends a request (A18, D64): the small 解 seal, the label, then "1 request" (or
+   "Saved") in muted ink. The seal is the only AI red: the button itself keeps its usual look. */
+.action {
+  gap: 8px;
+}
+
+.label {
+  min-width: 0;
+}
+
+.hint {
+  flex: none;
+  font-size: var(--text-xs, 12px);
+  font-weight: 400;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.hint::before {
+  content: "· ";
+}
+
+.saved {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* On the ink pill the hint stays readable. */
+[data-look="primary"] > .hint {
+  color: inherit;
+  opacity: 0.8;
+}
+
+.text {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.text .label {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.text:disabled {
+  color: var(--ink-faint);
+  cursor: default;
+}
+
+/* The Ask box: a bare arrow sends (D106); the line under the field says it uses AI. */
+.ask {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.send {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tap);
+  height: var(--tap);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.send:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.askHint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding-inline-start: 18px;
+  font-size: var(--text-xs, 12px);
+  color: var(--ink-muted);
+}
+
+/* The icon look (capture "Take another photo"): 52px outlined circle, the seal on its corner. */
+.icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.icon:disabled {
+  color: var(--ink-faint);
+  cursor: default;
+}
+
+.icon:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  display: inline-flex;
+}
+
+.legend {
+  display: inline-flex;
+  vertical-align: -3px;
+}

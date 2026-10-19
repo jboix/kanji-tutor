@@ -1,0 +1,23 @@
+/** English messages: session labels, feedback and the end-of-session summary (M3). */
+export const readSession = {
+  missingKana: '(no {kana})',
+  whatYouSaid: 'What you said',
+  hear: 'Hear',
+  slipLongVowel: 'long vowel',
+  slipSokuon: 'small っ',
+  slipRendaku: 'voicing',
+  prompt: 'Type the reading',
+  right: 'Right',
+  notQuite: 'Not quite',
+  almost: 'Almost: {slip}',
+  almostPlain: 'Almost',
+  readAs: 'Read as',
+  youWrote: 'You wrote',
+  expected: 'Expected',
+  skip: "I don't know",
+  hereItIs: 'Here it is:',
+  alsoCorrect: 'Also correct.',
+  moreCommonReading: 'is the more common reading.',
+  nextWord: 'Next word',
+  nextSentence: 'Next sentence',
+} as const;

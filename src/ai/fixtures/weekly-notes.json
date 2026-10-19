@@ -1,0 +1,25 @@
+{
+  "fixtures": [
+    {
+      "inputTokens": 1186,
+      "outputTokens": 342,
+      "response": {
+        "letter": [
+          "Most of this week's sentences went through cleanly, and two-kanji words held up well, including some you hadn't met before.",
+          "What still trips you is length: most misses dropped a long vowel. It's a listening habit more than a kanji one.",
+          "There are grammar patterns from this lesson you haven't used in a sentence of your own yet. Reading them isn't the same as owning them."
+        ],
+        "plan": [
+          {
+            "when": "Daily",
+            "what": "A short reading session. Some sentences focus on long vowels."
+          },
+          {
+            "when": "Tue, Thu",
+            "what": "Write one sentence with a grammar pattern you haven't used yet."
+          }
+        ]
+      }
+    }
+  ]
+}

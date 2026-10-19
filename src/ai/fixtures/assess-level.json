@@ -1,0 +1,19 @@
+{
+  "fixtures": [
+    {
+      "inputTokens": 820,
+      "outputTokens": 190,
+      "toolCalls": [
+        [{ "id": "call_1", "name": "get_learner_profile", "args": {} }],
+        [{ "id": "call_2", "name": "check_known", "args": { "words": ["学生", "大学"] } }]
+      ],
+      "response": {
+        "level": "N4",
+        "strengths": ["N5 kanji readings", "Polite past forms such as 〜ました"],
+        "gaps": ["Long vowels in N4 words", "Choosing between similar N4 grammar forms"],
+        "notes": "The N5 questions were steady and the written answer uses です and ました correctly. N4 readings were mixed, mostly on long vowels, so N4 is the level to work on now.",
+        "readings": [{ "surface": "学生", "reading": "がくせい" }]
+      }
+    }
+  ]
+}

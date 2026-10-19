@@ -1,0 +1,235 @@
+/* The learned screen (P3): quiet coverage lines, a kanji grid and ruled rows, in the kit's
+   type and tokens. State reads in ink for known, accent for learning, faint for not started. */
+.title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.intro {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.6;
+}
+
+.muted,
+.hint {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
+.hint a {
+  color: var(--accent);
+  text-underline-offset: 3px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: var(--tap);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.toggle input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--ink);
+}
+
+.groups {
+  display: flex;
+  flex-direction: column;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.groupHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 52px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: var(--text-md);
+  text-align: start;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.groupHead:focus-visible,
+.cell:focus-visible,
+.more:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.chevron {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--ink-faint);
+  transition: transform 150ms ease-out;
+}
+
+.chevronOpen {
+  transform: rotate(90deg);
+}
+
+.entries {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 10px;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  font-family: var(--font-ja);
+  font-size: 26px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: var(--tap);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.rowMain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  min-width: 0;
+  font-size: var(--text-md);
+}
+
+.rowLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.meaning {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.state {
+  flex-shrink: 0;
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.known {
+  color: var(--ink);
+}
+
+.learning {
+  color: var(--accent);
+}
+
+.cell.learning {
+  border-color: var(--accent);
+}
+
+.not-started {
+  color: var(--ink-faint);
+}
+
+.cell.not-started {
+  border-style: dashed;
+}
+
+.more {
+  align-self: flex-start;
+  min-height: var(--tap);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.apply {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.applyRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron {
+    transition: none;
+  }
+}
+
+/* A word row's word: tappable (U5), at the size of the emphasised kanji. */
+.wordTap {
+  font-size: 1.2em;
+  font-weight: 600;
+}

@@ -1,0 +1,36 @@
+{
+  "fixtures": [
+    {
+      "inputTokens": 903,
+      "outputTokens": 287,
+      "response": {
+        "sentences": [
+          {
+            "text": "駅で友達を待ちました。",
+            "translation": "I waited for a friend at the station.",
+            "target": "待ちました"
+          },
+          {
+            "text": "友達に手紙を書きました。",
+            "translation": "I wrote a letter to a friend.",
+            "target": "手紙"
+          },
+          {
+            "text": "先生に友達を紹介しました。",
+            "translation": "I introduced my friend to the teacher.",
+            "target": "紹介"
+          }
+        ],
+        "readings": [
+          { "surface": "駅", "reading": "えき" },
+          { "surface": "友達", "reading": "ともだち" },
+          { "surface": "待ちました", "reading": "まちました" },
+          { "surface": "手紙", "reading": "てがみ" },
+          { "surface": "書きました", "reading": "かきました" },
+          { "surface": "先生", "reading": "せんせい" },
+          { "surface": "紹介", "reading": "しょうかい" }
+        ]
+      }
+    }
+  ]
+}

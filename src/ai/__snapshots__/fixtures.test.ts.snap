@@ -1,0 +1,486 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`tasks over the mock provider > answerQuestion: default and わけではない 1`] = `
+[
+  {
+    "answer": "間に marks a point inside a stretch of time: the reading happened at some point while you were waiting. Without に, 間 covers the whole stretch, so the verb usually describes an ongoing state, like 読んでいた.",
+    "readings": [
+      {
+        "reading": "あいだ",
+        "surface": "間",
+        "verified": true,
+      },
+      {
+        "reading": "よんでいた",
+        "surface": "読んでいた",
+        "verified": true,
+      },
+    ],
+  },
+  {
+    "answer": ""However, it isn't that fewer people speak dialects." The writer is pushing back on the previous line. That's the job わけではない does, and it's this week's grammar.",
+    "readings": [
+      {
+        "reading": "ほうげん",
+        "surface": "方言",
+        "verified": true,
+      },
+      {
+        "reading": "はなす",
+        "surface": "話す",
+        "verified": false,
+      },
+      {
+        "reading": "へっている",
+        "surface": "減っている",
+        "verified": false,
+      },
+    ],
+  },
+]
+`;
+
+exports[`tasks over the mock provider > breakdownSentence: chunks join back into the sentence 1`] = `
+[
+  {
+    "chunks": [
+      {
+        "focus": false,
+        "gloss": "at the station",
+        "text": "駅で",
+      },
+      {
+        "focus": false,
+        "gloss": "waiting for a friend",
+        "text": "友達を待っている",
+      },
+      {
+        "focus": true,
+        "gloss": "during that time",
+        "text": "間に",
+      },
+      {
+        "focus": false,
+        "gloss": "I read a book",
+        "text": "、本を読みました。",
+      },
+    ],
+    "readings": [
+      {
+        "reading": "えき",
+        "surface": "駅",
+        "verified": true,
+      },
+      {
+        "reading": "ともだち",
+        "surface": "友達",
+        "verified": true,
+      },
+      {
+        "reading": "まっている",
+        "surface": "待っている",
+        "verified": true,
+      },
+      {
+        "reading": "あいだ",
+        "surface": "間",
+        "verified": true,
+      },
+      {
+        "reading": "ほん",
+        "surface": "本",
+        "verified": true,
+      },
+      {
+        "reading": "よみました",
+        "surface": "読みました",
+        "verified": true,
+      },
+    ],
+    "translation": "While I was waiting for a friend at the station, I read a book.",
+  },
+  {
+    "chunks": [
+      {
+        "focus": false,
+        "gloss": "however",
+        "text": "しかし、",
+      },
+      {
+        "focus": false,
+        "gloss": "people who speak dialects",
+        "text": "方言を話す人が",
+      },
+      {
+        "focus": false,
+        "gloss": "are decreasing",
+        "text": "減っている",
+      },
+      {
+        "focus": false,
+        "gloss": "it isn't that…",
+        "text": "わけではない。",
+      },
+    ],
+    "readings": [
+      {
+        "reading": "ほうげん",
+        "surface": "方言",
+        "verified": true,
+      },
+      {
+        "reading": "はなす",
+        "surface": "話す",
+        "verified": false,
+      },
+      {
+        "reading": "ひと",
+        "surface": "人",
+        "verified": false,
+      },
+      {
+        "reading": "へっている",
+        "surface": "減っている",
+        "verified": false,
+      },
+    ],
+    "translation": "However, it isn't that fewer people speak dialects.",
+  },
+]
+`;
+
+exports[`tasks over the mock provider > correctSentence: な insertion (error) and 好きではない (style) 1`] = `
+{
+  "corrected": "日本語が嫌いなわけではないが、漢字を書くのは好きではない。",
+  "marks": [
+    {
+      "end": 6,
+      "kind": "insert",
+      "note": "嫌い is a na-adjective, so it takes な before わけ, the same way you'd say 嫌いな物.",
+      "severity": "error",
+      "start": 6,
+      "text": "な",
+      "title": "Needed: な.",
+    },
+    {
+      "end": 27,
+      "kind": "replace",
+      "note": "After ではないが, written style flows better with 好きではない.",
+      "severity": "style",
+      "start": 21,
+      "text": "好きではない",
+      "title": "Correct, but casual.",
+    },
+  ],
+  "readings": [
+    {
+      "reading": "にほんご",
+      "surface": "日本語",
+      "verified": false,
+    },
+    {
+      "reading": "きらい",
+      "surface": "嫌い",
+      "verified": false,
+    },
+    {
+      "reading": "きらいなもの",
+      "surface": "嫌いな物",
+      "verified": false,
+    },
+    {
+      "reading": "かんじ",
+      "surface": "漢字",
+      "verified": false,
+    },
+    {
+      "reading": "かく",
+      "surface": "書く",
+      "verified": false,
+    },
+    {
+      "reading": "すき",
+      "surface": "好き",
+      "verified": false,
+    },
+  ],
+  "summary": "Otherwise natural. That's how you'd explain your relationship with kanji.",
+  "usesTarget": true,
+}
+`;
+
+exports[`tasks over the mock provider > explainMistake: 待 read as 持 (read.html) 1`] = `
+{
+  "chips": [
+    {
+      "kind": "compare",
+      "label": "待 and 持 side by side",
+    },
+    {
+      "kind": "example",
+      "label": "One more with 待",
+    },
+    {
+      "kind": "simpler",
+      "label": "Break down the sentence",
+    },
+  ],
+  "confusedWith": {
+    "kanji": "持",
+    "meaning": "to hold",
+  },
+  "explanation": "You read it as 持, to hold. Look at the left side: 待 has 彳, a person walking, while 持 has 扌, a hand. Here someone walked to the station and is waiting.",
+  "readings": [
+    {
+      "reading": "まって",
+      "surface": "待って",
+      "verified": true,
+    },
+    {
+      "reading": "もって",
+      "surface": "持って",
+      "verified": true,
+    },
+    {
+      "reading": "まつ",
+      "surface": "待つ",
+      "verified": true,
+    },
+    {
+      "reading": "もつ",
+      "surface": "持つ",
+      "verified": true,
+    },
+  ],
+}
+`;
+
+exports[`tasks over the mock provider > explainWord: わけではない from a capture 1`] = `
+{
+  "chips": [
+    {
+      "kind": "example",
+      "label": "One more with わけではない",
+    },
+    {
+      "kind": "simpler",
+      "label": "Simpler, please",
+    },
+    {
+      "kind": "keep",
+      "label": "Keep in my notes",
+    },
+  ],
+  "contrast": {
+    "meaning": "The number of dialect speakers is not falling.",
+    "text": "方言を話す人が減っていない。",
+  },
+  "meaning": "it isn't that…, it doesn't mean that…",
+  "nuance": "わけではない denies a conclusion the reader might draw, not the fact itself. ではない alone would just say something is not so.",
+  "reading": {
+    "reading": "わけではない",
+    "surface": "わけではない",
+    "verified": false,
+  },
+  "readings": [
+    {
+      "reading": "ほうげん",
+      "surface": "方言",
+      "verified": true,
+    },
+    {
+      "reading": "はなす",
+      "surface": "話す",
+      "verified": false,
+    },
+    {
+      "reading": "ひと",
+      "surface": "人",
+      "verified": false,
+    },
+    {
+      "reading": "へっていない",
+      "surface": "減っていない",
+      "verified": false,
+    },
+  ],
+  "surface": "わけではない",
+}
+`;
+
+exports[`tasks over the mock provider > explainWord: 間に breakdown chips (explain.html) 1`] = `
+{
+  "chips": [
+    {
+      "kind": "quiz",
+      "label": "Quiz me: 間 or 間に?",
+    },
+    {
+      "kind": "simpler",
+      "label": "Simpler, please",
+    },
+    {
+      "kind": "keep",
+      "label": "Keep in my notes",
+    },
+  ],
+  "contrast": {
+    "meaning": "I was reading the whole time I waited.",
+    "text": "待っている間、本を読んでいた。",
+  },
+  "meaning": "while, at some point during",
+  "nuance": "With 間に, the reading happened at some point while you waited. Drop the に and it means you read the whole time.",
+  "reading": {
+    "reading": "あいだに",
+    "surface": "間に",
+    "verified": false,
+  },
+  "readings": [
+    {
+      "reading": "あいだ",
+      "surface": "間",
+      "verified": true,
+    },
+    {
+      "reading": "まっている",
+      "surface": "待っている",
+      "verified": true,
+    },
+    {
+      "reading": "ほん",
+      "surface": "本",
+      "verified": true,
+    },
+    {
+      "reading": "よんでいた",
+      "surface": "読んでいた",
+      "verified": true,
+    },
+  ],
+  "surface": "間に",
+}
+`;
+
+exports[`tasks over the mock provider > followUp compare 1`] = `
+{
+  "readings": [
+    {
+      "reading": "まつ",
+      "surface": "待つ",
+      "verified": true,
+    },
+    {
+      "reading": "もつ",
+      "surface": "持つ",
+      "verified": true,
+    },
+    {
+      "reading": "てら",
+      "surface": "寺",
+      "verified": false,
+    },
+  ],
+  "text": "待 has 彳 on the left, a person walking: you go somewhere and wait, as in 待つ. 持 has 扌, a hand: you hold something, as in 持つ. The right side, 寺, is shared by both, so look left to tell them apart.",
+}
+`;
+
+exports[`tasks over the mock provider > followUp example 1`] = `
+{
+  "example": {
+    "text": "駅で三十分待ちました。",
+    "translation": "I waited thirty minutes at the station.",
+  },
+  "readings": [
+    {
+      "reading": "えき",
+      "surface": "駅",
+      "verified": true,
+    },
+    {
+      "reading": "さんじゅっぷん",
+      "surface": "三十分",
+      "verified": false,
+    },
+    {
+      "reading": "まちました",
+      "surface": "待ちました",
+      "verified": true,
+    },
+  ],
+  "text": "Same 待, same reading まつ, this time in the past.",
+}
+`;
+
+exports[`tasks over the mock provider > followUp quiz 1`] = `
+{
+  "quiz": {
+    "answerIndex": 0,
+    "options": [
+      "間",
+      "間に",
+    ],
+    "question": "電車を待っている（　）、ずっと音楽を聞いていた。",
+  },
+  "readings": [
+    {
+      "reading": "でんしゃ",
+      "surface": "電車",
+      "verified": false,
+    },
+    {
+      "reading": "まっている",
+      "surface": "待っている",
+      "verified": true,
+    },
+    {
+      "reading": "あいだ",
+      "surface": "間",
+      "verified": true,
+    },
+    {
+      "reading": "おんがく",
+      "surface": "音楽",
+      "verified": false,
+    },
+    {
+      "reading": "きいていた",
+      "surface": "聞いていた",
+      "verified": false,
+    },
+  ],
+  "text": "Pick the one that fits.",
+}
+`;
+
+exports[`tasks over the mock provider > followUp simpler 1`] = `
+{
+  "readings": [
+    {
+      "reading": "あいだ",
+      "surface": "間",
+      "verified": true,
+    },
+  ],
+  "text": "間に means "at some point while". 間 alone means "the whole time".",
+}
+`;
+
+exports[`tasks over the mock provider > weeklyNotes: letter and plan (notes.html) 1`] = `
+{
+  "letter": [
+    "Most of this week's sentences went through cleanly, and two-kanji words held up well, including some you hadn't met before.",
+    "What still trips you is length: most misses dropped a long vowel. It's a listening habit more than a kanji one.",
+    "There are grammar patterns from this lesson you haven't used in a sentence of your own yet. Reading them isn't the same as owning them.",
+  ],
+  "plan": [
+    {
+      "what": "A short reading session. Some sentences focus on long vowels.",
+      "when": "Daily",
+    },
+    {
+      "what": "Write one sentence with a grammar pattern you haven't used yet.",
+      "when": "Tue, Thu",
+    },
+  ],
+}
+`;

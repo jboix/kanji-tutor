@@ -1,0 +1,270 @@
+/* JLPT-shaped questions (J1–J5, T6) in the app's look: read.html's sentence and rules, numbered
+   option rows like the exam, pills for actions. Green (--ok) only marks the right answer once
+   it was chosen. A wrong choice is struck in ink: static grading never uses the AI red (D64). */
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: -8px 0 -6px;
+}
+
+.section {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+
+.prompt {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+/* The sentence on ruled lines, as in read.html, a little smaller to leave room for options. */
+.stem {
+  margin: 0;
+  font-family: var(--font-ja);
+  font-size: 24px;
+  line-height: 2.2;
+  overflow-wrap: anywhere;
+  background-image: linear-gradient(var(--rule) 1px, transparent 1px);
+  background-size: 100% 2.2em;
+  /* Klee One's content-area bottom, (2.2 + 1.448) / 2, where the underlines below sit (U7). */
+  background-position: 0 calc(1.824em + 0.5px);
+}
+
+.underline {
+  border-bottom: 2px solid var(--ink);
+}
+
+.filled {
+  border-bottom-style: dashed;
+}
+
+.blank {
+  display: inline-block;
+  min-width: 3.2em;
+  height: 1.1em;
+  margin: 0 0.15em;
+  border-bottom: 2px solid var(--ink);
+  vertical-align: -0.1em;
+}
+
+.translation {
+  margin: -6px 0 0;
+  font-size: var(--text-md);
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+.question {
+  margin: 0;
+  font-family: var(--font-ja);
+  font-size: 20px;
+  line-height: 1.7;
+}
+
+/* Four numbered rows (1–4), 52px tall: a full-width tap target each. */
+.options,
+.chips,
+.notes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.option,
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 52px;
+  padding: 6px 18px;
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.option:hover:not([aria-disabled="true"], .still),
+.chip:hover:not(:disabled) {
+  border-color: var(--ink-faint);
+}
+
+.option[aria-disabled="true"],
+.still,
+.chip:disabled {
+  cursor: default;
+}
+
+.number {
+  flex: none;
+  width: 1.4em;
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+}
+
+/* 24px, so each word of an answered option, tappable on its own, is a 24px target (WCAG 2.5.8). */
+.optionText {
+  flex: 1 1 auto;
+  font-family: var(--font-ja);
+  font-size: 24px;
+}
+
+/* After answering: the right row in ink, then green once it was the learner's choice. */
+.right {
+  border-color: var(--ink);
+}
+
+.right:has([data-check]) {
+  border-color: var(--ok);
+  background: var(--ok-surface);
+  color: var(--ok-ink);
+}
+
+.right:has([data-check]) [data-check] {
+  color: var(--ok);
+}
+
+.chosen .optionText {
+  color: var(--ink-muted);
+  text-decoration: line-through var(--ink);
+  text-decoration-thickness: 2px;
+}
+
+.other {
+  opacity: 0.6;
+}
+
+/* An answered row of tappable words is live text, not a disabled button: muted ink, not
+   opacity, so it keeps AA contrast (U5). */
+.still.other {
+  opacity: 1;
+  border-color: var(--rule);
+  color: var(--ink-muted);
+}
+
+/* Why each option: the number, then the note (Japanese runs in Klee One). */
+.note {
+  display: flex;
+  gap: 12px;
+  font-size: var(--text-md);
+  line-height: 1.5;
+}
+
+.noteRight {
+  font-weight: 600;
+}
+
+.noteText {
+  flex: 1 1 auto;
+}
+
+/* ★ order, laid out like a printed 文の組み立て item (U8): the slots are inline boxes on the
+   text's baseline, as tall as Klee One's content area, so a slot's line lies on the row's rule
+   level with the text around it, empty or filled. Rows are a little taller than a plain stem
+   (2.6em) so the ★ above a slot never meets the rule of the row above when the stem wraps. The
+   rule sits at the content-area bottom, (2.6 + 1.448) / 2. */
+.orderStem {
+  line-height: 2.6;
+  background-size: 100% 2.6em;
+  background-position: 0 calc(2.024em + 0.5px);
+}
+
+.slot {
+  position: relative;
+  display: inline-block;
+  min-width: 3.4em;
+  margin: 0 0.12em;
+  padding: 0 0.3em;
+  border: 0;
+  border-bottom: 2px solid var(--ink-faint);
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  line-height: normal;
+  text-align: center;
+  vertical-align: baseline;
+  cursor: pointer;
+}
+
+/* A 44px target without a taller box, which would push the slot off the text line. */
+.slot::after {
+  content: "";
+  position: absolute;
+  inset: -6px 0 -4px;
+}
+
+.placed {
+  border-bottom-color: var(--ink);
+}
+
+.star {
+  border-bottom-color: var(--accent);
+}
+
+/* The ★ rests on the baseline inside an empty slot, as on the exam sheet, and just over the
+   piece's ink once the slot is filled. */
+.starMark {
+  position: absolute;
+  bottom: 0.3em;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 13px;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.placed .starMark {
+  bottom: calc(100% + 1px);
+}
+
+/* The last slot and the text after it: closing punctuation never wraps alone (U8). */
+.keep {
+  white-space: nowrap;
+}
+
+.chip {
+  font-family: var(--font-ja);
+  font-size: 20px;
+}
+
+.chip:disabled {
+  opacity: 0.35;
+}
+
+/* 読解: the passage on ruled lines, the proving line picked out after answering. */
+.passage {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-family: var(--font-ja);
+  font-size: 19px;
+  line-height: 2;
+  background-image: linear-gradient(var(--rule) 1px, transparent 1px);
+  background-size: 100% 2em;
+  background-position: 0 1.8em;
+}
+
+.passageLine {
+  margin: 0;
+}
+
+.evidence {
+  border-radius: 6px;
+  background: var(--paper-soft);
+  box-shadow: inset 3px 0 0 var(--accent);
+  padding: 0 6px;
+}

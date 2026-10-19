@@ -1,0 +1,273 @@
+/* Calm one-line states: loading, offline, no key, outcomes of chips. */
+.status {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
+.link {
+  color: var(--accent);
+  text-underline-offset: 3px;
+}
+
+@media (hover: hover) {
+  .link:hover {
+    color: var(--link-hover);
+  }
+}
+
+/* "More about は" on its own line: a full 44px target (N6). */
+.more {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  min-height: var(--tap);
+}
+
+.link:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.para {
+  margin: 0;
+}
+
+.para + .para {
+  margin-top: 8px;
+}
+
+/* An English line under a Japanese example. */
+.gloss {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.unchecked {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--ink-muted);
+}
+
+.claim {
+  white-space: nowrap;
+}
+
+/* Follow-up quiz */
+.quiz {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.quiz [aria-pressed="true"] {
+  border-color: var(--ink);
+}
+
+.added {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sentences {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Word sheet: HOW THIS SENTENCE IS BUILT (explain.html) */
+.breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chunks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chunk {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.chunkText {
+  font-family: var(--font-ja);
+  font-size: 19px;
+}
+
+.chunkGloss {
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+/* The tapped chunk is the AI's point, so vermilion. */
+.focusText {
+  border-bottom: 2px solid var(--ai);
+}
+
+.focusGloss {
+  color: var(--ai);
+  font-weight: 700;
+}
+
+.glosses {
+  margin: 0;
+  padding-inline-start: 20px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footLine {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+/* Question box (A4) */
+.ask {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.answer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+.asked {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+/* "The tutor needs a minute" with its Retry (A14). */
+/* Static word sheet (A13): sections, kanji with parts, grammar and particle notes. */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.muted {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
+.kanjiList,
+.notes,
+.uses {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kanjiRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.kanjiText {
+  flex: 1;
+  min-width: 0;
+}
+
+.kanjiLine {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.kanjiLink {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--tap);
+  height: var(--tap);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--ink);
+  font-family: var(--font-ja);
+  font-size: 24px;
+  text-decoration: none;
+}
+
+/* U4: links and buttons in the sheet answer a pointer and the keyboard. */
+@media (hover: hover) {
+  .kanjiLink:hover {
+    border-color: var(--ink-muted);
+    background: var(--paper-soft);
+  }
+}
+
+.kanjiLink:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.noteHead {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.uses li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.useName {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.translation {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.tutor {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
