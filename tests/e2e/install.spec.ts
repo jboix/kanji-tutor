@@ -8,11 +8,7 @@ const IPHONE =
 
 const section = (page: Page) => page.getByRole('heading', { name: 'Install Kanji Tutor' });
 
-test('the welcome points to install help, and Settings offers the browser menu', async ({
-  page,
-}) => {
-  await page.goto('/');
-  await expect(page.getByText('see Settings → Install.')).toBeVisible();
+test('Settings offers the browser menu to install', async ({ page }) => {
   await onboard(page);
   await page.goto('/settings/install');
   await expect(section(page)).toBeVisible();

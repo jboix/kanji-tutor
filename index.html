@@ -37,6 +37,16 @@
         }
       })();
       if (stored === 'light' || stored === 'dark') document.documentElement.dataset.theme = stored;
+      // A first run opens on the welcome, which draws the icon itself (D138): the launch screen
+      // is then plain paper, so the icon never flashes twice.
+      const welcomed = (() => {
+        try {
+          return localStorage.getItem('kanji-tutor-welcomed') === '1';
+        } catch {
+          return true;
+        }
+      })();
+      if (!welcomed) document.documentElement.dataset.firstRun = '';
     </script>
     <!-- The launch screen (N1c, D65): paper, the icon and the name, until the first screen. -->
     <style>
@@ -51,6 +61,7 @@
       #launch svg { width: 96px; height: 96px; }
       #launch p { margin: 0; }
       #launch[data-done=""] { opacity: 0; pointer-events: none; }
+      :root[data-first-run] #launch > * { visibility: hidden; }
       @media (prefers-color-scheme: dark) {
         :root:not([data-theme="light"]), :root:not([data-theme="light"]) #launch { background: #0f1418; color: #e8edf2; }
       }

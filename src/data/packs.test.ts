@@ -73,16 +73,16 @@ describe('createPackLoader', () => {
     expect(await loader.installed()).toBeUndefined();
   });
 
-  it('installs every store, reports progress per batch and records the version', async () => {
+  it('installs every store, reports progress per batch and overall, and records the version', async () => {
     serve('v1');
     const progress: PackProgress[] = [];
     await createPackLoader(db, '/packs/').install((p) => progress.push(p));
     expect(progress).toEqual([
-      { stage: 'words', loaded: 2, total: 3 },
-      { stage: 'words', loaded: 3, total: 3 },
-      { stage: 'kanji', loaded: 1, total: 1 },
-      { stage: 'sentences', loaded: 1, total: 1 },
-      { stage: 'done', loaded: 5, total: 5 },
+      { stage: 'words', loaded: 2, total: 3, overall: 0.4 },
+      { stage: 'words', loaded: 3, total: 3, overall: 0.6 },
+      { stage: 'kanji', loaded: 1, total: 1, overall: 0.8 },
+      { stage: 'sentences', loaded: 1, total: 1, overall: 1 },
+      { stage: 'done', loaded: 5, total: 5, overall: 1 },
     ]);
     const repos = createDexieRepos(db);
     expect(await repos.dictionary.wordCount()).toBe(3);

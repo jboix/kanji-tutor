@@ -35,10 +35,13 @@ interface CardsProps<T extends string> {
   value: T;
   /** Only selects: moving on is the Next button's job (P5). */
   onChange: (value: T) => void;
+  /** Show a card's hint only once it is chosen, to keep long options short. */
+  hintWhenChosen?: boolean;
 }
 
 /** Exclusive options as tall cards on native radios (arrow keys move, Tab leaves). */
-export function ChoiceCards<T extends string>({ label, options, value, onChange }: CardsProps<T>) {
+export function ChoiceCards<T extends string>(props: CardsProps<T>) {
+  const { label, options, value, onChange, hintWhenChosen = false } = props;
   const name = useId();
   return (
     <fieldset className={styles.cards}>
@@ -54,7 +57,9 @@ export function ChoiceCards<T extends string>({ label, options, value, onChange 
             onChange={() => onChange(option.value)}
           />
           <span className={styles.cardTitle}>{option.title}</span>
-          {option.hint !== undefined && <span className={styles.cardHint}>{option.hint}</span>}
+          {option.hint !== undefined && (!hintWhenChosen || option.value === value) && (
+            <span className={styles.cardHint}>{option.hint}</span>
+          )}
         </label>
       ))}
     </fieldset>

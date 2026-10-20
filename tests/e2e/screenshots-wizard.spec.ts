@@ -14,39 +14,30 @@ const STEPS: {
   full?: boolean;
   leave: (page: Page) => Promise<void>;
 }[] = [
-  { heading: 'Welcome to Kanji Tutor', name: 'wizard-welcome', leave: next },
+  { heading: 'Kanji Tutor', name: 'wizard-welcome', leave: (page) => skip(page, 'Start') },
   { heading: 'Your language', name: 'wizard-language', leave: next },
   {
-    heading: 'Load the dictionary',
-    name: 'wizard-dictionary',
-    leave: async (page) => {
-      await page.getByRole('button', { name: 'Load dictionary' }).click();
-      await next(page);
-    },
-  },
-  {
-    heading: 'Where you start',
+    heading: 'Which one can you read?',
     name: 'wizard-start',
     leave: async (page) => {
       await page.getByRole('radio', { name: /I'm studying N4/ }).check();
       await next(page);
     },
   },
-  { heading: 'What you already know', name: 'wizard-known', leave: (page) => skip(page, 'Skip') },
   {
-    heading: 'Your class',
+    heading: 'Do you follow a class?',
     name: 'wizard-class',
     leave: async (page) => {
-      await page.getByLabel('Textbook or course').fill('My course');
-      await page.getByLabel('Current lesson').fill('4');
+      await page.getByText('Minna no Nihongo', { exact: true }).click();
+      for (let i = 0; i < 3; i++) await page.getByRole('button', { name: 'Next lesson' }).click();
       await next(page);
     },
   },
   {
-    heading: 'Your AI tutor',
+    heading: 'Meet your tutor',
     name: 'wizard-ai',
     full: true,
-    leave: (page) => skip(page, 'Skip for now'),
+    leave: (page) => skip(page, 'Skip'),
   },
   { heading: 'How sessions feel', name: 'wizard-feel', leave: next },
 ];
@@ -57,6 +48,8 @@ test('wizard: every step', async ({ page }) => {
   await page.goto('/');
   for (const step of STEPS) {
     await expect(stepHeading(page, step.heading)).toBeVisible({ timeout: 30_000 });
+    // A key skips the welcome's animation to its last frame.
+    await page.keyboard.press('Shift');
     await shot(page, step.name, { full: step.full ?? false });
     await step.leave(page);
   }

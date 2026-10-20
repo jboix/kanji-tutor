@@ -202,7 +202,7 @@ test('navigation: Learn, Add, Settings and a category, the plan (IA3–IA6)', as
   await expect(page.getByRole('group', { name: 'Furigana' })).toBeVisible();
   await shot(page, 'settings-sessions', { full: true });
   await page.goto('/settings/appearance');
-  await expect(page.getByRole('group', { name: 'Sound' })).toBeVisible();
+  await expect(page.getByRole('slider', { name: 'Sound' })).toBeVisible();
   await shotBothThemes(page, 'settings-appearance');
   await page.goto('/plan');
   await expect(page.getByRole('button', { name: 'Use this plan' })).toBeVisible();

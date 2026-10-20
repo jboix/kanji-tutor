@@ -200,8 +200,16 @@ export interface PackManifest {
 
 export interface PackProgress {
   stage: PackFile['store'] | LanguageFile['store'] | 'done';
+  /** Rows loaded and to load in this stage. */
   loaded: number;
   total: number;
+  /**
+   * How far the whole item is, 0 to 1, when the loader knows (D135): the dictionary, or a
+   * language pack.
+   */
+  overall?: number;
+  /** Set while a language pack (meanings and translations) loads (D136). */
+  language?: PackLanguage;
 }
 
 /** First-run loader for the dictionary packs into IndexedDB (N4). */

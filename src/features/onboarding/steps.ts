@@ -1,23 +1,16 @@
 import type { JlptList } from '../../domain/services/index.ts';
 import type { LearnerLevel } from '../../domain/types.ts';
 
-/** The welcome wizard's steps, in order (P5). */
-export const STEPS = [
-  'welcome',
-  'language',
-  'dictionary',
-  'start',
-  'known',
-  'class',
-  'ai',
-  'feel',
-  'summary',
-] as const;
+/**
+ * The welcome wizard's steps, in order (P5, D134): the welcome screen, then six numbered steps.
+ * The dictionary loads in the background from the welcome's Start, so it has no step.
+ */
+export const STEPS = ['welcome', 'language', 'start', 'class', 'ai', 'feel', 'summary'] as const;
 
 export type StepId = (typeof STEPS)[number];
 
-/** Steps with a Skip button: everything on them is optional. */
-export const SKIPPABLE: ReadonlySet<StepId> = new Set(['known', 'class', 'ai']);
+/** The numbered steps: all but the welcome. */
+export const NUMBERED = STEPS.length - 1;
 
 /** Where the learner starts (P1, P4): from zero, or studying N5, N4 or N3. */
 export type StartChoice = 'zero' | 'n5' | 'n4' | 'n3';
@@ -45,21 +38,16 @@ export const isStep = (value: string | undefined): value is StepId =>
 export const indexOf = (step: StepId) => STEPS.indexOf(step);
 
 /**
- * Where a reload resumes (P5): the saved step, but never past the dictionary while the packs
- * are not in IndexedDB, since later steps need them.
+ * Where a reload resumes (P5): the saved step. A step from before D134 (the dictionary, what you
+ * know) starts again at the welcome.
  */
-export function resumeStep(saved: string | undefined, installed: boolean): StepId {
-  const step = isStep(saved) ? saved : 'welcome';
-  if (!installed && indexOf(step) > indexOf('dictionary')) return 'dictionary';
-  return step;
+export function resumeStep(saved: string | undefined): StepId {
+  return isStep(saved) ? saved : 'welcome';
 }
 
-/**
- * The step after `step`. After a jump from the summary ("Change"), the wizard goes back to the
- * summary, except that a new start also shows what you know, since it sets those lists.
- */
+/** The step after `step`; after a jump from the summary ("Change"), back to the summary. */
 export function stepAfter(step: StepId, returning: boolean): StepId {
-  if (returning) return step === 'start' ? 'known' : 'summary';
+  if (returning) return 'summary';
   return STEPS[Math.min(indexOf(step) + 1, STEPS.length - 1)] ?? 'summary';
 }
 

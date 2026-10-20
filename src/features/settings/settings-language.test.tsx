@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import type { PackLoader } from '../../domain/repos.ts';
+import type { PackLoader, PackProgress } from '../../domain/repos.ts';
 import { createMemoryRepos } from '../../test/memory-repos.ts';
 import { fakeServices, renderWithServices } from '../../test/render.tsx';
 import { renderSettingsSection } from '../../test/settings-section.tsx';
@@ -73,6 +73,38 @@ describe('Settings in the learner language (N7b)', () => {
     expect(await screen.findByText(/ne sont pas encore installés \(2,4 Mo\)/)).toBeTruthy();
     await userEvent.click(screen.getByRole('button', { name: 'Installer les sens en français' }));
     expect(installLanguage.mock.calls[0]?.[0]).toBe('fr');
+    expect(
+      await screen.findByText('Les sens et les traductions en français sont installés.'),
+    ).toBeTruthy();
+  });
+  it('shows a progress bar and a percentage while the pack installs (D137)', async () => {
+    let finish: () => void = () => undefined;
+    const installLanguage = vi.fn(
+      async (_language: string, onProgress: (p: PackProgress) => void) => {
+        onProgress({ stage: 'glosses', loaded: 40, total: 100, overall: 0.4, language: 'fr' });
+        await new Promise<void>((resolve) => {
+          finish = resolve;
+        });
+      },
+    );
+    setup('fr', 'language', {
+      installLanguage,
+      installedLanguages: async () => [],
+      manifest: async () => ({
+        version: 'test',
+        files: [],
+        languages: { fr: [{ store: 'glosses', url: 'fr.json', bytes: 2_400_000, count: 100 }] },
+      }),
+    });
+    await userEvent.click(
+      await screen.findByRole('button', { name: 'Installer les sens en français' }),
+    );
+    const bar = await screen.findByRole('progressbar', {
+      name: 'Installation des sens en français',
+    });
+    expect(bar.getAttribute('aria-valuenow')).toBe('40');
+    expect(screen.getByText('40 %')).toBeTruthy();
+    finish();
     expect(
       await screen.findByText('Les sens et les traductions en français sont installés.'),
     ).toBeTruthy();

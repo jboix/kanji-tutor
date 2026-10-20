@@ -10,3 +10,24 @@
   font-size: var(--text-sm);
   color: var(--ink-muted);
 }
+
+/* While it installs: what, how far, then the bar across the width (D137). */
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-self: stretch;
+}
+
+.top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.percent {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}

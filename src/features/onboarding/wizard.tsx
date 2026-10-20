@@ -1,36 +1,37 @@
 import { type ReactNode, type RefObject, useEffect, useRef } from 'react';
 import type { Settings } from '../../domain/types.ts';
 import { cx } from '../../ui/cx.ts';
-import { isEmptyChoice, toChoice } from '../../ui/known-import-fields.tsx';
+import { languageOf } from '../../ui/languages.ts';
 import { Screen } from '../../ui/screen.tsx';
 import { isEditable } from '../../ui/use-visual-viewport.ts';
 import { StepAi } from './step-ai.tsx';
 import { StepClass } from './step-class.tsx';
-import { StepDictionary } from './step-dictionary.tsx';
 import { StepFeel } from './step-feel.tsx';
-import { StepKnown } from './step-known.tsx';
 import { StepLanguage } from './step-language.tsx';
 import type { StepProps } from './step-props.ts';
 import { StepStart } from './step-start.tsx';
 import { StepSummary } from './step-summary.tsx';
-import { StepWelcome } from './step-welcome.tsx';
 import type { StepId } from './steps.ts';
 import type { InstallState } from './use-pack-install.ts';
-import { type Direction, useWizard } from './use-wizard.ts';
+import { usePackQueue } from './use-pack-queue.ts';
+import {
+  type Direction,
+  marksOnClass,
+  useWizard,
+  type Wizard as WizardState,
+} from './use-wizard.ts';
 import type { PatchSettings } from './use-wizard-settings.ts';
+import { WelcomeScreen } from './welcome-screen.tsx';
 import styles from './wizard.module.css';
 import { WizardHeader } from './wizard-header.tsx';
 import { WizardNav } from './wizard-nav.tsx';
 
 type ViewProps = StepProps & { waiting: boolean };
 
-const VIEWS: Record<StepId, (props: ViewProps) => ReactNode> = {
-  welcome: () => <StepWelcome />,
+const VIEWS: Record<Exclude<StepId, 'welcome'>, (props: ViewProps) => ReactNode> = {
   language: (p) => <StepLanguage wizard={p.wizard} />,
-  dictionary: (p) => <StepDictionary install={p.install} onInstall={p.onInstall} />,
   start: (p) => <StepStart wizard={p.wizard} />,
-  known: (p) => <StepKnown wizard={p.wizard} waiting={p.waiting} />,
-  class: (p) => <StepClass wizard={p.wizard} />,
+  class: (p) => <StepClass wizard={p.wizard} waiting={p.waiting} />,
   ai: (p) => <StepAi settings={p.settings} patch={p.patch} />,
   feel: (p) => <StepFeel settings={p.settings} patch={p.patch} />,
   summary: (p) => <StepSummary {...p} />,
@@ -68,6 +69,21 @@ function useKeepInView(area: RefObject<HTMLDivElement | null>) {
   }, [area]);
 }
 
+/**
+ * The dictionary loads in the background from the welcome's Start (D134), and again on a
+ * reload past the welcome; after a failure, the header offers a retry.
+ */
+function useBackgroundInstall(step: StepId, install: InstallState, onInstall: () => void) {
+  useEffect(() => {
+    if (step !== 'welcome' && install.phase === 'idle') onInstall();
+  }, [step, install.phase, onInstall]);
+}
+
+/** The class step has words to mark, but the dictionary is not in yet. */
+function isWaiting(wizard: WizardState, install: InstallState): boolean {
+  return wizard.step === 'class' && install.phase !== 'done' && marksOnClass(wizard.draft);
+}
+
 export interface WizardProps {
   settings: Settings;
   patch: PatchSettings;
@@ -83,19 +99,29 @@ export function Wizard({ settings, patch, initial, install, onInstall }: WizardP
   const area = useRef<HTMLDivElement>(null);
   useStepFocus(body, wizard.step);
   useKeepInView(area);
-  const waiting =
-    wizard.step === 'known' &&
-    install.phase !== 'done' &&
-    !isEmptyChoice(toChoice(wizard.draft.known));
+  useBackgroundInstall(wizard.step, install, onInstall);
+  const queue = usePackQueue(languageOf(settings.uiLanguage), install);
+  if (wizard.step === 'welcome') return <WelcomeScreen onStart={() => void wizard.next()} />;
+  const waiting = isWaiting(wizard, install);
   const props = { wizard, settings, patch, install, onInstall, waiting };
+  const view = VIEWS[wizard.step];
   return (
     <Screen
-      topBar={<WizardHeader step={wizard.step} install={install} onInstall={onInstall} />}
-      footer={<WizardNav wizard={wizard} install={install} waiting={waiting} />}
+      topBar={
+        <WizardHeader step={wizard.step} install={install} onInstall={onInstall} queue={queue} />
+      }
+      footer={
+        <WizardNav
+          wizard={wizard}
+          install={install}
+          waiting={waiting}
+          hasKey={Boolean(settings.apiKey)}
+        />
+      }
     >
       <div ref={area} className={styles.viewport}>
         <div ref={body} key={wizard.step} className={cx(styles.slide, SLIDE[wizard.direction])}>
-          {VIEWS[wizard.step](props)}
+          {view(props)}
         </div>
       </div>
     </Screen>

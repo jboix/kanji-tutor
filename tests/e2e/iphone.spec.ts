@@ -28,6 +28,18 @@ test('the launch screen shows on a cold start and leaves (U12)', async ({ page }
   await expect(page).toHaveURL(/\/welcome$/);
 });
 
+test('a first run opens on plain paper, and the icon shows once the welcome is done (D138)', async ({
+  page,
+}) => {
+  await page.goto('/', { waitUntil: 'commit' });
+  // The welcome draws the icon itself, so the launch screen does not show it first.
+  await expect(page.locator('#launch svg')).toBeHidden();
+  await onboard(page);
+  await page.reload({ waitUntil: 'commit' });
+  await expect(page.locator('#launch svg')).toBeVisible();
+  await launched(page);
+});
+
 test('the install banner gives the Share steps on an iPhone (N1d)', async ({ page }) => {
   await onboard(page);
   const banner = page.getByRole('complementary', { name: 'Install the app' });

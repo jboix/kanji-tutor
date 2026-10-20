@@ -394,6 +394,8 @@ export interface Settings {
   onboardingKnown?: OnboardingKnown;
   /** Soft answer sounds in sessions (U2); on when unset. */
   sound?: boolean;
+  /** How loud the answer tones are, 0.1 to 1 (U2); full when unset. Off is `sound: false`. */
+  soundVolume?: number;
   /** About how long a session or lesson takes, in minutes (L6); absent means 5. */
   sessionMinutes?: SessionMinutes;
   /**

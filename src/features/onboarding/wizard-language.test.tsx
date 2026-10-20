@@ -25,8 +25,8 @@ function packs(): PackLoader {
   };
 }
 
-describe('wizard language step (N7b, N9)', () => {
-  it('switches to Spanish at once, offers the pack and saves the choice on Next', async () => {
+describe('wizard language step (N7b, N9, D136)', () => {
+  it('switches to Spanish at once, and its meanings install on their own after Next', async () => {
     const repos = await readingRepos({ onboardingStep: 'language' });
     const loader = packs();
     render(
@@ -42,15 +42,20 @@ describe('wizard language step (N7b, N9)', () => {
     await userEvent.click(screen.getByRole('radio', { name: 'Español' }));
     expect(await screen.findByRole('heading', { level: 1, name: 'Tu idioma' })).toBeTruthy();
     expect(document.documentElement.lang).toBe('es');
-    const install = await screen.findByRole('button', { name: 'Instalar significados en español' });
-    expect(screen.getByText(/aún no están instalados \(2,1 MB\)/)).toBeTruthy();
-    await userEvent.click(install);
-    expect(vi.mocked(loader.installLanguage ?? vi.fn()).mock.calls[0]?.[0]).toBe('es');
-    expect(await screen.findByText(/en español están instalados/)).toBeTruthy();
+    // No button to find, and nothing announced: the meanings come on their own.
+    expect(screen.queryByRole('button', { name: /Instalar/ })).toBeNull();
+    expect(screen.queryByText(/significados en español/)).toBeNull();
+    expect(loader.installLanguage).not.toHaveBeenCalled();
     await userEvent.click(screen.getByRole('button', { name: 'Siguiente' }));
     await waitFor(async () => expect((await repos.settings.get()).uiLanguage).toBe('es'));
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'Cargar el diccionario' }),
+      await screen.findByRole('heading', { level: 1, name: '¿Cuál sabes leer?' }),
     ).toBeTruthy();
+    await waitFor(() =>
+      expect(vi.mocked(loader.installLanguage ?? vi.fn()).mock.calls[0]?.[0]).toBe('es'),
+    );
+    // It installs quietly: no line in the header, and no error.
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(screen.queryByText(/significados/)).toBeNull();
   });
 });

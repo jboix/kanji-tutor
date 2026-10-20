@@ -13,9 +13,9 @@ test('Sound off in Appearance silences the session: no speaker, no speech (D125)
   await onboard(page);
   await importKnown(page);
   await page.goto('/settings/appearance');
-  const group = page.getByRole('group', { name: 'Sound' });
-  await group.getByText('Off', { exact: true }).click();
-  await expect(group.getByRole('radio', { name: 'Off' })).toBeChecked();
+  const knob = page.getByRole('slider', { name: 'Sound' });
+  await knob.fill('0');
+  await expect(knob).toHaveAttribute('aria-valuetext', 'Off');
   await page.goto('/settings');
   await expect(page.getByRole('link', { name: /^Appearance/ })).toContainText('Sound off');
   await page.goto('/');

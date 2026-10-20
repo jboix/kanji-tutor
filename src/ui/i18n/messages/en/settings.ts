@@ -99,8 +99,6 @@ export const settings = {
   sounds: 'Sound',
   soundHint:
     'Answer tones and spoken Japanese. Off, the app makes no sound: the speaker buttons hide and sessions leave out listening.',
-  on: 'On',
-  off: 'Off',
   lesson: 'Current lesson',
   lessonNone: 'New items get no lesson tag.',
   lessonTagged: 'New items are tagged {lesson}.',

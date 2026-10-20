@@ -107,8 +107,7 @@ export const ui = {
   packMissing:
     'Los significados del diccionario y las traducciones en {language} aún no están instalados ({size} MB). Mientras tanto se muestran en inglés, marcados (en).',
   packInstall: 'Instalar significados en {language}',
-  packStarting: 'Instalando…',
-  packLoading: 'Instalando: {loaded} de {total}',
+  packLoading: 'Instalando los significados en {language}',
   packFailed: 'El paquete de idioma no se cargó. Revisa la conexión e inténtalo de nuevo.',
   packInstalled: 'Los significados y las traducciones en {language} están instalados.',
   showMeaning: 'Ver el significado',
@@ -117,4 +116,8 @@ export const ui = {
   externalOffline: '{label}, necesita conexión',
   externalNeedsNet: 'necesita conexión',
   sourceFrom: 'Frase de {site}',
+  volumeMute: 'Sin sonido',
+  volumeUp: 'Más alto',
+  volumeOff: 'Apagado',
+  percent: '{n} %',
 } satisfies Messages['ui'];

@@ -52,25 +52,25 @@ test('no horizontal scroll and 44 px targets at this width (N6)', async ({ page 
   }
 });
 
-/** Each welcome wizard step, from the first to the summary (P5). */
+/** The welcome, then each wizard step to the summary (P5, D134). */
 const WIZARD: { heading: string; leave: (page: Page) => Promise<void> }[] = [
-  { heading: 'Welcome to Kanji Tutor', leave: (page) => next(page) },
+  { heading: 'Kanji Tutor', leave: (page) => skip(page, 'Start') },
   { heading: 'Your language', leave: (page) => next(page) },
+  { heading: 'Which one can you read?', leave: (page) => next(page) },
   {
-    heading: 'Load the dictionary',
+    heading: 'Do you follow a class?',
     leave: async (page) => {
-      await page.getByRole('button', { name: 'Load dictionary' }).click();
+      await page.getByText('Minna no Nihongo', { exact: true }).click();
+      await page.getByRole('button', { name: 'Next lesson' }).click();
+      await page.getByText('Paste a list of words you know').click();
       await next(page);
     },
   },
-  { heading: 'Where you start', leave: (page) => next(page) },
-  { heading: 'What you already know', leave: (page) => skip(page, 'Skip') },
-  { heading: 'Your class', leave: (page) => skip(page, 'Skip') },
   {
-    heading: 'Your AI tutor',
+    heading: 'Meet your tutor',
     leave: async (page) => {
       await page.getByText('Advanced: models').click();
-      await skip(page, 'Skip for now');
+      await skip(page, 'Skip');
     },
   },
   { heading: 'How sessions feel', leave: (page) => next(page) },
@@ -90,8 +90,10 @@ test('every wizard step passes axe and keeps 44 px targets (N6, P5)', async ({ p
     await expect(page.getByRole('heading', { level: 1, name: step.heading })).toBeVisible({
       timeout: 30_000,
     });
-    // Let the slide settle so axe sees the final colours.
-    await page.waitForTimeout(350);
+    // A key skips the welcome's animation; then let the slide settle so axe sees the final
+    // colours.
+    await page.keyboard.press('Shift');
+    await page.waitForTimeout(400);
     issues.push(...(await scanHere(page, step.heading)));
     const report = await layoutReport(page);
     expect.soft(report.wide, `${step.heading} scrolls sideways`).toBe(false);

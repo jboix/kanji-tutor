@@ -44,6 +44,30 @@ function fade(launch: HTMLElement): void {
   setTimeout(() => launch.remove(), FADE_MS);
 }
 
+/** The localStorage key index.html reads before the first paint (D138); keep both in step. */
+export const WELCOMED_KEY = 'kanji-tutor-welcomed';
+
+/**
+ * Mirrors "the welcome is done" for index.html: until it is, the launch screen is plain paper,
+ * since the first screen is the welcome, which draws the icon itself (D138).
+ */
+export function rememberWelcomed(done: boolean): void {
+  try {
+    if (done) localStorage.setItem(WELCOMED_KEY, '1');
+    else localStorage.removeItem(WELCOMED_KEY);
+  } catch {
+    // Storage blocked: index.html then shows the icon, as before.
+  }
+}
+
+/**
+ * Removes the launch screen at once, with no minimum and no fade: for the first-run welcome
+ * (D135), whose own animation starts from the blank icon tile.
+ */
+export function dropLaunch(): void {
+  document.getElementById('launch')?.remove();
+}
+
 /** Calls `endLaunch` when the calling screen mounts. */
 export function useEndLaunch(): void {
   useEffect(endLaunch, []);

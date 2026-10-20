@@ -215,3 +215,17 @@ export const InfoIcon = () => (
     <path d="M12 11v5.5M12 7.8v.2" />
   </Svg>
 );
+/** Done: a check in a circle. */
+export const CheckIcon = () => (
+  <Svg size={18} width={1.8}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="m8 12.5 2.8 2.8L16 9.8" />
+  </Svg>
+);
+/** Sound off: a speaker with a cross. */
+export const SpeakerOffIcon = () => (
+  <Svg size={16} width={1.6}>
+    <path d="M4 10v4h4l5 4V6L8 10z" />
+    <path d="m16 10 4 4M20 10l-4 4" />
+  </Svg>
+);

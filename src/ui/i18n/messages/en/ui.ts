@@ -97,8 +97,7 @@ export const ui = {
   packMissing:
     'Dictionary meanings and sentence translations in {language} are not installed yet ({size} MB). Until then they show in English, marked (en).',
   packInstall: 'Install {language} meanings',
-  packStarting: 'Installing…',
-  packLoading: 'Installing: {loaded} of {total}',
+  packLoading: 'Installing the meanings in {language}',
   packFailed: 'The language pack did not load. Check the connection and try again.',
   packInstalled: 'Meanings and translations in {language} are installed.',
   showMeaning: 'Show meaning',
@@ -107,4 +106,8 @@ export const ui = {
   externalOffline: '{label}, needs a connection',
   externalNeedsNet: 'needs a connection',
   sourceFrom: 'Sentence from {site}',
+  volumeMute: 'Sound off',
+  volumeUp: 'Louder',
+  volumeOff: 'Off',
+  percent: '{n}%',
 } as const;

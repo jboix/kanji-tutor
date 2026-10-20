@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import type { Translate } from '../../ui/i18n/types.ts';
+import { IconButton } from '../../ui/icon-button.tsx';
+import { BackIcon } from '../../ui/icons.tsx';
 import { PillButton } from '../../ui/pill-button.tsx';
-import { SKIPPABLE, stepAfter } from './steps.ts';
+import { stepAfter } from './steps.ts';
 import type { InstallState } from './use-pack-install.ts';
 import type { Wizard } from './use-wizard.ts';
 import styles from './wizard-chrome.module.css';
@@ -10,20 +12,22 @@ import styles from './wizard-chrome.module.css';
 interface Props {
   wizard: Wizard;
   install: InstallState;
-  /** The known step has lists to mark but the dictionary is not in yet. */
+  /** The class step has words to mark but the dictionary is not in yet. */
   waiting: boolean;
+  /** A Gemini key is saved: the tutor step's button reads Next, not Skip. */
+  hasKey: boolean;
 }
 
 /** Whether Next (or Start reading) can be pressed on this step. */
 function canGoOn({ wizard, install, waiting }: Props): boolean {
-  if (wizard.step === 'dictionary') return install.phase === 'loading' || install.phase === 'done';
   if (wizard.step === 'summary') return install.phase === 'done';
-  if (wizard.step === 'known') return !waiting && wizard.importPhase.phase !== 'running';
+  if (wizard.step === 'class') return !waiting && wizard.importPhase.phase !== 'running';
   return true;
 }
 
-function nextLabel(t: Translate, wizard: Wizard): string {
+function nextLabel(t: Translate, { wizard, hasKey }: Props): string {
   if (wizard.step === 'summary') return t('onboarding.startReading');
+  if (wizard.step === 'ai' && !hasKey) return t('common.skip');
   if (wizard.returning && stepAfter(wizard.step, true) === 'summary') {
     return t('onboarding.backToSummary');
   }
@@ -41,21 +45,11 @@ function useBusy() {
   return [busy, run] as const;
 }
 
-function Skip({ wizard, run }: { wizard: Wizard; run: (move: () => Promise<void>) => void }) {
-  const t = useT();
-  if (!SKIPPABLE.has(wizard.step)) return null;
-  const ai = wizard.step === 'ai';
-  return (
-    <div className={styles.skipRow}>
-      <button type="button" className={styles.skip} onClick={() => run(wizard.skip)}>
-        {ai ? t('onboarding.skipForNow') : t('common.skip')}
-      </button>
-      {ai && <span className={styles.skipHint}>{t('onboarding.skipAiHint')}</span>}
-    </div>
-  );
-}
-
-/** Back, Next and Skip (P5). Selecting an option never moves; only these do. */
+/**
+ * Back, a round arrow, and Next (P5): selecting an option never moves; only these do. On the tutor step, Next
+ * reads Skip until a key is saved, in the same place, so a quick tap never lands on another
+ * button.
+ */
 export function WizardNav(props: Props) {
   const { wizard } = props;
   const t = useT();
@@ -64,16 +58,20 @@ export function WizardNav(props: Props) {
   return (
     <nav className={styles.nav} aria-label={t('onboarding.navLabel')}>
       <div className={styles.navRow}>
-        {wizard.step !== 'welcome' && (
-          <PillButton variant="secondary" onClick={() => run(wizard.back)} disabled={busy}>
-            {t('common.back')}
-          </PillButton>
-        )}
-        <PillButton onClick={() => run(next)} disabled={busy || !canGoOn(props)} grow={1.4}>
-          {nextLabel(t, wizard)}
+        <IconButton
+          size={52}
+          look="outline"
+          className={styles.back}
+          aria-label={t('common.back')}
+          onClick={() => run(wizard.back)}
+          disabled={busy}
+        >
+          <BackIcon />
+        </IconButton>
+        <PillButton onClick={() => run(next)} disabled={busy || !canGoOn(props)}>
+          {nextLabel(t, props)}
         </PillButton>
       </div>
-      <Skip wizard={wizard} run={run} />
     </nav>
   );
 }

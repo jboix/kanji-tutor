@@ -19,6 +19,7 @@ import type { Repos, SettingsRepo } from '../domain/repos.ts';
 import { createLearnerView } from '../domain/services/learner-profile.ts';
 import type { Settings } from '../domain/types.ts';
 import { createLang, createWorkerTokenizer } from '../lang/index.ts';
+import { rememberWelcomed } from '../ui/launch.ts';
 import type { Services } from '../ui/services.tsx';
 import { applySound } from '../ui/sound.ts';
 import { learnerProfile } from './profile.ts';
@@ -71,11 +72,13 @@ function aiContext(
 
 /**
  * Settings → Sound (D125) follows every settings read and write, so boot, a change, an import
- * and the welcome all mute or unmute the tones and speech at once.
+ * and the welcome all mute or unmute the tones and speech at once. So does the launch screen's
+ * "welcome done" mark, which index.html reads before the first paint (D138).
  */
 export function soundFollows(repo: SettingsRepo): SettingsRepo {
   const apply = (settings: Settings) => {
-    applySound(settings.sound);
+    applySound(settings.sound, settings.soundVolume);
+    rememberWelcomed(settings.onboarded);
     return settings;
   };
   return {

@@ -35,14 +35,6 @@
   }
 }
 
-.mark {
-  margin: 0;
-  font-family: var(--font-ja);
-  font-size: 40px;
-  line-height: 1.2;
-  color: var(--ink);
-}
-
 .heading {
   margin: 0;
   font-size: 24px;
@@ -59,25 +51,11 @@
   outline-offset: 4px;
 }
 
-.lead,
-.lines {
+.lead {
   margin: 0;
   font-size: var(--text-md);
   line-height: 1.6;
   color: var(--ink);
-}
-
-.lines {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 0;
-  list-style: none;
-}
-
-.lines li {
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--rule);
 }
 
 .note {
@@ -192,37 +170,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-.primary,
-.secondary {
-  align-self: flex-start;
-  min-height: var(--tap);
-  padding: 0 22px;
-  border-radius: var(--radius-pill);
-  font-family: inherit;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.primary {
-  border: 0;
-  background: var(--ink);
-  color: var(--on-ink);
-  font-weight: 500;
-}
-
-.secondary {
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--ink);
-}
-
-.secondary:disabled {
-  opacity: 0.45;
-  cursor: default;
-}
-
-.primary:focus-visible,
-.secondary:focus-visible,
 .change:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
@@ -240,13 +187,6 @@
   color: var(--ink-muted);
   letter-spacing: 0.04em;
   text-transform: uppercase;
-}
-
-.inline {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
 }
 
 /* Klee One: textbook names and lesson tags mix Latin and kanji (D16). */
@@ -317,6 +257,95 @@
   text-decoration: underline;
   text-underline-offset: 3px;
   cursor: pointer;
+}
+
+/* The label over the tutor's sample note (D134). */
+.sampleLabel {
+  margin: 4px 0 -8px;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--ink-muted);
+}
+
+/* Where you start: each card is a level tag over a sentence at that level. */
+.sample {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sampleTag {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+
+.sampleJa {
+  font-family: var(--font-ja);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* Meet your tutor: a fixed miss on 待つ and the note it gets. */
+.demo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-panel);
+}
+
+.demoSentence {
+  margin: 0;
+  font-family: var(--font-ja);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 2;
+}
+
+.demoTarget {
+  color: var(--miss);
+  border-bottom: 2px solid var(--miss);
+}
+
+.demoMiss {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: var(--miss-surface);
+  color: var(--miss-ink);
+  font-size: 14px;
+}
+
+/* How sessions feel: the sentence as a session shows it. */
+.preview {
+  padding: 20px 18px 14px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-panel);
+}
+
+.previewSentence {
+  margin: 0;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--font-ja);
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 2.1;
+}
+
+.previewSentence rt {
+  font-size: 12px;
+  color: var(--accent);
+}
+
+.previewCaption {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--ink-muted);
 }
 
 /* Keyboard open (U1): the dots and the hint give way to the field being typed in. */

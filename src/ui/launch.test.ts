@@ -1,5 +1,7 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { endLaunch, FONT_WAIT_MS, MIN_LAUNCH_MS } from './launch.ts';
+import { endLaunch, FONT_WAIT_MS, MIN_LAUNCH_MS, WELCOMED_KEY } from './launch.ts';
 import { applyTheme, THEME_KEY } from './theme.ts';
 
 function launchScreen(): HTMLElement {
@@ -69,5 +71,13 @@ describe('the launch screen (N1c)', () => {
     expect(localStorage.getItem(THEME_KEY)).toBe('dark');
     applyTheme('system');
     expect(localStorage.getItem(THEME_KEY)).toBeNull();
+  });
+});
+
+describe('index.html', () => {
+  it('reads the same storage keys as the app, before the first paint (N1c, D138)', () => {
+    const html = readFileSync(resolve(import.meta.dirname, '..', '..', 'index.html'), 'utf8');
+    expect(html).toContain(`'${THEME_KEY}'`);
+    expect(html).toContain(`'${WELCOMED_KEY}'`);
   });
 });

@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { blockGemini, importKnown, onboard, stepHeading } from './helpers.ts';
+import { blockGemini, importKnown, onboard, startWizard, stepHeading } from './helpers.ts';
 
 /**
  * The interface in the learner's language (N7b, D52): French chosen in Settings switches Today, a
@@ -74,12 +74,10 @@ test('French chosen in Settings: Today, a session card, the word sheet and Setti
 test('Spanish chosen in the wizard switches the wizard at once', async ({ page }) => {
   await blockGemini(page);
   await page.goto('/');
-  await expect(stepHeading(page, 'Welcome to Kanji Tutor')).toBeVisible();
-  await page.getByRole('button', { name: 'Next', exact: true }).click();
-  await expect(stepHeading(page, 'Your language')).toBeVisible();
+  await startWizard(page);
   await page.getByRole('radio', { name: 'Español' }).check();
   await expect(stepHeading(page, 'Tu idioma')).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('lang', 'es');
   await page.getByRole('button', { name: 'Siguiente', exact: true }).click();
-  await expect(stepHeading(page, 'Cargar el diccionario')).toBeVisible();
+  await expect(stepHeading(page, '¿Cuál sabes leer?')).toBeVisible();
 });

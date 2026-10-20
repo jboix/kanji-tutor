@@ -10,7 +10,7 @@ test('deleting all local data starts the app again from the welcome', async ({ p
   await page.getByRole('button', { name: 'Delete everything' }).click();
 
   await expect(page).toHaveURL(/\/welcome$/);
-  await expect(stepHeading(page, 'Welcome to Kanji Tutor')).toBeVisible();
+  await expect(stepHeading(page, 'Kanji Tutor')).toBeVisible();
   // The app opens a fresh, empty database on the new start; nothing from before survives.
   expect(await page.evaluate(() => localStorage.length)).toBe(0);
   await page.goto('/');

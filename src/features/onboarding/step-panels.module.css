@@ -1,0 +1,176 @@
+/* Your class (D134): book chips, the lesson stepper, and grouped rows (also on the feel step). */
+
+/* Your class: the books as chips on native radios. */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+}
+
+.chips > legend {
+  margin-bottom: 10px;
+  padding: 0;
+}
+
+.chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding: 0 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chip:has(:checked) {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-ink);
+  font-weight: 500;
+}
+
+.chip:has(:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.lesson {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 10px 10px 16px;
+  border: 1px solid var(--rule);
+  border-radius: 18px;
+}
+
+.lessonText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lessonTag {
+  font-family: var(--font-ja);
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.stepper {
+  display: flex;
+  gap: 8px;
+}
+
+.stepButton {
+  width: var(--tap);
+  height: var(--tap);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.stepButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.stepButton:focus-visible,
+.groupRow:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* A grouped panel of rows (Settings.dc.html). */
+.group {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-panel);
+  background: var(--paper-soft);
+  overflow: hidden;
+}
+
+.group > * + * {
+  border-top: 1px solid var(--rule);
+}
+
+.groupRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 64px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.groupBody {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px 16px;
+}
+
+.rowText {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 2px;
+}
+
+.rowTitle {
+  font-size: var(--text-md);
+  font-weight: 500;
+}
+
+.rowHint {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+.switch {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.paste > summary {
+  list-style: none;
+}
+
+.paste > summary::-webkit-details-marker {
+  display: none;
+}
+
+.pasteBody {
+  padding: 0 16px 16px;
+}
+
+.area {
+  width: 100%;
+  min-height: 96px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-ja);
+  font-size: 16px;
+  resize: vertical;
+}

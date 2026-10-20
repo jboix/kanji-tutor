@@ -163,7 +163,10 @@ a.small {
 }
 
 .unitTitle {
+  display: inline-flex;
+  align-items: center;
   align-self: flex-start;
+  min-height: var(--tap);
   color: var(--on-hero);
   font-size: 22px;
   text-decoration: none;

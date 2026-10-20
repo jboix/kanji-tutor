@@ -1,0 +1,77 @@
+/* The sound knob: a label with its value, then a native range between two speakers. */
+
+.slider {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.label {
+  font-size: var(--text-md);
+  font-weight: 500;
+}
+
+.value {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.track {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ink-muted);
+}
+
+/* The speakers are one-tap buttons, 44px to the touch (N6). */
+.tap {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--tap);
+  height: var(--tap);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.tap[aria-pressed="true"] {
+  background: var(--paper-soft);
+  color: var(--ink);
+}
+
+.tap:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.tap:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* 44px tall to the touch (N6). */
+.input {
+  flex-grow: 1;
+  min-width: 0;
+  height: var(--tap);
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

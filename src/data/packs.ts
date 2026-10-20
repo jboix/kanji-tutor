@@ -52,14 +52,21 @@ function setPackVersion(db: KanjiTutorDb, packVersion: string): Promise<void> {
 
 type Report = (progress: PackProgress) => void;
 
+/** Rows loaded across every store, for the overall share of the install. */
+interface Overall {
+  done: number;
+  total: number;
+}
+
 async function loadStore(
   db: KanjiTutorDb,
   base: string,
   files: PackFile[],
   report: Report,
-  seen: Set<string>,
+  run: { seen: Set<string>; overall: Overall },
 ) {
   const total = files.reduce((sum, file) => sum + file.count, 0);
+  const { seen, overall } = run;
   let loaded = 0;
   for (const file of files) {
     const records = await readRecords(`${base}${file.url}`);
@@ -68,7 +75,8 @@ async function loadStore(
       await putBatch(db, file.store, batch);
       for (const row of batch) seen.add(rowId(file.store, row));
       loaded += batch.length;
-      report({ stage: file.store, loaded, total });
+      overall.done += batch.length;
+      report({ stage: file.store, loaded, total, overall: overall.done / overall.total });
     }
   }
 }
@@ -93,15 +101,16 @@ async function applyLanguages(db: KanjiTutorDb, base: string, next: PackManifest
  */
 async function install(db: KanjiTutorDb, base: string, next: PackManifest, report: Report) {
   const seen = emptySeen();
+  const total = next.files.reduce((sum, file) => sum + file.count, 0);
+  const overall = { done: 0, total: Math.max(total, 1) };
   for (const store of PACK_STORES) {
     const files = next.files.filter((file) => file.store === store);
-    await loadStore(db, base, files, report, seen[store]);
+    await loadStore(db, base, files, report, { seen: seen[store], overall });
   }
   await applyLanguages(db, base, next, report);
   await setPackVersion(db, next.version);
   await prunePacks(db, seen);
-  const total = next.files.reduce((sum, file) => sum + file.count, 0);
-  report({ stage: 'done', loaded: total, total });
+  report({ stage: 'done', loaded: total, total, overall: 1 });
 }
 
 function addLanguage(db: KanjiTutorDb, lang: PackLanguage): Promise<void> {

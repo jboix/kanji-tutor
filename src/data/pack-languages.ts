@@ -65,12 +65,15 @@ export interface LanguageInstall {
   batch: number;
 }
 
+const countOf = (files: LanguageFile[]) => files.reduce((sum, file) => sum + file.count, 0);
+
 async function applyStore(
   job: LanguageInstall,
   store: LanguageFile['store'],
-  files: LanguageFile[],
+  run: { files: LanguageFile[]; overall: { done: number; total: number } },
 ) {
-  const total = files.reduce((sum, file) => sum + file.count, 0);
+  const { files, overall } = run;
+  const total = countOf(files);
   let loaded = 0;
   for (const file of files) {
     const records = await job.read(file.url);
@@ -78,18 +81,20 @@ async function applyStore(
       const part = records.slice(i, i + job.batch);
       await applyBatch(job.db, job.lang, store, part);
       loaded += part.length;
-      job.report({ stage: store, loaded, total });
+      overall.done += part.length;
+      const share = overall.done / overall.total;
+      job.report({ stage: store, loaded, total, overall: share, language: job.lang });
     }
   }
 }
 
-/** Merges one language's files into the installed rows, reporting progress per batch. */
+/**
+ * Merges one language's files into the installed rows, reporting progress per batch, with the
+ * share of the whole language pack and its language (D136).
+ */
 export async function applyLanguage(job: LanguageInstall, files: LanguageFile[]): Promise<void> {
+  const overall = { done: 0, total: Math.max(countOf(files), 1) };
   for (const store of ['glosses', 'translations'] as const) {
-    await applyStore(
-      job,
-      store,
-      files.filter((file) => file.store === store),
-    );
+    await applyStore(job, store, { files: files.filter((file) => file.store === store), overall });
   }
 }

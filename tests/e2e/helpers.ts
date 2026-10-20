@@ -30,27 +30,28 @@ export async function nextStep(page: Page, to: string): Promise<void> {
   await expect(stepHeading(page, to)).toBeVisible();
 }
 
+/** The welcome (D134): presses Start, which also starts the dictionary download. */
+export async function startWizard(page: Page): Promise<void> {
+  await expect(page).toHaveURL(/\/welcome$/);
+  await expect(stepHeading(page, 'Kanji Tutor')).toBeVisible();
+  await page.getByRole('button', { name: 'Start', exact: true }).click();
+  await expect(stepHeading(page, 'Your language')).toBeVisible();
+}
+
 /**
- * Goes through the welcome wizard quickly (P5): loads the fixture dictionary, starts from zero
- * (or at `start`, e.g. /I'm studying N4/), skips the optional steps and the key, and lands on
- * Today.
+ * Goes through the welcome wizard quickly (P5, D134): Start loads the fixture dictionary in the
+ * background; it starts from zero (or at `start`, e.g. /I'm studying N4/), with no class and no
+ * key, and lands on Today.
  */
 export async function onboard(page: Page, start = /I'm starting from zero/): Promise<void> {
   await blockGemini(page);
   await page.goto('/');
-  await expect(page).toHaveURL(/\/welcome$/);
-  await expect(stepHeading(page, 'Welcome to Kanji Tutor')).toBeVisible();
-  await nextStep(page, 'Your language');
-  await nextStep(page, 'Load the dictionary');
-  await page.getByRole('button', { name: 'Load dictionary' }).click();
-  await nextStep(page, 'Where you start');
+  await startWizard(page);
+  await nextStep(page, 'Which one can you read?');
   await page.getByRole('radio', { name: start }).check();
-  await nextStep(page, 'What you already know');
+  await nextStep(page, 'Do you follow a class?');
+  await nextStep(page, 'Meet your tutor');
   await page.getByRole('button', { name: 'Skip', exact: true }).click();
-  await expect(stepHeading(page, 'Your class')).toBeVisible();
-  await page.getByRole('button', { name: 'Skip', exact: true }).click();
-  await expect(stepHeading(page, 'Your AI tutor')).toBeVisible();
-  await page.getByRole('button', { name: 'Skip for now' }).click();
   await expect(stepHeading(page, 'How sessions feel')).toBeVisible();
   await nextStep(page, 'Your choices');
   // Start reading opens once the dictionary is in.

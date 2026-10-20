@@ -1,8 +1,9 @@
 import { useI18n } from '../../ui/i18n/i18n.tsx';
-import { LanguagePackOffer } from '../../ui/language-pack-offer.tsx';
 import { UI_LANGUAGES, type UiLanguage } from '../../ui/languages.ts';
 import { ChoiceCards, Lead, StepHeading } from './step-parts.tsx';
 import type { StepProps } from './step-props.ts';
+import { TutorNote } from './tutor-note.tsx';
+import styles from './wizard.module.css';
 
 const OPTIONS = UI_LANGUAGES.map((language) => ({
   value: language.value,
@@ -10,8 +11,9 @@ const OPTIONS = UI_LANGUAGES.map((language) => ({
 }));
 
 /**
- * The interface and explanation language (N7b, N10). Choosing one switches the interface at
- * once; it is saved as `uiLanguage` on Next (D44). French and Spanish offer their pack (N9).
+ * The interface and explanation language (N7b, N10). Choosing one switches the interface and
+ * the tutor's sample note at once; it is saved as `uiLanguage` on Next (D44). French and Spanish
+ * meanings (N9) download after the dictionary, on their own and unannounced (D136).
  */
 export function StepLanguage({ wizard }: Pick<StepProps, 'wizard'>) {
   const { t, setLanguage } = useI18n();
@@ -30,7 +32,8 @@ export function StepLanguage({ wizard }: Pick<StepProps, 'wizard'>) {
         value={language}
         onChange={choose}
       />
-      <LanguagePackOffer language={language} />
+      <p className={styles.sampleLabel}>{t('onboarding.languageSample')}</p>
+      <TutorNote key={language} />
     </>
   );
 }

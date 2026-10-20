@@ -1,9 +1,8 @@
 import { useT } from '../../ui/i18n/i18n.tsx';
-import { KnownImportFields, type SetKnownDraft } from '../../ui/known-import-fields.tsx';
 import { ProgressLine } from '../../ui/progress-line.tsx';
 import type { ImportPhase } from '../../ui/use-known-import.ts';
 import { knownText, markingText } from './known-text.ts';
-import { Lead, Note, StepHeading } from './step-parts.tsx';
+import { Note } from './step-parts.tsx';
 import type { StepProps } from './step-props.ts';
 import styles from './wizard.module.css';
 
@@ -20,7 +19,8 @@ function Marking({ phase }: { phase: Extract<ImportPhase, { phase: 'running' }> 
   );
 }
 
-function Status({ wizard, waiting }: { wizard: StepProps['wizard']; waiting: boolean }) {
+/** Marking what you know (K6): its progress, a failure, the wait for the dictionary, or done. */
+export function KnownStatus({ wizard, waiting }: Pick<StepProps, 'wizard'> & { waiting: boolean }) {
   const t = useT();
   const phase = wizard.importPhase;
   if (phase.phase === 'running') return <Marking phase={phase} />;
@@ -33,22 +33,4 @@ function Status({ wizard, waiting }: { wizard: StepProps['wizard']; waiting: boo
     return <Note>{t('onboarding.knownDone', { text })}</Note>;
   }
   return null;
-}
-
-/**
- * What you already know (K6, D38): the lists ticked by your start, Minna lessons and your own
- * list. Next marks them; Skip marks nothing. Marking twice adds nothing twice (P2).
- */
-export function StepKnown({ wizard, waiting }: Pick<StepProps, 'wizard'> & { waiting: boolean }) {
-  const t = useT();
-  const set: SetKnownDraft = (key, value) =>
-    wizard.setDraft({ known: { ...wizard.draft.known, [key]: value } });
-  return (
-    <>
-      <StepHeading>{t('onboarding.knownHeading')}</StepHeading>
-      <Lead>{t('onboarding.knownLead')}</Lead>
-      <KnownImportFields draft={wizard.draft.known} set={set} known />
-      <Status wizard={wizard} waiting={waiting} />
-    </>
-  );
 }

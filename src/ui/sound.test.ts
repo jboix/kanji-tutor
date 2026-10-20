@@ -114,6 +114,16 @@ describe('sound', () => {
     expect(fake.notes).toHaveLength(1);
   });
 
+  it('scales every note by the volume (Settings → Sound)', () => {
+    const fake = fakeContext();
+    const player = createSound(() => fake.context);
+    player.unlock();
+    player.play('wrong');
+    player.volume(0.5);
+    player.play('wrong');
+    expect(fake.notes.map((note) => note.peak)).toEqual([PEAK, PEAK / 2]);
+  });
+
   it('applies the setting to speech as well, on when unset', () => {
     vi.stubGlobal('speechSynthesis', { cancel: () => undefined });
     applySound(false);

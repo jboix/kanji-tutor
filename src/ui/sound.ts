@@ -41,9 +41,11 @@ export interface Sound {
   listen: (target: EventTarget) => () => void;
   /** Silences every cue until unmuted (Settings → Sound off, D125). */
   mute: (value: boolean) => void;
+  /** Scales every cue, 0 to 1 (Settings → Sound). */
+  volume: (value: number) => void;
 }
 
-function playNote(context: AudioContext, note: Note, start: number) {
+function playNote(context: AudioContext, note: Note, start: number, peak: number) {
   const osc = context.createOscillator();
   const gain = context.createGain();
   const begin = start + note.at;
@@ -51,7 +53,7 @@ function playNote(context: AudioContext, note: Note, start: number) {
   osc.type = note.wave;
   osc.frequency.setValueAtTime(note.freq, begin);
   gain.gain.setValueAtTime(FLOOR, begin);
-  gain.gain.linearRampToValueAtTime(PEAK, begin + ATTACK);
+  gain.gain.linearRampToValueAtTime(peak, begin + ATTACK);
   gain.gain.exponentialRampToValueAtTime(FLOOR, end);
   osc.connect(gain);
   gain.connect(context.destination);
@@ -59,10 +61,10 @@ function playNote(context: AudioContext, note: Note, start: number) {
   osc.stop(end + 0.02);
 }
 
-function playCue(context: AudioContext, cue: Cue) {
+function playCue(context: AudioContext, cue: Cue, peak: number) {
   if (context.state !== 'running') void context.resume().catch(() => undefined);
   try {
-    for (const note of CUES[cue]) playNote(context, note, context.currentTime);
+    for (const note of CUES[cue]) playNote(context, note, context.currentTime, peak);
   } catch {
     // A sound is never worth breaking the session for.
   }
@@ -74,6 +76,7 @@ const GESTURES = ['pointerdown', 'touchend', 'keydown'] as const;
 export function createSound(make: () => AudioContext | undefined): Sound {
   let context: AudioContext | undefined;
   let muted = false;
+  let peak = PEAK;
   const unlock = () => {
     try {
       context ??= make();
@@ -83,7 +86,7 @@ export function createSound(make: () => AudioContext | undefined): Sound {
     }
   };
   const play = (cue: Cue) => {
-    if (context && !muted) playCue(context, cue);
+    if (context && !muted) playCue(context, cue, peak);
   };
   const listen = (target: EventTarget) => {
     for (const name of GESTURES) target.addEventListener(name, unlock, { passive: true });
@@ -94,7 +97,10 @@ export function createSound(make: () => AudioContext | undefined): Sound {
   const mute = (value: boolean) => {
     muted = value;
   };
-  return { unlock, play, listen, mute };
+  const volume = (value: number) => {
+    peak = PEAK * Math.min(Math.max(value, FLOOR), 1);
+  };
+  return { unlock, play, listen, mute, volume };
 }
 
 function browserContext(): AudioContext | undefined {
@@ -107,10 +113,11 @@ export const sound: Sound = createSound(browserContext);
 
 /**
  * Applies Settings → Sound (D125) to everything that makes a sound: the answer tones and speech
- * (the speaker buttons, listening exercises). On when unset.
+ * (the speaker buttons, listening exercises). On when unset; the volume scales the tones.
  */
-export function applySound(setting: boolean | undefined): void {
+export function applySound(setting: boolean | undefined, volume = 1): void {
   const off = setting === false;
   sound.mute(off);
+  sound.volume(volume);
   muteSpeech(off);
 }
