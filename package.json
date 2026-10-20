@@ -1,6 +1,6 @@
 {
   "name": "kanji-tutor",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "description": "Personal, phone-first PWA for reading Japanese kanji in context (N3).",
