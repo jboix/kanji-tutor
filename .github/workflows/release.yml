@@ -63,7 +63,7 @@ jobs:
         run: bun run check
 
       - name: Playwright browsers
-        uses: ./.github/actions/playwright-browsers
+        uses: $/.github/actions/playwright-browsers
 
       # The full suite at both phone sizes, against a mock-AI build: nothing is released without it.
       - name: Playwright (full suite)

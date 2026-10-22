@@ -10,4 +10,6 @@ RUN mkdir -p /data && chown bun:bun /data
 USER bun
 ENV DB_PATH=/data/sync.db PORT=3000 SYNC_VERSION=$VERSION
 EXPOSE 3000
+# Docker marks the container healthy or not, as `docker compose ps` shows.
+HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://127.0.0.1:3000/health || exit 1
 CMD ["bun", "main.js"]

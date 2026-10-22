@@ -41,7 +41,7 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Playwright browsers
-        uses: ./.github/actions/playwright-browsers
+        uses: $/.github/actions/playwright-browsers
 
       # The e2e build uses the mock AI provider: no key, no network calls to Gemini.
       - name: Playwright (full suite)
