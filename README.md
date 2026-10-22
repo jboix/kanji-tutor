@@ -1,5 +1,5 @@
 <h1>
-  <img src="public/icons/icon.svg" width="44" height="44" align="absmiddle" alt="">
+  <img src="apps/web/public/icons/icon.svg" width="44" height="44" align="absmiddle" alt="">
   Kanji Tutor
 </h1>
 
@@ -7,16 +7,13 @@
 [![Release](https://github.com/jboix/kanji-tutor/actions/workflows/release.yml/badge.svg)](https://github.com/jboix/kanji-tutor/actions/workflows/release.yml)
 [![version](https://img.shields.io/github/v/release/jboix/kanji-tutor?label=version)](https://github.com/jboix/kanji-tutor/releases/latest)
 [![bun](https://img.shields.io/badge/bun-1.4.2-brightgreen)](https://bun.sh)
-[![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178c6)](https://www.typescriptlang.org)
-[![React](https://img.shields.io/badge/React-19-61dafb)](https://react.dev)
-[![PWA](https://img.shields.io/badge/PWA-offline-5a0fc8)](https://jboix.github.io/kanji-tutor/)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
 
 A phone-first web app for reading Japanese, from the first kanji up to JLPT N3. It teaches kanji
 through words in real sentences, schedules reviews with FSRS, and can put an AI tutor beside each
 exercise. Everything stays in your browser.
 
-Open it at [jboix.github.io/kanji-tutor](https://jboix.github.io/kanji-tutor/) and add it to
+Open it at [app.kanjitutor.ch](https://app.kanjitutor.ch/) and add it to
 your home screen. It works offline.
 
 ## Use it

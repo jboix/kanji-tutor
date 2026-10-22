@@ -5,6 +5,6 @@ coverage
 test-results
 playwright-report
 notes
-public
+apps/web/public
 .cache
 .worktrees

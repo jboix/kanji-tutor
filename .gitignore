@@ -14,10 +14,14 @@ coverage
 .cache
 *.pem
 # Raw data downloads for the pack pipeline: never committed (licences, size)
-data/raw/
+apps/web/data/raw/
 # Playwright
 test-results/
 playwright-report/
 blob-report/
 # Parallel workstream worktrees (kept inside the project folder)
 .worktrees/
+# The sync server: its settings (they hold the save key), its build and its local data
+apps/sync/deploy/.env
+apps/sync/deploy/app/
+apps/sync/data/

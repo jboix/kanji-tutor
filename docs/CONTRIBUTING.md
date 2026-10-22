@@ -36,34 +36,42 @@ every release.
 
 ## Layout
 
-| Path            | Contents                                                                   |
-| --------------- | -------------------------------------------------------------------------- |
-| `src/app`       | Startup, routes, wiring of the services                                    |
-| `src/features`  | One folder per screen or flow; features never import each other            |
-| `src/domain`    | Pure TypeScript: scheduling, sessions, grading. No React, Dexie or network |
-| `src/lang`      | Japanese: tokenizer, readings, kana input, conjugation                     |
-| `src/ai`        | The Gemini provider, its prompts, and the mock provider with its fixtures  |
-| `src/data`      | Dexie (IndexedDB) repositories and the dictionary packs                    |
-| `src/ui`        | Shared components, tokens and the typed message catalogues (en, fr, es)    |
-| `scripts/packs` | The data pipeline that builds `public/packs`                               |
-| `tests/e2e`     | Playwright tests                                                           |
+The repository is a Bun workspace: one install and one lockfile at the root, which also holds
+the shared tools (TypeScript, Biome, commitlint, dependency-cruiser, knip, remark). Each app has
+its own `package.json` with its own dependencies.
+
+| Path                     | Contents                                                                           |
+| ------------------------ | ---------------------------------------------------------------------------------- |
+| `apps/web`               | The PWA: Vite, React and Dexie                                                     |
+| `apps/web/src/app`       | Startup, routes, wiring of the services                                            |
+| `apps/web/src/features`  | One folder per screen or flow; features never import each other                    |
+| `apps/web/src/domain`    | Pure TypeScript: scheduling, sessions, grading. No React, Dexie or network         |
+| `apps/web/src/lang`      | Japanese: tokenizer, readings, kana input, conjugation                             |
+| `apps/web/src/ai`        | The Gemini provider, its prompts, and the mock provider with its fixtures          |
+| `apps/web/src/data`      | Dexie (IndexedDB) repositories and the dictionary packs                            |
+| `apps/web/src/ui`        | Shared components, tokens and the typed message catalogues (en, fr, es)            |
+| `apps/web/scripts/packs` | The data pipeline that builds `apps/web/public/packs`                              |
+| `apps/web/tests/e2e`     | Playwright tests                                                                   |
+| `apps/sync`              | The cloud-save server: Bun, Hono and SQLite ([its README](../apps/sync/README.md)) |
 
 The layers are `features → domain | lang | ai | ui`, `ai → lang | data`. dependency-cruiser fails
-the check when an import crosses them.
+the check when an import crosses them, or when one app imports the other. The root scripts run
+the apps' own (`bun run dev`, `bun run sync:dev`); inside an app folder, `bun run <script>` runs
+its scripts directly.
 
 ## Data packs
 
-`public/packs` is built from pinned JMdict, KANJIDIC2, KRADFILE, Tatoeba and JLPT sources
-(`scripts/packs/sources.ts`).
+`apps/web/public/packs` is built from pinned JMdict, KANJIDIC2, KRADFILE, Tatoeba and JLPT sources
+(`apps/web/scripts/packs/sources.ts`).
 
 ```sh
-bun run packs                    # downloads into data/raw/ (git-ignored), prunes, emits packs
+bun run packs                    # downloads into apps/web/data/raw/ (git-ignored), prunes, emits packs
 bun run packs --refresh-tatoeba  # accept a newer weekly Tatoeba export
 ```
 
-Never commit `data/raw/` or any textbook content.
+Never commit `apps/web/data/raw/` or any textbook content.
 
-`bun run credits` writes `public/third-party-licenses.txt`, the licence texts that Settings →
+`bun run credits` writes `apps/web/public/third-party-licenses.txt`, the licence texts that Settings →
 About offers for download. Run it after adding or updating a runtime dependency; a test fails
 when the file is out of date.
 

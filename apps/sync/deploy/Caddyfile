@@ -1,0 +1,6 @@
+# HTTPS for the sync domain, then everything to the server. Caddy adds X-Forwarded-For, which
+# the server's per-client limit reads.
+{$SYNC_DOMAIN} {
+	encode zstd gzip
+	reverse_proxy sync:3000
+}

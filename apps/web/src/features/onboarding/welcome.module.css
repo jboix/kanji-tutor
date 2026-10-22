@@ -1,0 +1,225 @@
+/* The welcome (D134): the icon writes 漢, the tutor stamps its seal and writes the reading, then
+   the name, the line and Start rise in, easing out over about three seconds. The icon keeps the
+   icon's own colours in both themes. */
+
+.welcome {
+  display: contents;
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  padding-top: 32px;
+  text-align: center;
+}
+
+.reading {
+  display: flex;
+  gap: 0.3em;
+  height: 30px;
+  margin: 0 0 6px;
+  font-family: var(--font-ja);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ai);
+}
+
+.reading > span {
+  opacity: 0;
+  transform: translateY(4px);
+  animation: rise 300ms cubic-bezier(0.16, 1, 0.3, 1) 1700ms forwards;
+}
+
+.reading > span + span {
+  animation-delay: 1820ms;
+}
+
+.logo {
+  width: 148px;
+  height: 148px;
+  filter: drop-shadow(0 18px 28px rgb(30 77 122 / 0.28));
+  animation: tile-in 250ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.tile {
+  fill: #1e4d7a;
+}
+
+.stroke {
+  fill: none;
+  stroke: #f7f8f6;
+  stroke-width: 120;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw var(--d) cubic-bezier(0.2, 0.7, 0.3, 1) var(--t) forwards;
+}
+
+/* The whole glyph, once the strokes are down: the centre lines are rough. */
+.ink {
+  fill: #f7f8f6;
+  opacity: 0;
+  animation: show 300ms ease-out 1300ms forwards;
+}
+
+.seal {
+  fill: #b3243a;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: stamp 420ms cubic-bezier(0.3, 1.5, 0.5, 1) 1400ms forwards;
+}
+
+.ring {
+  fill: none;
+  stroke: #b3243a;
+  stroke-width: 1.4;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ripple 700ms ease-out 1500ms forwards;
+}
+
+.name,
+.tagline,
+.actions {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: rise 450ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.name {
+  margin: 30px 0 0;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  animation-delay: 1950ms;
+}
+
+.tagline {
+  max-width: 300px;
+  margin: 12px 0 0;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--ink);
+  animation-delay: 2120ms;
+}
+
+/* Log in, quiet under Start: most people opening the welcome have no cloud saves (D140). */
+.logIn {
+  margin: 0;
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.logInLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding: 0 4px;
+  color: var(--accent);
+  font-weight: 500;
+  text-underline-offset: 3px;
+}
+
+.logInLink:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* "AI tutor" in the hanko crimson, as on the social preview. */
+.tutor {
+  font-style: normal;
+  color: var(--ai);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px var(--gutter) max(20px, calc(env(safe-area-inset-bottom) + 8px));
+  animation-delay: 2300ms;
+}
+
+/* A tap, a key or reduced motion: the last frame at once. These selectors outweigh every
+   animation rule above. */
+.welcome[data-skipped] * {
+  animation-duration: 1ms;
+  animation-delay: 0ms;
+}
+
+.welcome[data-skipped] .ring {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome:not([data-skipped]) * {
+    animation-duration: 1ms;
+    animation-delay: 0ms;
+  }
+
+  .ring {
+    display: none;
+  }
+}
+
+@keyframes tile-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes show {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes stamp {
+  0% {
+    opacity: 0;
+    transform: rotate(-4deg) scale(2.4);
+  }
+
+  70% {
+    opacity: 1;
+    transform: rotate(-4deg) scale(0.92);
+  }
+
+  100% {
+    opacity: 1;
+    transform: rotate(-4deg) scale(1);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(3.2);
+  }
+}
+
+@keyframes rise {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -9,7 +9,7 @@
       "!**/dist",
       "!**/dev-dist",
       "!**/coverage",
-      "!public/packs",
+      "!apps/web/public/packs",
       "!notes"
     ]
   },
@@ -72,7 +72,13 @@
       "linter": { "rules": { "style": { "noDefaultExport": "off" } } }
     },
     {
-      "includes": ["**/*.test.ts", "**/*.test.tsx", "tests/**", "scripts/**", "src/test/**"],
+      "includes": [
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "apps/web/tests/**",
+        "apps/*/scripts/**",
+        "apps/web/src/test/**"
+      ],
       "linter": {
         "rules": {
           "complexity": {
@@ -84,7 +90,7 @@
       }
     },
     {
-      "includes": ["scripts/**"],
+      "includes": ["apps/*/scripts/**"],
       "linter": { "rules": { "suspicious": { "noConsole": "off" } } }
     }
   ]
