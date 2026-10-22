@@ -4,5 +4,10 @@
 	# Browsers that have been here once never try plain HTTP again, for a year.
 	header Strict-Transport-Security "max-age=31536000"
 	encode zstd gzip
+	# An API, with nothing to index or train on: every crawler is asked to stay out.
+	respond /robots.txt <<TXT
+		User-agent: *
+		Disallow: /
+		TXT 200
 	reverse_proxy sync:3000
 }

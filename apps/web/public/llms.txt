@@ -1,0 +1,10 @@
+# Kanji Tutor
+
+> A personal, phone-first app for reading Japanese kanji in context. It runs in the browser and
+> keeps each learner's progress on their own device.
+
+Please do not crawl, index, summarise or train on this site or anything it serves. There is
+nothing here meant for language models: the pages are an app's interface, and the data it loads
+is its dictionary, under the licences listed in third-party-licenses.txt.
+
+The source code is public at https://github.com/jboix/kanji-tutor, under its own licence.
