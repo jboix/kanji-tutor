@@ -1,79 +1,51 @@
-# Sync server
+# Kanji Tutor sync server
 
-Cloud saves for Kanji Tutor, by invitation: a Bun server with Hono over one SQLite file, behind
-Caddy for HTTPS, run with Docker Compose on a small VPS.
+Cloud saves for [Kanji Tutor](../../README.md): your progress, saved online and kept in step on
+every device you log in on. You log in with a passkey, by linking from a device that is already
+logged in, or with a code sent to your email. There are no passwords, and accounts are by
+invitation.
 
-| Part         | What it does                                                            |
-| ------------ | ----------------------------------------------------------------------- |
-| `src/`       | The API: passkeys, device linking, email codes, devices, saves, invites |
-| `src/cli.ts` | Commands on the server: `invite`, `invites`, `revoke`, `backup`         |
-| `deploy/`    | `Dockerfile`, `compose.yaml`, `Caddyfile`, `.env.example`               |
-| `test/`      | The routes over memory, and the SQL over Node's SQLite                  |
+The app works fully without it. The server only adds saves shared between your devices.
 
-The app works without it: the server only adds saves shared between a learner's devices.
+## Use it
 
-## What it keeps
+With an invite for [app.kanjitutor.ch](https://app.kanjitutor.ch/), open the invite link, or go to
+**Settings → Cloud saves → Turn on** and type the code. The app asks for a passkey, then saves by
+itself. On another device, choose **Log in** to bring your progress there.
 
-One SQLite file, `/data/sync.db` in the container:
+## Host your own
 
-- **accounts**, with a recovery email once confirmed;
-- **passkeys**, public keys only;
-- **devices**, with a hash of each session token;
-- **invites**, with a hash of each code, used once;
-- **saves**, one per account, gzipped by the app, encrypted with AES-GCM under `SAVE_KEY` and
-  versioned, so an older device never overwrites a newer save;
-- **codes** that expire: passkey challenges, pairing and email codes.
+You need a small Linux server with Docker, a domain for it, and your own build of the app (the
+app talks only to the server it was built for, and the server only to that app).
 
-## Limits
+1. Point a domain at the server, such as `api.example.com`, with ports 80 and 443 open.
+2. Copy `deploy/` to the server, then create `.env` there from `deploy/.env.example`: the
+   domain, your app's address, and a save key from `openssl rand -base64 32`. Keep a copy of the
+   key: without it the saves cannot be read.
+3. Choose the image in `.env`: `SYNC_TAG=1.2.0` uses a published version of
+   `ghcr.io/jboix/kanji-sync`, or build your own (`SYNC_IMAGE`, see the guide).
+4. Start it with `docker compose up -d`. Caddy gets the HTTPS certificate by itself, and
+   `https://api.example.com/health` answers `{"ok":true,…}`.
+5. Build the app with `VITE_SYNC_URL=https://api.example.com`, and make yourself an invite.
 
-Each has a default that suits invite-only use, and can be changed in `.env`:
-
-| Setting                 | Default | Limits                                                     |
-| ----------------------- | ------- | ---------------------------------------------------------- |
-| `RATE_PER_MINUTE`       | 120     | Requests per client address, to any endpoint but `/health` |
-| `SIGNED_OUT_PER_MINUTE` | 20      | Signed-out requests that start a sign-in or an account     |
-| `SAVES_PER_HOUR`        | 120     | Saves per account                                          |
-| `MAX_BODY_KB`           | 64      | Any request body but a save                                |
-| `MAX_SAVE_MB`           | 50      | One save                                                   |
-| `MAX_DEVICES`           | 20      | Devices per account: a new one signs out the oldest        |
-
-Every answer is `Cache-Control: no-store` and `X-Content-Type-Options: nosniff`; Caddy adds
-`Strict-Transport-Security`.
-
-## Build and deploy
-
-The **Sync server** workflow (`.github/workflows/sync.yml`) does it, started by hand from `main`.
-The server takes the app's version: run **Release** first, then this.
-
-1. it checks out the latest release tag, runs `bun run check`, builds the image from `deploy/`
-   and publishes it to GHCR as `ghcr.io/jboix/kanji-sync:<version>` (public, so the server pulls
-   it without a token);
-2. after approval in the `sync` environment, it connects with a deploy key that can only run
-   `deploy/deploy.sh`. The script backs up the database, installs that release's `compose.yaml`
-   and `Caddyfile`, runs the image, checks `/health`, and puts the previous version back when
-   that fails. `/health` answers with the version running.
-
-To roll back, start the workflow with an earlier version, such as `1.2.0`: its image is deployed
-again, unbuilt.
-
-Trivy checks the image before it is published: one with a HIGH or CRITICAL vulnerability that has
-a fix is not. The **Image scan** workflow scans the running images, this one and Caddy's, every
-week and puts what it finds in the repository's Security tab.
-
-The server keeps a `.env` next to `compose.yaml` (from `.env.example`) with the domain, the
-app's origin and `SAVE_KEY` (`openssl rand -base64 32`). It never leaves the server. Keep a copy
-of `SAVE_KEY`: without it the saves cannot be decrypted.
+The [sync server guide](../../docs/SYNC-SERVER.md) covers updates from GitHub Actions, backups,
+the limits you can change and how the server is protected.
 
 ## Invites and backups
 
+On the server, in the folder with `compose.yaml`:
+
 ```sh
-docker compose exec sync bun cli.js invite "for Marta"   # prints the code and a link, once
-docker compose exec sync bun cli.js invites
-docker compose exec sync bun cli.js revoke KD7M-3XQP
-docker compose exec sync bun cli.js backup               # /data/backups/sync-<time>.db
+docker compose exec sync bun cli.js invite "for Marta"   # prints a code and a link, once
+docker compose exec sync bun cli.js invites              # open, used and revoked
+docker compose exec sync bun cli.js revoke KD7M-3XQP     # an unused code stops working
+docker compose exec sync bun cli.js backup               # a copy of the database
 ```
 
-## Locally
+## Run it locally
 
-`bun run sync:dev` runs it with `APP_ORIGIN`, `SAVE_KEY` and `DB_PATH` from the environment.
-Its tests run with the rest (`bun run test`), or alone with `bun run test` in `apps/sync`.
+```sh
+bun run sync:dev   # with APP_ORIGIN, SAVE_KEY and DB_PATH set in the environment
+```
+
+Its tests run with the rest (`bun run test`).

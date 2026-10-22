@@ -2,7 +2,7 @@
 # workflow builds it at a release tag and publishes it to GHCR as that version.
 FROM oven/bun:1.4.2-alpine
 ARG VERSION=dev
-# Alpine's own security fixes, newer than the Bun image's (Trivy).
+# Alpine's own security fixes, newer than the Bun image's.
 RUN apk upgrade --no-cache
 WORKDIR /app
 COPY app/ ./

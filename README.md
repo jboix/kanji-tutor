@@ -27,7 +27,8 @@ key: open **Settings → AI tutor**, paste a key from
 [Google AI Studio](https://aistudio.google.com/apikey) and press **Test key**. The key stays in
 this browser; it is never in the build or a backup.
 
-Your data lives in this browser only. **Settings → Backup and storage** saves it to a file and restores it.
+Your data lives in this browser. **Settings → Backup and storage** saves it to a file and restores it.
+With an invite, [cloud saves](apps/sync/README.md) keep it in step on all your devices.
 
 ## Run it locally
 
