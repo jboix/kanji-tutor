@@ -126,10 +126,7 @@ describe('ExplainWordSheet, static first (A13)', () => {
     };
     const { sheet } = await open(ai as Partial<AiClient>);
     const saved = /^Ask the tutor about this word, saved, uses AI: no request$/;
-    // The saved answer comes from an async peek; under the full run's load it can take over 1 s.
-    expect(
-      await within(sheet).findByRole('button', { name: saved }, { timeout: 3000 }),
-    ).toBeTruthy();
+    expect(await within(sheet).findByRole('button', { name: saved })).toBeTruthy();
     expect(within(sheet).getByRole('button', { name: saved }).textContent).toContain('Saved');
     expect(
       within(sheet).getByRole('button', {

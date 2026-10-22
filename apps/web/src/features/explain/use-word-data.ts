@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type {
   AiClient,
+  BreakdownInput,
   ExplainWordInput,
   SentenceBreakdown,
   SentenceContext,
@@ -49,17 +50,25 @@ async function loadOffline(repos: Repos, sentence: Sentence, surface: string, wo
 }
 
 /** The dictionary entry, kanji parts and lesson of the tapped word: no AI (A13). */
-function useOffline(sentence: Sentence, surface: string, wordId: string | undefined): Offline {
+const NOTHING_YET: Offline = { kanji: [] };
+
+/** The dictionary entry and the kanji, and whether they have loaded. */
+function useOffline(
+  sentence: Sentence,
+  surface: string,
+  wordId: string | undefined,
+): [Offline, boolean] {
   const { repos } = useServices();
-  const [offline, setOffline] = useState<Offline>({ kanji: [] });
+  const [offline, setOffline] = useState<Offline | undefined>(undefined);
   useEffect(() => {
     let live = true;
+    setOffline(undefined);
     void loadOffline(repos, sentence, surface, wordId).then((o) => live && setOffline(o));
     return () => {
       live = false;
     };
   }, [repos, sentence, surface, wordId]);
-  return offline;
+  return [offline ?? NOTHING_YET, offline !== undefined];
 }
 
 /** The general explanation's input: keyed on the word, not the sentence (A15). */
@@ -96,6 +105,22 @@ export interface WordData extends Offline {
 }
 
 /**
+ * The saved answers' lookups. The explanation's input includes the dictionary entry: it looks
+ * once the entry is in, so "Saved" never shows for the incomplete input and then goes.
+ */
+function usePeeks(input: ExplainWordInput, parts: BreakdownInput, loaded: boolean) {
+  const peekExplain = useCallback(
+    (client: AiClient) => (loaded ? client.peek('explainWord', input) : Promise.resolve(undefined)),
+    [input, loaded],
+  );
+  const peekBreakdown = useCallback(
+    (client: AiClient) => client.peek('breakdownSentence', parts),
+    [parts],
+  );
+  return { peekExplain, peekBreakdown };
+}
+
+/**
  * Everything the word sheet shows. The dictionary entry, kanji parts and catalogue grammar load
  * at once; the tutor's explanation and breakdown only when asked, each by its own `AiAction`,
  * which says "Saved" when the tutor already answered (A13, A15, A18).
@@ -103,17 +128,13 @@ export interface WordData extends Offline {
 export function useWordData(sentence: Sentence, surface: string, wordId?: string): WordData {
   const context = useMemo(() => contextOf(sentence), [sentence]);
   const grammar = useMemo(() => sentenceGrammar(sentence), [sentence]);
-  const offline = useOffline(sentence, surface, wordId);
+  const [offline, loaded] = useOffline(sentence, surface, wordId);
   const input = useMemo(
     () => wordInput(context, surface, wordId, offline.word),
     [context, surface, wordId, offline.word],
   );
   const parts = useMemo(() => ({ sentence: context, focus: surface }), [context, surface]);
-  const peekExplain = useCallback((client: AiClient) => client.peek('explainWord', input), [input]);
-  const peekBreakdown = useCallback(
-    (client: AiClient) => client.peek('breakdownSentence', parts),
-    [parts],
-  );
+  const { peekExplain, peekBreakdown } = usePeeks(input, parts, loaded);
   const [explain, startExplain] = useAiState<WordExplanation>();
   const [breakdown, startBreakdown] = useAiState<SentenceBreakdown>();
   return {
