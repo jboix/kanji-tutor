@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { inLanguage } from '../test/render.tsx';
@@ -30,7 +30,8 @@ describe('RouteError', () => {
   it('reloads once when the screen chunk of an older build is gone', async () => {
     failWith('Failed to fetch dynamically imported module: /assets/settings-screen-x.js');
     expect(await screen.findByRole('heading', { name: 'Something went wrong' })).toBeTruthy();
-    expect(reloadOnce).toHaveBeenCalledTimes(1);
+    // The reload runs in an effect, just after the error screen renders.
+    await waitFor(() => expect(reloadOnce).toHaveBeenCalledTimes(1));
   });
 
   it('shows the error and a Reload button, without reloading, for any other error', async () => {
