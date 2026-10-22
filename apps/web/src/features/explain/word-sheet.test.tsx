@@ -68,7 +68,7 @@ describe('ExplainWordSheet, static first (A13)', () => {
     expect(ai.explainWord).not.toHaveBeenCalled();
     expect(ai.breakdownSentence).not.toHaveBeenCalled();
     expect(ai.answerQuestion).not.toHaveBeenCalled();
-    // Static content only: no AI box until the tutor is asked (D57); the seal only on the
+    // Static content only: no AI box until the tutor is asked; the seal only on the
     // presses that send a request (A18).
     expect(sheet.querySelector('[data-ai-block]')).toBeNull();
     const copy = sheet.cloneNode(true) as HTMLElement;
@@ -126,7 +126,10 @@ describe('ExplainWordSheet, static first (A13)', () => {
     };
     const { sheet } = await open(ai as Partial<AiClient>);
     const saved = /^Ask the tutor about this word, saved, uses AI: no request$/;
-    expect(await within(sheet).findByRole('button', { name: saved })).toBeTruthy();
+    // The saved answer comes from an async peek; under the full run's load it can take over 1 s.
+    expect(
+      await within(sheet).findByRole('button', { name: saved }, { timeout: 3000 }),
+    ).toBeTruthy();
     expect(within(sheet).getByRole('button', { name: saved }).textContent).toContain('Saved');
     expect(
       within(sheet).getByRole('button', {
