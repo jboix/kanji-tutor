@@ -1,0 +1,43 @@
+name: Image scan
+
+# Weekly, and by hand: Trivy scans the images the server runs, the sync server's latest
+# and Caddy's, for vulnerabilities found since they were deployed. Nothing fails: the results go
+# to the Security tab (code scanning), beside CodeQL's. Trivy runs from its image, pinned by
+# digest.
+on:
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: sync
+            image: ghcr.io/jboix/kanji-sync:latest
+          - name: caddy
+            image: caddy:2-alpine
+    steps:
+      - name: Scan
+        env:
+          IMAGE: ${{ matrix.image }}
+        run: |
+          docker pull --quiet "$IMAGE"
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:/out" \
+            aquasec/trivy:0.75.0@sha256:af6acf9a6b85dfe389a1941505c0ce9efef52a4719635e1a962f022a3d855daa \
+            image --quiet --severity HIGH,CRITICAL --format sarif --output /out/trivy.sarif "$IMAGE"
+
+      - name: Report
+        uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+        with:
+          sarif_file: trivy.sarif
+          category: trivy-${{ matrix.name }}

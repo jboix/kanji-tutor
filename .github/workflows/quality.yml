@@ -129,9 +129,28 @@ jobs:
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: bunx commitlint --from "$BASE_SHA" --to "$HEAD_SHA" --verbose
 
+  # zizmor: the workflows themselves, for script injection, broad permissions, unpinned or
+  # known-vulnerable actions. Fails on medium and above. Pinned to a release on PyPI, where a
+  # version can never be replaced.
+  workflows:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: zizmor
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: pipx run zizmor==1.30.1 --min-severity medium --format github .github
+
   quality:
     if: always()
-    needs: [verify, e2e-smoke, commitlint]
+    needs: [verify, e2e-smoke, commitlint, workflows]
     runs-on: ubuntu-latest
     timeout-minutes: 2
     permissions: {}
