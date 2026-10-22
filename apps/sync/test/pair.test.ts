@@ -12,7 +12,7 @@ async function start(deps: ReturnType<typeof testDeps>) {
   return (await response.json()) as { code: string; secret: string; expiresIn: number };
 }
 
-describe('linking a device (D133)', () => {
+describe('linking a device', () => {
   it('shows a code, the phone sees who asks and approves, and the computer gets a session', async () => {
     const deps = testDeps();
     const phone = await signedInAccount(deps);
@@ -42,5 +42,13 @@ describe('linking a device (D133)', () => {
     expect(wrong.status).toBe(404);
     const unsigned = await handle(call('POST', '/pair/approve', { body: { code } }), deps);
     expect(unsigned.status).toBe(401);
+  });
+
+  it('answers a malformed code like an expired one, not with a server error', async () => {
+    const deps = testDeps();
+    const phone = await signedInAccount(deps);
+    const peek = await handle(call('GET', '/pair/not-a-code', { token: phone.token }), deps);
+    expect(peek.status).toBe(404);
+    expect(await peek.json()).toEqual({ error: 'code-expired' });
   });
 });

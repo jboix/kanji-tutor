@@ -4,7 +4,7 @@ import { body, HttpError, json } from './http.ts';
 import { newDevice, signedIn } from './sessions.ts';
 import { pairingCode, randomToken, sha256 } from './tokens.ts';
 
-/** A pairing code works for two minutes, once (D133). */
+/** A pairing code works for two minutes, once. */
 export const PAIR_TTL = 120;
 
 interface Pairing {
@@ -38,7 +38,9 @@ export async function pairStart(request: Request, deps: Deps): Promise<Response>
 /** GET /pair/:code (the signed-in phone): which device asks, before approving. */
 export async function pairPeek(request: Request, deps: Deps, code: string): Promise<Response> {
   await signedIn(request, deps);
-  const found = await pairing(deps, CODE.parse(code.toUpperCase()));
+  const parsed = CODE.safeParse(code.toUpperCase());
+  if (!parsed.success) throw new HttpError(404, 'code-expired');
+  const found = await pairing(deps, parsed.data);
   if (found.accountId) throw new HttpError(409, 'code-used');
   return json({ name: found.name });
 }
