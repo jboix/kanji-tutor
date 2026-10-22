@@ -11,7 +11,7 @@ export interface Target {
   surface: string;
   /**
    * Accepted readings in hiragana: the preferred reading first (the one shown as furigana), with
-   * its endings, then the other valid variants of the written form (D56).
+   * its endings, then the other valid variants of the written form.
    */
   readings: string[];
   /** The readings in `readings` that are valid but not preferred (日本人 にっぽんじん), if any. */

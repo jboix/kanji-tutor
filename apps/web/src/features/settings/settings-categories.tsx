@@ -5,6 +5,7 @@ import type { Settings } from '../../domain/types.ts';
 import type { PlainKey, Translate } from '../../ui/i18n/types.ts';
 import {
   ChatIcon,
+  CloudIcon,
   ContrastIcon,
   GlobeIcon,
   InfoIcon,
@@ -14,9 +15,11 @@ import {
   TrayIcon,
 } from '../../ui/icons.tsx';
 import type { SettingsSectionId } from '../../ui/paths.ts';
+import { syncServer } from '../../ui/sync-server.ts';
 import { AboutSection } from './about-section.tsx';
 import { AiUseSection } from './ai-use-section.tsx';
 import { BackupSection } from './backup-section.tsx';
+import { CloudSection } from './cloud-section.tsx';
 import { EraseSection } from './erase-section.tsx';
 import { ImmersionSection } from './immersion-section.tsx';
 import { InstallSection } from './install-section.tsx';
@@ -46,9 +49,9 @@ export interface SectionProps {
 export interface Category {
   id: SettingsSectionId;
   title: PlainKey;
-  /** The square's line icon, decorative: the title names the category (D122). */
+  /** The square's line icon, decorative: the title names the category. */
   icon: ReactNode;
-  /** The square's colour; never the AI crimson, which stays for the tutor's own output (D57). */
+  /** The square's colour; never the AI crimson, which stays for the tutor's own output. */
   tone: 'accent' | 'ink' | 'muted';
   detail: (t: Translate, settings: Settings | undefined) => string;
   render: (props: SectionProps) => ReactNode;
@@ -69,7 +72,7 @@ function sessionsDetail(t: Translate, settings: Settings | undefined): string {
   return t('settings.catSessionsLine', { minutes, explain: t(explain) });
 }
 
-/** "Dark", or "Dark · Sound off" once sound is off (D125). */
+/** "Dark", or "Dark · Sound off" once sound is off. */
 function appearanceDetail(t: Translate, settings: Settings | undefined): string {
   const theme = t(THEME[settings?.theme ?? 'system']);
   return settings?.sound === false ? `${theme} · ${t('settings.catSoundOff')}` : theme;
@@ -153,6 +156,14 @@ export const CATEGORIES: readonly (readonly Category[])[] = [
       ),
     },
     {
+      id: 'cloud',
+      title: 'account.cloudTitle',
+      icon: <CloudIcon />,
+      tone: 'accent',
+      detail: (t) => t('account.cloudDetail'),
+      render: () => <CloudSection />,
+    },
+    {
       id: 'install',
       title: 'settings.catInstall',
       icon: <PhoneIcon />,
@@ -176,10 +187,13 @@ export const CATEGORIES: readonly (readonly Category[])[] = [
   ],
 ];
 
-/** The groups as listed: Install goes once the app is installed, as it has nothing to say (D121). */
+/**
+ * The groups as listed: Install goes once the app is installed, as it has nothing to say, and
+ * Cloud saves when the build has no server.
+ */
 export function visibleCategories(installed: boolean): readonly (readonly Category[])[] {
-  if (!installed) return CATEGORIES;
-  return CATEGORIES.map((group) => group.filter((category) => category.id !== 'install'));
+  const hidden = new Set([...(installed ? ['install'] : []), ...(syncServer() ? [] : ['cloud'])]);
+  return CATEGORIES.map((group) => group.filter((category) => !hidden.has(category.id)));
 }
 
 /** The category with this id, or undefined. */

@@ -1,4 +1,4 @@
-/* Design tokens (B2, D62; the Paper redesign, D105). The colours are the Kanji Tutor palette:
+/* Design tokens (B2; the Paper redesign). The colours are the Kanji Tutor palette:
    cool washi paper, sumi ink, 藍 indigo, a hanko crimson for --ai, and the answer greens and
    crimsons. Dark is the "Ink" mockup's night palette. `tokens.test.ts` checks every text pair for
    WCAG AA in both themes. `data-theme` also works on any element, so a subtree (the dev gallery)
@@ -27,7 +27,7 @@
   --ai: #b3243a; /* 紅 hanko crimson: ONLY for AI explanations, the 解 seal, corrections */
   --on-ink: #f7f8f6; /* text on primary buttons */
 
-  /* Answer states (U2, D30, D105): green ONLY for a right answer; the miss crimson is a
+  /* Answer states (U2): green ONLY for a right answer; the miss crimson is a
      correction, so it shares the AI red's hue and keeps to the answer state. */
   --ok: #1f7a4a; /* a right reading: the target, its furigana, the check circle */
   --ok-surface: #e2f3e8; /* the "Right" card */

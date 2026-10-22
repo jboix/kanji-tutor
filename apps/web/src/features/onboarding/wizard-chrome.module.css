@@ -58,7 +58,7 @@
   flex: 1;
 }
 
-/* The dictionary loading (D135): what it is, the overall share, and the part loading now. */
+/* The dictionary loading: what it is, the overall share, and the part loading now. */
 .loading {
   display: flex;
   flex-direction: column;

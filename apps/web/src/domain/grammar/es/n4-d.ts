@@ -1,4 +1,4 @@
-/** Spanish texts for N4 grammar, part D (N9, D53). Written for this app. */
+/** Spanish texts for N4 grammar, part D (N9). Written for this app. */
 import type { ById, GrammarText } from '../../content-types.ts';
 
 export const ES_N4_D: ById<GrammarText> = {

@@ -1,5 +1,5 @@
 /**
- * Guard (D52): no hard-coded English in feature and shared UI components. Every JSX text node and
+ * Guard: no hard-coded English in feature and shared UI components. Every JSX text node and
  * every user-facing string attribute with Latin letters must come from the message catalogues,
  * except brand names, units and level labels. New English text fails this test.
  */

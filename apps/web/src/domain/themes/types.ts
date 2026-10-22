@@ -1,5 +1,5 @@
 /**
- * Thematic units (T1, T2, T6): the lesson path, N5 → N4 → N3. Authored for this app (D33), not
+ * Thematic units (T1, T2, T6): the lesson path, N5 → N4 → N3. Authored for this app, not
  * runtime AI output. Pure data types.
  */
 

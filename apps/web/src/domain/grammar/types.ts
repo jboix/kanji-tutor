@@ -57,7 +57,7 @@ export type GrammarFamily =
   | 'wish'
   | 'word-formation';
 
-/** One grammar point of the catalogue, written for this app (D29). */
+/** One grammar point of the catalogue, written for this app. */
 export interface GrammarEntry {
   /** Kebab-case slug, e.g. "te-mo-ii". Also the `GrammarPoint` id and the item ref. */
   id: string;

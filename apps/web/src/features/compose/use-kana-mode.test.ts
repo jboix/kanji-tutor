@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { loadMode } from './use-kana-mode.ts';
 
-describe('loadMode (D112)', () => {
+describe('loadMode', () => {
   afterEach(() => {
     sessionStorage.clear();
     vi.restoreAllMocks();

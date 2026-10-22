@@ -1,6 +1,6 @@
 /**
  * `bun run packs:measure [fixture]`: installs a pack into fake IndexedDB and
- * times the two ways to fetch "sentences with this word at or below N4" (D40):
+ * times the two ways to fetch "sentences with this word at or below N4":
  * the `wordIds` multiEntry index filtered by level in JS, against one range of the `levelKeys`
  * index. Fake IndexedDB is slower than a browser's, so only the ratio matters.
  */

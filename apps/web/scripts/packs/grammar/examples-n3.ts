@@ -1,4 +1,4 @@
-/** N3 detector cases: [grammar id, sentence, whether the detector must fire]. Written for D29. */
+/** N3 detector cases: [grammar id, sentence, whether the detector must fire]. */
 import type { DetectCase } from './examples-n5.ts';
 
 export const N3_CASES: readonly DetectCase[] = [

@@ -1,4 +1,4 @@
-/** French texts for N3 units 31–33 (N9, D53). Written for this app. */
+/** French texts for N3 units 31–33 (N9). Written for this app. */
 import type { ById, UnitText } from '../../content-types.ts';
 
 export const FR_N3_B: ById<UnitText> = {

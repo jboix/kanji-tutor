@@ -40,7 +40,7 @@ function GoodToKnow() {
   );
 }
 
-/** How to get a Gemini key (P6, D43): why, the AI Studio steps and what to know about it. */
+/** How to get a Gemini key (P6): why, the AI Studio steps and what to know about it. */
 export function KeyHelp() {
   const t = useT();
   return (

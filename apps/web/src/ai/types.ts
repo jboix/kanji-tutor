@@ -19,7 +19,7 @@ export interface AiError {
   message: string;
   /** For `rate-limit`: how long to wait before a retry, in ms (A14). */
   retryAfterMs?: number;
-  /** For `provider`: a known cause the UI words in the learner's language (D52). */
+  /** For `provider`: a known cause the UI words in the learner's language. */
   code?: 'cancelled' | 'refused' | 'no-answer';
   /** For `refused`: the HTTP status Google answered with. */
   status?: number;
@@ -27,7 +27,7 @@ export interface AiError {
 
 /**
  * A task result. `offLanguage` marks an answer whose prose is still not in the explanation
- * language after one retry (D35): show it, marked, rather than as normal.
+ * language after one retry: show it, marked, rather than as normal.
  */
 export type Result<T> =
   | { ok: true; value: T; cached: boolean; offLanguage?: true }
@@ -36,7 +36,7 @@ export type Result<T> =
 /** Which model a task runs on (A12): the cheap fast model or the tool-using teacher model. */
 export type ModelTier = 'fast' | 'teacher';
 
-/** Gemini 3.x `thinkingLevel` (D34). Never sent together with a thinking budget. */
+/** Gemini 3.x `thinkingLevel`. Never sent together with a thinking budget. */
 export type ThinkingLevel = 'minimal' | 'low' | 'medium' | 'high';
 
 /** A function the model asked to call (A10). `id` must come back on its result. */
@@ -79,7 +79,7 @@ export interface AiRequest {
   thinking?: ThinkingLevel;
   /** Learner tools for teacher-tier tasks (A10); the provider runs the call loop. */
   tools?: ToolRunner;
-  /** Tool rounds this request may run (D57); `MAX_TOOL_ROUNDS` when absent, 0 forces text. */
+  /** Tool rounds this request may run; `MAX_TOOL_ROUNDS` when absent, 0 forces text. */
   maxToolRounds?: number;
 }
 

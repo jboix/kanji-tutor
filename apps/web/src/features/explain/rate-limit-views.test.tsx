@@ -80,7 +80,7 @@ async function hook(ai: Partial<AiClient>) {
   await userEvent.click(screen.getByRole('button', { name: /^Show a memory hook, / }));
 }
 
-describe('rate limit in the explain views (A14, D57)', () => {
+describe('rate limit in the explain views (A14)', () => {
   it('mistake note: countdown and Retry', async () => {
     await mistake({ explainMistake: vi.fn(rateLimited(30_000)), peek: async () => undefined });
     await expectCountdown();

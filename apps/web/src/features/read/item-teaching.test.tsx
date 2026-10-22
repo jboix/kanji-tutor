@@ -154,7 +154,7 @@ describe('question translations in the learner language (N9, issue 44)', () => {
     const card = { ...cardOf(late), sentence };
     const ui = <QuestionScreen question={late} card={card} topBar={null} onDone={vi.fn()} />;
     renderWithServices(ui, { services, slots, language });
-    // A blank's full translation shows once it is answered (U6, D66, D94).
+    // A blank's full translation shows once it is answered (U6).
     const label = language === 'fr' ? 'Je ne sais pas' : 'No lo sé';
     await userEvent.click(await screen.findByRole('button', { name: label }));
   }

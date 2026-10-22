@@ -28,7 +28,7 @@ function check(claim: string, expected: readonly string[]): ReadingCheck {
 }
 
 /**
- * The usual reading of `text` when `claim` is one of its less common variants (R10, D57): the
+ * The usual reading of `text` when `claim` is one of its less common variants (R10): the
  * preferred (first) reading of an entry written `text` that lists `claim` among its `variants`.
  * Readings with a meaning of their own (今日 こんにち) are not variants, so they are not marked.
  */

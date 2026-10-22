@@ -6,7 +6,7 @@ import { afterEach, vi } from 'vitest';
 // jsdom's Blob loses its methods through fake-indexeddb's structuredClone; Node's survives it.
 globalThis.Blob = NodeBlob as unknown as typeof Blob;
 
-// findBy waits up to 5 s rather than 1 s: lazy chunks load cold in each test file (D70).
+// findBy waits up to 5 s rather than 1 s: lazy chunks load cold in each test file.
 configure({ asyncUtilTimeout: 5000 });
 
 // No test may reach Gemini (CLAUDE.md): any request to its host fails loudly. The host is read
@@ -22,7 +22,7 @@ const guardedFetch = (input: RequestInfo | URL, init?: RequestInit): Promise<Res
 };
 globalThis.fetch = Object.assign(guardedFetch, { preconnect: realFetch.preconnect });
 
-// Content and message chunks load lazily (D52, D53); let them finish before the file tears down.
+// Content and message chunks load lazily; let them finish before the file tears down.
 afterEach(async () => {
   cleanup();
   // A saved session (R14) must not resume in the next test.

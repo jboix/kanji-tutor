@@ -1,4 +1,4 @@
-/** N3 units 40–41: entrance exams and cram school, the rush-hour train (D33). */
+/** N3 units 40–41: entrance exams and cram school, the rush-hour train. */
 import type { Unit } from './types.ts';
 
 export const N3_E: readonly Unit[] = [

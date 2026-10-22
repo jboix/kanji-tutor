@@ -254,7 +254,7 @@ function Session({ controls }: { controls: SessionControls }) {
   const reading = { controls, topBar, all, voice, onVoice: setVoice, explainFirst };
   const body = (card && exerciseScreen(card, topBar, controls)) || <Reading {...reading} />;
   const chips = explainFirst ? null : <CardChips state={state} />;
-  // The card's type, sentence level and sentence, for tests: the level gate (G3), the retry (D117).
+  // The card's type, sentence level and sentence, for tests: the level gate (G3), the retry.
   return (
     <div
       key={state.index}
@@ -279,7 +279,7 @@ export function ReadScreen() {
   const request = useRequest();
   const round = roundOf(useLocation().state);
   // A new request (the next part of a lesson, from its end screen) or another round of the same
-  // one (D108) starts a new session: the finished one must not stay on screen, or its end would
+  // one starts a new session: the finished one must not stay on screen, or its end would
   // count the new part as done.
   return <RequestedSession key={`${JSON.stringify(request)}#${round}`} request={request} />;
 }

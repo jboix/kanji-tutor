@@ -1,5 +1,5 @@
 /**
- * Sentence selection with coverage targets (U3, D56). Pure and deterministic.
+ * Sentence selection with coverage targets (U3). Pure and deterministic.
  *
  * 1. Pinned: each pinned key (a unit word, see `unit-reach.ts`) gets up to `perPinned` of its
  *    ranked sentences.
@@ -25,7 +25,7 @@ export interface CoverageOptions {
   max: number;
   /** Sentences per level the fill reaches first, in this order, before the rest. */
   quota?: readonly (readonly [JlptLevel, number])[];
-  /** Ranked sentences per key that must be kept first (unit words, D56). */
+  /** Ranked sentences per key that must be kept first (unit words). */
   pinned?: ReadonlyMap<string, readonly Sentence[]>;
   perPinned?: number;
 }

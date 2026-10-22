@@ -84,7 +84,7 @@ describe('gradeReading', () => {
   });
 });
 
-describe('gradeReading with variants (D56)', () => {
+describe('gradeReading with variants', () => {
   it('grades a valid variant correct and names the preferred reading', () => {
     const accepted = ['にほんじん', 'にっぽんじん'];
     expect(gradeReading(accepted, 'にっぽんじん', [], ['にっぽんじん'])).toEqual({

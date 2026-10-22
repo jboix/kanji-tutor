@@ -10,7 +10,7 @@ interface Props {
 }
 
 /**
- * Sound as one knob (D125): the answer tones (U2) and spoken Japanese (R7) together, on unless
+ * Sound as one knob: the answer tones (U2) and spoken Japanese (R7) together, on unless
  * slid to off. The volume sets how loud the tones are. Off, the speaker buttons hide and
  * sessions leave out listening exercises.
  */

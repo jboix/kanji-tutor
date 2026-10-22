@@ -1,5 +1,5 @@
 /**
- * Guard (B2, D62): every text and UI pair in `tokens.css` passes WCAG AA in light and dark.
+ * Guard (B2): every text and UI pair in `tokens.css` passes WCAG AA in light and dark.
  * The ratios use the WCAG 2.x relative luminance formula.
  */
 import { readdirSync, readFileSync } from 'node:fs';
@@ -57,7 +57,7 @@ function faintIsText(): boolean {
 const TEXT = ['ink', 'ink-muted', 'accent', 'ai', 'ok', 'miss'];
 const SURFACES = ['paper', 'paper-soft'];
 
-/** The answer cards (D105): their text, the muted lines on them, the marks on their circles. */
+/** The answer cards: their text, the muted lines on them, the marks on their circles. */
 const CARDS = [
   ['ok-ink', 'ok-surface'],
   ['ink-muted', 'ok-surface'],

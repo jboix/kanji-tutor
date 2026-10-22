@@ -77,7 +77,7 @@ export const ArrowIcon = () => (
     <path d="M5 12h14M13 6l6 6-6 6" />
   </Svg>
 );
-/** The bare send arrow of the answer and ask fields (W-read): no circle around it (D106). */
+/** The bare send arrow of the answer and ask fields (W-read): no circle around it. */
 export const SendIcon = ({ size = 24 }: { size?: number }) => (
   <Svg size={size} width={2}>
     <path d="M4 12h15M13 6l6 6-6 6" />
@@ -158,7 +158,7 @@ export const BrushIcon = () => (
   </Svg>
 );
 
-/* The Settings categories (IA5, D122): line icons in place of the kanji squares. */
+/* The Settings categories (IA5): line icons in place of the kanji squares. */
 
 /** Sessions: a stopwatch. */
 export const TimerIcon = () => (
@@ -241,5 +241,11 @@ export const MailIcon = () => (
   <Svg size={20} width={1.8}>
     <rect x="3.5" y="6" width="17" height="12" rx="2" />
     <path d="m4 7 8 6 8-6" />
+  </Svg>
+);
+/** Settings → Cloud saves: a cloud. */
+export const CloudIcon = () => (
+  <Svg size={20} width={1.8}>
+    <path d="M7 18.5h10a4 4 0 0 0 .6-7.95A5.5 5.5 0 0 0 7 9.5a4.5 4.5 0 0 0 0 9Z" />
   </Svg>
 );

@@ -27,22 +27,23 @@ describe('Settings categories (IA5)', () => {
       .getAllByRole('link')
       .filter((link) => link.getAttribute('href')?.startsWith('/settings/'));
     expect(links.map((link) => link.getAttribute('href'))).toEqual(
-      SETTINGS_SECTIONS.map((id) => `/settings/${id}`),
+      // Cloud saves only with a sync server; this build has none.
+      SETTINGS_SECTIONS.filter((id) => id !== 'cloud').map((id) => `/settings/${id}`),
     );
     const sessions = screen.getByRole('link', { name: /^Sessions/ });
     expect(await within(sessions).findByText('10 min · explain new things first')).toBeTruthy();
     expect(screen.getByRole('link', { name: /^Appearance/ }).textContent).toContain('Dark');
-    // Every category's square is a line icon, never a kanji (D122).
+    // Every category's square is a line icon, never a kanji.
     for (const link of links) expect(link.querySelector('svg')).toBeTruthy();
     expect(screen.getByRole('main').querySelector('[lang="ja"]')).toBeNull();
-    // Settings is a tab: no install banner here (D68), and the tab is current.
+    // Settings is a tab: no install banner here, and the tab is current.
     const nav = screen.getByRole('navigation', { name: 'Main' });
     expect(within(nav).getByRole('link', { name: 'Settings' }).getAttribute('aria-current')).toBe(
       'page',
     );
   });
 
-  it('says on Appearance when sound is off (D125)', async () => {
+  it('says on Appearance when sound is off', async () => {
     const repos = createMemoryRepos({ settings: { theme: 'light', sound: false } });
     renderWithServices(<SettingsScreen />, {
       services: fakeServices({ repos }),
@@ -66,7 +67,7 @@ describe('Settings categories (IA5)', () => {
     expect(await screen.findByRole('link', { name: /^AI tutor/ })).toBeTruthy();
   });
 
-  describe('once installed (D121)', () => {
+  describe('once installed', () => {
     afterEach(() => {
       resetInstallPrompt();
       vi.unstubAllGlobals();

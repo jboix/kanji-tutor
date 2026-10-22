@@ -1,5 +1,5 @@
 /**
- * Links to outside references (R9, D58): Jisho for words and kanji, Wiktionary for kanji, Tatoeba
+ * Links to outside references (R9): Jisho for words and kanji, Wiktionary for kanji, Tatoeba
  * for a sentence's source, Tofugu's kana guide in the welcome (P8). Only the link itself leaves
  * the device, when the learner opens it.
  */

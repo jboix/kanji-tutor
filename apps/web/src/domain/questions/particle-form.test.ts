@@ -29,7 +29,7 @@ const DOOR = sentence('door', [
   ['。', 'symbol'],
 ]);
 
-describe('particleFormQuestion (J4 at N5, D95)', () => {
+describe('particleFormQuestion (J4 at N5)', () => {
   it('blanks the case particle before a verb, against の, や and か', () => {
     const question = particleFormQuestion({ sentence: DOOR, seed: 's' });
     expect(question?.kind).toBe('grammar-form');

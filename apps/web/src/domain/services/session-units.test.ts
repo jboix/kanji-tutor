@@ -36,9 +36,9 @@ describe('unit sessions (T3, T6)', { timeout: 30_000 }, () => {
   });
 });
 
-describe('a learner from zero (V2, D56)', { timeout: 60_000 }, () => {
+describe('a learner from zero (V2)', { timeout: 60_000 }, () => {
   it('gets exercises between reading cards, never more than two readings in a row', async () => {
-    // As onboarding starts them (D38): N5 from zero, N4 with N5 known, N3 with N5 and N4.
+    // As onboarding starts them: N5 from zero, N4 with N5 known, N3 with N5 and N4.
     const lists = { 5: [], 4: ['n5'], 3: ['n5', 'n4'] } as const;
     for (const level of [5, 4, 3] as const) {
       const repos = await curriculumRepos();

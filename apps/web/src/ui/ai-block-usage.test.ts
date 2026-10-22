@@ -1,5 +1,5 @@
 /**
- * Guard (D57): every view that renders tutor output does so through the AI box (`AiBlock`, or
+ * Guard: every view that renders tutor output does so through the AI box (`AiBlock`, or
  * its request states), and no static teaching view uses the box, the seal or AI red. A new
  * AI result view belongs in `AI_VIEWS`; a new static one in `STATIC_VIEWS`.
  */
@@ -70,7 +70,7 @@ function cssOf(path: string): string | undefined {
   return module && join(path, '..', module);
 }
 
-describe('the AI box (D57)', () => {
+describe('the AI box', () => {
   it.each(AI_VIEWS)('%s renders tutor output through the AI box', (path) => {
     expect(read(path)).toMatch(AI_BOX);
   });
@@ -109,7 +109,7 @@ describe('the AI box (D57)', () => {
     }
   });
 
-  /** Static exercises, grading and navigation: never the AI red (A18, D64). */
+  /** Static exercises, grading and navigation: never the AI red (A18). */
   const STATIC_SHEETS = [
     'src/features/read/question.module.css',
     'src/features/read/read.module.css',

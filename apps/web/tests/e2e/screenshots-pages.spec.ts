@@ -54,7 +54,7 @@ test('grammar: the index, a point, its intro and a particle', async ({ page }) =
   await shot(page, 'grammar-intro', { full: true });
   await page.goto('/grammar/particle-ga');
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-  // The particle's fills on the page (D96).
+  // The particle's fills on the page.
   await expect(page.getByText(/^Drill 1 of \d$/)).toBeVisible();
   await shot(page, 'grammar-particle', { full: true });
 });
@@ -154,9 +154,7 @@ test('use it: romaji typed as kana, with kanji to pick (C6)', async ({ page }) =
   await page.emulateMedia({ colorScheme: 'light' });
 });
 
-test('session end: the check, the counts, the misses, Retry and Next session (D115)', async ({
-  page,
-}) => {
+test('session end: the check, the counts, the misses, Retry and Next session', async ({ page }) => {
   await onboard(page);
   await importKnown(page);
   await page.goto(`/read?kanji=${encodeURIComponent('待')}&reading=${encodeURIComponent('ま.つ')}`);
@@ -165,7 +163,7 @@ test('session end: the check, the counts, the misses, Retry and Next session (D1
   await shotBothThemes(page, 'session-end');
 });
 
-test('use it: the red pen on the particle it names (D90)', async ({ page }) => {
+test('use it: the red pen on the particle it names', async ({ page }) => {
   await onboard(page);
   await page.goto('/compose');
   const pattern = page.getByLabel('PATTERN');

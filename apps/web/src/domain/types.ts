@@ -94,7 +94,7 @@ export interface Word {
   pos?: string[];
   /**
    * Valid but less usual readings of the first form, meaning the same as `readings[0]`, its
-   * preferred reading (D56): 日本人 has にっぽんじん. Accepted when typed, never shown.
+   * preferred reading: 日本人 has にっぽんじん. Accepted when typed, never shown.
    */
   variants?: string[];
   /**
@@ -145,7 +145,7 @@ export interface GrammarPoint {
   /** JLPT level of the point, when the catalogue gives one ("other" on the learned screen). */
   level?: 5 | 4 | 3;
   exampleSentenceIds: string[];
-  /** Installed from the grammar catalogue pack; pack updates may refresh it (D40). */
+  /** Installed from the grammar catalogue pack; pack updates may refresh it. */
   catalogue?: true;
 }
 
@@ -161,7 +161,7 @@ export interface Token {
   /** JMdict id the token resolved to, if any. */
   wordId?: string;
   /**
-   * Other usual readings of this writing (D56), when `reading` is the preferred one of several:
+   * Other usual readings of this writing, when `reading` is the preferred one of several:
    * 日本人 にほんじん has にっぽんじん. Accepted when typed, but never shown or offered as wrong.
    */
   variants?: string[];
@@ -185,7 +185,7 @@ export interface Sentence {
   /** Grammar point ids the sentence exercises, when known. */
   grammarIds?: string[];
   /**
-   * Hardest JLPT level among its kanji words, kanji and grammar (G2, D31); untagged words count
+   * Hardest JLPT level among its kanji words, kanji and grammar (G2); untagged words count
    * as N1. Absent on sentences saved before levels were computed: level-gated queries skip them.
    */
   level?: 5 | 4 | 3 | 2 | 1;
@@ -197,7 +197,7 @@ export interface Sentence {
   aiRead?: true;
 }
 
-/** A small group of words of one JLPT level linked by a shared kanji or co-occurrence (V1, D32). */
+/** A small group of words of one JLPT level linked by a shared kanji or co-occurrence (V1). */
 export interface Cluster {
   /** `c<level>-<seed word id>`, e.g. "c5-1416650". */
   id: string;
@@ -229,7 +229,7 @@ export interface UnitPack {
 }
 
 /**
- * A unit's progress on the lesson path (T3, D49), kept in `Settings.unitStatus`. Epoch ms of
+ * A unit's progress on the lesson path (T3), kept in `Settings.unitStatus`. Epoch ms of
  * each step the learner reached; `doneAt` is set once the unit counts as done and then stays.
  */
 export interface UnitProgress {
@@ -266,7 +266,7 @@ export interface Grade {
   /** "I don't know" (L4): shown the answer instead. Graded `wrong` (FSRS Again), no error type. */
   skipped?: true;
   /**
-   * A right answer that was a valid but less usual reading (D56): the preferred reading the
+   * A right answer that was a valid but less usual reading: the preferred reading the
    * feedback recommends, e.g. にほんじん for にっぽんじん.
    */
   variantOf?: string;
@@ -297,7 +297,7 @@ export interface Review {
   mode: AnswerMode;
   /** A skip ("I don't know", L4), so stats can tell it from a wrong answer. */
   skipped?: true;
-  /** A right answer in a less usual reading: the preferred one (D56). */
+  /** A right answer in a less usual reading: the preferred one. */
   variantOf?: string;
   /** Set when the drill answer was a JLPT-shaped question (J1–J5), with its kind. */
   questionKind?: QuestionKind;
@@ -351,7 +351,7 @@ export interface WeeklyPlan {
   status: 'proposed' | 'accepted';
 }
 
-/** The JLPT level the learner is working on (P4, D38): N5, N4 or N3. */
+/** The JLPT level the learner is working on (P4): N5, N4 or N3. */
 export type LearnerLevel = 5 | 4 | 3;
 
 export type FuriganaMode = 'new' | 'all';
@@ -360,7 +360,7 @@ export type ThemeMode = 'system' | 'light' | 'dark';
 export interface Settings {
   /** Gemini API key, entered at runtime (N3). Never exported in backups. */
   apiKey?: string;
-  /** Fast model for everyday tasks (A12, D34). */
+  /** Fast model for everyday tasks (A12). */
   modelId: string;
   /** Teacher model for tool-using tasks (A10, A12); absent means `DEFAULT_TEACHER_MODEL_ID`. */
   teacherModelId?: string;
@@ -377,9 +377,9 @@ export interface Settings {
   packVersion?: string;
   /** Language packs installed on top of the dictionary (N9), e.g. ["fr"]. */
   packLanguages?: string[];
-  /** JLPT level the learner is working on (D38); absent means N5. */
+  /** JLPT level the learner is working on; absent means N5. */
   learnerLevel?: LearnerLevel;
-  /** Progress per thematic unit id (T3, D49). */
+  /** Progress per thematic unit id (T3). */
   unitStatus?: Record<string, UnitProgress>;
   /** A unit opened early (T3): the active lesson until it is done. Absent means the path's next. */
   activeUnit?: string;
@@ -410,7 +410,7 @@ export interface Settings {
    */
   tutor?: TutorMode;
   /**
-   * Settings → Tutor → "Explanations in" (M1, D51): 'auto' (absent) follows the learner's level
+   * Settings → Tutor → "Explanations in" (M1): 'auto' (absent) follows the learner's level
    * and coverage; 'native' is the learner's language, 'mixed' Japanese with a native line, and
    * 'japanese' Japanese at the learner's level.
    */

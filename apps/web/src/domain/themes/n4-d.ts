@@ -1,4 +1,4 @@
-/** N4 units 23–25: New Year cards, the turn of the year, the school trip (D33). */
+/** N4 units 23–25: New Year cards, the turn of the year, the school trip. */
 import type { Unit } from './types.ts';
 
 export const N4_D: readonly Unit[] = [

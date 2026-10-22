@@ -1,5 +1,5 @@
 /**
- * Which language the interface and the tutor use (N7b, N10, D52), pure: the stored choice, else
+ * Which language the interface and the tutor use (N7b, N10), pure: the stored choice, else
  * the browser's first offered language, else English. The interface and the tutor share this rule,
  * so a French browser gets French prose as well as a French interface (issue 43).
  */

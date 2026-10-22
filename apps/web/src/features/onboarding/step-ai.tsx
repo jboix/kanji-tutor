@@ -7,7 +7,7 @@ import type { StepProps } from './step-props.ts';
 import { TutorNote } from './tutor-note.tsx';
 import styles from './wizard.module.css';
 
-/** What the tutor does, as a fixed example: a miss on 待つ and its margin note (D134). */
+/** What the tutor does, as a fixed example: a miss on 待つ and its margin note. */
 function Demo() {
   const { rich } = useI18n();
   return (

@@ -1,5 +1,5 @@
 /**
- * What a session met for the first time (the session end's "New today", D115): words read for the
+ * What a session met for the first time (the session end's "New today"): words read for the
  * first time, the kanji they brought that no earlier word had, and the grammar points introduced.
  */
 import { GRAMMAR_CATALOGUE } from '../grammar/index.ts';

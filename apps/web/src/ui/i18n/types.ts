@@ -1,5 +1,5 @@
 /**
- * Types of the message catalogues (N7b, D52). English is the source of truth: its namespaces and
+ * Types of the message catalogues (N7b). English is the source of truth: its namespaces and
  * keys define `MessageKey`, and French and Spanish must satisfy `Messages` exactly.
  */
 import type { en } from './messages/en/index.ts';

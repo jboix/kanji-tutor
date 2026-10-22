@@ -1,4 +1,4 @@
-/** Spanish texts for N5 unit 1 (N9, D53, T8). Written for this app. */
+/** Spanish texts for N5 unit 1 (N9, T8). Written for this app. */
 import type { ById, UnitText } from '../../content-types.ts';
 
 export const ES_N5_FIRST: ById<UnitText> = {

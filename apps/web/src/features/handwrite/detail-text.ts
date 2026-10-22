@@ -18,7 +18,7 @@ export interface CandidateFacts {
 
 const READINGS_EACH = 2;
 
-/** "タイ · ま・つ": up to two on and two kun readings, okurigana after ・ (D12). */
+/** "タイ · ま・つ": up to two on and two kun readings, okurigana after ・. */
 export function readingsLine(kanji: Kanji): Segment[] {
   const on = kanji.on.slice(0, READINGS_EACH).join('、');
   const kun = kanji.kun.slice(0, READINGS_EACH).map(readingLabel).join('、');

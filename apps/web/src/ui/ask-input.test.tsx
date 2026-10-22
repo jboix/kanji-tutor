@@ -25,7 +25,7 @@ describe('kanaEdit (C6)', () => {
     expect(kanaEdit('kan', 3)).toEqual({ text: 'かn', caret: 2 });
   });
 
-  it('types katakana from capitals, or from any romaji in katakana mode (D109)', () => {
+  it('types katakana from capitals, or from any romaji in katakana mode', () => {
     expect(kanaEdit('KOHI-', 5)).toEqual({ text: 'コヒー', caret: 3 });
     expect(kanaEdit('わたしはANNA', 9)).toEqual({ text: 'わたしはアンア', caret: 7 });
     expect(kanaEdit('ko-hi-', 6, 'katakana')).toEqual({ text: 'コーヒー', caret: 4 });
@@ -43,7 +43,7 @@ describe('kanaEdit (C6)', () => {
     expect(finalText('kan', 'native')).toBe('kan');
   });
 
-  it('knows a Japanese keyboard by the Japanese it types, not by a paste (D112)', () => {
+  it('knows a Japanese keyboard by the Japanese it types, not by a paste', () => {
     expect(nativeInput({ inputType: 'insertText', data: 'あ' })).toBe(true);
     expect(nativeInput({ inputType: 'insertCompositionText', data: '学生' })).toBe(true);
     expect(nativeInput({ inputType: 'insertReplacementText', data: 'ア' })).toBe(true);
@@ -86,7 +86,7 @@ describe('AskInput (A4, C6)', () => {
     expect(field.value).toBe('');
   });
 
-  it('has no ア mode and no IME detection: those belong to the sentence field (D113)', async () => {
+  it('has no ア mode and no IME detection: those belong to the sentence field', async () => {
     const { field } = await renderAsk();
     await kanaOn();
     await userEvent.click(screen.getByRole('button', { name: 'Type romaji as kana' }));

@@ -4,7 +4,7 @@ import { popupKey } from './use-candidate-popup.ts';
 const typed = (index: number) => ({ index, count: 3, sideways: true });
 const moved = (index: number) => ({ index, count: 3, sideways: false });
 
-describe('popupKey (C6, D110)', () => {
+describe('popupKey (C6)', () => {
   it.each<[string, number, ReturnType<typeof popupKey>]>([
     ['ArrowDown', 0, { highlight: 1 }],
     ['ArrowRight', 0, { highlight: 1 }],

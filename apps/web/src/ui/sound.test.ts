@@ -102,7 +102,7 @@ describe('sound', () => {
     expect(() => broken.play('correct')).not.toThrow();
   });
 
-  it('plays nothing while muted, and plays again once unmuted (D125)', () => {
+  it('plays nothing while muted, and plays again once unmuted', () => {
     const fake = fakeContext();
     const player = createSound(() => fake.context);
     player.unlock();

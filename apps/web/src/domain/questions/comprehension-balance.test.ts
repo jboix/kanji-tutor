@@ -1,8 +1,8 @@
 /**
- * 読解 option balance (T6, D93), measured over every unit's generated comprehension set: the
+ * 読解 option balance (T6), measured over every unit's generated comprehension set: the
  * right option should not give itself away by being the longest one, nor by repeating the line
  * that proves it word for word. Chance alone would make about a quarter of the answers the longest;
- * the units were rewritten to about one in twenty (D93).
+ * the units were rewritten to about one in twenty.
  */
 import { describe, expect, it } from 'vitest';
 import { UNITS } from '../themes/units.ts';
@@ -56,7 +56,7 @@ function sets(): ComprehensionSet[] {
   });
 }
 
-describe('読解 option balance (T6, D93)', () => {
+describe('読解 option balance (T6)', () => {
   const all = sets().flatMap((set) => set.questions.map((question) => ({ set, question })));
 
   it('measures every unit question', () => {

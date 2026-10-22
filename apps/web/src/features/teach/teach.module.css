@@ -148,7 +148,7 @@
   line-height: 1.55;
 }
 
-/* "Ask the tutor": AI only when the learner asks (D41). */
+/* "Ask the tutor": AI only when the learner asks. */
 .ask {
   display: flex;
 }

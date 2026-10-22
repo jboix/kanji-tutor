@@ -5,7 +5,7 @@ import { fakeServices, renderWithServices } from '../test/render.tsx';
 import { AiBlock, AiBlockStatus, AiWriting, modelShortName } from './ai-block.tsx';
 import { RateLimitNotice, RateLimitWait, secondsLeft } from './rate-limit-notice.tsx';
 
-describe('AiBlock (D57)', () => {
+describe('AiBlock', () => {
   it('is a note "From the tutor" with the seal and the model line', async () => {
     renderWithServices(<AiBlock>待つ means to wait.</AiBlock>);
     const note = screen.getByRole('note', { name: 'From the tutor' });

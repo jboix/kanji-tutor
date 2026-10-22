@@ -1,5 +1,5 @@
 /**
- * "Written by the tutor" (A18, D64): content the AI wrote keeps this mark wherever it shows up
+ * "Written by the tutor" (A18): content the AI wrote keeps this mark wherever it shows up
  * again, in exercises and lists too. Example sentences the tutor wrote (`source: 'ai'`) are
  * written by it; lines captured from a photo (`aiRead`) were read by it.
  */

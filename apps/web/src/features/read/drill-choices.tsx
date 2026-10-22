@@ -49,7 +49,7 @@ function ChoiceFeedback({ answer, note }: { answer: DrillAnswer; note?: ReactNod
   );
 }
 
-/** The sentence with its blank, before the answer: the blank and its pieces shut (D63). */
+/** The sentence with its blank, before the answer: the blank and its pieces shut. */
 function Masked({ masked }: { masked: MaskedSentence }) {
   return (
     <TapSentence

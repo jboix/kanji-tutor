@@ -39,7 +39,7 @@ describe('buildSession', () => {
     expect(readings).toEqual({ 待っ: ['まっ', 'まって'], 間: ['あいだ'] });
   });
 
-  it('skips a sentence where a lone-kanji target has an unlikely reading (間 → ま, D13)', async () => {
+  it('skips a sentence where a lone-kanji target has an unlikely reading (間 → ま)', async () => {
     const repos = await readingRepos({ learnerLevel: 3 });
     await knowBasics(repos);
     await track(repos, [[W.ma, 1]]);
@@ -143,7 +143,7 @@ describe('buildSession', () => {
     expect(await buildSession(repos, { now: NOW })).toEqual([]);
   });
 
-  it('starts a learner from zero on sentences whose one kanji word is N5 (P1, D38)', async () => {
+  it('starts a learner from zero on sentences whose one kanji word is N5 (P1)', async () => {
     const repos = withJlptIndex(await readingRepos({ learnerLevel: 5 }));
     await repos.sentences.put(HON);
     const cards = await buildSession(repos, { now: NOW, size: 5 });

@@ -27,7 +27,7 @@ type Start<T> = (run: () => Promise<Result<T>>) => void;
 /**
  * A call started on demand by an `AiAction` (a button, a chip, a question, A18). Only the latest
  * call's reply is kept. Under a `NoSpoilProvider`, the answer shown has every hidden reading
- * removed (L3, D57). A cached answer comes back from the same call, marked `cached` (A15).
+ * removed (L3). A cached answer comes back from the same call, marked `cached` (A15).
  */
 export function useAiState<T>(): [AiState<T>, Start<T>] {
   const [state, setState] = useState<AiState<T>>({ status: 'idle' });

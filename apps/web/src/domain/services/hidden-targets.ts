@@ -1,6 +1,6 @@
 /**
- * The targets of a card still to be answered and every reading to keep from the learner (L3,
- * D57): the span's accepted readings and the word's dictionary readings.
+ * The targets of a card still to be answered and every reading to keep from the learner (L3):
+ * the span's accepted readings and the word's dictionary readings.
  */
 import type { Repos } from '../repos.ts';
 import type { SessionCard } from '../session-types.ts';

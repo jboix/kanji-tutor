@@ -1,5 +1,5 @@
 /**
- * Tap a word anywhere (U5, D63): the one way a screen makes Japanese from its data open the word
+ * Tap a word anywhere (U5): the one way a screen makes Japanese from its data open the word
  * sheet slot (or the particle note). Each piece owns its sheet. Exercises pass the tokens that
  * stay shut (`locked`) and, before the answer, a masked sentence with `beforeAnswer`.
  */
@@ -41,7 +41,7 @@ export function useWordSheet(beforeAnswer = false): { open?: OpenWord; sheet: Re
 export interface TapProps {
   /** Token indices that do not open: the target, the blank, the cut pieces around it. */
   locked?: readonly number[];
-  /** Not answered yet: the sentence is masked and the sheet shows the word alone (D63). */
+  /** Not answered yet: the sentence is masked and the sheet shows the word alone. */
   beforeAnswer?: boolean;
 }
 
@@ -114,7 +114,7 @@ export function TapWord({ form, wordId, reading }: WordProps) {
 
 /**
  * Japanese with no tokens of its own (an authored example, an option): looked up as one word in
- * the packs, else tokenized by the worker, which loads only now (D63). Plain text until then.
+ * the packs, else tokenized by the worker, which loads only now. Plain text until then.
  * `word`: a word list entry, never tokenized.
  */
 export function TapText({ text, id, word = false }: { text: string; id: string; word?: boolean }) {

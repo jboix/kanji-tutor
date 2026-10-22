@@ -85,7 +85,7 @@ describe('kanjiCandidates (C6)', () => {
     expect(await kanjiCandidates(repos(), 'これ', { start: 2, end: 2 })).toEqual([]);
   });
 
-  it('leaves katakana as it is (D109), and caps the row', async () => {
+  it('leaves katakana as it is, and caps the row', async () => {
     expect(await kanjiCandidates(repos(), 'コーヒー', { start: 4, end: 4 })).toEqual([]);
     expect(await kanjiCandidates(repos(), 'コーヒー', { start: 0, end: 4 })).toEqual([]);
     // A hiragana run right after katakana is still looked up on its own.

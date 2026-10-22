@@ -1,5 +1,5 @@
 /**
- * Level keys of a sentence row (Dexie v4, D40): one multiEntry index entry per word and per
+ * Level keys of a sentence row (Dexie v4): one multiEntry index entry per word and per
  * grammar point, tagged with the sentence level, so "sentences with this word at or below N4" is
  * one index range instead of a scan of every sentence with the word.
  *

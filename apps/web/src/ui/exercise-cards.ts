@@ -1,6 +1,6 @@
 /**
- * What the help bar explains for each exercise (U6, D66), pure. Before the answer it is the
- * sentence as the exercise shows it (D63): the blank as a blank, a 表記 word in kana, and for
+ * What the help bar explains for each exercise (U6), pure. Before the answer it is the
+ * sentence as the exercise shows it: the blank as a blank, a 表記 word in kana, and for
  * 漢字読み the underlined word as a target whose reading the tutor's reply must not hold (L3).
  */
 

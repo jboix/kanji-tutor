@@ -23,7 +23,7 @@ type AnyDef = TaskDef<TaskName, z.ZodType>;
 const ATTEMPTS = 2;
 
 /**
- * Provider requests one press may make, tool rounds and the retry included (D57, A14): under a
+ * Provider requests one press may make, tool rounds and the retry included (A14): under a
  * free-tier minute of 10–15. The first attempt runs at most 1 + `MAX_TOOL_ROUNDS` = 3; the retry
  * gets what is left, with no tool rounds.
  */
@@ -31,7 +31,7 @@ export const REQUESTS_PER_ACTION = 4;
 
 /**
  * Cache key: SHA-256 of the stable JSON of task, prompt version, model, input (media too) and the
- * scope: the explanation language and, for teacher tasks, the learner snapshot (D35).
+ * scope: the explanation language and, for teacher tasks, the learner snapshot.
  */
 export function cacheKey(
   task: TaskName,
@@ -133,7 +133,7 @@ function inLanguage(def: AnyDef, value: unknown, language: string): boolean {
 
 /**
  * One provider call. `final` unless the reply was invalid or in the wrong language; those are
- * retried once, and a reply still in the wrong language comes back marked `offLanguage` (D35).
+ * retried once, and a reply still in the wrong language comes back marked `offLanguage`.
  */
 async function attemptOnce(def: AnyDef, request: AiRequest, plan: Plan, call: CallDeps) {
   const { outcome: next, requests } = await callOnce(def, request, call.provider, call.context);
@@ -154,7 +154,7 @@ function withBudget(request: AiRequest, left: number): AiRequest | undefined {
   return { ...request, maxToolRounds: Math.min(MAX_TOOL_ROUNDS, left - 1) };
 }
 
-/** At most `ATTEMPTS` attempts and `REQUESTS_PER_ACTION` requests in all (D57). */
+/** At most `ATTEMPTS` attempts and `REQUESTS_PER_ACTION` requests in all. */
 async function generate(def: AnyDef, plan: Plan, provider: AiProvider, context: AiContext) {
   let outcome: Outcome<unknown> = failure('invalid-response', 'No reply.');
   let used = 0;

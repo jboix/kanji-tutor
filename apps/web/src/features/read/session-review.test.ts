@@ -53,7 +53,7 @@ const results = [
 ];
 const drills: DrillResult[] = [{ kind: 'lookalike', right: false, card: 2 }];
 
-describe('missedOf (D116)', () => {
+describe('missedOf', () => {
   it('lists near-misses, misses, skips and missed exercises in session order', () => {
     const missed = missedOf({ cards, results, drills });
     expect(missed.map((m) => [m.kind, m.index])).toEqual([
@@ -72,7 +72,7 @@ describe('missedOf (D116)', () => {
   });
 });
 
-describe('retryCards (D117)', () => {
+describe('retryCards', () => {
   it('replays only the missed targets and exercises, once per card, no longer new', () => {
     const extra = answer(0, target(7, W.aida), { verdict: 'wrong', given: 'ま' });
     const round = retryCards(missedOf({ cards, results: [...results, extra], drills }));
@@ -95,7 +95,7 @@ describe('retryCards (D117)', () => {
   });
 });
 
-describe('endCounts (D116)', () => {
+describe('endCounts', () => {
   it('counts sentences, answers read right, and the rest to look at again', () => {
     expect(endCounts(2, { cards, results, drills: [] })).toEqual({
       label: 'sentences',
@@ -117,7 +117,7 @@ describe('endCounts (D116)', () => {
   });
 });
 
-describe('sessionMinutes (D116)', () => {
+describe('sessionMinutes', () => {
   it('rounds the time taken, at least a minute', () => {
     expect(sessionMinutes(0, 9 * 60_000 + 20_000, 60)).toBe(9);
     expect(sessionMinutes(0, 10_000, 600)).toBe(1);
@@ -129,7 +129,7 @@ describe('sessionMinutes (D116)', () => {
   });
 });
 
-describe('New today inputs (D115)', () => {
+describe('New today inputs', () => {
   it('takes the words read and the grammar introduced or marked new', () => {
     expect(metInput({ cards, results, drills }, 7)).toEqual({
       wordIds: [W.matsu.id, W.aida.id, W.gakusei.id],

@@ -66,7 +66,7 @@ describe('mixCards (V2)', () => {
     }
   });
 
-  it('places an exercise on the session’s own words only after their cards (D56)', () => {
+  it('places an exercise on the session’s own words only after their cards', () => {
     const qs = questions(3);
     const after = new Map([
       [qs[0] as SessionCard, 4],
@@ -104,7 +104,7 @@ describe('mixCards (V2)', () => {
     ]);
   });
 
-  it('cuts the session to what the exercises can keep to runs of two (fit, D56)', () => {
+  it('cuts the session to what the exercises can keep to runs of two (fit)', () => {
     const qs = questions(3);
     expect(fitReadings(readings(20), qs).readings).toHaveLength(8);
     const fitted = mixCards(readings(20), qs, undefined, undefined, true);

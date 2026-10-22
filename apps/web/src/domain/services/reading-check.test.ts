@@ -76,7 +76,7 @@ describe('answer span', () => {
   });
 });
 
-describe('spanVariants (D56)', () => {
+describe('spanVariants', () => {
   it('lists a target’s valid variants after its preferred reading, with any endings', () => {
     const nihonjin = { ...token('日本人', 'にほんじん'), variants: ['にっぽんじん'] };
     const sentence = {

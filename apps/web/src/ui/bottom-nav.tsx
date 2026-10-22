@@ -37,7 +37,7 @@ const TABS_START: Tab[] = [
     owns: [paths.today, paths.plan],
     column: 0,
   },
-  // A real icon rather than 学, which a beginner may not read yet (D122).
+  // A real icon rather than 学, which a beginner may not read yet.
   { to: paths.learn, label: 'ui.navLearn', icon: <BookIcon />, owns: LEARN_PATHS, column: 1 },
 ];
 
@@ -100,7 +100,7 @@ function StartButton() {
 let lastColumn: number | undefined;
 
 /**
- * The highlight's column (D123). A new screen's bar starts it where the last one left it, then
+ * The highlight's column. A new screen's bar starts it where the last one left it, then
  * moves it to the active tab once the old place is styled, so the move is a CSS transition.
  */
 function useIndicator(column: number | undefined) {
@@ -132,7 +132,7 @@ function Indicator({ column }: { column: number | undefined }) {
 
 /**
  * The bottom bar (IA3): Today · Learn · Start · Add · Settings. The hubs carry it, so it also
- * carries the install banner (N1d, D68), unless `install` is false (Settings, a session's end).
+ * carries the install banner (N1d), unless `install` is false (Settings, a session's end).
  */
 export function BottomNav({ install = true }: { install?: boolean }) {
   const t = useT();

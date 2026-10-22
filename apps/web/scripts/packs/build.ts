@@ -42,7 +42,7 @@ const ROOT = resolve(import.meta.dir, '..', '..');
 const PACKS = join(ROOT, 'public', 'packs');
 
 /**
- * Coverage targets (U3, D56); `max` keeps all packs under 9 MB gzipped.
+ * Coverage targets (U3); `max` keeps all packs under 9 MB gzipped.
  * The quotas give beginners plenty of sentences at their level before N3 takes the rest.
  */
 const COVERAGE = {
@@ -83,7 +83,7 @@ async function loadDictionaries() {
 
 type Dictionaries = Awaited<ReturnType<typeof loadDictionaries>>;
 
-/** Preferred readings over all of JMdict (D56), counting the readings it changes. */
+/** Preferred readings over all of JMdict, counting the readings it changes. */
 function preferIn(words: readonly JmWord[]) {
   const byId = new Map(words.map((w) => [w.id, w]));
   let changed = 0;
@@ -95,7 +95,7 @@ function preferIn(words: readonly JmWord[]) {
   return Object.assign(prefer, { changed: () => changed });
 }
 
-/** Each unit word's reachable candidates, for its simulated learner (D56). */
+/** Each unit word's reachable candidates, for its simulated learner. */
 function reachOf(d: Dictionaries, lookup: Lookup, candidates: Sentence[]) {
   const untagged = untaggedLevels(d.jmdict.words, d.jlpt, d.kanji);
   const units = UNITS.map((u) => ({ ...u, wordIds: unitKanjiWordIds(u, lookup) }));

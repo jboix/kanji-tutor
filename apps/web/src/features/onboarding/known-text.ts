@@ -3,7 +3,7 @@ import type { Translate } from '../../ui/i18n/types.ts';
 
 /**
  * "11 words marked as known; 3 words were already known", then the lists the start implies:
- * "JLPT N5: marked as known when you start reading" (D38).
+ * "JLPT N5: marked as known when you start reading".
  */
 export function knownText(t: Translate, known: OnboardingKnown | undefined): string {
   const marked = known?.marked;

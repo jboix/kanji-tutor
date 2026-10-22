@@ -98,7 +98,7 @@
   text-decoration: none;
 }
 
-/* voice.html "WHAT YOU SAID": caps label, the spoken kana at 26px, a 22px ink gap (D64). */
+/* voice.html "WHAT YOU SAID": caps label, the spoken kana at 26px, a 22px ink gap. */
 .saidBlock {
   display: flex;
   flex-direction: column;

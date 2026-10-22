@@ -77,7 +77,7 @@ function TutorHook({ input, client }: { input: MemoryHookInput; client: AiClient
 
 /**
  * The memory hook (L1, A5): the hook built from the parts, always; the tutor's, built from what
- * the learner knows, only after "Ask the tutor for a hook" (D41: AI only when asked).
+ * the learner knows, only after "Ask the tutor for a hook" (AI only when asked).
  */
 export function MemoryHookView({
   teaching,

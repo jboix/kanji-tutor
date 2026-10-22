@@ -1,4 +1,4 @@
-/** French texts for N4 units 20–22 (N9, D53). Written for this app. */
+/** French texts for N4 units 20–22 (N9). Written for this app. */
 import type { ById, UnitText } from '../../content-types.ts';
 
 export const FR_N4_C: ById<UnitText> = {

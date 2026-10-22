@@ -38,7 +38,7 @@ export interface KanjiReadingInput {
 function validReadings(input: KanjiReadingInput, token: Sentence['tokens'][number], full: string) {
   const tail = full.slice(stemReading(token.surface, token.reading).length);
   const stem = kanjiStem(token.surface);
-  // A valid variant (日本人 にっぽんじん, D56) is never offered as a wrong reading, with the
+  // A valid variant (日本人 にっぽんじん) is never offered as a wrong reading, with the
   // endings the underline carries.
   const ending = full.slice(toKanaFold(token.reading).length);
   const variants = (token.variants ?? []).map((v) => toKanaFold(v) + ending);

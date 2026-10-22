@@ -60,7 +60,7 @@ describe('answer feedback (U2)', () => {
     expect(screen.getByText('Not quite')).toBeTruthy();
     expect(document.querySelector('[data-check]')).toBeNull();
     expect(document.querySelector('[data-answer] [data-cross]')).toBeTruthy();
-    // A plain grading result never shows the 解 seal: that is the tutor's (D105).
+    // A plain grading result never shows the 解 seal: that is the tutor's.
     expect(document.querySelector('[data-answer] [data-seal]')).toBeNull();
     expect(play).toHaveBeenCalledWith('wrong');
   });

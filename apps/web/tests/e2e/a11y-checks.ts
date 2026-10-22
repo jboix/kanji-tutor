@@ -10,7 +10,7 @@ import type { Page } from '@playwright/test';
  */
 
 /**
- * Waits for the finite animations and transitions to end (the entrance, D124, a sheet rising,
+ * Waits for the finite animations and transitions to end (the entrance, a sheet rising,
  * a theme switch), so axe measures the final colours and not a section half faded in. Looping
  * ones (a mic pulse) are left.
  */
@@ -33,7 +33,7 @@ export async function scanHere(page: Page, label: string): Promise<string[]> {
     await page.evaluate((mode) => {
       document.documentElement.dataset.theme = mode;
     }, theme);
-    // A theme switch starts colour transitions (the bar's labels, D123): measure after them.
+    // A theme switch starts colour transitions (the bar's labels): measure after them.
     await page.evaluate(() => new Promise(requestAnimationFrame));
     await settle(page);
     const results = await new AxeBuilder({ page })
@@ -74,7 +74,7 @@ function smallTargets(): string[] {
 
 /**
  * Sideways scroll and targets under 44 px on the current page (N6). A kit component may reach
- * 44 px through an invisible absolute ::before/::after (D12): the pseudo-element's measured size
+ * 44 px through an invisible absolute ::before/::after: the pseudo-element's measured size
  * counts, not the mere presence of one (Issue 17).
  */
 export async function layoutReport(page: Page) {

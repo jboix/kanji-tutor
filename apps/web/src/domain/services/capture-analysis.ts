@@ -1,6 +1,6 @@
 /**
  * What a captured page asks of the learner (C2, C3): how much of it they can read today, and
- * which words are new. Uses the same content-token rules as the session selector (D9).
+ * which words are new. Uses the same content-token rules as the session selector.
  */
 import { hasKanji, toKanaFold } from '../kana.ts';
 import type { Repos } from '../repos.ts';
@@ -44,7 +44,7 @@ export interface CaptureAnalysis {
   words: CandidateWord[];
 }
 
-/** True for tokens that count: written with kanji and not a particle, auxiliary or symbol (D9). */
+/** True for tokens that count: written with kanji and not a particle, auxiliary or symbol. */
 function isContent(token: Token): boolean {
   return !FUNCTION_POS.has(token.pos) && hasKanji(token.surface);
 }

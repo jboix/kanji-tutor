@@ -9,10 +9,10 @@
  * 2. A reading given with a cue after a hidden word or its kanji: "待って is read as もって",
  *    "待って: まって", "待 = ま". The reading is blanked, even when it is a wrong one.
  * 3b. Part of a hidden reading given after one of its kanji, split per kanji or into pieces:
- *    "紹 is しょう and 介 is かい", "待 ま + つ", "待 (ma)" (D57).
+ *    "紹 is しょう and 介 is かい", "待 ま + つ", "待 (ma)".
  * 4. Any hiragana or katakana form of a hidden reading, anywhere: まって, マッテ, and long-vowel
  *    katakana such as ショーカイ. Not inside a longer kana word the sentence shows (まつ in
- *    まつり, D89).
+ *    まつり).
  * 5. Romaji forms of a hidden reading as whole words, in Hepburn, macron and long-vowel
  *    spellings, also split by hyphens or spaces: matte, ma-tte, ma tte, shoukai, shōkai,
  *    shookai, shokai, sho-kai. Common English words are left alone.
@@ -209,7 +209,7 @@ function sameAfter(a: string, at: number, b: string, from: number): number {
 
 /**
  * True when the form at `at` in `text` is part of a longer kana word the learner already sees
- * (D89): まつ inside まつり, when the sentence shows まつり. It gives nothing away.
+ *: まつ inside まつり, when the sentence shows まつり. It gives nothing away.
  */
 function inVisibleWord(text: string, at: number, form: string, visible: string): boolean {
   for (let from = visible.indexOf(form); from >= 0; from = visible.indexOf(form, from + 1)) {
@@ -301,7 +301,7 @@ function answerForms(answer: string): string[] {
   return [text, stem].filter((form) => form.length >= (HAN.test(form) ? 1 : 2));
 }
 
-/** Blanks every written form of a blank's hidden answer in `text` (A19, with D57's filter). */
+/** Blanks every written form of a blank's hidden answer in `text` (A19). */
 export function redactAnswer(text: string, answer: string | undefined): Redaction {
   const forms = answer ? answerForms(answer) : [];
   if (forms.length === 0) return { text, leaked: false };

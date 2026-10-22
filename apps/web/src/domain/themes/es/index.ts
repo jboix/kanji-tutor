@@ -1,4 +1,4 @@
-/** Spanish unit texts (N9, D53), loaded on demand by `loadContentLanguage`. */
+/** Spanish unit texts (N9), loaded on demand by `loadContentLanguage`. */
 import type { ById, UnitText } from '../../content-types.ts';
 import { ES_N3_A } from './n3-a.ts';
 import { ES_N3_B } from './n3-b.ts';

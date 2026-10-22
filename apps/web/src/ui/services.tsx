@@ -1,15 +1,18 @@
 import { createContext, type ReactNode, use } from 'react';
 import type { AiClient } from '../ai/types.ts';
+import type { CloudPort } from '../domain/cloud.ts';
 import type { BackupPort, PackLoader, Repos } from '../domain/repos.ts';
 import type { Lang } from '../lang/types.ts';
 
-/** What features get from the app: storage, language services and AI (D3). */
+/** What features get from the app: storage, language services and AI. */
 export interface Services {
   repos: Repos;
   lang: Lang;
   ai: AiClient;
   backup: BackupPort;
   packs: PackLoader;
+  /** Cloud saves; absent when the build has no sync server. */
+  cloud?: CloudPort;
 }
 
 const ServicesContext = createContext<Services | null>(null);

@@ -31,7 +31,7 @@ test('the Install button opens the browser prompt, then Install leaves Settings'
   });
   await page.getByRole('button', { name: 'Install', exact: true }).click();
   await expect(section(page)).toBeHidden();
-  // Installed (D121): the category has nothing left to say, so its screen goes back to the list.
+  // Installed: the category has nothing left to say, so its screen goes back to the list.
   await expect(page).toHaveURL(/\/settings$/);
   await expect(page.getByRole('link', { name: /^Install/ })).toHaveCount(0);
   expect(await page.evaluate(() => (window as unknown as { prompted: boolean }).prompted)).toBe(
@@ -51,7 +51,7 @@ test.describe('on an iPhone', () => {
     await expect(page.getByRole('img', { name: 'Share' })).toBeVisible();
     await page.addInitScript(() => Object.defineProperty(navigator, 'standalone', { value: true }));
     await page.reload();
-    // Installed (D121): a direct link lands on the list, which has no Install row.
+    // Installed: a direct link lands on the list, which has no Install row.
     await expect(page).toHaveURL(/\/settings$/);
     await expect(page.getByRole('heading', { name: 'Settings', level: 1 })).toBeVisible();
     await expect(page.getByRole('link', { name: /^Install/ })).toHaveCount(0);

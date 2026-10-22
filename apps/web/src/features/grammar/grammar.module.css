@@ -92,7 +92,7 @@
 }
 
 /* Ruled rows on paper, the grammar span underlined in ink, like a page of the book. No rounded
-   tinted cards: those read as chat bubbles, and so as the tutor (D64). */
+   tinted cards: those read as chat bubbles, and so as the tutor. */
 .example {
   display: flex;
   flex-direction: column;

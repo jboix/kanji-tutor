@@ -1,5 +1,5 @@
 /**
- * No-spoil for the explain screens (L3, D57): while targets of the card are still to be answered,
+ * No-spoil for the explain screens (L3): while targets of the card are still to be answered,
  * every tutor output shown under this provider (the word sheet, its breakdown, a free question,
  * follow-ups, a mistake note), cached ones too, goes through `redactOutput`, and a dictionary
  * reading that is a hidden one is not shown.

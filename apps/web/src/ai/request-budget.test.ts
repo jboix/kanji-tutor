@@ -46,7 +46,7 @@ function contextWith(sdk: ReturnType<typeof countingSdk>) {
 
 const INPUT = { sentence: { text: '駅で友達を待っている間に、本を読みました。' }, surface: '間' };
 
-describe('requests per press (Issue 42, A14, D57)', () => {
+describe('requests per press (Issue 42, A14)', () => {
   it('caps tool rounds at two', () => {
     expect(MAX_TOOL_ROUNDS).toBe(2);
     expect(REQUESTS_PER_ACTION).toBe(4);

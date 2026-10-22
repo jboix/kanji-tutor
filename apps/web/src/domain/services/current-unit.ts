@@ -1,4 +1,4 @@
-/** The unit path's current unit as the tutor's tools see it (A10, D57). */
+/** The unit path's current unit as the tutor's tools see it (A10). */
 import type { CurrentUnit } from '../learner-view.ts';
 import type { Repos } from '../repos.ts';
 import { unitGrammar } from '../themes/index.ts';

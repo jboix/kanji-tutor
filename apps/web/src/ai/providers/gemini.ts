@@ -77,7 +77,7 @@ function modelConfig(request: AiRequest, allowTools: boolean): GenerateContentCo
 
 /**
  * The `generateContent` parameters for one turn (exported for tests). No temperature, top-p or
- * top-k: Google advises leaving them unset for Gemini 3.x (D34).
+ * top-k: Google advises leaving them unset for Gemini 3.x.
  */
 export function toParams(
   request: AiRequest,

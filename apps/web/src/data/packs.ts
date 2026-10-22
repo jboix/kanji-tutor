@@ -96,7 +96,7 @@ async function applyLanguages(db: KanjiTutorDb, base: string, next: PackManifest
 
 /**
  * Rows are upserted over the installed version, then the version is recorded, then old rows are
- * pruned: an interrupted update leaves a usable dictionary and retries on the next start (D27).
+ * pruned: an interrupted update leaves a usable dictionary and retries on the next start.
  * Installed languages are applied again before the version is recorded.
  */
 async function install(db: KanjiTutorDb, base: string, next: PackManifest, report: Report) {

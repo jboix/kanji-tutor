@@ -86,7 +86,7 @@ function token(surface: string, reading: string, wordId: string): Token {
 const read = (surface: string, reading: string, id: string) =>
   preferToken(token(surface, reading, id), BY_ID);
 
-describe('preferred readings (D56)', () => {
+describe('preferred readings', () => {
   it('reads a word as its preferred reading, keeping the variants it may be typed as', () => {
     expect(read('日本人', 'にっぽんじん', '1464700')).toMatchObject({
       reading: 'にほんじん',

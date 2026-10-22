@@ -197,7 +197,7 @@ describe('kanji', () => {
     expect(kanjiJlpt(null, true)).toBeUndefined();
   });
 
-  it('levels a kanji by the easiest listed word usually written with it (D56)', () => {
+  it('levels a kanji by the easiest listed word usually written with it', () => {
     const levels = vocabularyKanjiLevels([
       { form: '悪い', level: 5 },
       { form: '悪魔', level: 2 },
@@ -223,7 +223,7 @@ describe('kanji', () => {
   });
 });
 
-describe('unit compounds (D56)', () => {
+describe('unit compounds', () => {
   const t = (surface: string, start: number, pos = 'noun', wordId?: string) => ({
     surface,
     reading: surface,

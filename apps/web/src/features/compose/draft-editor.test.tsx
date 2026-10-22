@@ -34,7 +34,7 @@ describe('DraftEditor (C6)', () => {
     expect(field.selectionStart).toBe(2);
   });
 
-  it('cycles the あ switch: katakana on ア, romaji as typed on A (D109)', async () => {
+  it('cycles the あ switch: katakana on ア, romaji as typed on A', async () => {
     renderWithServices(<Draft />, { services: fakeServices({ repos: await readingRepos() }) });
     const field = screen.getByRole('textbox') as HTMLTextAreaElement;
     await userEvent.click(screen.getByRole('button', { name: 'Romaji turns into hiragana' }));
@@ -55,7 +55,7 @@ describe('DraftEditor (C6)', () => {
     expect(field.value).toBe('学生');
   });
 
-  it('marks the kana a pick would replace, the highlighted part more strongly (D112)', async () => {
+  it('marks the kana a pick would replace, the highlighted part more strongly', async () => {
     const field = await renderDraft();
     await userEvent.type(field, 'korehagakusei');
     await screen.findByRole('option', { name: '学生' });

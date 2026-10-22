@@ -16,7 +16,7 @@ export default defineConfig({
   // On CI: annotations on the run, and an HTML report that the workflows upload when a test fails.
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'list',
   // The first tutor answer loads the 17.8 MB tokenizer dictionary to verify readings; on a busy
-  // machine that alone can pass 5 s, so waits allow for a cold start (D70).
+  // machine that alone can pass 5 s, so waits allow for a cold start.
   timeout: 60_000,
   expect: { timeout: 15_000 },
   use: {
@@ -47,7 +47,7 @@ export default defineConfig({
         deviceScaleFactor: 2,
       },
     },
-    // Opt-in (D97): WebKit as an iPhone, for the checks a real phone would otherwise need.
+    // Opt-in: WebKit as an iPhone, for the checks a real phone would otherwise need.
     ...(process.env.PW_WEBKIT
       ? [{ name: 'iphone-webkit', testMatch: /iphone\.spec\.ts/, use: { ...devices['iPhone 13'] } }]
       : []),

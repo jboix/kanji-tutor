@@ -145,7 +145,7 @@ describe('lessonPlan (V1, T3)', () => {
     expect(plan.gate).toEqual({ level: 5, stretch: new Set(), taught });
   });
 
-  it('never gates out the words of the current or an opened unit (D56)', async () => {
+  it('never gates out the words of the current or an opened unit', async () => {
     const repos = await curriculumRepos();
     await startUnit(repos, 'family', NOW);
     const plan = await lessonPlan(repos, { now: NOW, levels: new Map() });

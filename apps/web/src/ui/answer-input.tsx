@@ -50,7 +50,7 @@ export function AnswerInput(props: AnswerInputProps) {
   );
 }
 
-/** The bare arrow that sends the answer, at the pill's end: a 44px target (U9, D106). */
+/** The bare arrow that sends the answer, at the pill's end: a 44px target (U9). */
 function SubmitButton({ disabled }: { disabled: boolean }) {
   const t = useT();
   return (

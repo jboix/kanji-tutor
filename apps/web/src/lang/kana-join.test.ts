@@ -25,7 +25,7 @@ const tokens = (...list: [string, string][]) => {
   return list.map(([surface, pos]) => tok(surface, pos));
 };
 
-describe('kana words the tokenizer splits (D92)', () => {
+describe('kana words the tokenizer splits', () => {
   it('lists the spans of two or three kana pieces, never particles or demonstratives', () => {
     const split = tokens(
       ['わが', 'adnominal'],

@@ -1,4 +1,4 @@
-/** Every route path in one place, so links cannot drift from the router (D2). */
+/** Every route path in one place, so links cannot drift from the router. */
 export const paths = {
   today: '/',
   /** The Learn hub (IA4): lessons, kanji, grammar, what you've learned, notes. */
@@ -38,6 +38,8 @@ export const paths = {
   onboarding: '/welcome',
   /** Log in from the welcome: bring progress from another device (cloud saves). */
   logIn: '/log-in',
+  /** Turning on cloud saves with an invite, opened from the invite link. */
+  cloudJoin: '/cloud/join',
   devUi: '/dev/ui',
 } as const;
 
@@ -49,6 +51,7 @@ export const SETTINGS_SECTIONS = [
   'appearance',
   'words',
   'backup',
+  'cloud',
   'install',
   'about',
 ] as const;

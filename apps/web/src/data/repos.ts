@@ -65,7 +65,7 @@ function reviewRepo(db: KanjiTutorDb): Repos['reviews'] {
 
 /**
  * Sentences whose level key for `prefix` (a word or grammar key) is at `maxLevel` or easier,
- * easiest first: one range of the `levelKeys` index (D40).
+ * easiest first: one range of the `levelKeys` index.
  */
 async function byLevelKey(
   db: KanjiTutorDb,

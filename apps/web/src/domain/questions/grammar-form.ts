@@ -43,7 +43,7 @@ export interface GrammarFormInput {
 
 /**
  * Families where another member often fits the same blank (です/だ, よ/ね, plain or polite
- * forms, ましょう/ませんか): never blanked. And detectors known to be weak (D39), or points
+ * forms, ましょう/ませんか): never blanked. And detectors known to be weak, or points
  * the sentence would be right without (んです): never trusted for a question.
  */
 const AMBIGUOUS: ReadonlySet<GrammarFamily> = new Set([

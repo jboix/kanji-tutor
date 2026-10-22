@@ -40,7 +40,7 @@ describe('the launch screen (N1c)', () => {
     endLaunch();
   });
 
-  it('holds for the fonts past the minimum, but no longer than the cap (D124)', async () => {
+  it('holds for the fonts past the minimum, but no longer than the cap', async () => {
     vi.useFakeTimers();
     let loaded: () => void = () => undefined;
     fonts(new Promise<void>((resolve) => (loaded = resolve)));
@@ -75,7 +75,7 @@ describe('the launch screen (N1c)', () => {
 });
 
 describe('index.html', () => {
-  it('reads the same storage keys as the app, before the first paint (N1c, D138)', () => {
+  it('reads the same storage keys as the app, before the first paint (N1c)', () => {
     const html = readFileSync(resolve(import.meta.dirname, '..', '..', 'index.html'), 'utf8');
     expect(html).toContain(`'${THEME_KEY}'`);
     expect(html).toContain(`'${WELCOMED_KEY}'`);

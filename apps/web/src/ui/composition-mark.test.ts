@@ -11,7 +11,7 @@ const at = (form: string, kana: string, start: number): KanjiCandidate => ({
   known: false,
 });
 
-describe('markParts (C6, D112)', () => {
+describe('markParts (C6)', () => {
   const text = 'これはがくせい';
   const candidates = [at('学生', 'がくせい', 3), at('性', 'せい', 5)];
 

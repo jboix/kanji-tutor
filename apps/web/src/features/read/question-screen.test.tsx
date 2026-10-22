@@ -112,13 +112,13 @@ describe('a 4-option question', () => {
     expect(onDone).toHaveBeenCalledWith({ kind: 'kanji-reading', right: true });
   });
 
-  it('offers no meaning before a blank is answered when it cannot be masked (D94)', async () => {
+  it('offers no meaning before a blank is answered when it cannot be masked', async () => {
     const { hint: _hint, ...unmasked } = grammar;
     await show(unmasked);
     expect(screen.queryByRole('button', { name: 'Show meaning' })).toBeNull();
   });
 
-  it('shows a blank with its masked meaning one press away (U6, D94), and skips quietly', async () => {
+  it('shows a blank with its masked meaning one press away (U6), and skips quietly', async () => {
     const { repos } = await show(grammar);
     expect(document.querySelector('[data-blank]')).toBeTruthy();
     expect(screen.queryByText("It's ___ late.")).toBeNull();

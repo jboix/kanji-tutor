@@ -37,7 +37,7 @@
         }
       })();
       if (stored === 'light' || stored === 'dark') document.documentElement.dataset.theme = stored;
-      // A first run opens on the welcome, which draws the icon itself (D138): the launch screen
+      // A first run opens on the welcome, which draws the icon itself: the launch screen
       // is then plain paper, so the icon never flashes twice.
       const welcomed = (() => {
         try {
@@ -48,7 +48,7 @@
       })();
       if (!welcomed) document.documentElement.dataset.firstRun = '';
     </script>
-    <!-- The launch screen (N1c, D65): paper, the icon and the name, until the first screen. -->
+    <!-- The launch screen (N1c): paper, the icon and the name, until the first screen. -->
     <style>
       html { background: #f7f8f6; }
       #launch {

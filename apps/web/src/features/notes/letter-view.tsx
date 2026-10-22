@@ -103,7 +103,7 @@ export function LetterView({ letter, onAsk, peek }: LetterViewProps) {
   );
 }
 
-/** A plain rule after the letter; an AI letter carries its seal in the AI box (D57). */
+/** A plain rule after the letter; an AI letter carries its seal in the AI box. */
 export function LetterDivider({ letter }: { letter: Letter }) {
   if (letter.kind === 'loading') return null;
   return <hr className={styles.rule} />;

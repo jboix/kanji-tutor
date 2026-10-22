@@ -5,7 +5,7 @@ import { importKnown, onboard } from './helpers.ts';
 import { card, playCard, playSession, sessionDone } from './lesson-play.ts';
 
 /**
- * The session's end (W-end, D115–D117): the check, お疲れさまでした, three counts, what was new,
+ * The session's end (W-end): the check, お疲れさまでした, three counts, what was new,
  * what to look at again, then Retry N missed and Next session. Retry plays only the missed cards
  * and ends on its own; with nothing missed there is no list and no Retry.
  */

@@ -1,5 +1,5 @@
 /**
- * Word clusters (V1, D32): within each JLPT level, groups of 5–8 kanji words linked by a shared
+ * Word clusters (V1): within each JLPT level, groups of 5–8 kanji words linked by a shared
  * kanji or by appearing together in pack sentences. Pure and deterministic.
  */
 import type { JlptLevel } from '../../src/domain/learner-view.ts';

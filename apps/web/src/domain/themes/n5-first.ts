@@ -1,6 +1,6 @@
 /**
  * N5 unit 1, the first lesson from zero (T8): は, です and じゃありません with a few nouns, in kana
- * and the first N5 kanji only. Written for the app (D33).
+ * and the first N5 kanji only. Written for the app.
  */
 import type { Unit } from './types.ts';
 

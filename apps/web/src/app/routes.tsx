@@ -17,7 +17,7 @@ const grammar = async () => (await import('../features/grammar/grammar-screen.ts
 const settings = () => import('../features/settings/settings-screen.tsx');
 const settingsSection = () => import('../features/settings/settings-section-screen.tsx');
 
-/** Screens that need the dictionary packs (D2). Paths come from `src/ui/paths.ts`. */
+/** Screens that need the dictionary packs. Paths come from `src/ui/paths.ts`. */
 const GATED: RouteObject[] = [
   screen(paths.today, today),
   screen(paths.learn, async () => (await import('../features/learn/learn-screen.tsx')).LearnScreen),
@@ -79,12 +79,16 @@ const ROUTES: RouteObject[] = [
     paths.onboarding,
     async () => (await import('../features/onboarding/onboarding-screen.tsx')).OnboardingScreen,
   ),
-  // Log in exists only when the build has a cloud-save server (D146).
+  // Log in exists only when the build has a cloud-save server.
   ...(syncServer()
     ? [
         screen(
           paths.logIn,
           async () => (await import('../features/account/log-in-screen.tsx')).LogInScreen,
+        ),
+        screen(
+          paths.cloudJoin,
+          async () => (await import('../features/account/join-screen.tsx')).JoinScreen,
         ),
       ]
     : []),
@@ -94,8 +98,19 @@ const ROUTES: RouteObject[] = [
     : []),
 ];
 
+/**
+ * An invite link (`…/?invite=KD7M-3XQP`, printed by the server's `invite` command) opens the
+ * screen that turns cloud saves on, with the code filled in.
+ */
+function followInvite(basename: string) {
+  const code = new URLSearchParams(window.location.search).get('invite');
+  if (!code || !syncServer()) return;
+  const join = `${paths.cloudJoin}?${new URLSearchParams({ code }).toString()}`;
+  window.history.replaceState(null, '', `${basename === '/' ? '' : basename}${join}`);
+}
+
 export function createRouter() {
-  return createBrowserRouter(ROUTES, {
-    basename: import.meta.env.BASE_URL.replace(/\/$/, '') || '/',
-  });
+  const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || '/';
+  followInvite(basename);
+  return createBrowserRouter(ROUTES, { basename });
 }

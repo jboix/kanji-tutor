@@ -1,4 +1,4 @@
-/** N3 units 31–33: kabuki, rakugo, the tea ceremony (D33). */
+/** N3 units 31–33: kabuki, rakugo, the tea ceremony. */
 import type { Unit } from './types.ts';
 
 export const N3_B: readonly Unit[] = [

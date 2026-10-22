@@ -7,7 +7,7 @@ const UNRESOLVED_POS = new Set(['particle', 'symbol']);
 
 /**
  * The token read as its word's preferred reading when the tokenizer chose a valid variant of
- * the word's usual writing (日本人 にっぽんじん → にほんじん, D56), with the variants kept.
+ * the word's usual writing (日本人 にっぽんじん → にほんじん), with the variants kept.
  */
 export function preferReading(token: Token, word: Word): Token {
   const variants = word.variants ?? [];
@@ -27,7 +27,7 @@ async function resolveOne(token: Token, lookup: WordLookup): Promise<Token> {
   return word === undefined ? token : preferReading({ ...token, wordId: word.id }, word);
 }
 
-/** The kana words the tokens split (わが|まま → わがまま), joined back (D92). */
+/** The kana words the tokens split (わが|まま → わがまま), joined back. */
 async function joinSplitWords(tokens: readonly Token[], lookup: WordLookup): Promise<Token[]> {
   const texts = kanaSpans(tokens);
   const words = await Promise.all(texts.map(async (text) => kanaWordOf(await lookup(text), text)));

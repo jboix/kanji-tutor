@@ -1,13 +1,13 @@
 import { browserLanguages, resolveLanguage } from './language.ts';
 import type { Settings } from './types.ts';
 
-/** Fast default model (D34); the user can change it in Settings. */
+/** Fast default model; the user can change it in Settings. */
 export const DEFAULT_MODEL_ID = 'gemini-3.5-flash-lite';
 
-/** Teacher default model (D34, D35); a separate setting, e.g. for `gemini-3.8-flash`. */
+/** Teacher default model; a separate setting, e.g. for `gemini-3.8-flash`. */
 export const DEFAULT_TEACHER_MODEL_ID = 'gemini-3.5-flash-lite';
 
-/** The fast default before D34; stored settings still holding it move to the new default. */
+/** The earlier fast default; stored settings still holding it move to the new default. */
 const RETIRED_DEFAULT_MODEL_ID = 'gemini-2.5-flash-lite';
 
 /** Settings used until the user changes something. */

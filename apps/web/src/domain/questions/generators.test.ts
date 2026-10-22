@@ -195,7 +195,7 @@ describe('漢字読み (J1)', () => {
     expect(underlineReading(sentence, 2)).toBe('あいたい');
   });
 
-  it('never offers a valid variant of the reading as a wrong option (D56)', () => {
+  it('never offers a valid variant of the reading as a wrong option', () => {
     const plain = gakusei() as ChoiceQuestion;
     const variant = texts(plain).find((t) => t !== right(plain)) ?? '';
     const tokens = S.student.tokens.map((t, i) => (i === 0 ? { ...t, variants: [variant] } : t));

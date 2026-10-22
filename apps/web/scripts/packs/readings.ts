@@ -1,5 +1,5 @@
 /**
- * Preferred readings (D56): kuromoji/IPADIC often reads a word in a valid but less usual way
+ * Preferred readings: kuromoji/IPADIC often reads a word in a valid but less usual way
  * (日本人 as にっぽんじん). For each token resolved to a JMdict entry and written as the entry
  * writes it, the reading becomes the entry's preferred one for that writing, and the other
  * usual readings of that writing are kept as `variants`, which grading accepts. A reading with a

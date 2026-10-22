@@ -1,5 +1,5 @@
 /**
- * "To look at again" on the session end (W-end; D116): each missed sentence with its word in the
+ * "To look at again" on the session end (W-end): each missed sentence with its word in the
  * miss crimson and its reading, what was written struck through and why, and missed exercises.
  * The first two show; "See all N" opens the rest in place.
  */

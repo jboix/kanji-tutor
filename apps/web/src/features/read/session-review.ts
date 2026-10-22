@@ -1,5 +1,5 @@
 /**
- * What the session end shows of the session (D116): its three counts, what to look at again, the
+ * What the session end shows of the session: its three counts, what to look at again, the
  * retry round of only those, its length, and what it met first. Pure, apart from the types.
  */
 import type { MetFirst, MetFirstInput } from '../../domain/services/index.ts';
@@ -17,7 +17,7 @@ export interface SessionTally {
   drills: readonly DrillResult[];
 }
 
-/** The card an answer was given on; answers saved before D116 carry no index. */
+/** The card an answer was given on; answers saved by older versions carry no index. */
 function withCard<T extends { card?: number }>(cards: readonly SessionCard[], entry: T) {
   const index = entry.card;
   const card = index === undefined ? undefined : cards[index];
@@ -47,7 +47,7 @@ function retryReading(card: SessionCard, misses: readonly Missed[]): SessionCard
   return { ...rest, targets, reason: card.reason === 'drill' ? 'drill' : 'due' };
 }
 
-/** The retry round (D117): only the missed sentences and exercises, once each, in order. */
+/** The retry round: only the missed sentences and exercises, once each, in order. */
 export function retryCards(missed: readonly Missed[]): SessionCard[] {
   const indices = [...new Set(missed.map((m) => m.index))];
   return indices.flatMap((index) => {
@@ -70,7 +70,7 @@ export interface EndCounts {
 }
 
 /**
- * The three counts (D116): the sentences (and exercises) done, the answers right, and the ones to
+ * The three counts: the sentences (and exercises) done, the answers right, and the ones to
  * look at again. Near-misses are to look at again; an exercise counts once, as one answer.
  */
 export function endCounts(sentences: number, tally: SessionTally): EndCounts {
@@ -86,14 +86,14 @@ export function endCounts(sentences: number, tally: SessionTally): EndCounts {
 
 const MINUTE = 60_000;
 
-/** Rough length when the real one is unknown or a resumed session stretched it (D116). */
+/** Rough length when the real one is unknown or a resumed session stretched it. */
 export function sessionMinutes(startedAt: number | undefined, now: number, estimate: number) {
   const elapsed = startedAt === undefined ? Number.NaN : now - startedAt;
   const minutes = elapsed >= 0 && elapsed <= 60 * MINUTE ? elapsed / MINUTE : estimate / 60;
   return Math.max(1, Math.round(minutes));
 }
 
-/** The words read and grammar points met in the session, for "New today" (D115). */
+/** The words read and grammar points met in the session, for "New today". */
 export function metInput(tally: SessionTally, since: number): MetFirstInput {
   const wordIds = tally.results.map((a) => a.target.wordId);
   const grammarIds = tally.cards.flatMap((card) => [
@@ -103,7 +103,7 @@ export function metInput(tally: SessionTally, since: number): MetFirstInput {
   return { wordIds, grammarIds, since };
 }
 
-/** The "New today" cards (D115): one of each kind first, up to `max`, and the rest for a line. */
+/** The "New today" cards: one of each kind first, up to `max`, and the rest for a line. */
 export function splitMet(met: readonly MetFirst[], max = 3) {
   const firsts = (['kanji', 'word', 'grammar'] as const).flatMap((kind) => {
     const first = met.find((m) => m.kind === kind);

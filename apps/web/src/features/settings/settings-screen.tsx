@@ -34,8 +34,8 @@ function CategoryRow({ category, settings }: { category: Category; settings?: Se
 
 /**
  * Settings (IA5): the categories with icons, in two groups; each opens its own sub-screen.
- * Settings is a tab of the bottom bar; the install banner stays off here (D68), and Install
- * leaves the list once the app runs installed (D121).
+ * Settings is a tab of the bottom bar; the install banner stays off here, and Install
+ * leaves the list once the app runs installed.
  */
 export function SettingsScreen() {
   const t = useT();

@@ -1,5 +1,5 @@
 /**
- * Translations of the app's own content (N9, D53): grammar points, particles and units, written
+ * Translations of the app's own content (N9): grammar points, particles and units, written
  * for this app in French and Spanish. English stays in the entries themselves; Japanese text is
  * never translated. Pure data types.
  */

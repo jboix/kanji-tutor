@@ -16,7 +16,7 @@ export interface MistakeSlotProps {
   onOpenWord: (tokenIndex: number) => void;
 }
 
-/** The card a sheet opens in and its first target still to be answered (L3, D57). */
+/** The card a sheet opens in and its first target still to be answered (L3). */
 export interface NoSpoilScope {
   card: SessionCard;
   /** Targets from this index on are not answered: none of their readings may show. */
@@ -28,7 +28,7 @@ export interface WordSheetSlotProps {
   sentence: Sentence;
   tokenIndex: number;
   /**
-   * Opened from an exercise not answered yet (U5, D63): `sentence` is already masked, and the
+   * Opened from an exercise not answered yet (U5): `sentence` is already masked, and the
    * sheet shows the word alone, nothing about the sentence (translation, grammar, tutor, ask).
    */
   beforeAnswer?: boolean;

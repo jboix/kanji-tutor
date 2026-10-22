@@ -167,7 +167,7 @@ const sectionProgress = z.object({
   at: z.number().exactOptional(),
 });
 
-/** Progress of one thematic unit (T3, D49), with its lesson sections (S3). */
+/** Progress of one thematic unit (T3), with its lesson sections (S3). */
 const unitProgress = z.object({
   introducedAt: z.number().exactOptional(),
   readAt: z.number().exactOptional(),
@@ -215,7 +215,7 @@ const settings = z.object({
 });
 
 /**
- * The app id written into backups. Files from before the rename (B1, D62) say `kanji-reader`
+ * The app id written into backups. Files from before the rename (B1) say `kanji-reader`
  * and still import.
  */
 export const BACKUP_APP = 'kanji-tutor';

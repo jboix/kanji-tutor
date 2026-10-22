@@ -56,7 +56,7 @@ export function questionTranslationIn(
 
 /**
  * The meaning a blank question (J3, J4) shows before it is answered: its English translation
- * with the blank's meaning masked (D94), marked English in another language, or none.
+ * with the blank's meaning masked, marked English in another language, or none.
  */
 export function questionHintIn(
   question: { hint?: string },

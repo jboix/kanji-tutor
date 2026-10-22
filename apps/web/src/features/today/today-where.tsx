@@ -44,7 +44,7 @@ const EMPTY: LevelProgress = {
 
 /**
  * The three bars. Until the counts are read, an invisible copy holds their place, so the panel
- * does not grow under the learner; the real bars then fade in (D124).
+ * does not grow under the learner; the real bars then fade in.
  */
 function Bars({ progress }: { progress: LevelProgress | undefined }) {
   if (!progress) {

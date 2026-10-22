@@ -1,4 +1,4 @@
-/** French texts for the other particles (N9, D53). Written for this app. */
+/** French texts for the other particles (N9). Written for this app. */
 import type { ById, FunctionWordText } from '../../content-types.ts';
 
 export const FR_PARTICLES_B: ById<FunctionWordText> = {

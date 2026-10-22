@@ -29,7 +29,7 @@ function stageText(t: Translate, progress: PackProgress | undefined): string {
   return t('onboarding.dictionaryNow', { stage, loaded: progress.loaded, total: progress.total });
 }
 
-/** The dictionary download (D135): what it is for, how far, and the part loading now. */
+/** The dictionary download: what it is for, how far, and the part loading now. */
 function Loading({ progress }: { progress: PackProgress | undefined }) {
   const t = useT();
   const share = progress?.overall ?? 0;
@@ -78,9 +78,9 @@ export interface DownloadProps {
 }
 
 /**
- * The background download (D134, D135): the dictionary with its progress, a retry if it fails,
+ * The background download: the dictionary with its progress, a retry if it fails,
  * then one line once it is in. The meanings in the chosen language follow it without a word
- * (D136); only a failure shows, with a retry.
+ *; only a failure shows, with a retry.
  */
 export function DownloadStatus({ install, onInstall, queue }: DownloadProps) {
   const t = useT();

@@ -1,5 +1,5 @@
 /**
- * A unit's words as the unit writes them (D73): わたし, not 私, in the first N5 units, which keep
+ * A unit's words as the unit writes them: わたし, not 私, in the first N5 units, which keep
  * to their level's kanji. The packs resolve each word to its JMdict entry, whose first form may
  * be a kanji the unit leaves in kana. Pure.
  */

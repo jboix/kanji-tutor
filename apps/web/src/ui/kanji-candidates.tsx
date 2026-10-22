@@ -139,7 +139,7 @@ interface KanaToggleProps {
 }
 
 /**
- * The あ switch of the sentence field (C6, D109, D112): あ hiragana → ア katakana → A romaji as
+ * The あ switch of the sentence field (C6): あ hiragana → ア katakana → A romaji as
  * typed, one press each. "IME" while the phone's or computer's Japanese keyboard types; a press
  * turns ours back on. Its name says the mode.
  */
@@ -161,7 +161,7 @@ export function KanaToggle({ mode, onChange }: KanaToggleProps) {
   );
 }
 
-/** The Ask box's あ switch (C6, D113): romaji typed in the field turns into kana while it is on. */
+/** The Ask box's あ switch (C6): romaji typed in the field turns into kana while it is on. */
 export function KanaSwitch({ on, onChange }: { on: boolean; onChange: (on: boolean) => void }) {
   const t = useT();
   return (

@@ -330,3 +330,18 @@
     animation: none;
   }
 }
+
+/* Cloud saves → Devices: one row per device, its name and when it was last used. */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list .row {
+  justify-content: space-between;
+  align-items: center;
+}

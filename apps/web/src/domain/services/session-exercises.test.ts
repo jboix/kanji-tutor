@@ -83,7 +83,7 @@ describe('Practise this point (S5)', { timeout: 30_000 }, () => {
     expect(await pointPractice(repos, 'no-such-point', { now: NOW, listening: false })).toEqual([]);
   });
 
-  it('gives a particle page fills of that particle, each in its own sentence (D96)', async () => {
+  it('gives a particle page fills of that particle, each in its own sentence', async () => {
     const repos = await curriculumRepos();
     const cards = await pointPractice(repos, 'particle-ni', { now: NOW, listening: false });
     expect(cards.length).toBeGreaterThanOrEqual(2);

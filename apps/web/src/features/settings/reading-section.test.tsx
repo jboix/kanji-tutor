@@ -20,7 +20,7 @@ describe('Reading settings', () => {
     expect((await repos.settings.get()).furigana).toBe('all');
   });
 
-  it('has no sound field: Sound moved to Appearance (D125)', async () => {
+  it('has no sound field: Sound moved to Appearance', async () => {
     setup();
     await screen.findByRole('group', { name: 'Furigana' });
     expect(screen.queryByRole('group', { name: 'Sound' })).toBeNull();

@@ -3,7 +3,7 @@
   ruby-align: center;
 }
 
-/* Klee One like all Japanese text (D105; W-answered draws the target's reading so). */
+/* Klee One like all Japanese text (W-answered draws the target's reading so). */
 .rt {
   font-family: var(--font-ja);
   font-size: var(--text-sm);

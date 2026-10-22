@@ -1,4 +1,4 @@
-/** N3 grammar, part E: points the thematic units use (〜ず, 〜と呼ばれる, 〜にかけて). Written for D29. */
+/** N3 grammar, part E: points the thematic units use (〜ず, 〜と呼ばれる, 〜にかけて). */
 import { afterVerb, te } from './common.ts';
 import { alt, b, not, prev, s, seq, tok } from './dsl.ts';
 import type { GrammarEntry } from './types.ts';

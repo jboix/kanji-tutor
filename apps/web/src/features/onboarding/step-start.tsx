@@ -5,7 +5,7 @@ import type { StepProps } from './step-props.ts';
 import type { StartChoice } from './steps.ts';
 import styles from './wizard.module.css';
 
-/** A sentence a learner at each start can read (D134); from zero, a few first kanji. */
+/** A sentence a learner at each start can read; from zero, a few first kanji. */
 const SAMPLES: readonly { value: StartChoice; sample: string }[] = [
   { value: 'zero', sample: '山、川、日、人' },
   { value: 'n5', sample: '毎朝、水を飲みます。' },
@@ -43,7 +43,7 @@ function options(t: ReturnType<typeof useT>): readonly CardOption<StartChoice>[]
 }
 
 /**
- * Where you start (P1, P4, D38, D134): the hardest sentence you can read sets the level on Next.
+ * Where you start (P1, P4): the hardest sentence you can read sets the level on Next.
  * From zero, the kana note shows before anything is asked (P8).
  */
 export function StepStart({ wizard }: Pick<StepProps, 'wizard'>) {

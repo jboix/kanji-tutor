@@ -170,7 +170,7 @@ interface BodyProps {
 }
 
 /**
- * The text around the slots: tappable from the masked sentence, the slots' words shut (D63).
+ * The text around the slots: tappable from the masked sentence, the slots' words shut.
  * Closing punctuation after the slots comes apart as `glue`, to stay with the last slot (U8).
  */
 function around(question: OrderQuestion, sentence: Sentence | undefined) {
@@ -180,7 +180,7 @@ function around(question: OrderQuestion, sentence: Sentence | undefined) {
   return { ...aroundSpan(sentence, range, false, undefined, glue.length), glue };
 }
 
-/** The sentence the help explains: the slots as one blank until the answer (D63). */
+/** The sentence the help explains: the slots as one blank until the answer. */
 function helpFor(question: OrderQuestion, sentence: Sentence | undefined, answered: boolean) {
   const range = stemRange(sentence, question.before, question.after);
   if (sentence && range) {

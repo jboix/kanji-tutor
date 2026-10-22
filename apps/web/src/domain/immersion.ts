@@ -1,5 +1,5 @@
 /**
- * Immersion (M1, D51): the tutor's explanations move from the learner's language to Japanese as
+ * Immersion (M1): the tutor's explanations move from the learner's language to Japanese as
  * they progress. Pure: the dial setting and the learner's level and coverage in, a mode out.
  */
 import type { LearnerOverview, LevelCoverage } from './learner-view.ts';

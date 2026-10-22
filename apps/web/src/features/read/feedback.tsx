@@ -67,7 +67,7 @@ function MissTitle({ answered }: { answered: Answered }) {
 }
 
 /**
- * A right answer in a less usual reading (D56): "Also correct. にほんじん is the more common
+ * A right answer in a less usual reading: "Also correct. にほんじん is the more common
  * reading.", the preferred reading in Klee One, in the same green state.
  */
 function VariantNote({ answered }: { answered: Answered }) {
@@ -135,7 +135,7 @@ function AnswerTeaching({ card, answered, onOpenWord }: FeedbackProps) {
 }
 
 /**
- * After an answer (R5, U2, D105): the green card with "Right" and "Read as" when right; when
+ * After an answer (R5, U2): the green card with "Right" and "Read as" when right; when
  * not, the crimson card with what was written, struck (with a short shake), and the expected
  * reading for a near-miss, then the teaching slot. A skip (L4) shows the reading on a quiet card.
  */

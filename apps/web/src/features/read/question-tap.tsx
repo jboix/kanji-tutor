@@ -1,5 +1,5 @@
 /**
- * Tap-a-word in JLPT questions (U5, D63). A stem is cut from its source sentence, so the text
+ * Tap-a-word in JLPT questions (U5). A stem is cut from its source sentence, so the text
  * around the marked span keeps its tokens. Before the answer that text is read from the sentence
  * with the span masked (`maskSentence`), so no sheet shows the hidden word, its kanji spelling,
  * the translation or the grammar; after it, the real sentence opens everywhere.

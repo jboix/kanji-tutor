@@ -1,4 +1,4 @@
-/* The welcome (D134): the icon writes 漢, the tutor stamps its seal and writes the reading, then
+/* The welcome: the icon writes 漢, the tutor stamps its seal and writes the reading, then
    the name, the line and Start rise in, easing out over about three seconds. The icon keeps the
    icon's own colours in both themes. */
 
@@ -110,7 +110,7 @@
   animation-delay: 2120ms;
 }
 
-/* Log in, quiet under Start: most people opening the welcome have no cloud saves (D140). */
+/* Log in, quiet under Start: most people opening the welcome have no cloud saves. */
 .logIn {
   margin: 0;
   text-align: center;

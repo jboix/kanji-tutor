@@ -90,7 +90,7 @@ function Body({ state }: { state: ReturnType<typeof useKnownImport> }) {
   );
 }
 
-/** Mark what you already know (K6, D14): JLPT lists, Minna lessons, or your own list. */
+/** Mark what you already know (K6): JLPT lists, Minna lessons, or your own list. */
 export function ImportScreen() {
   const { t, rich } = useI18n();
   const state = useKnownImport();

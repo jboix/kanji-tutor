@@ -29,17 +29,17 @@ function useSkip(): boolean {
 }
 
 /**
- * The welcome (P5, D134, D135), on a first launch only and with no launch screen before it: the
+ * The welcome (P5), on a first launch only and with no launch screen before it: the
  * icon writes 漢 and the tutor stamps its seal and adds the reading, in about three seconds, then
  * the name, "Read Japanese with an AI tutor at your side" (as the social preview), Start, and
- * a quiet "Already use cloud saves? Log in" for progress saved on another device (D133, D140),
- * only when the build has a cloud-save server (D146).
+ * a quiet "Already use cloud saves? Log in" for progress saved on another device,
+ * only when the build has a cloud-save server.
  * Reduced motion shows the last frame at once.
  */
 export function WelcomeScreen({ onStart }: { onStart: () => void }) {
   const { t, rich } = useI18n();
   const skipped = useSkip();
-  // The welcome is its own opening: no launch screen before it (D135).
+  // The welcome is its own opening: no launch screen before it.
   useLayoutEffect(dropLaunch, []);
   return (
     <div className={styles.welcome} data-skipped={skipped || undefined}>

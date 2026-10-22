@@ -254,7 +254,7 @@ function coveringWords(full: Pack, missing: Set<string>, level: number, inPack: 
 
 /**
  * Adds, for every N5 and N4 kanji of the fixture, a word of that level carrying it, so marking a
- * level known proves its kanji as it does in the full pack (P4, D88). The clusters and the
+ * level known proves its kanji as it does in the full pack (P4). The clusters and the
  * language packs follow the new word list.
  */
 export function withLevelWords(full: Pack, fixture: Pack): Pack {

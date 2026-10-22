@@ -1,7 +1,7 @@
 /**
  * The units pack (T1–T3): each thematic unit resolved against the dictionary, its passage as
  * `unit` sentences with level and grammar, and the pack sentences that teach each of its words
- * (D56) or use two of them.
+ * or use two of them.
  */
 
 import { toHiragana } from 'wanakana';
@@ -27,7 +27,7 @@ export interface UnitContext {
   lookup: Lookup;
   tokenize: Tokenize;
   levels: LevelContext;
-  /** Sets preferred readings on a passage line's tokens (D56, `readings.ts`). */
+  /** Sets preferred readings on a passage line's tokens (`readings.ts`). */
   prefer?: (tokens: Token[]) => Token[];
   /** Unit words kuromoji splits, joined back into one token (`unitCompounds`). */
   compounds?: ReadonlyMap<string, Compound>;
@@ -55,7 +55,7 @@ export function grammarIdFor(
 
 /**
  * The unit words kuromoji splits (自己紹介 → 自己 紹介), by written form, to join back into one
- * token wherever a sentence writes them (D56, `compounds.ts`).
+ * token wherever a sentence writes them (`compounds.ts`).
  */
 export function unitCompounds(
   units: readonly Unit[],
@@ -118,7 +118,7 @@ export function unitKanjiWordIds(unit: Unit, lookup: Lookup): string[] {
 }
 
 /**
- * Word id → the level a unit teaches it at (D56): the easiest unit with the word. Sentence
+ * Word id → the level a unit teaches it at: the easiest unit with the word. Sentence
  * levels count a unit word at the easier of this and its list level.
  */
 export function unitWordLevels(units: readonly Unit[], lookup: Lookup): Map<string, JlptLevel> {
@@ -136,7 +136,7 @@ const easiestFirst = (a: Sentence, b: Sentence) =>
   a.text.length - b.text.length ||
   Number(a.sourceRef) - Number(b.sourceRef);
 
-/** Sentences per unit word, from its reach list, listed before the two-word ones (D56). */
+/** Sentences per unit word, from its reach list, listed before the two-word ones. */
 const REACH_PER_WORD = 2;
 
 function reachIds(unit: Unit, wordIds: string[], ctx: UnitContext, kept: ReadonlySet<string>) {

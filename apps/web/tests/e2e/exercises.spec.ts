@@ -148,7 +148,7 @@ test('a grammar page practises its point inline, with the full session one tap a
   await expect(full).toHaveAttribute('href', '/read?grammar=desu');
 });
 
-test('a particle page practises that particle inline (D96)', async ({ page }) => {
+test('a particle page practises that particle inline', async ({ page }) => {
   await onboard(page);
   await page.goto('/grammar/particle-ga');
   const practice = page.getByRole('region', { name: 'Practise this point' });

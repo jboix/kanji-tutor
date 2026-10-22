@@ -28,7 +28,7 @@ const labels = (met: Awaited<ReturnType<typeof metFirst>>) =>
     return `grammar ${m.entry.id}`;
   });
 
-describe('metFirst (D115)', () => {
+describe('metFirst', () => {
   it('lists the words first read in the session and the kanji only they brought', async () => {
     const repos = await readingRepos();
     // 持つ was read yesterday, so neither it nor 持 is new; 待つ and 待 are.

@@ -1,5 +1,5 @@
-/* The entrance (D124): a screen's sections fade in and settle from 8px above, top to bottom,
-   100ms apart (D131), so a screen and the content that arrives after a load ease in instead of popping.
+/* The entrance: a screen's sections fade in and settle from 8px above, top to bottom,
+   100ms apart, so a screen and the content that arrives after a load ease in instead of popping.
    The whole screen settles within about 850ms. Nothing moves with reduced motion.
 
    Opting out: `<Screen enter={false}>` (data-enter="off" on the body) turns it off for a screen,

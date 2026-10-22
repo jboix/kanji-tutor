@@ -90,7 +90,7 @@ async function applyStore(
 
 /**
  * Merges one language's files into the installed rows, reporting progress per batch, with the
- * share of the whole language pack and its language (D136).
+ * share of the whole language pack and its language.
  */
 export async function applyLanguage(job: LanguageInstall, files: LanguageFile[]): Promise<void> {
   const overall = { done: 0, total: Math.max(countOf(files), 1) };

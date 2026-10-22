@@ -5,7 +5,7 @@ import type { PlainKey } from './i18n/types.ts';
 import styles from './known-import.module.css';
 import type { ImportChoice, PastedAs } from './use-known-import.ts';
 
-/** What the known-words form holds while the learner fills it in (K6, D14). */
+/** What the known-words form holds while the learner fills it in (K6). */
 export interface KnownDraft {
   n5: boolean;
   n4: boolean;
@@ -174,7 +174,7 @@ function OwnList({ draft, set, known }: FieldsProps & { known: boolean }) {
 }
 
 /**
- * The known-words choices (K6, D14): JLPT lists, Minna lessons and a pasted list. With `known`,
+ * The known-words choices (K6): JLPT lists, Minna lessons and a pasted list. With `known`,
  * the pasted list is always words already known, with no lesson tag (the welcome wizard).
  */
 export function KnownImportFields({

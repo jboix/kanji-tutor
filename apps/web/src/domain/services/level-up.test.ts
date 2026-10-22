@@ -32,7 +32,7 @@ describe('levelUpSuggestion (P4)', () => {
     expect((await repos.settings.get()).learnerLevel).toBe(5);
   });
 
-  it('suggests N4 on the e2e fixture pack once its N5 list is marked known (D88)', async () => {
+  it('suggests N4 on the e2e fixture pack once its N5 list is marked known', async () => {
     const repos = await fixtureRepos();
     await importKnown(repos, { lists: ['n5'], now: NOW });
     // Marking a whole level known moves the learner past it; back to N5 for the suggestion.

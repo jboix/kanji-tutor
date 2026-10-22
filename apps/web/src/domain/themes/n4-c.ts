@@ -1,4 +1,4 @@
-/** N4 units 20–22: table manners, shrines and temples, Japanese school (D33). */
+/** N4 units 20–22: table manners, shrines and temples, Japanese school. */
 import type { Unit } from './types.ts';
 
 export const N4_C: readonly Unit[] = [

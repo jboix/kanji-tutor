@@ -188,7 +188,7 @@
   gap: 14px;
 }
 
-/* Klee One: descriptions mix English with kanji like 寺 (as the lesson tag field, D16). */
+/* Klee One: descriptions mix English with kanji like 寺 (as the lesson tag field). */
 .description {
   box-sizing: border-box;
   width: 100%;

@@ -1,5 +1,5 @@
 /**
- * The immersion post-check (M2, D51). After a mixed or Japanese explanation is generated, its
+ * The immersion post-check (M2). After a mixed or Japanese explanation is generated, its
  * Japanese is tokenized and every content word is looked up in the learner's progress:
  *
  * - a word above the learner (not known, and never met or harder than their level) gets
@@ -116,7 +116,7 @@ async function tokensOf(lang: Verifier, texts: readonly string[]) {
 }
 
 /**
- * Where each glossed word is, by the tokenizer's offsets (D57): a token whose surface is a glossed
+ * Where each glossed word is, by the tokenizer's offsets: a token whose surface is a glossed
  * word and sits at its `start` in the text. 日 inside 毎日 is one token 毎日, so it never gets ひ.
  */
 export function glossPlaces(

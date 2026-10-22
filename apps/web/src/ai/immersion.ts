@@ -1,5 +1,5 @@
 /**
- * Immersion prompt policy (M1, M2, D51). In mixed or Japanese mode, teacher explanations are
+ * Immersion prompt policy (M1, M2). In mixed or Japanese mode, teacher explanations are
  * written in Japanese at the learner's level, using the learner tools to stay within what they
  * know, and every reply also carries `summaryNative`, a short summary in the learner's language
  * that the post-check falls back to when too many words are above the learner.

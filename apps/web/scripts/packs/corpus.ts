@@ -48,7 +48,7 @@ const KANJI = /(?![々〆〇])\p{Script=Han}/gu;
 
 /**
  * Level of a JMdict-common word that is on no JLPT list (父, 東京, 日本語, 行ける): the level of its
- * hardest kanji (D40). The lists map many everyday words and derived forms to other entries, and
+ * hardest kanji. The lists map many everyday words and derived forms to other entries, and
  * counting them as N1 would make half the corpus N1. Uncommon untagged words stay N1.
  */
 export function untaggedLevels(
@@ -74,7 +74,7 @@ function easier(a: JlptLevel | undefined, b: JlptLevel | undefined): JlptLevel |
 
 /**
  * The level lookups used by `sentenceLevel`: list level, else the untagged-common fallback.
- * `taught` holds the level of the unit that teaches a word (D56): a unit word counts at the
+ * `taught` holds the level of the unit that teaches a word: a unit word counts at the
  * easier of its list level and its unit's, since the path teaches it there (保険 in an N4 unit).
  */
 export function levelContext(

@@ -1,5 +1,5 @@
 /**
- * The no-spoil filter over a whole task output (L3, D57). A screen that shows tutor output while
+ * The no-spoil filter over a whole task output (L3). A screen that shows tutor output while
  * targets of the card are still to be answered (the word sheet, its breakdown, a free question,
  * follow-ups, a mistake note) passes every output through `redactOutput`, cached ones included:
  *

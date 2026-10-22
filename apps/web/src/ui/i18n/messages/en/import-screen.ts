@@ -1,4 +1,4 @@
-/** English messages: the import page (K6, D14). */
+/** English messages: the import page (K6). */
 export const importScreen = {
   heading: 'Mark what you already know',
   intro:

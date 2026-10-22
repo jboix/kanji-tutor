@@ -1,4 +1,4 @@
-/** N3 units 34–36: souvenirs for the office, kimono, the packed lunch (D33). */
+/** N3 units 34–36: souvenirs for the office, kimono, the packed lunch. */
 import type { Unit } from './types.ts';
 
 export const N3_C: readonly Unit[] = [

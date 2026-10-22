@@ -26,7 +26,7 @@
 }
 
 /* A tab: a 26px icon box right over a 16px label, its label on Start's line, so the sliding
-   highlight sits centred behind both at one height (D123, D131). Painted above the highlight. */
+   highlight sits centred behind both at one height. Painted above the highlight. */
 .link {
   position: relative;
   justify-content: flex-end;
@@ -74,7 +74,7 @@
   pointer-events: none;
 }
 
-/* The active tab (D123): its icon in the accent on the soft square, its label in ink and bold. */
+/* The active tab: its icon in the accent on the soft square, its label in ink and bold. */
 .active {
   color: var(--ink);
   font-weight: 700;
@@ -85,7 +85,7 @@
 }
 
 /* One highlight for the bar, placed in the grid row and moved a column at a time: a rounded
-   square behind the whole tab, icon and label (D131). */
+   square behind the whole tab, icon and label. */
 .indicator {
   position: absolute;
   grid-row: 1 / 2;

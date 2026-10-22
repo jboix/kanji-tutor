@@ -1,5 +1,5 @@
 /**
- * Two soft answer tones synthesized with Web Audio (U2, D30): no audio files. The context is
+ * Two soft answer tones synthesized with Web Audio (U2): no audio files. The context is
  * created on the first user gesture, since iOS only lets audio start from one, and resumed on
  * later gestures if the system suspended it.
  */
@@ -39,7 +39,7 @@ export interface Sound {
   play: (cue: Cue) => void;
   /** Unlocks on every pointer, touch or key gesture on `target`; returns the remover. */
   listen: (target: EventTarget) => () => void;
-  /** Silences every cue until unmuted (Settings → Sound off, D125). */
+  /** Silences every cue until unmuted (Settings → Sound off). */
   mute: (value: boolean) => void;
   /** Scales every cue, 0 to 1 (Settings → Sound). */
   volume: (value: number) => void;
@@ -112,7 +112,7 @@ function browserContext(): AudioContext | undefined {
 export const sound: Sound = createSound(browserContext);
 
 /**
- * Applies Settings → Sound (D125) to everything that makes a sound: the answer tones and speech
+ * Applies Settings → Sound to everything that makes a sound: the answer tones and speech
  * (the speaker buttons, listening exercises). On when unset; the volume scales the tones.
  */
 export function applySound(setting: boolean | undefined, volume = 1): void {

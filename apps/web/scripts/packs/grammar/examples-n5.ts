@@ -1,6 +1,6 @@
 /**
  * N5 detector cases: [grammar id, sentence, whether the detector must fire]. Sentences are
- * written for these tests, not taken from a textbook (D29).
+ * written for these tests, not taken from a textbook.
  */
 export type DetectCase = readonly [id: string, sentence: string, hit: boolean];
 

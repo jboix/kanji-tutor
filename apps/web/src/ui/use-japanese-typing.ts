@@ -36,7 +36,7 @@ export type KanaMode = KanaScript | 'off';
 
 /**
  * A field's mode, `native` too: the device's Japanese keyboard (an OS IME) types, and the field
- * converts nothing, marks nothing and offers no kanji (D112).
+ * converts nothing, marks nothing and offers no kanji.
  */
 export type TypingMode = KanaMode | 'native';
 
@@ -64,7 +64,7 @@ export function finalText(value: string, mode: TypingMode): string {
 const JAPANESE = /[\u3040-\u30ff\u3400-\u9fff]/u;
 
 /**
- * True when an input event came from a Japanese keyboard (D112): typed or composed text that is
+ * True when an input event came from a Japanese keyboard: typed or composed text that is
  * already Japanese. A paste, a drop or our own conversion is not.
  */
 export function nativeInput(event: { inputType?: string; data?: string | null }): boolean {
@@ -192,7 +192,7 @@ function picker(
 }
 
 export interface TypingOptions {
-  /** Called when a Japanese keyboard types in the field (D112); only the sentence field asks. */
+  /** Called when a Japanese keyboard types in the field; only the sentence field asks. */
   onNative?: (() => void) | undefined;
 }
 
@@ -228,7 +228,7 @@ export function useJapaneseTyping<E extends Field>(
   );
   const found = useCandidates(value, selection);
   // A Japanese keyboard, or its composition in progress, has its own candidates: none of ours.
-  // Only the sentence field watches for one (D113); the Ask box keeps its popup as it was.
+  // Only the sentence field watches for one; the Ask box keeps its popup as it was.
   const quiet = mode === 'native' || (options.onNative !== undefined && composing.now);
   const candidates = useStanding(found.list, value, quiet);
   const pick = picker(value, place, ref);
@@ -239,7 +239,7 @@ export function useJapaneseTyping<E extends Field>(
 
 /**
  * The candidates whose kana is still where it was: a lookup still to come back may be for text
- * that moved on (a pick, a deletion), and those must neither show nor mark (D112).
+ * that moved on (a pick, a deletion), and those must neither show nor mark.
  */
 function useStanding(list: KanjiCandidate[], value: string, quiet: boolean): KanjiCandidate[] {
   return useMemo(() => {

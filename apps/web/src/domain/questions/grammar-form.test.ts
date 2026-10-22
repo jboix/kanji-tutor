@@ -1,5 +1,5 @@
 /**
- * 文法形式の判断 (J4) regressions from the question quality review (D54): the blank covers
+ * 文法形式の判断 (J4) regressions from the question quality review: the blank covers
  * whole tokens with their ending, options fill the same slot conjugated like the answer,
  * nothing outside the blank is repeated, and giving verbs are set against each other only when
  * the particles rule them out.

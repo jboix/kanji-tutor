@@ -1,6 +1,6 @@
 /**
- * Cross-checks pre-tokenized readings against JMdict before they are graded or shown (D13 known
- * limit): kuromoji sometimes picks a valid but wrong reading of a lone kanji (間 → ま).
+ * Cross-checks pre-tokenized readings against JMdict before they are graded or shown, a known
+ * limit: kuromoji sometimes picks a valid but wrong reading of a lone kanji (間 → ま).
  */
 import { hasKanji, toKanaFold } from '../kana.ts';
 import type { Sentence, Token, Word } from '../types.ts';
@@ -105,7 +105,7 @@ export function answerSpan(sentence: Sentence, tokenIndex: number): number[] {
 }
 
 /**
- * The valid variant readings of a target (D56, `Token.variants`), each with the target's
+ * The valid variant readings of a target (`Token.variants`), each with the target's
  * attached endings, as accepted answers that are not the preferred one.
  */
 export function spanVariants(sentence: Sentence, tokenIndex: number): string[] {

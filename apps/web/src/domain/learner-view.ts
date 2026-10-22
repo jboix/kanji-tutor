@@ -1,5 +1,5 @@
 /**
- * The learner as the AI tutor's tools see it (A10, D35). A pure port: `services/learner-profile.ts`
+ * The learner as the AI tutor's tools see it (A10). A pure port: `services/learner-profile.ts`
  * implements it over `Repos`, and `src/ai/tools/` exposes it to the model as function calls.
  */
 import type { ErrorType, LearnerLevel, Verdict } from './types.ts';

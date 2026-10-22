@@ -40,7 +40,7 @@ async function lessonTag(repos: Repos, given: string | undefined): Promise<strin
  * Adds pasted words as new lesson words: level 0 with a fresh FSRS card, `source.kind`
  * 'textbook', the given lesson tag or the current lesson, and this ISO week. Words already
  * tracked keep their level and source. A tag given while no current lesson is set becomes the
- * current lesson, as captures do (D20), so the words are fresh in sessions.
+ * current lesson, as captures do, so the words are fresh in sessions.
  */
 export async function addLessonWords(
   repos: Repos,

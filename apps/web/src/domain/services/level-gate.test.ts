@@ -50,7 +50,7 @@ describe('the level gate (G3)', () => {
     expect(stretchLevel(3)).toBe(2);
   });
 
-  it('lets a unit’s taught words through whatever their tag, up to their unit level (D56)', () => {
+  it('lets a unit’s taught words through whatever their tag, up to their unit level', () => {
     const jlpt = new Map([
       [W.matsu.id, 5],
       [W.aida.id, 1],

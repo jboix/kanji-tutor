@@ -11,7 +11,7 @@ import { PillButton } from '../../ui/pill-button.tsx';
 import type { ImportChoice } from '../../ui/use-known-import.ts';
 import styles from './import.module.css';
 
-/** The choices of the import page (K6, D14). */
+/** The choices of the import page (K6). */
 export function ImportForm({ onImport }: { onImport: (choice: ImportChoice) => void }) {
   const t = useT();
   const [draft, setDraft] = useState(KNOWN_DRAFT);

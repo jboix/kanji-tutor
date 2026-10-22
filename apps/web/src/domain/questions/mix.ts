@@ -8,7 +8,7 @@
  * - `makeQuestions(repos, cards, options, count)` builds question cards over the `Repos` port,
  *   from material that passes the session's level gate (G3);
  * - `makeSessionQuestions(repos, cards, options, count)` builds them on the session's own words,
- *   each to be placed after the cards that introduce them (V2, D56);
+ *   each to be placed after the cards that introduce them (V2);
  * - `placeQuestions(cards, questions, every)` places them one after every `every` cards;
  * - `passageCard(set)` wraps a 読解 passage (T6) as a card;
  * - `mixQuestions(repos, cards, options)` makes and places them.
@@ -279,7 +279,7 @@ function afterOf(sentence: Sentence, first: ReadonlyMap<string, number>): number
 }
 
 /**
- * Questions on the session's own words (V2, D56), for a learner who knows too few words for
+ * Questions on the session's own words (V2), for a learner who knows too few words for
  * {@link makeQuestions}: each word a card targets counts as read once its card has been, so J1
  * and J2 can ask it, and J4 and J5 can use a sentence made of such words. A question comes after
  * the cards of every session word its sentence shows.

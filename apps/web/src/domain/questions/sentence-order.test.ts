@@ -1,5 +1,5 @@
 /**
- * 文の組み立て (J5) regressions from the question quality review (D54): every piece is a whole
+ * 文の組み立て (J5) regressions from the question quality review: every piece is a whole
  * word with its particles, and a window is asked only when its order is unique.
  */
 import { describe, expect, it } from 'vitest';

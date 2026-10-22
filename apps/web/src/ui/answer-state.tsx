@@ -21,7 +21,7 @@ export interface AnswerStateProps {
 }
 
 /**
- * The result card after an answer (U2, D105): green with a check in a circle when right, crimson
+ * The result card after an answer (U2): green with a check in a circle when right, crimson
  * with a cross when not, the quiet surface when skipped. Never the 解 seal: that is the tutor's.
  * `data-answer` carries the state for tests and styles; the motion is dropped under reduced
  * motion.

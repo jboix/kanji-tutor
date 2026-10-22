@@ -1,5 +1,5 @@
 /**
- * Guard (A18, D64): a feature starts an AI task only through the `AiAction` path in
+ * Guard (A18): a feature starts an AI task only through the `AiAction` path in
  * `ui/ai-action.tsx`. The client reaches a feature only as the argument of `run`, `peek` or
  * `onAsk`, so any `services.ai`, `useServices().ai` or `{ ai } = …` in a feature is a press the
  * learner could not see coming. The check reads each file's syntax tree, not its text.

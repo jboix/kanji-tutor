@@ -1,4 +1,4 @@
-/** English messages: the session's end, its counts, what was new, and the retry round (D115–D117). */
+/** English messages: the session's end, its counts, what was new, and the retry round. */
 export const sessionEnd = {
   subtitle: {
     one: 'Session done · about {n} minute',

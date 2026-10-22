@@ -1,4 +1,4 @@
-/** N3 units 37–39: plastic food models, the rainy season and typhoons, Obon (D33). */
+/** N3 units 37–39: plastic food models, the rainy season and typhoons, Obon. */
 import type { Unit } from './types.ts';
 
 export const N3_D: readonly Unit[] = [

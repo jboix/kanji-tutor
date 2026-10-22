@@ -6,7 +6,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
-    // Lazy chunks, the handwriting recognizer and fake IndexedDB start cold in each file (D70).
+    // Lazy chunks, the handwriting recognizer and fake IndexedDB start cold in each file.
     testTimeout: 20_000,
     include: ['src/**/*.test.{ts,tsx}', 'scripts/**/*.test.ts'],
     css: false,

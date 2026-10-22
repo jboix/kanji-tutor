@@ -20,7 +20,7 @@ const SETTINGS = {
 };
 
 describe('wizard steps', () => {
-  it('resumes at a saved step; a step from before D134 starts at the welcome', () => {
+  it('resumes at a saved step; a step from the older wizard starts at the welcome', () => {
     expect(resumeStep(undefined)).toBe('welcome');
     expect(resumeStep('')).toBe('welcome');
     expect(resumeStep('nonsense')).toBe('welcome');
@@ -51,7 +51,7 @@ describe('wizard steps', () => {
     expect(joinLesson('', '')).toBe('');
   });
 
-  it('reads the start a level stands for (D38)', () => {
+  it('reads the start a level stands for', () => {
     expect(startOf(undefined)).toBe('zero');
     expect(startOf(4)).toBe('n4');
     expect(startOf(3)).toBe('n3');
@@ -81,7 +81,7 @@ describe('wizard steps', () => {
   });
 });
 
-describe('your class (D134)', () => {
+describe('your class', () => {
   const draft = (change: Partial<WizardDraft>): WizardDraft => ({
     ...initialDraft(SETTINGS),
     ...change,

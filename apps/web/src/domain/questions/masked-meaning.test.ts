@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { MASK, maskedMeaning, meaningFields } from './options.ts';
 
-describe('maskedMeaning (J3, J4, D94)', () => {
+describe('maskedMeaning (J3, J4)', () => {
   it('masks the words of the blank’s meaning, with their endings', () => {
     expect(maskedMeaning('I want to drink tea.', ['want to …; wish to …'])).toBe(
       `I ${MASK} to drink tea.`,

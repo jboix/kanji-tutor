@@ -1,5 +1,5 @@
 /**
- * The shared rate-limit state (A14, D57), in every view that shows an AI result: "The tutor
+ * The shared rate-limit state (A14), in every view that shows an AI result: "The tutor
  * needs a minute", a countdown to the wait Google returned, and Retry, which only works once the
  * wait has passed. Nothing retries by itself.
  */

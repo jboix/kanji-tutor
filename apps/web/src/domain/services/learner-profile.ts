@@ -1,5 +1,5 @@
 /**
- * The tutor's view of the learner (A10, D35): level, coverage per JLPT level, recent mistakes, and
+ * The tutor's view of the learner (A10): level, coverage per JLPT level, recent mistakes, and
  * lookups of what the learner knows. Implements the `LearnerView` port over `Repos`; the app layer
  * builds one and hands it to the AI context.
  */
@@ -34,7 +34,7 @@ const MISTAKE_WINDOW_MS = 30 * 86_400_000;
 const EXAMPLES = 5;
 /** Items per kind a single `checkKnown` call answers; the rest are ignored. */
 const MAX_CHECKS = 30;
-/** Share of a level's words known before the estimate moves to the next level (D31). */
+/** Share of a level's words known before the estimate moves to the next level. */
 const MOVE_UP = 0.8;
 
 /** Unseen (untracked or 0), learning (1–2) or known (3–4). */

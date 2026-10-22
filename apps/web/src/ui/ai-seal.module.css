@@ -19,7 +19,7 @@
   content: attr(data-seal);
 }
 
-/* The mark on a press that sends a request (A18, D64). */
+/* The mark on a press that sends a request (A18). */
 .s16 {
   width: 16px;
   height: 16px;

@@ -11,7 +11,7 @@
   color: var(--ink-muted);
 }
 
-/* While it installs: what, how far, then the bar across the width (D137). */
+/* While it installs: what, how far, then the bar across the width. */
 .progress {
   display: flex;
   flex-direction: column;

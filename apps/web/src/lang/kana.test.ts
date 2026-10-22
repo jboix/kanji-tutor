@@ -58,7 +58,7 @@ describe('kana', () => {
   });
 });
 
-describe('toKanaIn (C6, D109)', () => {
+describe('toKanaIn (C6)', () => {
   it('types hiragana, with capitals as katakana (WanaKana)', () => {
     expect(toKanaIn('koohii', 'hiragana')).toBe('こおひい');
     expect(toKanaIn('KO-HI-', 'hiragana')).toBe('コーヒー');

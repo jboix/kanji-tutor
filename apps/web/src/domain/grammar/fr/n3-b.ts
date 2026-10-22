@@ -1,4 +1,4 @@
-/** French texts for N3 grammar, part B (N9, D53). Written for this app. */
+/** French texts for N3 grammar, part B (N9). Written for this app. */
 import type { ById, GrammarText } from '../../content-types.ts';
 
 export const FR_N3_B: ById<GrammarText> = {

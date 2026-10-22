@@ -131,7 +131,7 @@ function MissNote(props: MistakeSlotProps) {
 /**
  * Under a wrong or near-miss answer (A1, A13, read.html): the app's note for the error type,
  * then "Ask the tutor why". A skip ("I don't know") gets neither: the teaching card covers it.
- * The later targets of the card stay hidden in the tutor's note (L3, D57).
+ * The later targets of the card stay hidden in the tutor's note (L3).
  */
 export function MistakeExplanation(props: MistakeSlotProps) {
   if (props.grade.skipped) return null;

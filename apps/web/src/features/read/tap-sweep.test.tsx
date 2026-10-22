@@ -1,5 +1,5 @@
 /**
- * The U5/U6 sweep (D63, D66): every exercise kind renders its words tappable, keeps the answer
+ * The U5/U6 sweep: every exercise kind renders its words tappable, keeps the answer
  * shut until it is given, never lets a sheet show it, and (読解 aside) has the help bar with the
  * translation hidden until "Show meaning".
  */
@@ -291,7 +291,7 @@ describe('読解 (placement: placement-tap.test.tsx)', () => {
 });
 
 describe('the help bar (U6)', () => {
-  // Blank questions (J3, J4) show only their masked hint before the answer (D94).
+  // Blank questions (J3, J4) show only their masked hint before the answer.
   const hints = new Map<string, string>(
     KINDS.flatMap(({ q }) => (q.hint ? [[q.kind, q.hint] as const] : [])),
   );

@@ -78,7 +78,7 @@ describe('ReadScreen', () => {
     expect(counts.textContent).toContain('0 to look at again');
   });
 
-  it('retries only the missed target, then ends that round on its own (D117)', async () => {
+  it('retries only the missed target, then ends that round on its own', async () => {
     const repos = await waitingRepos();
     const input = await open(repos);
     await userEvent.type(input, 'nu{Enter}');
@@ -93,7 +93,7 @@ describe('ReadScreen', () => {
     const counts = await screen.findByRole('list', { name: 'Counts' });
     expect(counts.textContent).toContain('1 read right');
     expect(screen.queryByRole('button', { name: /^Retry/ })).toBeNull();
-    // The retry answer is graded and recorded like any review (D117).
+    // The retry answer is graded and recorded like any review.
     expect((await repos.reviews.all()).length).toBe(before + 1);
   });
 

@@ -76,7 +76,7 @@ const PARTICLE_SENTENCES = 300;
 
 /**
  * A particle's page (G5): particle fills of that particle (S4) in easy sentences the learner
- * can read, each in a different sentence (D96).
+ * can read, each in a different sentence.
  */
 async function particlePractice(repos: Repos, wordId: string, now: number) {
   const items = await repos.items.byKind('word');

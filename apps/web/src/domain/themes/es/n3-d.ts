@@ -1,4 +1,4 @@
-/** Spanish texts for N3 units 37–39 (N9, D53). Written for this app. */
+/** Spanish texts for N3 units 37–39 (N9). Written for this app. */
 import type { ById, UnitText } from '../../content-types.ts';
 
 export const ES_N3_D: ById<UnitText> = {

@@ -1,4 +1,4 @@
-/** All fr messages, one namespace per file (D52). */
+/** All fr messages, one namespace per file. */
 import type { Messages } from '../../types.ts';
 import { account } from './account.ts';
 import { add } from './add.ts';

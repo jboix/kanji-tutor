@@ -25,7 +25,7 @@ function stateText({ t, format }: Text, state: LanguagePackState, language: stri
   return t('ui.packInstalled', { language });
 }
 
-/** The install's progress: a bar over the whole pack and its percentage (D137). */
+/** The install's progress: a bar over the whole pack and its percentage. */
 function Progress({ text, share }: { text: string; share: number }) {
   const { t } = useI18n();
   return (

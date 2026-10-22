@@ -1,4 +1,4 @@
-/** The lesson path: every thematic unit in path order, N5 → N4 → N3 (T1, D33). */
+/** The lesson path: every thematic unit in path order, N5 → N4 → N3 (T1). */
 
 import { GRAMMAR_CATALOGUE } from '../grammar/catalogue.ts';
 import type { GrammarEntry } from '../grammar/types.ts';

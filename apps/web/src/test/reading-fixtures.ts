@@ -132,7 +132,7 @@ export const S = {
     A('た'),
     DOT,
   ]),
-  /** 友達の間に本。 with 間 read ま by the tokenizer: a wrong lone-kanji reading (D13). */
+  /** 友達の間に本。 with 間 read ま by the tokenizer: a wrong lone-kanji reading. */
   ma: sentence('s-ma', [
     ['友達', 'ともだち', 'noun', W.tomodachi],
     P('の'),

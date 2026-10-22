@@ -15,7 +15,7 @@
 }
 
 /* Struck-through wrong answer (read.html "You wrote"): the app's own grading, so ink, not the AI
-   red, which only the tutor's corrections use (D64). */
+   red, which only the tutor's corrections use. */
 .struck {
   font-family: var(--font-ja);
   font-size: 20px;

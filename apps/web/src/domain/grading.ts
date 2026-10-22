@@ -39,7 +39,7 @@ function correctGrade(accepted: string, expected: string, given: string, raw: st
   return grade;
 }
 
-/** A right answer, marked `variantOf` the preferred reading when it was a variant (D56). */
+/** A right answer, marked `variantOf` the preferred reading when it was a variant. */
 function rightGrade(
   match: { accepted: string; answer: string; raw: string },
   expected: readonly string[],
@@ -64,7 +64,7 @@ function nearMissGrade(expected: readonly string[], given: string): Grade | unde
  * hiragana are equivalent (`kana-variant`, still correct). A missing or extra long vowel, っ, or
  * a non-initial voicing change (rendaku) is a `near-miss` with that error type; anything else is `wrong`.
  * `confusable` lists readings of lookalike words so a match there is `wrong-kanji`. `variants`
- * lists the accepted readings that are valid but not preferred (D56): a match is still correct,
+ * lists the accepted readings that are valid but not preferred: a match is still correct,
  * with `variantOf` set to the preferred (first) reading.
  *
  * Romaji is converted to kana first and is not a kana variant. Order of checks: exact match,

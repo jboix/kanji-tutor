@@ -27,7 +27,7 @@ describe('placement questions (A11)', () => {
       }
     }
     // J6: grammar distractors stay at or below the level, so N5's 文法形式の判断 asks a particle
-    // (D95); the fixture's few N3 sentences give none.
+    //; the fixture's few N3 sentences give none.
     expect(made).toEqual([
       'kanji-reading@5',
       'grammar-form@5',

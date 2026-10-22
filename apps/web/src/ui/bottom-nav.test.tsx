@@ -49,7 +49,7 @@ describe('BottomNav (IA3)', () => {
     expect(current(navAt(path))).toEqual([tab]);
   });
 
-  it('has no dot: the icon carries real line art, never a kanji (D122)', () => {
+  it('has no dot: the icon carries real line art, never a kanji', () => {
     const nav = navAt('/learn');
     const learn = within(nav).getByRole('link', { name: 'Learn' });
     expect(learn.querySelector('svg')).toBeTruthy();
@@ -85,7 +85,7 @@ describe('BottomNav (IA3)', () => {
     expect(indicator(nav).style.getPropertyValue('--column')).toBe('3');
   });
 
-  it("starts a new screen's highlight where the last screen's was, then moves it (D123)", async () => {
+  it("starts a new screen's highlight where the last screen's was, then moves it", async () => {
     const first = renderWithServices(<BottomNav install={false} />, {
       services: fakeServices(),
       path: '/learn',

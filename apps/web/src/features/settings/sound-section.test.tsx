@@ -4,7 +4,7 @@ import { createMemoryRepos } from '../../test/memory-repos.ts';
 import { fakeServices } from '../../test/render.tsx';
 import { renderSettingsSection } from '../../test/settings-section.tsx';
 
-describe('Appearance → Sound (D125)', () => {
+describe('Appearance → Sound', () => {
   it('is at full volume by default; all the way left is off, and back up turns it on', async () => {
     const repos = createMemoryRepos();
     renderSettingsSection('appearance', { services: fakeServices({ repos }) });

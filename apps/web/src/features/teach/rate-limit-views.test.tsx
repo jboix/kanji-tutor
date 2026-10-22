@@ -50,7 +50,7 @@ beforeEach(() => {
   localStorage.clear();
 });
 
-describe('rate limit in the teach views (A14, D57)', () => {
+describe('rate limit in the teach views (A14)', () => {
   it('sentence help: countdown with Retry disabled during the wait', async () => {
     await openHelp({ explainSentence: vi.fn(rateLimited(30_000)) });
     const box = await waitBox();

@@ -17,7 +17,7 @@ import { wordVariants } from './readings.ts';
 
 /**
  * Words kept even when not common, on a list or in a sentence: fused polite forms the units
- * use, and words the unit authors needed (D40).
+ * use, and words the unit authors needed.
  */
 export const EXTRA_WORDS = [
   'お正月',
@@ -43,7 +43,7 @@ function hanChars(forms: Iterable<string>): Set<string> {
 
 /**
  * Every KANJIDIC2 kanji as `Kanji` (no components yet), for sentence levels. Its level comes
- * from the listed words usually written with it, else from KANJIDIC2 (D56).
+ * from the listed words usually written with it, else from KANJIDIC2.
  */
 export function kanjiTable(
   dic: KanjiDic,
@@ -116,7 +116,7 @@ export function pruneWords(words: readonly JmWord[], needs: WordNeeds): Word[] {
   return words.filter((w) => keep.has(w.id)).map((w) => withVariants(w, toWord(w, needs.jlpt)));
 }
 
-/** The word with its valid reading variants (D56), when it has any. */
+/** The word with its valid reading variants, when it has any. */
 function withVariants(jm: JmWord, word: Word): Word {
   const variants = wordVariants(jm, word.forms[0], word.readings[0]);
   return variants ? { ...word, variants } : word;

@@ -1,5 +1,5 @@
 /**
- * Your class (K5, D134): a few common textbooks as chips, None, or another course typed in, and
+ * Your class (K5): a few common textbooks as chips, None, or another course typed in, and
  * the lesson as a number. Saved as the current lesson tag, "Tobira 第4課".
  */
 export const BOOKS = [

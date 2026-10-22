@@ -60,7 +60,7 @@ function DrillBody(props: BodyProps) {
   return <ExerciseBody {...props} />;
 }
 
-/** The blanked range of a sentence drill, for the help's masked sentence (D63). */
+/** The blanked range of a sentence drill, for the help's masked sentence. */
 function blankOf(drill: Drill) {
   if (drill.kind === 'lookalike') return { from: drill.at, to: drill.at + 1, fill: KANJI_BLANK };
   if (drill.kind === 'cloze') return { from: drill.start, to: drill.end, fill: PATTERN_BLANK };

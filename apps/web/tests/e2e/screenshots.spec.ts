@@ -67,7 +67,7 @@ test('explain: tap a word', async ({ page }) => {
   await expect(page.getByRole('dialog')).toBeVisible();
   await page.getByRole('button', { name: 'Break down with the tutor' }).click();
   await expect(page.getByText(/how this sentence is built/i)).toBeVisible();
-  // The tutor's word note too, in its AI box (D60).
+  // The tutor's word note too, in its AI box.
   await page.getByRole('button', { name: 'Ask the tutor about this word' }).click();
   await expect(
     page.getByRole('dialog').getByRole('note', { name: /^The tutor on / }),

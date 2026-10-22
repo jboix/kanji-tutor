@@ -1,6 +1,6 @@
 /**
- * 文法形式の判断 (J4) for N5 (D95): the catalogue rarely has three other N5 forms that fill the same
- * slot (D79), so an N5 learner is asked the case particle between a noun and its verb or
+ * 文法形式の判断 (J4) for N5: the catalogue rarely has three other N5 forms that fill the same
+ * slot, so an N5 learner is asked the case particle between a noun and its verb or
  * adjective, as the JLPT N5 paper does (ドア（を）閉めます). The distractors must clearly not fit,
  * so they are の, や and か, which join a noun to a noun (or end a question) and never stand
  * before a verb. Another case particle would often fit too (右に / 右を曲がる, 牛乳で / 牛乳と作る),

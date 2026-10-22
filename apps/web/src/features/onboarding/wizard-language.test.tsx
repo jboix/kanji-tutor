@@ -25,7 +25,7 @@ function packs(): PackLoader {
   };
 }
 
-describe('wizard language step (N7b, N9, D136)', () => {
+describe('wizard language step (N7b, N9)', () => {
   it('switches to Spanish at once, and its meanings install on their own after Next', async () => {
     const repos = await readingRepos({ onboardingStep: 'language' });
     const loader = packs();

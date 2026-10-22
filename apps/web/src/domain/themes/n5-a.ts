@@ -1,4 +1,4 @@
-/** N5 units 2–5: meeting people, family, a day, the convenience store. Written for the app (D33). */
+/** N5 units 2–5: meeting people, family, a day, the convenience store. Written for the app. */
 import type { Unit } from './types.ts';
 
 export const N5_A: readonly Unit[] = [

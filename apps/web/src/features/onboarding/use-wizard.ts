@@ -44,7 +44,7 @@ export interface WizardDraft {
   known: KnownDraft;
 }
 
-/** The known-words form in the wizard: Minna's earlier lessons on, no JLPT lists (D134). */
+/** The known-words form in the wizard: Minna's earlier lessons on, no JLPT lists. */
 const WIZARD_KNOWN: KnownDraft = { ...KNOWN_DRAFT, n5: false, minna: true };
 
 export function initialDraft(settings: Settings): WizardDraft {
@@ -110,7 +110,7 @@ function markedOf(done: ImportSummary): OnboardingKnown['marked'] {
 }
 
 /**
- * Marking what you know (K6, D38, D134). The class step marks Minna's earlier lessons and a
+ * Marking what you know (K6). The class step marks Minna's earlier lessons and a
  * pasted list on Next; false if it failed. The JLPT lists the start implies (N4 means N5 is
  * known) are marked at Start reading, which waits for the dictionary. Marking twice adds nothing
  * twice (P2).
@@ -141,7 +141,7 @@ function useKnownStep(saved: OnboardingKnown | undefined, patch: PatchSettings) 
   return { phase, onClass, atStart };
 }
 
-/** Start reading: marks the lists the start implies (D38), then the wizard is done. */
+/** Start reading: marks the lists the start implies, then the wizard is done. */
 function useFinish(patch: PatchSettings, markLists: () => Promise<boolean>) {
   const navigate = useNavigate();
   return async () => {

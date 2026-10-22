@@ -1,4 +1,4 @@
-/** N5 units 10–13: a ramen shop, a department store, cherry blossoms, the weekend (D33). */
+/** N5 units 10–13: a ramen shop, a department store, cherry blossoms, the weekend. */
 import type { Unit } from './types.ts';
 
 export const N5_C: readonly Unit[] = [

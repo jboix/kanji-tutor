@@ -1,5 +1,5 @@
 /**
- * "Take another session" on the session's end (D108): a fresh round of the same kind. The plain
+ * "Take another session" on the session's end: a fresh round of the same kind. The plain
  * daily mix asks Start's resolver (IA3) for its next round, a finished lesson asks it for the
  * saved choice, and any other session (a grammar point, a kanji reading, a unit, reading only)
  * plays its own request again.
@@ -26,7 +26,7 @@ export function againPlan(request: SessionRequest): AgainPlan {
   return isPlain(request) ? { start: 'mix' } : { replay: true };
 }
 
-/** Starts the retry round of `cards` in place of the finished session (D117). */
+/** Starts the retry round of `cards` in place of the finished session. */
 export function useRetry(cards: readonly SessionCard[]) {
   const navigate = useNavigate();
   const { pathname, search } = useLocation();

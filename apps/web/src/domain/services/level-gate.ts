@@ -1,5 +1,5 @@
 /**
- * Level gating (G3, D31, D49, D56): a session shows only sentences at or below the learner's
+ * Level gating (G3): a session shows only sentences at or below the learner's
  * level, and its new words come only from that level or an easier one. Class-lesson words may be
  * one level harder. The words of the current unit and of opened units are taught by the unit, so
  * they pass whatever their JLPT tag, in sentences up to one level above the learner's (or at
@@ -16,10 +16,10 @@ import type { Kanji, LearnerLevel, Sentence, Word } from '../types.ts';
 export interface LevelGate {
   /** The learner's level: the hardest sentence level allowed. */
   level: LearnerLevel;
-  /** Word ids allowed one level harder: the class lesson's (D31). */
+  /** Word ids allowed one level harder: the class lesson's. */
   stretch: ReadonlySet<string>;
   /**
-   * Words a current or opened unit teaches (T3, D56), each with the hardest level a sentence
+   * Words a current or opened unit teaches (T3), each with the hardest level a sentence
    * teaching it may have. They pass the word check whatever their own JLPT tag.
    */
   taught?: ReadonlyMap<string, JlptLevel>;
@@ -41,7 +41,7 @@ export function maxLevelFor(gate: LevelGate, wordId: string): JlptLevel {
 }
 
 /**
- * Sentence levels for the words units teach (D56): one level above the learner's, or the
+ * Sentence levels for the words units teach: one level above the learner's, or the
  * unit's level when that is harder. A word in several units takes the most generous.
  */
 export function taughtLevels(
@@ -62,7 +62,7 @@ function unknownIds(sentence: Sentence, levels: WordLevels): (string | undefined
 
 /**
  * Bound pieces the lists tag erratically (的 as N1, さん as N1): their level is not checked,
- * as the pack's sentence level leaves them out too (D40, D56). They must still resolve.
+ * as the pack's sentence level leaves them out too. They must still resolve.
  */
 const BOUND_POS: ReadonlySet<string> = new Set(['suffix', 'prefix']);
 
@@ -94,7 +94,7 @@ function newWordsFit(gate: LevelGate, sentence: Sentence, levels: WordLevels, wo
  * True when the sentence passes the gate: its level (when it has one: packs, units) is at or
  * below the allowed one, and so is each word it would teach. Sentences without a level (a
  * capture, an AI or own sentence) are judged by those words alone. The word check matters for
- * levelled sentences too: the pack's level leaves pronouns and affixes out (D40), so お前 (N3)
+ * levelled sentences too: the pack's level leaves pronouns and affixes out, so お前 (N3)
  * can sit in an N4 sentence.
  */
 export function fitsGate(
@@ -115,7 +115,7 @@ function hardestKanji(word: Word, kanji: ReadonlyMap<string, Pick<Kanji, 'jlpt'>
 }
 
 /**
- * Word levels as the packs count them (D40), from loaded entries: the JLPT tag, else for a
+ * Word levels as the packs count them, from loaded entries: the JLPT tag, else for a
  * common word the level of its hardest kanji, else N1. Pure.
  */
 export function wordJlptFrom(

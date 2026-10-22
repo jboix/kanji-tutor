@@ -1,5 +1,5 @@
 /**
- * The learner's level (P1, P4, D38): the JLPT level they are working on. Starting from zero is
+ * The learner's level (P1, P4): the JLPT level they are working on. Starting from zero is
  * N5; a list marked as known moves the frontier one level up (N5 known → working on N4). An
  * import only ever raises the level, never lowers one the learner chose.
  */
@@ -20,7 +20,7 @@ export function harderLevel(a: LearnerLevel, b: LearnerLevel): LearnerLevel {
 }
 
 /**
- * The level a learner works on once these JLPT lists are known (D38): N5 known → N4, N4 known
+ * The level a learner works on once these JLPT lists are known: N5 known → N4, N4 known
  * → N3 (the app stops at N3). Undefined when no list was applied.
  */
 export function levelAfterLists(levels: readonly (5 | 4)[]): LearnerLevel | undefined {

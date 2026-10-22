@@ -1,6 +1,6 @@
 /**
  * Lookalike kanji pairs to drill (R8, 待/持): the pairs the learner actually swapped in the last
- * two weeks first, most often first, then pairs of known kanji that share parts (KRADFILE, D13).
+ * two weeks first, most often first, then pairs of known kanji that share parts (KRADFILE).
  */
 import type { LookalikePair } from '../drills/index.ts';
 import { parseItemId } from '../ids.ts';

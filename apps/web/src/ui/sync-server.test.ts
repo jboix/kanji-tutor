@@ -3,7 +3,7 @@ import { syncServer } from './sync-server.ts';
 
 afterEach(() => vi.unstubAllEnvs());
 
-describe('the cloud-save server setting (D146)', () => {
+describe('the cloud-save server setting', () => {
   it('is off without VITE_SYNC_URL', () => {
     vi.stubEnv('VITE_SYNC_URL', '');
     expect(syncServer()).toBeNull();

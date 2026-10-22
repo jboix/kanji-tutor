@@ -1,5 +1,5 @@
 /**
- * Bulk import of words the learner already knows (K6, D14): the approximate JLPT N5/N4 lists,
+ * Bulk import of words the learner already knows (K6): the approximate JLPT N5/N4 lists,
  * Minna no Nihongo lessons mapped to those lists, and a pasted word list, all at level 3.
  */
 import { hasKanji } from '../kana.ts';
@@ -14,7 +14,7 @@ export type JlptList = 'n5' | 'n4';
 
 export interface ImportKnownOptions {
   lists?: readonly JlptList[];
-  /** Minna no Nihongo lessons 1 to n (D14: ≤ 25 ≈ N5, 26–50 ≈ N5 + N4). */
+  /** Minna no Nihongo lessons 1 to n (≤ 25 ≈ N5, 26–50 ≈ N5 + N4). */
   minnaUpTo?: number;
   /** One word per line, kanji or kana. */
   pasted?: string;
@@ -57,7 +57,7 @@ export async function wordsOnList(dictionary: DictionaryRepo, level: 5 | 4 | 3):
   return [...byId.values()].filter((word) => word.jlpt === level);
 }
 
-/** Which lists a Minna lesson range stands for (D14) and the tag its words get. */
+/** Which lists a Minna lesson range stands for and the tag its words get. */
 function minnaLists(upTo: number): [JlptList, string][] {
   const first = `Minna 第1–${Math.min(upTo, 25)}課`;
   return upTo > 25
@@ -144,18 +144,18 @@ async function mark(repos: Repos, picked: Picked, options: ImportKnownOptions) {
   return { marked, already: ids.length - marked };
 }
 
-/** Moves the learner's level past the lists just applied (D38); never lowers it. */
+/** Moves the learner's level past the lists just applied; never lowers it. */
 async function raiseLevel(repos: Repos, options: ImportKnownOptions) {
   const level = levelAfterLists(listTags(options).map(([list]) => LEVEL_OF[list]));
   if (level !== undefined) await raiseLearnerLevel(repos.settings, level);
 }
 
 /**
- * Imports already-known words at level 3 (K6, D14) from the JLPT lists, a Minna lesson range
+ * Imports already-known words at level 3 (K6) from the JLPT lists, a Minna lesson range
  * (≤ 25 → N5, more → N5 + N4) and pasted lines, then derives kanji readings (K3). Kana-only
- * words are skipped: they are never unknown in a sentence (D9). Idempotent (P2): a second run
+ * words are skipped: they are never unknown in a sentence. Idempotent (P2): a second run
  * marks nothing new, never lowers a level and never touches a known word's FSRS card. A list
- * raises the learner's level past it (D38).
+ * raises the learner's level past it.
  */
 export async function importKnown(
   repos: Repos,

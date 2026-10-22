@@ -79,7 +79,7 @@ async function rightReading(page: Page): Promise<string> {
 
 /**
  * 文法形式の判断: the text the blank hides. Before the answer Show meaning gives only the masked
- * translation (U6, D94), which tells two sentences of the same shape apart.
+ * translation (U6), which tells two sentences of the same shape apart.
  */
 async function rightForm(page: Page): Promise<string> {
   const { before, after } = await around(page, '[data-blank]');

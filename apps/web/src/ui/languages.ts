@@ -1,6 +1,6 @@
 import { resolveLanguage } from '../domain/language.ts';
 
-/** Languages of the interface and the tutor (N7b, D36, D52). */
+/** Languages of the interface and the tutor (N7b). */
 export const UI_LANGUAGES = [
   { value: 'en', label: 'English' },
   { value: 'fr', label: 'Français' },

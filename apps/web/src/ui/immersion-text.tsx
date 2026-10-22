@@ -41,7 +41,7 @@ export interface PlacedWord {
 }
 
 /**
- * The glossed words of `prose`, at the offsets the tokenizer gave (D57); none when `prose` is not
+ * The glossed words of `prose`, at the offsets the tokenizer gave; none when `prose` is not
  * a text the check tokenized (it changed since). Never found by substring search: ひ for 日 never
  * lands inside 毎日.
  */

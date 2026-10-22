@@ -71,7 +71,7 @@ export class KanjiTutorDb extends Dexie {
     this.version(2).stores({ words: 'id, *forms, *kana, common, jlpt' });
     // v3: index kanji by JLPT level for the learned screen's coverage (P3).
     this.version(3).stores({ kanji: 'char, phonetic, *components, jlpt' });
-    // v4 (D40): sentence levels and level keys (G2, G3), word clusters (V1) and units (T1).
+    // v4: sentence levels and level keys (G2, G3), word clusters (V1) and units (T1).
     // Rows written before v4 have no level; the next pack update rewrites them with one.
     this.version(4).stores({
       sentences: 'id, source, *wordIds, level, *levelKeys',

@@ -53,7 +53,7 @@ test('no horizontal scroll and 44 px targets at this width (N6)', async ({ page 
   }
 });
 
-/** The welcome, then each wizard step to the summary (P5, D134). */
+/** The welcome, then each wizard step to the summary (P5). */
 const WIZARD: { heading: string; leave: (page: Page) => Promise<void> }[] = [
   { heading: 'Kanji Tutor', leave: (page) => skip(page, 'Start') },
   { heading: 'Your language', leave: (page) => next(page) },

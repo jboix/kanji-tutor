@@ -1,5 +1,5 @@
 /**
- * The quiet re-estimate (A11, D51): from the last 30 days of reviews, the accuracy at each JLPT
+ * The quiet re-estimate (A11): from the last 30 days of reviews, the accuracy at each JLPT
  * level suggests a level. Today may show "Your reviews suggest N4"; the level itself only ever
  * changes when the learner changes it.
  */

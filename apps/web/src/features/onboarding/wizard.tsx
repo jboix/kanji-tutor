@@ -70,7 +70,7 @@ function useKeepInView(area: RefObject<HTMLDivElement | null>) {
 }
 
 /**
- * The dictionary loads in the background from the welcome's Start (D134), and again on a
+ * The dictionary loads in the background from the welcome's Start, and again on a
  * reload past the welcome; after a failure, the header offers a retry.
  */
 function useBackgroundInstall(step: StepId, install: InstallState, onInstall: () => void) {

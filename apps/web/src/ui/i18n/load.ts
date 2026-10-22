@@ -1,5 +1,5 @@
 /**
- * Loading a language's messages (D52). English is in the app shell; French and Spanish are their
+ * Loading a language's messages. English is in the app shell; French and Spanish are their
  * own chunks, fetched only when chosen.
  */
 import type { UiLanguage } from '../languages.ts';

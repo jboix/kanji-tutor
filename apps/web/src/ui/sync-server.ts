@@ -1,5 +1,5 @@
 /**
- * The cloud-save server, from the build setting `VITE_SYNC_URL` (D146), or null. No address is
+ * The cloud-save server, from the build setting `VITE_SYNC_URL`, or null. No address is
  * built in: without one, the app offers no cloud saves (no Log in on the welcome, no /log-in), so
  * a fork that sets nothing works offline and never calls anyone's server. HTTPS only, except
  * localhost for development.

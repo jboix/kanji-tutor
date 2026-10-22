@@ -26,7 +26,7 @@ interface Filter {
   hidden: readonly HiddenReading[];
   /** A blank's hidden answer (A19). */
   answer?: string | undefined;
-  /** The sentence as the learner sees it: a blank's masked one (D89). */
+  /** The sentence as the learner sees it: a blank's masked one. */
   visible: string;
 }
 

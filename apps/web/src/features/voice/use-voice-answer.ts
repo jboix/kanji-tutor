@@ -26,7 +26,7 @@ interface Live {
   recorder: Recorder | undefined;
   released: boolean;
   mounted: boolean;
-  /** When the target was shown, for the answer duration (D9). */
+  /** When the target was shown, for the answer duration. */
   shownAt: number;
 }
 

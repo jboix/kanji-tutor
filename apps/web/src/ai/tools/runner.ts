@@ -1,5 +1,5 @@
 /**
- * The tutor's local tools (A10, D35): Gemini function declarations and their handlers over a
+ * The tutor's local tools (A10): Gemini function declarations and their handlers over a
  * `LearnerView`. Handlers only read the learner's progress; none writes or reaches the network.
  */
 import { z } from 'zod';

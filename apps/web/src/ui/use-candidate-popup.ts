@@ -1,5 +1,5 @@
 /**
- * Keys for the kanji popup (C6, D110), the way an IME's candidate window takes them while the
+ * Keys for the kanji popup (C6), the way an IME's candidate window takes them while the
  * focus stays in the field. The first candidate is highlighted as soon as the popup opens, so
  * Enter turns the kana into it; ↓ and ↑ move from there (never past either end), Escape closes
  * and keeps the kana, Tab closes and moves on. ←/→ move the highlight too while the kana was just

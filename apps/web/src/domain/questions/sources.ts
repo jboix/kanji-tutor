@@ -316,7 +316,7 @@ export const grammarFormMaker: Maker = async (ctx, sentence) => {
     seed: ctx.seed,
     ...skip,
   });
-  // N5 has too few forms of one shape for a form question; it is asked a particle (D95).
+  // N5 has too few forms of one shape for a form question; it is asked a particle.
   const particle = (q: typeof question) =>
     q ?? (ctx.learnerLevel === 5 ? particleN5(ctx, sentence) : undefined);
   return fitting(ctx, sentence, particle(question));

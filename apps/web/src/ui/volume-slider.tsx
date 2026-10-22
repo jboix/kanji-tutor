@@ -66,7 +66,7 @@ function Louder({ value, onChange }: TapProps) {
 }
 
 /**
- * Sound as one knob (U2, D125): all the way left is off, so no separate switch. The speaker on
+ * Sound as one knob (U2): all the way left is off, so no separate switch. The speaker on
  * the left turns it off and back on, the one on the right turns it up, so it never needs a drag.
  */
 export function VolumeSlider({ label, value, resume, onChange }: Props) {

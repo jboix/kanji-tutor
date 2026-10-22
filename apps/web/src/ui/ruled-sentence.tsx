@@ -24,7 +24,7 @@ export interface RuledSentenceProps {
   /** Token indices underlined as the target (2px accent), or highlighted in `context`. */
   target?: readonly number[];
   /**
-   * The target once answered (U2, D105): green when read right, crimson for a miss, ink when
+   * The target once answered (U2): green when read right, crimson for a miss, ink when
    * shown after "I don't know". It stays inline on the baseline: colour and underline only.
    */
   result?: TargetResult | undefined;

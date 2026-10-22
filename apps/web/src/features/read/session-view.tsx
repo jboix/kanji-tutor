@@ -39,7 +39,7 @@ function marks(card: SessionCard, step: number, answered: boolean, all: boolean)
   return { target: spans[step] ?? [], ask, furigana, locked };
 }
 
-/** How the answered target looks in the sentence (D105). */
+/** How the answered target looks in the sentence. */
 const RESULT: Record<AnswerLook, TargetResult> = {
   correct: 'correct',
   wrong: 'missed',
@@ -146,7 +146,7 @@ function SentenceTeach({ card, step, answered }: Omit<SessionViewProps, 'allFuri
 /**
  * The sentence being read (read.html), its feedback, and the tapped-word sheet (R2–R4, R7).
  * A target not answered yet opens the no-reading hint when the teach slot is wired (L2);
- * without it, it can't be tapped (D26 "no peeking").
+ * without it, it can't be tapped ("no peeking").
  */
 export function SessionView({ card, step, answered, allFurigana, onSkip }: SessionViewProps) {
   const [tapped, setTapped] = useState<number>();

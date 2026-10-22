@@ -1,5 +1,5 @@
 /**
- * What today's lesson gives a session (G3, V1, T3, D49): the level gate, the new words in
+ * What today's lesson gives a session (G3, V1, T3): the level gate, the new words in
  * order, the sentences to prefer and the grammar to bring in. With a class lesson, the lesson
  * is the class's. Without one, it is the current unit of the path (or a unit opened for
  * practice), and the level's word clusters fill in after the unit's words.
@@ -69,7 +69,7 @@ async function chosenUnit(repos: Repos, options: LessonPlanOptions) {
 }
 
 /**
- * The words the units teach (D56): the session's unit and every opened unit that is not done.
+ * The words the units teach: the session's unit and every opened unit that is not done.
  * They are never gated out while their unit is worked on, so its 80% can be reached.
  */
 function teaching(unit: UnitView | undefined, path: readonly UnitView[]): UnitView[] {
@@ -79,7 +79,7 @@ function teaching(unit: UnitView | undefined, path: readonly UnitView[]): UnitVi
 
 /**
  * Today's lesson (see the module comment). The words of the unit and of every opened unit are
- * taught there, so they pass the gate in sentences up to one level harder (D56).
+ * taught there, so they pass the gate in sentences up to one level harder.
  */
 export async function lessonPlan(repos: Repos, options: LessonPlanOptions): Promise<LessonPlan> {
   const settings = await repos.settings.get();

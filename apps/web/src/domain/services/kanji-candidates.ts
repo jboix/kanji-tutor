@@ -8,7 +8,7 @@ import type { Repos } from '../repos.ts';
 import type { Word } from '../types.ts';
 
 /**
- * Hiragana: the characters a kana run is made of. Katakana stays katakana (D109): it is how a
+ * Hiragana: the characters a kana run is made of. Katakana stays katakana: it is how a
  * loanword or a name is written, not a reading waiting for its kanji.
  */
 const KANA = /^[ぁ-ゖ]$/u;

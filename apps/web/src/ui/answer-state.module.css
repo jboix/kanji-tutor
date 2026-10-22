@@ -1,4 +1,4 @@
-/* The result card after an answer (U2, D30, D105; W-answered, W-error): a soft tinted card with
+/* The result card after an answer (U2; W-answered, W-error): a soft tinted card with
    a 34px circle. Green (--ok) is for a right answer only; the miss crimson is a correction. */
 .state {
   display: flex;

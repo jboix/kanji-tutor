@@ -108,7 +108,7 @@ describe('ExplainWordSheet with a target still to answer (Issue 31, L3)', () => 
     await within(sheet).findByRole('region', { name: 'How this sentence is built' });
     expect(sheet.textContent).toContain('at the station');
     expect(leaks(sheet.textContent)).toBe(false);
-    // The cached breakdown is in the AI box, marked as a saved answer (D57).
+    // The cached breakdown is in the AI box, marked as a saved answer.
     expect(sheet.querySelector('[data-ai-block=""]')?.textContent).toContain('saved answer');
   });
 

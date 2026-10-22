@@ -1,6 +1,6 @@
 /**
  * Repository ports. Pure interfaces implemented by `src/data` (Dexie) and by in-memory fakes in
- * tests. Features reach them through `useServices()` from `src/ui/services.tsx` (D3).
+ * tests. Features reach them through `useServices()` from `src/ui/services.tsx`.
  */
 
 import type { JlptLevel } from './learner-view.ts';
@@ -204,11 +204,11 @@ export interface PackProgress {
   loaded: number;
   total: number;
   /**
-   * How far the whole item is, 0 to 1, when the loader knows (D135): the dictionary, or a
+   * How far the whole item is, 0 to 1, when the loader knows: the dictionary, or a
    * language pack.
    */
   overall?: number;
-  /** Set while a language pack (meanings and translations) loads (D136). */
+  /** Set while a language pack (meanings and translations) loads. */
   language?: PackLanguage;
 }
 

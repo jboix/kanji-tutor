@@ -1,5 +1,5 @@
 /**
- * Kana words the tokenizer splits (D92): kuromoji cuts some dictionary words written in kana into
+ * Kana words the tokenizer splits: kuromoji cuts some dictionary words written in kana into
  * pieces it knows (わが|まま for わがまま, チーズ|ケーキ, お|つり), which then resolve to the wrong
  * entries (まま as 儘) and come apart in J5 pieces and the word sheet. Where two or three
  * adjacent kana content tokens spell exactly one common dictionary word, they become one token

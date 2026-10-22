@@ -17,7 +17,7 @@ export interface CheckedReading extends ReadingClaim {
   verified: boolean;
   /**
    * Set when the reading is valid but less common: the dictionary's usual reading, which the UI
-   * names inside the AI box (R10, D57), e.g. にほんじん for にっぽんじん.
+   * names inside the AI box (R10), e.g. にほんじん for にっぽんじん.
    */
   preferred?: string;
 }
@@ -254,7 +254,7 @@ export interface ExplainSentenceInput {
   grammar: DetectedGrammar[];
   /** The current and later targets: their readings are never shown (L3). */
   hidden: HiddenTarget[];
-  /** Set for a blank: the answer and its readings are also removed from the reply (D57). */
+  /** Set for a blank: the answer and its readings are also removed from the reply. */
   blank?: BlankHint;
 }
 /** Meaning and grammar of a sentence, before answering, with no target reading (L3). */
@@ -370,7 +370,7 @@ export interface GlossedWord {
 }
 
 /**
- * Where the tokenizer found a glossed word (D57): `texts[text]` from `start` to `end` (UTF-16
+ * Where the tokenizer found a glossed word: `texts[text]` from `start` to `end` (UTF-16
  * offsets) is `words[word]`. Furigana go there and only there, never by substring search.
  */
 export interface GlossPlace {

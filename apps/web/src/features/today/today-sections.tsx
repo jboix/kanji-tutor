@@ -45,7 +45,7 @@ export function Lead({ summary }: { summary: TodaySummary }) {
     n === 0
       ? rich('today.toRead', { sentences, minutes })
       : rich('today.toDo', { sentences, exercises, minutes });
-  // It fills in after the overview (N10), so it fades in rather than pops (D124).
+  // It fills in after the overview (N10), so it fades in rather than pops.
   return (
     <p className={cx(styles.text, 'enter')}>
       {lead} <NewReadings summary={summary} />

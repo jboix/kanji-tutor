@@ -82,7 +82,7 @@
   background-attachment: local;
 }
 
-/* The placeholder is the sentence's own type (D111): Klee One at 23px / 2.3, so it starts where
+/* The placeholder is the sentence's own type: Klee One at 23px / 2.3, so it starts where
    the caret blinks and sits on the same ruled line as the first character typed. */
 .editor::placeholder {
   font: inherit;
@@ -182,7 +182,7 @@
   color: inherit;
 }
 
-/* A red-pen note inside the AI box (D57): an error, or a 〜 style note. */
+/* A red-pen note inside the AI box: an error, or a 〜 style note. */
 .errorMark,
 .styleMark {
   font-size: 14px;

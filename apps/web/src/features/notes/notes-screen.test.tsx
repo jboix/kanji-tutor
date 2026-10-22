@@ -189,7 +189,7 @@ describe('NotesScreen', () => {
     expect(letter.textContent).toContain('You read 3 sentences and got the reading right in 1.');
     expect(letter.textContent).toContain('All 2 misses were long vowels.');
     expect(letter.textContent).toContain("You're offline, so this is the plain letter");
-    // The letter is plain: no AI box around it, only the tutor's status box (D57).
+    // The letter is plain: no AI box around it, only the tutor's status box.
     expect(container.querySelector('[data-ai-block=""]')).toBeNull();
     expect(container.querySelector('[data-ai-block="status"]')?.textContent).toContain('offline');
   });

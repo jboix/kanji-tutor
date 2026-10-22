@@ -2,7 +2,7 @@ import type { JlptList } from '../../domain/services/index.ts';
 import type { LearnerLevel } from '../../domain/types.ts';
 
 /**
- * The welcome wizard's steps, in order (P5, D134): the welcome screen, then six numbered steps.
+ * The welcome wizard's steps, in order (P5): the welcome screen, then six numbered steps.
  * The dictionary loads in the background from the welcome's Start, so it has no step.
  */
 export const STEPS = ['welcome', 'language', 'start', 'class', 'ai', 'feel', 'summary'] as const;
@@ -17,7 +17,7 @@ export type StartChoice = 'zero' | 'n5' | 'n4' | 'n3';
 
 export const START_LEVEL: Record<StartChoice, LearnerLevel> = { zero: 5, n5: 5, n4: 4, n3: 3 };
 
-/** The lists a start stands for (D38): N4 means N5 is known, N3 means N5 and N4 are. */
+/** The lists a start stands for: N4 means N5 is known, N3 means N5 and N4 are. */
 export const START_LISTS: Record<StartChoice, readonly JlptList[]> = {
   zero: [],
   n5: [],
@@ -38,7 +38,7 @@ export const isStep = (value: string | undefined): value is StepId =>
 export const indexOf = (step: StepId) => STEPS.indexOf(step);
 
 /**
- * Where a reload resumes (P5): the saved step. A step from before D134 (the dictionary, what you
+ * Where a reload resumes (P5): the saved step. A step from the older wizard (the dictionary, what you
  * know) starts again at the welcome.
  */
 export function resumeStep(saved: string | undefined): StepId {

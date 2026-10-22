@@ -77,7 +77,7 @@ describe('Settings in the learner language (N7b)', () => {
       await screen.findByText('Les sens et les traductions en français sont installés.'),
     ).toBeTruthy();
   });
-  it('shows a progress bar and a percentage while the pack installs (D137)', async () => {
+  it('shows a progress bar and a percentage while the pack installs', async () => {
     let finish: () => void = () => undefined;
     const installLanguage = vi.fn(
       async (_language: string, onProgress: (p: PackProgress) => void) => {

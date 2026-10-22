@@ -1,4 +1,4 @@
-/** Orchestration over the `Repos` port shared by Today, Read, Kanji and Import (D15). */
+/** Orchestration over the `Repos` port shared by Today, Read, Kanji and Import. */
 
 export {
   type AiSentenceDeps,

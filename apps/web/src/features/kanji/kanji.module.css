@@ -75,7 +75,7 @@
   font-weight: 600;
 }
 
-/* "Often misread" is static teaching content: ink, underlined, never AI red (D57). */
+/* "Often misread" is static teaching content: ink, underlined, never AI red. */
 .misread {
   color: var(--ink);
   text-decoration: underline dotted 1.5px var(--ink-muted);

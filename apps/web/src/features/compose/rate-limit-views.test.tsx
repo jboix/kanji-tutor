@@ -59,7 +59,7 @@ function waitBox(): Promise<HTMLElement> {
 
 afterEach(() => localStorage.clear());
 
-describe('rate limit in Use it (A14, D57)', () => {
+describe('rate limit in Use it (A14)', () => {
   it('shows the countdown with Retry disabled, and keeps the draft', async () => {
     await renderCompose({ correctSentence: vi.fn(rateLimited(30_000)) });
     const box = await waitBox();

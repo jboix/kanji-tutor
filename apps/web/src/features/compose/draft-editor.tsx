@@ -29,9 +29,9 @@ export interface DraftEditorProps {
 /**
  * The sentence field: Klee One on ruled lines. Written with the keyboard's Japanese IME, by voice
  * (I3), or in romaji that turns into kana with kanji spellings to pick in a popup by the kana (C6). The
- * あ switch cycles hiragana, katakana and romaji as typed (D109); capitals give katakana too. The
+ * あ switch cycles hiragana, katakana and romaji as typed; capitals give katakana too. The
  * kana a pick would replace is underlined, as an IME does; a Japanese keyboard switches all of
- * this off (D112), and an IME composition is never touched.
+ * this off, and an IME composition is never touched.
  */
 export function DraftEditor(props: DraftEditorProps) {
   const { text, onChange, error, disabled } = props;

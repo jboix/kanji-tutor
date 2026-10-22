@@ -54,7 +54,7 @@ function Tutor({ data, surface, chips }: { data: WordData; surface: string; chip
   );
 }
 
-/** Before the answer (U5, D63): the word alone, nothing about the sentence it is tested in. */
+/** Before the answer (U5): the word alone, nothing about the sentence it is tested in. */
 function WordOnly({ data, surface }: { data: WordData; surface: string }) {
   return (
     <>
@@ -125,7 +125,7 @@ function hasNote({ sentence, tokenIndex }: WordSheetSlotProps): boolean {
  * Tap a word (A2, A13, explain.html): what the app already knows first, with no AI: every
  * dictionary sense, each kanji with its parts, the sentence's catalogue grammar and translation.
  * The tutor runs only from its buttons (or a question). A particle opens its static note (G5).
- * In a session, nothing in it shows a reading of a target still to be answered (L3, D57).
+ * In a session, nothing in it shows a reading of a target still to be answered (L3).
  */
 export function ExplainWordSheet(props: WordSheetSlotProps) {
   const token = props.sentence.tokens[props.tokenIndex];

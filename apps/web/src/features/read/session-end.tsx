@@ -43,13 +43,13 @@ export interface SessionEndProps {
   cards: SessionCard[];
   results: Answered[];
   drills?: DrillResult[];
-  /** When the session was built; undefined for a session saved before D116. */
+  /** When the session was built; undefined for a session saved by older versions. */
   startedAt?: number | undefined;
   /** The unit practised, for a way back to it (T3). */
   unit?: string | undefined;
   /** The lesson part the session was (S3): it is marked done, and the next one offered. */
   lesson?: LessonPart | undefined;
-  /** What "Next session" starts (D108). */
+  /** What "Next session" starts. */
   again: AgainPlan;
 }
 
@@ -100,7 +100,7 @@ function NextPart({ unit, next }: { unit: string; next: NonNullable<Next> }) {
   );
 }
 
-/** "Next session": a fresh round of the same kind (D108). */
+/** "Next session": a fresh round of the same kind. */
 function NextSession({ plan }: { plan: AgainPlan }) {
   const t = useT();
   const { again, busy } = useAgain(plan);
@@ -139,7 +139,7 @@ const RetryIcon = () => (
   </svg>
 );
 
-/** "Retry 4 missed": a short round of only the missed cards, right away (D117). */
+/** "Retry 4 missed": a short round of only the missed cards, right away. */
 function RetryButton({ missed }: { missed: readonly Missed[] }) {
   const t = useT();
   const cards = useMemo(() => retryCards(missed), [missed]);
@@ -168,7 +168,7 @@ function EndActions({ missed, at, ...main }: ActionsProps) {
   );
 }
 
-/** What the session met first (D115); undefined while it is looked up. */
+/** What the session met first; undefined while it is looked up. */
 function useMet(tally: SessionTally, startedAt: number | undefined) {
   const { repos } = useServices();
   const [met, setMet] = useState<MetFirst[]>();
@@ -189,7 +189,7 @@ function useMet(tally: SessionTally, startedAt: number | undefined) {
 
 /**
  * When each part rises in (W-end): a later part comes sooner when one before it is not shown.
- * The actions come right after the counts, not after the lists (D132).
+ * The actions come right after the counts, not after the lists.
  */
 function timeline(newShown: boolean) {
   const again = 1.35 + (newShown ? 0.85 : 0);
@@ -197,7 +197,7 @@ function timeline(newShown: boolean) {
 }
 
 /**
- * End of a session (W-end, C-end; D115–D117): the check, お疲れさまでした, three plain counts,
+ * End of a session (W-end, C-end): the check, お疲れさまでした, three plain counts,
  * what was new, what to look at again, then Retry and the next session. No praise, no score (no
  * gamification); Today is one tap away in the bottom bar.
  */

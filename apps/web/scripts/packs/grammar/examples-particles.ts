@@ -1,6 +1,6 @@
 /**
  * Particle cases (G5): [entry id, sentence, the particle's surface, whether it must match]. The
- * entry must match the first token spelled that way. Sentences are written for these tests (D29).
+ * entry must match the first token spelled that way. Sentences are written for these tests.
  * Every use example of every entry is checked too, in detect.test.ts.
  */
 export type ParticleCase = readonly [id: string, sentence: string, surface: string, hit: boolean];

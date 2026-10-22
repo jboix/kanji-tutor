@@ -1,5 +1,5 @@
 /**
- * The app's own content in the learner's language (N9, D53). French and Spanish texts are loaded
+ * The app's own content in the learner's language (N9). French and Spanish texts are loaded
  * on demand, one chunk per language, so they stay out of the app shell; English is the entries
  * themselves. A missing text falls back to English, and the result says so, for the UI to mark.
  */

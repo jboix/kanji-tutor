@@ -1,6 +1,6 @@
 /**
- * The link state of a new round on the Read screen: "Take another session" (D108) stamps it, and
- * a retry round (D117) carries only the missed cards with it.
+ * The link state of a new round on the Read screen: "Take another session" stamps it, and
+ * a retry round carries only the missed cards with it.
  */
 import type { SessionCard } from '../../domain/session-types.ts';
 
@@ -15,7 +15,7 @@ export function roundOf(state: unknown): number {
   return typeof state.round === 'number' ? state.round : 0;
 }
 
-/** The link state of a retry round (D117): another round stamp, and only the missed cards. */
+/** The link state of a retry round: another round stamp, and only the missed cards. */
 export interface RetryState extends AgainState {
   retry: SessionCard[];
 }

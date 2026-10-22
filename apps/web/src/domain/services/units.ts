@@ -1,5 +1,5 @@
 /**
- * The lesson path over the `Repos` port (T3, T4, V1, D49): unit states, the stored progress per
+ * The lesson path over the `Repos` port (T3, T4, V1): unit states, the stored progress per
  * unit, and the words, sentences and grammar a session takes from the active lesson.
  */
 import type { Repos } from '../repos.ts';

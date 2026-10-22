@@ -80,3 +80,77 @@
   line-height: 1.5;
   color: var(--ink-muted);
 }
+
+/* A way in, once chosen: its steps, the form or the code, and a way back to the list. */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.input {
+  height: var(--tap);
+  border: 0;
+  border-radius: 22px;
+  background: var(--paper-soft);
+  color: var(--ink);
+  padding: 0 16px;
+  font-family: inherit;
+  font-size: var(--text-md);
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* The linking code, read out and typed on the other device: large, spaced, tabular. */
+.code {
+  margin: 0;
+  padding: 18px 0;
+  border-radius: var(--radius-panel);
+  background: var(--paper-soft);
+  color: var(--ink);
+  font-size: 34px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.message {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.error {
+  composes: message;
+  font-weight: 500;
+}
+
+.back {
+  align-self: flex-start;
+  min-height: var(--tap);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.back:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

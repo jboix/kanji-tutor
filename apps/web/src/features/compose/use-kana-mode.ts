@@ -1,5 +1,5 @@
 /**
- * The sentence field's typing mode (C6, D109, D112), kept for the app session. A Japanese
+ * The sentence field's typing mode (C6), kept for the app session. A Japanese
  * keyboard typing in the field switches ours off (`native`), so its own conversion is never
  * hindered; a press on the switch turns ours back on, and that choice then holds for the session.
  */

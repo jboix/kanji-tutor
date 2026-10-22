@@ -7,7 +7,7 @@ import {
   raiseLearnerLevel,
 } from './learner-level.ts';
 
-describe('learner level (D38)', () => {
+describe('learner level', () => {
   it('is N5 when never set', () => {
     expect(learnerLevelOf({})).toBe(5);
     expect(learnerLevelOf({ learnerLevel: 3 })).toBe(3);

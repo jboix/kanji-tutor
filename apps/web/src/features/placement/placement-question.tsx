@@ -53,7 +53,7 @@ function Body({ item }: { item: PlacementQuestion }) {
 
 /**
  * The help bar (U6) for placement's sentence questions: meaning and explanation of the stem as
- * shown, never the answer (D63). 読解 keeps its own layout and only the skip.
+ * shown, never the answer. 読解 keeps its own layout and only the skip.
  */
 function PlacementHelp({ item, skip }: { item: PlacementQuestion; skip: ReactNode }) {
   if (item.kind === 'comprehension') return skip;

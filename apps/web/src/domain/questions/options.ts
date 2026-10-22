@@ -87,7 +87,7 @@ function sameWord(word: string, meaning: ReadonlySet<string>): boolean {
 }
 
 /**
- * The translation with every word of the blank's meaning masked (J3, J4, D94): "I want to drink
+ * The translation with every word of the blank's meaning masked (J3, J4): "I want to drink
  * tea" with "want" → "I ___ to drink tea". Undefined when no word of the meaning is in it: the
  * translation then says it in other words, and would give the blank away.
  */
@@ -103,7 +103,7 @@ export function maskedMeaning(translation: string, glosses: readonly string[]): 
   return masked ? text.replace(new RegExp(`${MASK}(?:\\s+${MASK})+`, 'gu'), MASK) : undefined;
 }
 
-/** A blank question's translation, and its masked hint when there is one (D94). */
+/** A blank question's translation, and its masked hint when there is one. */
 export function meaningFields(
   translation: string | undefined,
   glosses: readonly string[],

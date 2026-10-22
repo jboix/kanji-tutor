@@ -18,7 +18,7 @@ function Translation({ example }: { example: Example }) {
 /**
  * Example sentences on ruled rows, the grammar span underlined in ink, their words tappable, and
  * their translations. Static content: no card, tint or seal, so nothing here looks like the tutor
- * (A18, D64). A sentence the tutor wrote keeps its own mark, from `RuledSentence`.
+ * (A18). A sentence the tutor wrote keeps its own mark, from `RuledSentence`.
  */
 export function ExampleList({ examples }: { examples: readonly Example[] }) {
   return (

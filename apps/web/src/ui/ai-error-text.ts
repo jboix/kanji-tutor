@@ -1,4 +1,4 @@
-/** An AI error in the learner's language (D52). Google's own wording, if any, stays as sent. */
+/** An AI error in the learner's language. Google's own wording, if any, stays as sent. */
 import type { AiError } from '../ai/types.ts';
 import type { Translate } from './i18n/types.ts';
 

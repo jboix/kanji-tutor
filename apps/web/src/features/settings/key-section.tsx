@@ -105,7 +105,7 @@ function RemoveKey({ onRemove }: { onRemove: () => Promise<void> }) {
 
 /**
  * The key form. `draft` is undefined until the learner types, and the field then shows the saved
- * key, masked, so Show reveals it (D120).
+ * key, masked, so Show reveals it.
  */
 function useKeyForm(settings: Settings, onPatch: PatchSettings, saveOnTest: boolean) {
   const [typed, setDraft] = useState<string>();
@@ -139,7 +139,7 @@ function useKeyForm(settings: Settings, onPatch: PatchSettings, saveOnTest: bool
 
 /**
  * Gemini key, typed at runtime and kept in IndexedDB only (N3). The field holds the saved key
- * masked; Show reveals it on this screen, and it is never logged or put anywhere else (D120).
+ * masked; Show reveals it on this screen, and it is never logged or put anywhere else.
  */
 export function KeySection({ settings, onPatch, help = true, saveOnTest = false }: Props) {
   const id = useId();

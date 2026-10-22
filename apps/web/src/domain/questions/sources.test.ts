@@ -1,5 +1,5 @@
 /**
- * Question material rules from the quality review (D54): tokens whose reading the tokenizer may
+ * Question material rules from the quality review: tokens whose reading the tokenizer may
  * get wrong or that are numbers are never asked, lookalikes are everyday kanji, and grammar is
  * asked at the learner's level and the one below.
  */

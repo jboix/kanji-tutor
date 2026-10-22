@@ -46,7 +46,7 @@ export interface KanjiDetail {
 const MISREAD_WINDOW_MS = 30 * DAY_MS;
 const EXAMPLES = 3;
 
-/** On readings stay katakana; kun readings show okurigana after ・ (D12). */
+/** On readings stay katakana; kun readings show okurigana after ・. */
 export function readingLabel(reading: string): string {
   return reading.replaceAll('.', '・');
 }

@@ -1,6 +1,6 @@
 /* JLPT-shaped questions (J1–J5, T6) in the app's look: read.html's sentence and rules, numbered
    option rows like the exam, pills for actions. Green (--ok) only marks the right answer once
-   it was chosen. A wrong choice is struck in ink: static grading never uses the AI red (D64). */
+   it was chosen. A wrong choice is struck in ink: static grading never uses the AI red. */
 
 .header {
   display: flex;

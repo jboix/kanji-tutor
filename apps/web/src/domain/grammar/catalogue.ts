@@ -1,4 +1,4 @@
-/** The full N5–N3 grammar catalogue (G1), written for this app (D29). */
+/** The full N5–N3 grammar catalogue (G1), written for this app. */
 import { N3_A } from './n3-a.ts';
 import { N3_B } from './n3-b.ts';
 import { N3_C } from './n3-c.ts';

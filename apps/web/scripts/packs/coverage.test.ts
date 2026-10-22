@@ -48,7 +48,7 @@ describe('sentence level', () => {
     expect(sentenceLevel('駅鬱', [token('a', '駅')], [], ctx)).toBe(1);
   });
 
-  it('lets a word cover its own kanji (D56): only kanji outside the counted words count', () => {
+  it('lets a word cover its own kanji: only kanji outside the counted words count', () => {
     expect(sentenceLevel('紹', [token('a', '紹')], [], ctx)).toBe(5);
     expect(uncoveredKanji('駅紹', [token('a', '駅'), token('zz', '紹', 'suffix')])).toEqual(['紹']);
     expect(sentenceLevel('駅紹', [token('a', '駅'), token('zz', '紹', 'suffix')], [], ctx)).toBe(3);
@@ -93,7 +93,7 @@ describe('coverage selection', () => {
   });
 });
 
-describe('coverage quotas and pinned sentences (D56)', () => {
+describe('coverage quotas and pinned sentences', () => {
   const base = {
     core: new Set(['a', 'b', 'c', 'd', 'e']),
     wordLevel,

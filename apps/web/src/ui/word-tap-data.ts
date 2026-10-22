@@ -1,5 +1,5 @@
 /**
- * Pure helpers behind tap-a-word (U5, D63): which tokens open the word sheet, a sentence with
+ * Pure helpers behind tap-a-word (U5): which tokens open the word sheet, a sentence with
  * the answer masked out for sheets opened before answering, and sentences for text without one.
  */
 import { blankText } from '../domain/drills/index.ts';

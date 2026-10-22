@@ -16,7 +16,7 @@
   background: var(--accent);
 }
 
-/* kanji.html: a reading that is recognised but often misread; ink, not AI red (D57). */
+/* kanji.html: a reading that is recognised but often misread; ink, not AI red. */
 .misread .filled {
   background: var(--ink);
 }

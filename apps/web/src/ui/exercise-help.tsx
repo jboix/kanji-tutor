@@ -1,7 +1,7 @@
 /**
- * One help bar under every exercise but 読解 (U6, D66): Show meaning, Explain this sentence (the
+ * One help bar under every exercise but 読解 (U6): Show meaning, Explain this sentence (the
  * teach slot, static first, the tutor on a press) and Skip, in that order, in the same place.
- * Before the answer the caller passes the masked card (D63), so the help gives nothing away.
+ * Before the answer the caller passes the masked card, so the help gives nothing away.
  */
 import { createContext, type ReactNode, use, useState } from 'react';
 import { questionHintIn, questionTranslationIn, translationIn } from '../domain/localized.ts';
@@ -21,7 +21,7 @@ export interface ExerciseHelpProps {
     | { kind?: string; translation?: string; sentenceId?: string; hint?: string }
     | undefined;
   /**
-   * What "Explain this sentence" explains: the masked card before the answer (D63), and for a
+   * What "Explain this sentence" explains: the masked card before the answer, and for a
    * blank what it hides, for the tutor's hint (A19).
    */
   explain?: { card: SessionCard; step: number; blank?: BlankAnswer } | undefined;

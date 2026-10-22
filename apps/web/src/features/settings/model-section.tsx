@@ -91,7 +91,7 @@ function ModelPicker({ label, current, hint, now, onUse }: PickerProps) {
   );
 }
 
-/** Fast and teacher models: a listed one or any other ID (N3, A12, D34). */
+/** Fast and teacher models: a listed one or any other ID (N3, A12). */
 export function ModelSection({ settings, onPatch, now = Date.now }: Props) {
   const at = now();
   const { t } = useI18n();

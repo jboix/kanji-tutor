@@ -1,4 +1,4 @@
-/* The AI box (D57): a AI red rule, the seal, a "Tutor · model" line. Only AI text uses it. */
+/* The AI box: a AI red rule, the seal, a "Tutor · model" line. Only AI text uses it. */
 .block {
   display: flex;
   gap: 12px;

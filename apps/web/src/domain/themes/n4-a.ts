@@ -1,4 +1,4 @@
-/** N4 units 14–16: hot springs, a summer festival, sorting rubbish (D33). */
+/** N4 units 14–16: hot springs, a summer festival, sorting rubbish. */
 import type { Unit } from './types.ts';
 
 export const N4_A: readonly Unit[] = [

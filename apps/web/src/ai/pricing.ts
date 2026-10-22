@@ -1,4 +1,4 @@
-/** USD per million tokens, for the cost estimate on the settings page (A9, A12, D34). */
+/** USD per million tokens, for the cost estimate on the settings page (A9, A12). */
 export interface ModelPrice {
   input: number;
   output: number;
@@ -11,7 +11,7 @@ export interface PricePeriod extends ModelPrice {
   until?: string;
 }
 
-/** Gemini 3.8 Flash launch price until 2026-12-31, then the regular price (D34). */
+/** Gemini 3.8 Flash launch price until 2026-12-31, then the regular price. */
 const FLASH_3_8: readonly PricePeriod[] = [
   { input: 0.75, output: 3.75, cachedInput: 0.075, until: '2027-01-01' },
   { input: 1.5, output: 7.5, cachedInput: 0.15 },
@@ -30,7 +30,7 @@ export const PRICES: Readonly<Record<string, readonly PricePeriod[]>> = {
   'gemini-2.5-flash': [{ input: 0.3, output: 2.5, cachedInput: 0.03 }],
 };
 
-/** Models offered as chips in Settings; any other id can be typed (D34). */
+/** Models offered as chips in Settings; any other id can be typed. */
 export const MODEL_CHOICES: readonly string[] = [
   'gemini-3.5-flash-lite',
   'gemini-3.1-flash-lite',

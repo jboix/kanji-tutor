@@ -71,7 +71,7 @@ export function Unconfirmed({ readings }: { readings: readonly CheckedReading[] 
   );
 }
 
-/** The mark on an AI reply that came back in another language than asked (D35). */
+/** The mark on an AI reply that came back in another language than asked. */
 export function OffLanguage({ off }: { off: boolean | undefined }) {
   const t = useT();
   if (!off) return null;

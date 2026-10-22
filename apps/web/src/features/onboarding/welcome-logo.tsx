@@ -33,7 +33,7 @@ const strokeTiming = (start: number, length: number) =>
   ({ '--t': `${start}ms`, '--d': `${length}ms` }) as CSSProperties;
 
 /**
- * The app icon drawing itself (D134): the blue tile, 漢 written stroke by stroke, then the
+ * The app icon drawing itself: the blue tile, 漢 written stroke by stroke, then the
  * tutor's crimson seal stamped in the corner. Decorative: the screen's heading names the app.
  */
 export function WelcomeLogo({ id }: { id: string }) {

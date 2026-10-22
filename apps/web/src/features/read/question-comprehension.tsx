@@ -20,7 +20,7 @@ import { useQuestion } from './use-question.ts';
 interface PassageProps {
   set: ComprehensionSet;
   evidence: number | undefined;
-  /** The question asked: before its answer the lines open in no-spoil mode (D63). */
+  /** The question asked: before its answer the lines open in no-spoil mode. */
   question: ComprehensionQuestion;
   answered: boolean;
 }

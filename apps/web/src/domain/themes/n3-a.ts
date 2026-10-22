@@ -1,4 +1,4 @@
-/** N3 units 28–30: honorific speech, dialects, earthquakes and preparedness (D33). */
+/** N3 units 28–30: honorific speech, dialects, earthquakes and preparedness. */
 import type { Unit } from './types.ts';
 
 export const N3_A: readonly Unit[] = [

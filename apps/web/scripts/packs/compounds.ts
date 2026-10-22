@@ -1,5 +1,5 @@
 /**
- * Unit compounds (T3, D56): kuromoji splits some unit words (自己紹介 → 自己 紹介, 誕生日 → 誕生 日),
+ * Unit compounds (T3): kuromoji splits some unit words (自己紹介 → 自己 紹介, 誕生日 → 誕生 日),
  * so their word id would never be a token and the reading loop could never target them. Where a
  * sentence writes such a word exactly, its tokens are joined back into one token with the unit
  * word's id and reading. Pure.
@@ -44,7 +44,7 @@ function matchAt(tokens: readonly Token[], i: number, compounds: ReadonlyMap<str
 }
 
 /**
- * A unit passage's tokens with each of the unit's own words claimed (D56): a token written
+ * A unit passage's tokens with each of the unit's own words claimed: a token written
  * exactly as a unit word, read as another entry by the tokenizer (分別 as ふんべつ for ぶんべつ,
  * 故郷 as こきょう for ふるさと), takes the unit word's id and reading. Only for passages, which
  * are written to use those words; a Tatoeba 分別 may well be ふんべつ.
@@ -81,7 +81,7 @@ export function joinCompounds(
 const KANA_TEXT = /^[\p{Script=Hiragana}\p{Script=Katakana}ー]{3,}$/u;
 
 /**
- * Kana words kuromoji may split, by reading: what `joinKanaWords` joins in the pipeline (D92),
+ * Kana words kuromoji may split, by reading: what `joinKanaWords` joins in the pipeline,
  * chosen by the same rule as at run time (`kanaWordOf`: the one common entry, not conjugating).
  */
 export function kanaWordIds(words: readonly JmWord[]): Map<string, string> {

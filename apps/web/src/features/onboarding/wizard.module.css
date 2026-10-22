@@ -189,7 +189,7 @@
   text-transform: uppercase;
 }
 
-/* Klee One: textbook names and lesson tags mix Latin and kanji (D16). */
+/* Klee One: textbook names and lesson tags mix Latin and kanji. */
 .input {
   width: 100%;
   min-height: var(--tap);
@@ -259,7 +259,7 @@
   cursor: pointer;
 }
 
-/* The label over the tutor's sample note (D134). */
+/* The label over the tutor's sample note. */
 .sampleLabel {
   margin: 4px 0 -8px;
   font-size: var(--text-sm);

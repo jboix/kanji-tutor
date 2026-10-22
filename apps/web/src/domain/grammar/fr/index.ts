@@ -1,4 +1,4 @@
-/** French grammar and particle texts (N9, D53), loaded on demand by `loadContentLanguage`. */
+/** French grammar and particle texts (N9), loaded on demand by `loadContentLanguage`. */
 import type { ById, FunctionWordText, GrammarText } from '../../content-types.ts';
 import { FR_N3_A } from './n3-a.ts';
 import { FR_N3_B } from './n3-b.ts';

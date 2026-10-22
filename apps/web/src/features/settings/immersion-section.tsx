@@ -59,7 +59,7 @@ interface Props {
 }
 
 /**
- * Settings → Tutor → "Explanations in" (M1, D51): Auto, the learner's language, mixed or
+ * Settings → Tutor → "Explanations in" (M1): Auto, the learner's language, mixed or
  * Japanese. Japanese is written at the learner's level; new words get furigana and a gloss.
  */
 export function ImmersionSection({ settings, onPatch }: Props) {

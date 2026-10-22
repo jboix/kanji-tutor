@@ -1,4 +1,4 @@
-/** N5 units 6–9: the station, weather and seasons, the Japanese home, vending machines (D33). */
+/** N5 units 6–9: the station, weather and seasons, the Japanese home, vending machines. */
 import type { Unit } from './types.ts';
 
 export const N5_B: readonly Unit[] = [

@@ -87,7 +87,7 @@ function waitBox(): Promise<HTMLElement> {
   );
 }
 
-describe('rate limit in the handwriting AI fallback (A14, D57)', { timeout: 20_000 }, () => {
+describe('rate limit in the handwriting AI fallback (A14)', { timeout: 20_000 }, () => {
   it('draw: shows the countdown with Retry disabled during the wait', async () => {
     await render({ recognizeHandwriting: vi.fn(rateLimited(30_000)) });
     await drawAndAsk();

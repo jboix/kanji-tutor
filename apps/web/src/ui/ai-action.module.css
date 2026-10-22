@@ -1,4 +1,4 @@
-/* A press that sends a request (A18, D64): the small 解 seal, the label, then "1 request" (or
+/* A press that sends a request (A18): the small 解 seal, the label, then "1 request" (or
    "Saved") in muted ink. The seal is the only AI red: the button itself keeps its usual look. */
 .action {
   gap: 8px;
@@ -54,7 +54,7 @@
   cursor: default;
 }
 
-/* The Ask box: a bare arrow sends (D106); the line under the field says it uses AI. */
+/* The Ask box: a bare arrow sends; the line under the field says it uses AI. */
 .ask {
   display: flex;
   flex-direction: column;

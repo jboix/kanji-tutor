@@ -1,5 +1,5 @@
 /**
- * The one way a feature starts an AI task (A18, D64). Every press that sends a request to Gemini
+ * The one way a feature starts an AI task (A18). Every press that sends a request to Gemini
  * is an `AiAction`: the 解 seal, "uses AI" in its accessible name and a visible "1 request" hint.
  * Before it shows, it asks the cache (`peek`): an answer the tutor already gave reads "Saved",
  * and pressing it opens that answer with no request (the task answers from the cache, A15).
@@ -221,7 +221,7 @@ export interface AiAskInputProps {
 
 /**
  * The Ask box (A4): a question field whose every submit, typed or dictated, sends one request.
- * Its send button is the bare arrow of W-answered (D106); its name says it uses AI, and the line
+ * Its send button is the bare arrow of W-answered; its name says it uses AI, and the line
  * under it says what a question costs (A18).
  */
 export function AiAskInput(props: AiAskInputProps) {

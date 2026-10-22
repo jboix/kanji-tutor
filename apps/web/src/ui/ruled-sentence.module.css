@@ -137,7 +137,7 @@
   color: var(--accent);
 }
 
-/* Once answered (U2, D105): the word keeps its place on the baseline and only changes colour,
+/* Once answered (U2): the word keeps its place on the baseline and only changes colour,
    with its furigana above in the same colour. No box, background, shadow or movement. */
 .correct {
   border-bottom-color: var(--ok);

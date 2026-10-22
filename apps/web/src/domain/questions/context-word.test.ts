@@ -1,5 +1,5 @@
 /**
- * 文脈規定 (J3) regressions from the question quality review (D54): a verb is blanked with its
+ * 文脈規定 (J3) regressions from the question quality review: a verb is blanked with its
  * ending and every option conjugated alike; numbers, counters, compound parts and given-away
  * words are never blanked; options keep the answer's shape and everyday spelling.
  */

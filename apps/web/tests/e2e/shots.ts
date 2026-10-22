@@ -65,7 +65,7 @@ export async function shotBothThemes(page: Page, name: string, options: ShotOpti
 const DAY = 24 * 60 * 60 * 1000;
 const TASKS = ['explainWord', 'explainMistake', 'explainSentence', 'memoryHook', 'followUp'];
 
-/** One logged AI call `daysAgo` days back (an `AiLogEntry`, D20). */
+/** One logged AI call `daysAgo` days back (an `AiLogEntry`). */
 function logEntry(daysAgo: number, index: number, now: number) {
   const cached = index % 4 === 3;
   return {

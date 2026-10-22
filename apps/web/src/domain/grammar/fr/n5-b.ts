@@ -1,4 +1,4 @@
-/** French texts for N5 grammar, part B (N9, D53). Written for this app. */
+/** French texts for N5 grammar, part B (N9). Written for this app. */
 import type { ById, GrammarText } from '../../content-types.ts';
 
 export const FR_N5_B: ById<GrammarText> = {

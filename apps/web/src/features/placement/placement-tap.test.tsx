@@ -1,4 +1,4 @@
-/** Placement in the U5/U6 sweep (D63, D66): no word opens, and the help bar hides the meaning. */
+/** Placement in the U5/U6 sweep: no word opens, and the help bar hides the meaning. */
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
@@ -36,7 +36,7 @@ describe('placement (U5, U6)', () => {
     expect(document.querySelector('[data-exercise-help]')).toBeTruthy();
     expect(screen.queryByText('I read while ___.')).toBeNull();
     await userEvent.click(screen.getByRole('button', { name: 'Show meaning' }));
-    // A blank shows its masked meaning only (D94), never the full translation.
+    // A blank shows its masked meaning only, never the full translation.
     expect(screen.getByText('I read while ___.')).toBeTruthy();
     expect(screen.queryByText('I read while waiting.')).toBeNull();
     expect(screen.getByRole('button', { name: "I don't know" })).toBeTruthy();

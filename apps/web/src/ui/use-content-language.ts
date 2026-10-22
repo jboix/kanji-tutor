@@ -8,7 +8,7 @@ import { useI18n } from './i18n/i18n.tsx';
 
 /**
  * The app's content texts in the learner's language (N9): the lookup maps for the interface
- * language (D52), so they switch with it; English until that language's chunk has loaded.
+ * language, so they switch with it; English until that language's chunk has loaded.
  */
 export function useContentLanguage(): ContentLookup {
   const { language } = useI18n();

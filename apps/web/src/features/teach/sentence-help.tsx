@@ -173,7 +173,7 @@ function HelpSheet(props: SentenceHelpSlotProps & { onClose: () => void }) {
 /**
  * "Explain this sentence" before answering (L3): the translation and the catalogue's grammar
  * notes first (offline too); the tutor's explanation, every reading still to answer removed, only
- * after "Ask the tutor" (D41: AI only when asked).
+ * after "Ask the tutor" (AI only when asked).
  */
 export function SentenceHelp(props: SentenceHelpSlotProps) {
   const t = useT();

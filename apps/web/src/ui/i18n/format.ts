@@ -1,4 +1,4 @@
-/** Dates, numbers and costs in the learner's language (N7b, D52). */
+/** Dates, numbers and costs in the learner's language (N7b). */
 import type { UiLanguage } from '../languages.ts';
 import { LOCALES } from './translate.ts';
 

@@ -75,7 +75,7 @@ function allowedLevel(state: State, gate: LevelGate, card: SessionCard): JlptLev
   return Math.min(state.level, ...levels) as JlptLevel;
 }
 
-/** Targets whose own level is checked: not taught by a unit, not a bound piece (D56). */
+/** Targets whose own level is checked: not taught by a unit, not a bound piece. */
 function checked(gate: LevelGate, card: SessionCard) {
   return card.targets.filter((t) => {
     const pos = card.sentence.tokens[t.tokenIndex]?.pos ?? '';

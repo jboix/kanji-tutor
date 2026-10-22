@@ -1,4 +1,4 @@
-/** N4 units 17–19: a part-time job, the clinic, the shinkansen (D33). */
+/** N4 units 17–19: a part-time job, the clinic, the shinkansen. */
 import type { Unit } from './types.ts';
 
 export const N4_B: readonly Unit[] = [

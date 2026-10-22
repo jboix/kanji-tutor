@@ -2,7 +2,7 @@ import { expect, type Page, test } from '@playwright/test';
 import { blockGemini, nextStep, startWizard, stepHeading } from './helpers.ts';
 
 /**
- * The welcome wizard (P5, P6, D134), the long way: N4, Minna with its earlier lessons known, a
+ * The welcome wizard (P5, P6), the long way: N4, Minna with its earlier lessons known, a
  * key checked with Test key, then a change from the summary. Gemini stays blocked; only the test-key request gets
  * a routed fake answer, in this spec alone.
  */
@@ -115,6 +115,6 @@ test('the steps are reachable by keyboard alone', async ({ page }) => {
   await page.keyboard.press('Tab');
   await page.keyboard.press('ArrowDown');
   await expect(page.getByRole('radio', { name: 'Français' })).toBeChecked();
-  // Choosing a language switches the wizard to it at once (D52), and stays on the step.
+  // Choosing a language switches the wizard to it at once, and stays on the step.
   await expect(stepHeading(page, 'Votre langue')).toBeVisible();
 });

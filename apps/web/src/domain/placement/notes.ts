@@ -9,7 +9,7 @@ import {
 } from './staircase.ts';
 
 /**
- * What an area's note says, worded by the UI (D52): steady at one level and not yet at a harder
+ * What an area's note says, worded by the UI: steady at one level and not yet at a harder
  * one ("Kanji readings: steady at N5; N4 not yet."), steady up to a level, or not yet steady.
  */
 export type AreaNote =

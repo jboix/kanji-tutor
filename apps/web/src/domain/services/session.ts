@@ -1,6 +1,6 @@
 /**
  * Builds a reading session (R2) over the `Repos` port: loads the pool, drops sentences whose
- * pre-tokenized readings JMdict does not confirm (D13), runs the i+1 selector and mixes in
+ * pre-tokenized readings JMdict does not confirm, runs the i+1 selector and mixes in
  * drills (R8).
  */
 
@@ -180,7 +180,7 @@ async function s4Exercises(
 /**
  * Questions for the mixer's free slots: first on known words, then, when those run short (a
  * learner from zero), on the session's own words, each placed after the cards that introduce
- * its words (V2, D56).
+ * its words (V2).
  */
 async function slotQuestions(
   repos: Repos,
@@ -205,7 +205,7 @@ async function slotQuestions(
 
 /**
  * The current unit's passage as one more exercise when the others are too few for the reading
- * cards (V2, D56): a learner from zero has few questions to answer. Not in a unit session,
+ * cards (V2): a learner from zero has few questions to answer. Not in a unit session,
  * which ends with the passage anyway.
  */
 async function passageIfShort(
@@ -285,7 +285,7 @@ async function tailFor(repos: Repos, options: BuildSessionOptions) {
  * then due words, then fresh ones of the current lesson or unit and cluster (T3, V1), then new
  * words that are a sentence's only unknown. Every sentence is at or below the learner's level
  * (G3), verified and i+1, with 1–2 targets, and every content token's reading fits JMdict; a
- * lone-kanji target must have its most likely reading, since context is not modelled (D13).
+ * lone-kanji target must have its most likely reading, since context is not modelled.
  * Accepted readings include attached endings (まっ, まって). Drills, questions and grammar
  * introductions are mixed in by the variety mixer (see `mixSession`). Deterministic for the
  * same data and day.

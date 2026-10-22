@@ -1,4 +1,4 @@
-/** Teacher-tier pieces (A10, D35): the tool rule and the learner snapshot for cache keys. */
+/** Teacher-tier pieces (A10): the tool rule and the learner snapshot for cache keys. */
 import type { LearnerOverview, LearnerView, LevelCoverage } from '../../domain/learner-view.ts';
 
 /** Added to the system instruction of teacher-tier requests that carry the tools. */
@@ -12,7 +12,7 @@ export const TEACHER_RULE = [
   'Never invent what the learner knows: if a tool fails, explain simply without it.',
 ].join(' ');
 
-/** The learner at the coarse grain that may change a cached answer (D35). */
+/** The learner at the coarse grain that may change a cached answer. */
 export interface LearnerSnapshot {
   /** Stable text folded into the cache key, e.g. "N4 w4 k3 g2". */
   key: string;

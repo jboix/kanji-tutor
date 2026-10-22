@@ -36,7 +36,7 @@ async function askAfterPlacement() {
   return user;
 }
 
-describe('rate limit on the tutor assessment (A14, D57)', () => {
+describe('rate limit on the tutor assessment (A14)', () => {
   it('shows the countdown with Retry disabled during the wait', async () => {
     const onAsk = vi.fn();
     renderWithServices(

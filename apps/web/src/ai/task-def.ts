@@ -30,7 +30,7 @@ export interface TaskDef<T extends TaskName, S extends z.ZodType> {
   name: T;
   /** `teacher` tasks run on the teacher model with the learner tools (A10, A12). */
   tier: ModelTier;
-  /** Defaults to `low` for fast tasks and `medium` for teacher tasks (D34). */
+  /** Defaults to `low` for fast tasks and `medium` for teacher tasks. */
   thinking?: ThinkingLevel;
   prompt: Prompt<TaskInput<T>>;
   schema: S;
@@ -40,7 +40,7 @@ export interface TaskDef<T extends TaskName, S extends z.ZodType> {
    * must use no more of the input than this. The whole input when absent.
    */
   cacheInput?: (input: TaskInput<T>) => unknown;
-  /** The reply's prose (not Japanese), for the explanation-language check (D35). */
+  /** The reply's prose (not Japanese), for the explanation-language check. */
   prose?: (raw: z.output<S>) => string[];
   /**
    * Teacher explanations that follow the immersion dial (M1, M2): in mixed or Japanese mode the

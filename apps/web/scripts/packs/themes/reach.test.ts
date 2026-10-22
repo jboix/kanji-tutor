@@ -1,5 +1,5 @@
 /**
- * The unit path can be finished (T3, D56): over the committed full pack, every unit word can be
+ * The unit path can be finished (T3): over the committed full pack, every unit word can be
  * met by a learner at the unit's level with that unit current, and a learner who knows the
  * unit's words reaches "done".
  */
@@ -32,7 +32,7 @@ function pathInput(levels: Map<string, KnowledgeLevel>, grammarRight: Set<string
   };
 }
 
-describe('unit reach (T3, D56)', () => {
+describe('unit reach (T3)', () => {
   it('lets a learner at the unit’s level meet every unit word in some sentence', () => {
     expect(checkReach(UNITS, pack).map(formatViolation)).toEqual([]);
   }, 60_000);

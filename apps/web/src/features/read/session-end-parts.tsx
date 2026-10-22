@@ -1,5 +1,5 @@
 /**
- * The top of the session end (W-end, C-end; D115, D116): the check that pops in and draws
+ * The top of the session end (W-end, C-end): the check that pops in and draws
  * itself, お疲れさまでした with its length, the three counts, and what was new today.
  */
 import type { CSSProperties } from 'react';
@@ -29,7 +29,7 @@ function DoneMark() {
   );
 }
 
-/** お疲れさまでした (the same in every language, D115) and "Session done · about 9 minutes". */
+/** お疲れさまでした (the same in every language) and "Session done · about 9 minutes". */
 export function DoneHeader({ minutes }: { minutes: number }) {
   const t = useT();
   return (
@@ -162,7 +162,7 @@ function More({ rest, at }: { rest: readonly MetFirst[]; at: number }) {
   );
 }
 
-/** "New today": at most three cards (one of each kind first), then "and N more: …" (D115). */
+/** "New today": at most three cards (one of each kind first), then "and N more: …". */
 export function NewToday({
   shown,
   rest,

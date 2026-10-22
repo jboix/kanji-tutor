@@ -1,5 +1,5 @@
 /**
- * The lesson path (T3, T4, D49), pure: each thematic unit's state, step and counts, worked out
+ * The lesson path (T3, T4), pure: each thematic unit's state, step and counts, worked out
  * from the learner's word levels, grammar reviews and stored unit progress. The loaders over the
  * `Repos` port are in `units.ts`.
  */
@@ -60,7 +60,7 @@ export interface PathInput {
 
 /**
  * The pack words of a unit that are written with kanji as the unit writes them: kana words
- * (さん, よろしく) are never reading targets (D9), so they are not counted.
+ * (さん, よろしく) are never reading targets, so they are not counted.
  */
 export function unitWordIds(unit: Unit, pack: UnitPack | undefined, words: PathInput['words']) {
   const written = new Set(unit.words.map((w) => w.written).filter(hasKanji));

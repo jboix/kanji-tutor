@@ -1,5 +1,5 @@
 /**
- * Find my level (A11, D51): a short adaptive placement. It starts at N5, moves up a level after
+ * Find my level (A11): a short adaptive placement. It starts at N5, moves up a level after
  * two right answers in a row and down after two wrong ones (a staircase), and proposes the level
  * just past the hardest one answered steadily. Pure; the result is a level and notes, never a
  * score.

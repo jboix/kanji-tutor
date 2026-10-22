@@ -12,8 +12,8 @@ const OPTIONS = UI_LANGUAGES.map((language) => ({
 
 /**
  * The interface and explanation language (N7b, N10). Choosing one switches the interface and
- * the tutor's sample note at once; it is saved as `uiLanguage` on Next (D44). French and Spanish
- * meanings (N9) download after the dictionary, on their own and unannounced (D136).
+ * the tutor's sample note at once; it is saved as `uiLanguage` on Next. French and Spanish
+ * meanings (N9) download after the dictionary, on their own and unannounced.
  */
 export function StepLanguage({ wizard }: Pick<StepProps, 'wizard'>) {
   const { t, setLanguage } = useI18n();

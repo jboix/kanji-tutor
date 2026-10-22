@@ -11,7 +11,7 @@ export const MIN_LAUNCH_MS = 600;
 
 /**
  * Past the minimum, the launch screen also waits for the fonts the first screen asked for, so
- * it never fades onto a fallback font that then swaps to Klee One or Zen Kaku (D124), but never
+ * it never fades onto a fallback font that then swaps to Klee One or Zen Kaku, but never
  * longer than this: a slow font then swaps in under the screen.
  */
 export const FONT_WAIT_MS = 700;
@@ -24,7 +24,7 @@ function fontsOrCap(cap: number): Promise<void> {
 }
 
 /**
- * Ends the launch screen of `index.html` (N1c, D65) once a screen has mounted: it fades out and
+ * Ends the launch screen of `index.html` (N1c) once a screen has mounted: it fades out and
  * leaves the document, so it covers the router's lazy chunks and the pack check, not just
  * React's first render. Every later call finds it gone and does nothing.
  */
@@ -44,12 +44,12 @@ function fade(launch: HTMLElement): void {
   setTimeout(() => launch.remove(), FADE_MS);
 }
 
-/** The localStorage key index.html reads before the first paint (D138); keep both in step. */
+/** The localStorage key index.html reads before the first paint; keep both in step. */
 export const WELCOMED_KEY = 'kanji-tutor-welcomed';
 
 /**
  * Mirrors "the welcome is done" for index.html: until it is, the launch screen is plain paper,
- * since the first screen is the welcome, which draws the icon itself (D138).
+ * since the first screen is the welcome, which draws the icon itself.
  */
 export function rememberWelcomed(done: boolean): void {
   try {
@@ -62,7 +62,7 @@ export function rememberWelcomed(done: boolean): void {
 
 /**
  * Removes the launch screen at once, with no minimum and no fade: for the first-run welcome
- * (D135), whose own animation starts from the blank icon tile.
+ *, whose own animation starts from the blank icon tile.
  */
 export function dropLaunch(): void {
   document.getElementById('launch')?.remove();

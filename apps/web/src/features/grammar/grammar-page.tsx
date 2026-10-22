@@ -105,7 +105,7 @@ function Related({ entry, lookup }: { entry: Point; lookup: ContentLookup }) {
   );
 }
 
-/** The ask box about the first example, scoped to the grammar span; AI only on submit (D45). */
+/** The ask box about the first example, scoped to the grammar span; AI only on submit. */
 function AskTutor({ loaded }: { loaded: Examples | undefined }) {
   const t = useT();
   const Ask = useSlot('askBox');

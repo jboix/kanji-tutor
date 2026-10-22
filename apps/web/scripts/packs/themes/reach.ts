@@ -1,5 +1,5 @@
 /**
- * Unit reach check (T3, D56): with a unit current, a learner at the unit's level can meet each
+ * Unit reach check (T3): with a unit current, a learner at the unit's level can meet each
  * of its kanji words in at least one pack sentence (a passage line counts), so the unit's 80%
  * "done" rule can be met. Uses the app's own gate and path code over the committed packs.
  */

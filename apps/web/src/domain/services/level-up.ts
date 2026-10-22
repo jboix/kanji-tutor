@@ -1,5 +1,5 @@
 /**
- * Moving up a level (P4, D31): the app suggests the next JLPT level once 80% of the current
+ * Moving up a level (P4): the app suggests the next JLPT level once 80% of the current
  * level's words and kanji are known, and never moves up by itself. "Not now" hides the
  * suggestion for a week.
  */

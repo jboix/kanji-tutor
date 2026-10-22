@@ -1,4 +1,4 @@
-/** N4 units 26–27: manga and anime, Mount Fuji (D33). */
+/** N4 units 26–27: manga and anime, Mount Fuji. */
 import type { Unit } from './types.ts';
 
 export const N4_E: readonly Unit[] = [

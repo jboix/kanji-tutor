@@ -66,7 +66,7 @@ function meanings(char: KdCharacter): string[] {
 }
 
 /**
- * Kanji levels from the vocabulary lists (D56): a kanji takes the easiest JLPT level of any
+ * Kanji levels from the vocabulary lists: a kanji takes the easiest JLPT level of any
  * listed word usually written with it (悪 is N5 through 悪い, 茶 through お茶). KANJIDIC2's
  * pre-2010 level is only the fallback for kanji in no listed word.
  */

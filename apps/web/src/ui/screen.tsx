@@ -15,7 +15,7 @@ export interface ScreenProps {
   /** Body top padding under a top bar; 24px by default (compose.html 16, handwrite.html 18). */
   top?: number;
   /**
-   * The sections' entrance (D124), on unless false: a session's cards turn it off, so answering
+   * The sections' entrance, on unless false: a session's cards turn it off, so answering
    * never waits on it. A child can opt out alone with `data-enter="off"`.
    */
   enter?: boolean;

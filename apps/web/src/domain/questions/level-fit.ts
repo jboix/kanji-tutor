@@ -2,7 +2,7 @@
  * Questions fit the learner's level (J6): before a 文脈規定 (J3) or 文法形式の判断 (J4) question is
  * shown, its sentence, answer and options must be at or below the learner's level, by word,
  * kanji and grammar level. The pack's sentence level already counts its kanji words and grammar
- * (D40, D56); this also catches pronouns written in kanji (お前), untagged kanji words, kana
+ *; this also catches pronouns written in kanji (お前), untagged kanji words, kana
  * words that are clearly harder (むしろ, もたれる), and option kanji (瓦 for グラム).
  */
 import { GRAMMAR_CATALOGUE } from '../grammar/catalogue.ts';

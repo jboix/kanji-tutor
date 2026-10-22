@@ -103,7 +103,7 @@ export function meaningChoices(drill: MeaningDrill, language: string): Choice[] 
   }));
 }
 
-/** The sentence with the particle blanked, before the answer: the blank shut (D63). */
+/** The sentence with the particle blanked, before the answer: the blank shut. */
 function BlankedParticle({ drill }: { drill: ParticleDrill }) {
   const to = drill.at + drill.answer.length;
   const masked = maskSentence(drill.sentence, drill.at, to, PATTERN_BLANK);

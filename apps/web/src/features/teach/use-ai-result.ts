@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { AiError, Result } from '../../ai/types.ts';
 
-/** Where an AI call stands; `offLanguage` is kept so the reply can be marked (D35). */
+/** Where an AI call stands; `offLanguage` is kept so the reply can be marked. */
 export type AiResult<T> =
   | { status: 'loading' }
   | { status: 'done'; value: T; offLanguage: boolean }

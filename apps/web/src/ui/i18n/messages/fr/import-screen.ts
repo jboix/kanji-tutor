@@ -1,4 +1,4 @@
-/** French messages: the import page (K6, D14). */
+/** French messages: the import page (K6). */
 import type { Messages } from '../../types.ts';
 
 export const importScreen = {

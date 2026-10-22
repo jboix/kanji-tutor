@@ -38,7 +38,7 @@ export function SettingsSectionScreen() {
   const category = categoryById(section);
   const t = useT();
   const installed = useInstallWay() === 'installed';
-  // Install has nothing to offer once installed (D121), even when opened from a link.
+  // Install has nothing to offer once installed, even when opened from a link.
   if (!category || (installed && category.id === 'install')) {
     return <Navigate to={paths.settings} replace />;
   }

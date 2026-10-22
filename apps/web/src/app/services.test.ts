@@ -6,7 +6,7 @@ import { WELCOMED_KEY } from '../ui/launch.ts';
 import { applySound } from '../ui/sound.ts';
 import { soundFollows } from './services.ts';
 
-describe('Sound follows the settings (D125)', () => {
+describe('Sound follows the settings', () => {
   afterEach(() => {
     applySound(true);
     vi.unstubAllGlobals();
@@ -35,7 +35,7 @@ describe('Sound follows the settings (D125)', () => {
   });
 });
 
-describe('The launch screen follows the welcome (D138)', () => {
+describe('The launch screen follows the welcome', () => {
   it('marks the welcome done for index.html, and clears the mark when it is run again', async () => {
     localStorage.removeItem(WELCOMED_KEY);
     const repo = soundFollows(createMemoryRepos().settings);

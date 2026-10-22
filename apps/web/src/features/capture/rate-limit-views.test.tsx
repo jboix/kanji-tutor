@@ -45,7 +45,7 @@ function waitBox(): Promise<HTMLElement> {
   });
 }
 
-describe('rate limit on a capture line (A14, D57)', () => {
+describe('rate limit on a capture line (A14)', () => {
   it('shows the countdown with Retry disabled during the wait', async () => {
     await askLine(vi.fn(rateLimited(30_000)));
     const box = await waitBox();

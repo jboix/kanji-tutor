@@ -35,5 +35,5 @@ Biome is strict: cognitive complexity ≤ 8, functions ≤ 25 lines, files ≤ 4
 ## Working style
 
 - Conventional commits, small and focused.
-- Open decisions: pick a sensible default, log it in `notes/DECISIONS.md`, keep going.
+- Open decisions: pick a sensible default, log it in `notes/DECISIONS.md`, keep going. Never cite decision numbers (D12) in code, comments, tests or docs: `notes/` is not in the repository, so readers cannot look them up.
 - Track progress per requirement ID in `notes/STATUS.md`.

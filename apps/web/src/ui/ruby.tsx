@@ -2,7 +2,7 @@ import { isKana } from 'wanakana';
 import { useT } from './i18n/i18n.tsx';
 import styles from './ruby.module.css';
 
-/** Furigana over a base: ruby-position over, the reading in Klee One (D105). Kana needs none. */
+/** Furigana over a base: ruby-position over, the reading in Klee One. Kana needs none. */
 export function Ruby({ base, reading }: { base: string; reading: string }) {
   if (isKana(base)) {
     return (

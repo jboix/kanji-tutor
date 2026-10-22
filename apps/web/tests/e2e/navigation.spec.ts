@@ -161,9 +161,7 @@ async function highlightAndIcon(page: Page, tab: string) {
   };
 }
 
-test('the active tab is highlighted behind it, and the highlight slides (D123, D131)', async ({
-  page,
-}) => {
+test('the active tab is highlighted behind it, and the highlight slides', async ({ page }) => {
   await onboard(page);
   await expect(nav(page).locator('[data-nav-indicator]')).toHaveCount(1);
   const today = await highlightAndIcon(page, 'Home');
@@ -203,7 +201,7 @@ test('the active tab is highlighted behind it, and the highlight slides (D123, D
   );
 });
 
-test('with reduced motion the highlight moves without sliding (D123)', async ({ page }) => {
+test('with reduced motion the highlight moves without sliding', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await onboard(page);
   const indicator = nav(page).locator('[data-nav-indicator]');

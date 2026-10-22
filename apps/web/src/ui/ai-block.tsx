@@ -1,5 +1,5 @@
 /**
- * The AI box (D57): every text the tutor wrote goes through `AiBlock`, and nothing static ever
+ * The AI box: every text the tutor wrote goes through `AiBlock`, and nothing static ever
  * does. A box with a AI red rule, the 解 seal and a "Tutor · model" line, then the text, the
  * marks it carries (saved answer, a reading hidden, not in your language), detail and chips.
  * `AiBlockStatus` is the same box for the request states: writing, the rate-limit countdown and
@@ -56,7 +56,7 @@ export interface AiMarks {
   cached?: boolean | undefined;
   /** A reading still to be answered was removed (L3). */
   hidden?: boolean | undefined;
-  /** The reply is not in the explanation language (D35). */
+  /** The reply is not in the explanation language. */
   offLanguage?: boolean | undefined;
 }
 
@@ -99,7 +99,7 @@ export interface AiBlockProps extends AiMarks {
   readings?: readonly CheckedReading[] | undefined;
 }
 
-/** "Less common reading にっぽんじん for 日本人: the usual one is にほんじん." (R10, D57). */
+/** "Less common reading にっぽんじん for 日本人: the usual one is にほんじん." (R10). */
 function LessCommon({ readings }: { readings: readonly CheckedReading[] | undefined }) {
   const { rich } = useI18n();
   const marked = (readings ?? []).filter((r) => r.verified && r.preferred);

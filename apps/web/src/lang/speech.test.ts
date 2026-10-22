@@ -48,7 +48,7 @@ describe('speech', () => {
   });
 });
 
-describe('with sound off (D125)', () => {
+describe('with sound off', () => {
   it('stays silent, stops what is playing, and offers no voice', async () => {
     const synth = { cancel: vi.fn(), speak: vi.fn(), getVoices: () => [{ lang: 'ja-JP' }] };
     vi.stubGlobal('speechSynthesis', synth);

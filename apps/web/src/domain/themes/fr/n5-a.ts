@@ -1,4 +1,4 @@
-/** French texts for N5 units 2–5 (N9, D53). Written for this app. */
+/** French texts for N5 units 2–5 (N9). Written for this app. */
 import type { ById, UnitText } from '../../content-types.ts';
 
 export const FR_N5_A: ById<UnitText> = {

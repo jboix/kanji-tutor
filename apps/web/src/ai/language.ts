@@ -1,5 +1,5 @@
 /**
- * The explanation language (N10, D35): named in both the system instruction and the request text,
+ * The explanation language (N10): named in both the system instruction and the request text,
  * and checked afterwards with a script heuristic, since a Flash-Lite model was seen answering in
  * Japanese when asked for French.
  */

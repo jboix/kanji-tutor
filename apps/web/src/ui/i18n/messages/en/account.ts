@@ -1,14 +1,111 @@
-/** English messages: logging in to bring progress from another device (cloud saves). */
+/** English messages: cloud saves, logging in to them, and Settings → Cloud saves. */
 export const account = {
   logInTitle: 'Log in',
   logInLead: 'Carry on with the progress saved on another device.',
   linkPhone: 'Link from your phone',
-  linkPhoneDetail: 'Scan a code with the device that has your progress',
+  linkPhoneDetail: 'Type a code on the device that has your progress',
   passkey: 'Use a passkey',
   passkeyDetail: 'Face ID, Windows Hello or your password manager',
   emailCode: 'Email me a code',
   emailCodeDetail: 'If you no longer have the other device',
-  notYet:
-    'Cloud saves are not available yet. Choose Start for now; your progress stays on this device.',
   backToWelcome: 'Back to the welcome',
+  otherWays: 'Other ways in',
+  bringing: 'Bringing your progress…',
+
+  linkSteps:
+    'On the device that has your progress, open Settings → Cloud saves → Link a device, and type this code. It works for two minutes.',
+  linkWaiting: 'Waiting for the other device…',
+  linkNewCode: 'New code',
+  passkeyButton: 'Use my passkey',
+  passkeyWaiting: 'Waiting for your passkey…',
+  emailLabel: 'Your recovery email',
+  emailSend: 'Send the code',
+  emailSent:
+    'If an account has this address, a 6-digit code is on its way. It works for 10 minutes.',
+  codeLabel: 'Code from the email',
+  codeSubmit: 'Log in',
+
+  joinTitle: 'Turn on cloud saves',
+  joinLead:
+    'Your progress is kept on the Kanji Tutor server, encrypted, and stays in step on every device you log in on. You log in with a passkey: there is no password.',
+  inviteLabel: 'Invite code',
+  joinButton: 'Create a passkey and turn on',
+  joinDone: 'Cloud saves are on, and your progress is saved.',
+  joinContinue: 'Continue',
+  joinAlready: 'Cloud saves are already on for this device.',
+
+  cloudTitle: 'Cloud saves',
+  cloudDetail: 'Your progress on every device',
+  cloudOff:
+    'Off on this device. With an invite, your progress is saved online and kept in step on your other devices.',
+  cloudTurnOn: 'Turn on',
+  cloudLogIn: 'Log in instead',
+  cloudLogInHint:
+    'Logging in brings the progress saved online; anything only on this device is kept too.',
+  statusSaved: 'Saved at {time}.',
+  statusUpToDate: 'Up to date.',
+  statusWaiting: 'Changes waiting: they are saved in a moment.',
+  statusSaving: 'Saving…',
+  statusOffline: 'Offline: your changes are saved when you are back online.',
+  statusPaused: 'Many saves this hour: the next goes in a few minutes.',
+  statusFailed: 'The last save did not go through. It tries again by itself.',
+  saveNow: 'Save now',
+
+  devicesTitle: 'Devices',
+  deviceThis: 'This device',
+  deviceSeen: 'Last used {date}',
+  deviceRemove: 'Sign out',
+  deviceRemoveQuestion:
+    'Sign out “{name}”? It keeps its progress, but saves nothing more until it logs in again.',
+  linkTitle: 'Link a device',
+  linkHint:
+    'On the new device, choose Log in, then Link from your phone, and type here the code it shows.',
+  linkCodeLabel: 'Code on the new device',
+  linkLookUp: 'Next',
+  linkAsk: '“{name}” asks to use your progress.',
+  linkApprove: 'Let it in',
+  linkApproved: 'Linked: “{name}” is bringing your progress.',
+
+  emailTitle: 'Recovery email',
+  emailNone: 'None yet. With one, you can log in with a code if you lose your devices.',
+  emailCurrent: 'Codes go to {email}.',
+  emailNew: 'Email address',
+  emailSendCode: 'Send a code',
+  emailCodeSent: 'A code is on its way to {email}.',
+  emailConfirm: 'Confirm',
+  emailSaved: 'Saved: codes now go to {email}.',
+
+  passkeyTitle: 'Passkey',
+  passkeyHint:
+    'Add a passkey on this device, to log in with Face ID, Windows Hello or your password manager.',
+  passkeyAdd: 'Add a passkey',
+  passkeyAdded: 'Passkey added.',
+
+  thisDeviceTitle: 'On this device',
+  logOut: 'Log out',
+  logOutQuestion: 'Log out on this device? Its progress stays here; it just stops saving online.',
+  loggedOut: 'Logged out. Your progress stays on this device.',
+  deleteAccount: 'Delete the online account',
+  deleteQuestion:
+    'Delete your online account and its save? Every device keeps its progress, but nothing is saved online any more. This cannot be undone.',
+  deleteConfirm: 'Delete',
+  cancel: 'Cancel',
+
+  errorOffline: 'No connection. Try again when you are online.',
+  errorServer: 'The server did not answer as expected. Try again in a moment.',
+  errorSignedOut: 'This device was signed out. Log in again.',
+  errorInviteNeeded: 'This invite code does not work: it may be used or revoked.',
+  errorPasskeyCancelled: 'The passkey was not used. Try again when ready.',
+  errorPasskeyRefused: 'The passkey did not work here. Try another way in.',
+  errorPasskeyUnknown: 'This passkey is not one of a Kanji Tutor account.',
+  errorChallengeExpired: 'That took too long. Try again.',
+  errorCodeExpired: 'This code has expired. Ask for a new one.',
+  errorCodeUsed: 'This code was already used.',
+  errorCodeWrong: 'That code is not right. Check it and try again.',
+  errorEmailOff: 'Email codes are not set up on this server.',
+  errorEmailFailed: 'The email could not be sent. Try again later.',
+  errorEmailTaken: 'This address belongs to another account.',
+  errorTooManyCodes: 'Too many codes for this address. Try again in an hour.',
+  errorSlowDown: 'Too many tries. Wait a minute, then try again.',
+  errorBadRequest: 'That does not look right. Check what you typed.',
 } as const;

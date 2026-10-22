@@ -3,7 +3,7 @@ import { answerField, importKnown, launched, onboard } from './helpers.ts';
 
 /**
  * The real-iPhone checks (N1, U10, U12) as far as WebKit with iPhone emulation can take them
- * (D97): only in the opt-in `iphone-webkit` project (`PW_WEBKIT=1`). Safari on a phone, the
+ *: only in the opt-in `iphone-webkit` project (`PW_WEBKIT=1`). Safari on a phone, the
  * home-screen launch and a finger drag still need checking by hand.
  */
 
@@ -28,7 +28,7 @@ test('the launch screen shows on a cold start and leaves (U12)', async ({ page }
   await expect(page).toHaveURL(/\/welcome$/);
 });
 
-test('a first run opens on plain paper, and the icon shows once the welcome is done (D138)', async ({
+test('a first run opens on plain paper, and the icon shows once the welcome is done', async ({
   page,
 }) => {
   await page.goto('/', { waitUntil: 'commit' });

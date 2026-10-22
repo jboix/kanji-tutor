@@ -2,13 +2,11 @@ import { expect, type Page, test } from '@playwright/test';
 import { answerField, beginMix, importKnown, launched, onboard } from './helpers.ts';
 import { fakeJapaneseVoice } from './lesson-play.ts';
 
-/** The polish round (D122–D125): the entrance, sound off everywhere, the Settings icons. */
+/** The polish round: the entrance, sound off everywhere, the Settings icons. */
 
 const speaker = (page: Page) => page.getByRole('button', { name: 'Play the sentence' });
 
-test('Sound off in Appearance silences the session: no speaker, no speech (D125)', async ({
-  page,
-}) => {
+test('Sound off in Appearance silences the session: no speaker, no speech', async ({ page }) => {
   await fakeJapaneseVoice(page);
   await onboard(page);
   await importKnown(page);
@@ -25,7 +23,7 @@ test('Sound off in Appearance silences the session: no speaker, no speech (D125)
   expect(await page.evaluate(() => (window as unknown as { spoken: string[] }).spoken)).toEqual([]);
 });
 
-test('with sound on, the speaker plays the sentence (D125)', async ({ page }) => {
+test('with sound on, the speaker plays the sentence', async ({ page }) => {
   await fakeJapaneseVoice(page);
   await onboard(page);
   await importKnown(page);
@@ -38,9 +36,7 @@ test('with sound on, the speaker plays the sentence (D125)', async ({ page }) =>
     .toBe(1);
 });
 
-test("a screen's sections fade in top to bottom, and settle within 850ms (D124, D131)", async ({
-  page,
-}) => {
+test("a screen's sections fade in top to bottom, and settle within 850ms", async ({ page }) => {
   await onboard(page);
   await launched(page);
   await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Learn' }).click();
@@ -63,7 +59,7 @@ test("a screen's sections fade in top to bottom, and settle within 850ms (D124, 
   expect(Math.max(...ends)).toBeLessThanOrEqual(0.85);
 });
 
-test('no entrance with reduced motion, nor on a session card (D124)', async ({ page }) => {
+test('no entrance with reduced motion, nor on a session card', async ({ page }) => {
   await onboard(page);
   await importKnown(page);
   await page.goto('/');
@@ -86,7 +82,7 @@ test('no entrance with reduced motion, nor on a session card (D124)', async ({ p
   expect(names.every((name) => name === 'none')).toBe(true);
 });
 
-test('Settings and the bar use line icons, not kanji (D122)', async ({ page }) => {
+test('Settings and the bar use line icons, not kanji', async ({ page }) => {
   await onboard(page);
   await page.goto('/settings');
   const rows = page.getByRole('main').getByRole('link');

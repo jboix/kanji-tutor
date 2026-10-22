@@ -1,4 +1,4 @@
-/* The session end (W-end, C-end; D115). Its parts rise in one after another (~3 s in all, as in
+/* The session end (W-end, C-end). Its parts rise in one after another (~3 s in all, as in
    the mockup): the check pops in, its stroke draws itself and one soft ring goes out. CSS only,
    and under reduced motion everything simply shows. No burst, no confetti (no gamification). */
 
@@ -193,7 +193,7 @@
   color: var(--ink);
 }
 
-/* "To look at again": each miss on the miss surface, the word in the miss crimson (D105). */
+/* "To look at again": each miss on the miss surface, the word in the miss crimson. */
 .missedList {
   display: flex;
   flex-direction: column;

@@ -45,7 +45,7 @@ describe('importKnown', () => {
     expect(await repos.items.count()).toBe(14);
   });
 
-  it('maps Minna lessons to the JLPT lists (D14)', async () => {
+  it('maps Minna lessons to the JLPT lists', async () => {
     const repos = await readingRepos();
     expect((await importKnown(repos, { minnaUpTo: 12, now: NOW })).marked).toBe(11);
     expect((await repos.items.get(`word:${W.eki.id}`))?.source.lesson).toBe('Minna 第1–12課');
@@ -105,7 +105,7 @@ describe('importKnown', () => {
     expect(hon?.card).toEqual(before[1]?.card);
   });
 
-  it('moves the learner level past the lists and never lowers it (D38)', async () => {
+  it('moves the learner level past the lists and never lowers it', async () => {
     const repos = await readingRepos();
     await importKnown(repos, { pasted: '駅', now: NOW });
     expect((await repos.settings.get()).learnerLevel).toBeUndefined();

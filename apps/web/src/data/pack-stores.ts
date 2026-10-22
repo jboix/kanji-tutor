@@ -1,4 +1,4 @@
-/** Writing and pruning the rows of each pack store (D27 semantics: upsert, then prune). */
+/** Writing and pruning the rows of each pack store (upsert, then prune). */
 import type { PackFile } from '../domain/repos.ts';
 import type { Cluster, GrammarPoint, Kanji, Sentence, UnitPack, Word } from '../domain/types.ts';
 import type { KanjiTutorDb } from './db.ts';

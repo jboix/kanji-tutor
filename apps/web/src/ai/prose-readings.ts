@@ -1,5 +1,5 @@
 /**
- * Readings written inside AI prose (A8, D57), in any explanation language: furigana-style
+ * Readings written inside AI prose (A8), in any explanation language: furigana-style
  * brackets after a kanji anywhere ("紹介 (しょうかい)", 紹介「しょうかい」), a kana run after
  * ＝, = or a colon, and the phrasings of en ("一生 is いっしょう"), fr (« 紹介 se lit しょうかい »),
  * es ("紹介 se lee しょうかい") and ja (「紹介」は「しょうかい」と読みます, 「紹介」の読み方は…).

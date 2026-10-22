@@ -1,5 +1,5 @@
 /**
- * Sentence level (G2, D31, D56): the hardest JLPT level among the sentence's kanji words, its
+ * Sentence level (G2): the hardest JLPT level among the sentence's kanji words, its
  * detected grammar, and the kanji that none of its words cover (a kanji written in a suffix,
  * prefix or pronoun). A word's own level already accounts for its kanji, so 悪い (N5) makes an
  * N5 sentence whatever KANJIDIC says of 悪. A word or kanji with no JLPT tag counts as N1. Pure.

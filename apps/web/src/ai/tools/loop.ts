@@ -1,12 +1,12 @@
 /**
- * The bounded function-calling loop (A10, D35), shared by the Gemini and mock providers. Each
+ * The bounded function-calling loop (A10), shared by the Gemini and mock providers. Each
  * round runs every call the model made and answers each with exactly one result carrying the
  * call's id and name. After `MAX_TOOL_ROUNDS` (or the request's `maxToolRounds`) the model must
- * answer without tools: one press of a button makes at most 1 + rounds requests (D57).
+ * answer without tools: one press of a button makes at most 1 + rounds requests.
  */
 import type { AiResponse, ToolCall, ToolResult, ToolRunner } from '../types.ts';
 
-/** Tool rounds per request: two, so a whole tool loop is three requests (D57, A14). */
+/** Tool rounds per request: two, so a whole tool loop is three requests (A14). */
 export const MAX_TOOL_ROUNDS = 2;
 
 /** One model turn: the calls it made (none for a final answer) and its text. */

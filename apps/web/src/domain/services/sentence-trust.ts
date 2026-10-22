@@ -1,5 +1,5 @@
 /**
- * The reading checks every session sentence passes (D13, D18): each content token's reading is a
+ * The reading checks every session sentence passes: each content token's reading is a
  * JMdict reading of its word, and a lone kanji the learner may be asked about has its most
  * likely reading (間 → あいだ, not ま). Sessions and drills share them.
  */
@@ -59,8 +59,8 @@ function trusted(token: Token, checks: Checks): boolean {
 }
 
 /**
- * The sentences whose every content token has a reading that may be shown and graded (D13,
- * D18): a JMdict reading of its word, and the most likely one for a lone kanji not yet known.
+ * The sentences whose every content token has a reading that may be shown and graded:
+ * a JMdict reading of its word, and the most likely one for a lone kanji not yet known.
  */
 export async function trustedSentences(
   repos: Repos,

@@ -24,7 +24,7 @@ const SENTENCE: Sentence = {
   ],
 } as Sentence;
 
-describe('a less common reading from the tutor (R10, D57)', () => {
+describe('a less common reading from the tutor (R10)', () => {
   it('marks にっぽんじん inside the AI box and names にほんじん', async () => {
     const ai = createAiClient(async () => testContext({ provider: createMockProvider() }));
     renderWithServices(

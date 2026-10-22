@@ -68,7 +68,7 @@ async function forKanji(repos: Repos, word: Word, char: string, accepted: readon
 
 /**
  * Readings of lookalike words for a target word (待つ → 持つ, 時, 詩…), inflected like the
- * accepted answers. Lookalikes share a component (KRADFILE parts, D13).
+ * accepted answers. Lookalikes share a component (KRADFILE parts).
  */
 export async function confusablesFor(
   repos: Repos,

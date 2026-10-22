@@ -148,7 +148,7 @@ function Known({ wizard }: Props) {
 }
 
 /**
- * Your class and what you know (K5, K6, D134): a textbook or None, the lesson, and words you
+ * Your class and what you know (K5, K6): a textbook or None, the lesson, and words you
  * already know. Next saves the lesson tag and marks the known words; none of it needs the tutor.
  */
 export function StepClass({ wizard, waiting }: Props & { waiting: boolean }) {

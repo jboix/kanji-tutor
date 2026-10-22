@@ -1,5 +1,5 @@
 /**
- * The interface language (N7b, D52): a provider with the active catalogue, `useT()` for messages
+ * The interface language (N7b): a provider with the active catalogue, `useT()` for messages
  * and `useI18n()` for formats and switching. Outside a provider everything is English, so tests
  * and the dev gallery need no setup.
  */

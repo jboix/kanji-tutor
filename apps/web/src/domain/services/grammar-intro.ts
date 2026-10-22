@@ -1,5 +1,5 @@
 /**
- * Grammar introductions (G4, D49): a grammar point of the learner's level is introduced with a
+ * Grammar introductions (G4): a grammar point of the learner's level is introduced with a
  * card (meaning, formation, two examples) before its first exercise in a session, then joins
  * FSRS. Points easier than the learner's level count as known, like the JLPT lists they start
  * past. New points come in unit order (the current unit, then later units of the level), then

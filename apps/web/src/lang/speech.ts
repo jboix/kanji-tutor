@@ -1,7 +1,7 @@
 let muted = false;
 
 /**
- * Settings → Appearance → Sound (D125): off silences speech too. While muted, `canSpeak` is
+ * Settings → Appearance → Sound: off silences speech too. While muted, `canSpeak` is
  * false, so the speaker buttons hide and sessions leave out listening exercises.
  */
 export function muteSpeech(value: boolean): void {

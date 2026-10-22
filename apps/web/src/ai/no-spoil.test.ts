@@ -125,7 +125,7 @@ describe('redactReadings (L3 leak fixtures)', () => {
     );
   });
 
-  it('keeps a kana word the sentence shows whole, and still blanks the reading (D89)', () => {
+  it('keeps a kana word the sentence shows whole, and still blanks the reading', () => {
     const sentence = 'お祭りで友達を待つ。まつりはたのしい。';
     const reply = 'まつり means festival; おまつり is polite. Here you まつ your friend.';
     expect(redactReadings(reply, MATTE, sentence)).toEqual({
@@ -134,7 +134,7 @@ describe('redactReadings (L3 leak fixtures)', () => {
     });
   });
 
-  it('still blanks a kana word the sentence does not show (D89)', () => {
+  it('still blanks a kana word the sentence does not show', () => {
     expect(redactReadings('まつり means festival.', MATTE).text).toBe(
       `${HIDDEN_MARK}り means festival.`,
     );

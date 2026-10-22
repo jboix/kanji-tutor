@@ -10,7 +10,7 @@ function learner(level: LearnerLevel, known: number): Pick<LearnerOverview, 'lev
   };
 }
 
-describe('immersionMode (M1, D51)', () => {
+describe('immersionMode (M1)', () => {
   it('keeps a fixed setting whatever the level', () => {
     expect(immersionMode(learner(5, 0), 'japanese')).toBe('japanese');
     expect(immersionMode(learner(3, 99), 'native')).toBe('native');

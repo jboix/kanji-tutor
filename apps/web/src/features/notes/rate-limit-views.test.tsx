@@ -45,7 +45,7 @@ function waitBox(): Promise<HTMLElement> {
   });
 }
 
-describe('rate limit on the weekly letter (A14, D57)', () => {
+describe('rate limit on the weekly letter (A14)', () => {
   it('keeps the plain letter and shows the countdown with Retry disabled', async () => {
     await askLetter(vi.fn(rateLimited(30_000)));
     const box = await waitBox();

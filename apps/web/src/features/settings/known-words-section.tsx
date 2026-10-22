@@ -14,7 +14,7 @@ interface Props {
   onPatch: PatchSettings;
 }
 
-/** The learner's level (P4, D38) and the entry points to the import (K6) and progress (P3). */
+/** The learner's level (P4) and the entry points to the import (K6) and progress (P3). */
 export function KnownWordsSection({ settings, onPatch }: Props) {
   const t = useT();
   return (

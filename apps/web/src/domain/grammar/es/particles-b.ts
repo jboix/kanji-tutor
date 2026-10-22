@@ -1,4 +1,4 @@
-/** Spanish texts for the listing, ending and linking particles (N9, D53). Written for this app. */
+/** Spanish texts for the listing, ending and linking particles (N9). Written for this app. */
 import type { ById, FunctionWordText } from '../../content-types.ts';
 
 export const ES_PARTICLES_B: ById<FunctionWordText> = {

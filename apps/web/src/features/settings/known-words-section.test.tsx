@@ -6,7 +6,7 @@ import { fakeServices } from '../../test/render.tsx';
 import { renderSettingsSection } from '../../test/settings-section.tsx';
 
 describe('Level and known words settings', () => {
-  it('sets the learner level, N5 by default (P4, D38)', async () => {
+  it('sets the learner level, N5 by default (P4)', async () => {
     const repos = createMemoryRepos();
     renderSettingsSection('words', { services: fakeServices({ repos }) });
     const group = await screen.findByRole('group', { name: 'Your level' });

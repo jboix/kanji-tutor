@@ -1,7 +1,7 @@
 /**
- * JLPT level corrections for clearly basic words (D40). Waller's lists, as mapped to JMdict ids,
+ * JLPT level corrections for clearly basic words. Waller's lists, as mapped to JMdict ids,
  * leave some everyday words untagged or put them far too high (顔 untagged, すぐ as N1), and a
- * sentence level (D31) counts an untagged word as N1, so these would wrongly gate sentences.
+ * sentence level counts an untagged word as N1, so these would wrongly gate sentences.
  *
  * Each entry names the JMdict entry by its usual writing and reading. Only words that every
  * beginner course teaches in its first months belong here, at the level of the usual lists.
@@ -18,7 +18,7 @@ export interface JlptOverride {
 
 export const JLPT_OVERRIDES: readonly JlptOverride[] = [
   { written: '顔', reading: 'かお', level: 5 },
-  // D56: the lists put these day-one words at N3 (日本語 and 昼ごはん are N5).
+  // The lists put these day-one words at N3 (日本語 and 昼ごはん are N5).
   { written: '日本', reading: 'にほん', level: 5 },
   { written: 'お昼', reading: 'おひる', level: 5 },
   { written: 'すぐ', reading: 'すぐ', level: 5 },
@@ -63,7 +63,7 @@ function entryWritten(words: readonly JmWord[], written: string, reading?: strin
 
 /**
  * Fused polite forms (お寺, お正月) are on no list; they take the level of the word without the
- * prefix (寺, 正月), so the units can use them at that level (D40).
+ * prefix (寺, 正月), so the units can use them at that level.
  */
 export function inheritPolitePrefix(
   words: readonly JmWord[],

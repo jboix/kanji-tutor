@@ -36,7 +36,7 @@ describe('Gemini key (N3)', () => {
     await userEvent.click(within(section).getByRole('button', { name: 'Save' }));
     expect((await repos.settings.get()).apiKey).toBe('AIza-secret');
     expect(await screen.findByText('Key saved.')).toBeTruthy();
-    // The field keeps the saved key, masked (D120), and Save has nothing new to save.
+    // The field keeps the saved key, masked, and Save has nothing new to save.
     expect(field).toHaveProperty('value', 'AIza-secret');
     expect(field.getAttribute('type')).toBe('password');
     expect(within(section).getByRole('button', { name: 'Save' })).toHaveProperty('disabled', true);

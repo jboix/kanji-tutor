@@ -8,6 +8,7 @@ import {
 import type { AiContext, AiProvider } from '../ai/types.ts';
 import {
   createBackupPort,
+  createCloudPort,
   createDexieRepos,
   createPackLoader,
   KanjiTutorDb,
@@ -22,6 +23,7 @@ import { createLang, createWorkerTokenizer } from '../lang/index.ts';
 import { rememberWelcomed } from '../ui/launch.ts';
 import type { Services } from '../ui/services.tsx';
 import { applySound } from '../ui/sound.ts';
+import { syncServer } from '../ui/sync-server.ts';
 import { learnerProfile } from './profile.ts';
 
 /** The mock's request counter and failure switch, on `window` for e2e (`VITE_AI_PROVIDER=mock`). */
@@ -71,9 +73,9 @@ function aiContext(
 }
 
 /**
- * Settings → Sound (D125) follows every settings read and write, so boot, a change, an import
+ * Settings → Sound follows every settings read and write, so boot, a change, an import
  * and the welcome all mute or unmute the tones and speech at once. So does the launch screen's
- * "welcome done" mark, which index.html reads before the first paint (D138).
+ * "welcome done" mark, which index.html reads before the first paint.
  */
 export function soundFollows(repo: SettingsRepo): SettingsRepo {
   const apply = (settings: Settings) => {
@@ -92,6 +94,9 @@ export function createServices(db = new KanjiTutorDb()): Services {
   const stored = createDexieRepos(db);
   const repos: Repos = { ...stored, settings: soundFollows(stored.settings) };
   const base = import.meta.env.BASE_URL;
+  // Before anything reads the database, so the cloud hears every change.
+  const server = syncServer();
+  const cloud = server ? { cloud: createCloudPort(db, server) } : {};
   const lang = createLang({
     dictionary: repos.dictionary,
     tokenizer: createWorkerTokenizer(`${base}dict/`),
@@ -105,5 +110,6 @@ export function createServices(db = new KanjiTutorDb()): Services {
       db,
       `${base}packs/${import.meta.env.VITE_PACKS === 'fixture' ? 'fixture/' : ''}`,
     ),
+    ...cloud,
   };
 }

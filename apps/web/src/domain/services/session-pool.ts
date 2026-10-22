@@ -116,7 +116,7 @@ async function dueQueue(repos: Repos, now: number): Promise<Item[]> {
   return (await repos.items.dueBefore(now)).filter((item) => item.kind === 'word');
 }
 
-/** Word ids with kanji forms only: kana words are never targets (D9). */
+/** Word ids with kanji forms only: kana words are never targets. */
 async function withKanji(repos: Repos, items: readonly Item[]): Promise<Item[]> {
   const words = await repos.dictionary.words(items.map((item) => item.ref));
   return items.filter((_, i) => words[i]?.forms.some(hasKanji) ?? false);
@@ -134,12 +134,12 @@ function discover(pool: Pool, extra: readonly Sentence[], items: Map<string, Ite
   return [...found.values()];
 }
 
-/** Untracked words of the learner's level searched when few words are known (P1, D38). */
+/** Untracked words of the learner's level searched when few words are known (P1). */
 const SEED_WORDS = 60;
 
 /**
  * Sentences whose only unknown word is an untracked word of the learner's level, searched when
- * few words are known: a learner starting from zero (P1, D38) meets N5 words in sentences where
+ * few words are known: a learner starting from zero (P1) meets N5 words in sentences where
  * everything else is kana.
  */
 async function levelSeedSentences(repos: Repos, pool: Pool, now: number, known: number) {

@@ -1,4 +1,4 @@
-/** Message lookup, interpolation and plurals (N7b, D52). Pure: no React. */
+/** Message lookup, interpolation and plurals (N7b). Pure: no React. */
 import type { UiLanguage } from '../languages.ts';
 import type { MessageKey, Messages, ParamValue, PluralMessage, Translate } from './types.ts';
 

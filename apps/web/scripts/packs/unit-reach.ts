@@ -1,5 +1,5 @@
 /**
- * Unit word reach (T3, D56): for each unit word, the sentences a learner can meet it in while the
+ * Unit word reach (T3): for each unit word, the sentences a learner can meet it in while the
  * unit is current. Uses the app's own gate (`fitsGate`, `isIPlusOne`), so the pipeline keeps the
  * sentences the session will actually show. Pure and deterministic.
  *

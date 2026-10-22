@@ -1,4 +1,4 @@
-/** All en messages, one namespace per file (D52). */
+/** All en messages, one namespace per file. */
 
 import { account } from './account.ts';
 import { add } from './add.ts';

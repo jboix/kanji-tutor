@@ -95,8 +95,8 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-describe('welcome wizard (P5, D134)', () => {
-  it('offers Log in only when the build has a cloud-save server (D146)', async () => {
+describe('welcome wizard (P5)', () => {
+  it('offers Log in only when the build has a cloud-save server', async () => {
     vi.stubEnv('VITE_SYNC_URL', '');
     await setup();
     expect(await heading('Kanji Tutor')).toBeTruthy();
@@ -130,7 +130,7 @@ describe('welcome wizard (P5, D134)', () => {
     expect(await repos.settings.get()).toMatchObject({ uiLanguage: 'fr', onboardingStep: 'start' });
 
     await heading('Which one can you read?');
-    // French meanings follow the dictionary unannounced (D136).
+    // French meanings follow the dictionary unannounced.
     expect(screen.queryByText(/meanings in French/)).toBeNull();
     await userEvent.click(screen.getByRole('radio', { name: /I'm studying N4/ }));
     expect(screen.getByText(/N5 words\. They are marked as known/)).toBeTruthy();

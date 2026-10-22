@@ -2,7 +2,7 @@ import { expect, type Page, test } from '@playwright/test';
 import { blockGemini, importKnown, onboard, startWizard, stepHeading } from './helpers.ts';
 
 /**
- * The interface in the learner's language (N7b, D52): French chosen in Settings switches Today, a
+ * The interface in the learner's language (N7b): French chosen in Settings switches Today, a
  * session card, the word sheet and Settings at once; Spanish chosen in the wizard switches the
  * wizard itself. Japanese stays Japanese.
  */

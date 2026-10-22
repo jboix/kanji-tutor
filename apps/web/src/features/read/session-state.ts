@@ -10,7 +10,7 @@ export interface Answered {
   answer: string;
   mode: AnswerMode;
   grade: Grade;
-  /** The index of the card it was answered on (the end's missed list and retry, D116). */
+  /** The index of the card it was answered on (the end's missed list and retry). */
   card?: number;
 }
 
@@ -18,7 +18,7 @@ export interface Answered {
 export interface DrillResult {
   kind: DrillKind | QuestionKind;
   right: boolean;
-  /** The index of its card (the end's missed list and retry, D116). */
+  /** The index of its card (the end's missed list and retry). */
   card?: number;
 }
 
@@ -34,7 +34,7 @@ export interface SessionState {
   results: Answered[];
   /** Drills finished in this session (R8). */
   drills: DrillResult[];
-  /** When the current target appeared (epoch ms), for the answer duration (D9 Easy rating). */
+  /** When the current target appeared (epoch ms), for the answer duration (the Easy rating). */
   shownAt: number;
   /** When the session was built (epoch ms), for the end's "about N minutes"; older saves lack it. */
   startedAt?: number;

@@ -25,7 +25,7 @@ const token = (surface: string, reading: string): Token => ({
   start: 0,
 });
 
-describe('preferred readings at run time (D56)', () => {
+describe('preferred readings at run time', () => {
   it('reads a tokenizer variant as the preferred reading and keeps the variants', () => {
     expect(preferReading(token('日本人', 'ニッポンジン'), nihonjin)).toMatchObject({
       reading: 'にほんじん',

@@ -119,7 +119,7 @@ describe('teach slots in a session', () => {
     expect(await screen.findByText('Teaching 待っ after a miss')).toBeTruthy();
   });
 
-  it('keeps targets untappable before answering without the hint slot (D26)', async () => {
+  it('keeps targets untappable before answering without the hint slot', async () => {
     const repos = await open({});
     await screen.findByLabelText('Reading of 待って');
     expect(screen.queryByRole('button', { name: '待っ' })).toBeNull();

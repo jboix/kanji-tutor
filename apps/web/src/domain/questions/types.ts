@@ -16,7 +16,7 @@ export const SECTION: Readonly<Record<QuestionKind, string>> = {
   comprehension: '問題 · 読解',
 };
 
-/** What an option's note says, by code; the UI words it in the learner's language (D52). */
+/** What an option's note says, by code; the UI words it in the learner's language. */
 export type NoteCode =
   | 'long-vowel-dropped'
   | 'long-vowel-added'
@@ -88,7 +88,7 @@ interface QuestionBase {
   /** The sentence's English translation, shown after answering. */
   translation?: string;
   /**
-   * J3, J4: the English translation with the blank's meaning masked (D94), the only meaning
+   * J3, J4: the English translation with the blank's meaning masked, the only meaning
    * shown before answering. Absent when it cannot be masked: then none is shown before.
    */
   hint?: string;

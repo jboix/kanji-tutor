@@ -31,7 +31,7 @@ function useDue({ target, onDone }: IntroSlotProps): boolean | undefined {
   return due;
 }
 
-/** The card's other targets, still to be read: shut, as in the session (D63). */
+/** The card's other targets, still to be read: shut, as in the session. */
 function laterTargets(card: IntroSlotProps['card'], target: IntroSlotProps['target']): number[] {
   return card.targets
     .filter((t) => t.tokenIndex !== target.tokenIndex)
@@ -87,7 +87,7 @@ export function NewItemIntro(props: IntroSlotProps) {
 
 /**
  * The same teaching under a skip or a miss, so a skip teaches too (L1, L4). Static only: no AI
- * fires here (D41), the hook is the one built from the parts.
+ * fires here, the hook is the one built from the parts.
  */
 export function TeachingCard({ card, target }: TeachingSlotProps) {
   const t = useT();

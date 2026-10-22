@@ -5,7 +5,7 @@ import { maskSentence, opensSheet, sliceTokens } from './word-tap-data.ts';
 
 const sentence = { ...S.waiting, translation: 'While waiting…', grammarIds: ['te-iru'] };
 
-describe('maskSentence (D63)', () => {
+describe('maskSentence', () => {
   it('replaces the span, drops what could give it away, and shuts the cut pieces', () => {
     // 待 of 待っ masked: the っ left of the token is shut too.
     const m = maskSentence(sentence, 5, 6, '〇');

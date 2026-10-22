@@ -1,5 +1,5 @@
 /**
- * The pending segment, marked as a Japanese IME marks it (C6, D112): a thin underline under the
+ * The pending segment, marked as a Japanese IME marks it (C6): a thin underline under the
  * kana the kanji popup may replace, a thick one and a soft fill under the part the highlighted
  * candidate replaces. A field cannot style part of its text, so a mirror with the field's box and
  * type lies over it, its text transparent and its scroll kept with the field's; only the marks
@@ -76,7 +76,7 @@ function useOverlay(field: RefObject<Field | null>, deps: readonly unknown[]) {
   return mirror;
 }
 
-/** The marks over the field while the kanji popup is open (C6, D112). */
+/** The marks over the field while the kanji popup is open (C6). */
 export function CompositionMark({ typing }: { typing: JapaneseTyping }) {
   const { candidates, popup, value } = typing;
   const mirror = useOverlay(typing.ref, [value, candidates, popup.index, popup.open]);

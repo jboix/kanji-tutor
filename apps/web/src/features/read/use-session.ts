@@ -93,7 +93,7 @@ const optionsOf = (key: string): Omit<BuildSessionOptions, 'now'> =>
 
 /**
  * One key for the whole request: a new object with the same options builds nothing new. A retry
- * round (D117) has its own, so it resumes as itself and never stands in for the session.
+ * round has its own, so it resumes as itself and never stands in for the session.
  */
 function useSessionKey(request: SessionRequest): { key: string; handoff: unknown } {
   const handoff: unknown = useLocation().state;

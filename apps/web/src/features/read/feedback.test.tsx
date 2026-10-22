@@ -35,7 +35,7 @@ function answered(given: string, variantOf?: string): Answered {
   };
 }
 
-describe('Feedback for a variant reading (D56)', () => {
+describe('Feedback for a variant reading', () => {
   it('says the answer is right and names the more common reading in Klee One', () => {
     renderWithServices(
       <Feedback

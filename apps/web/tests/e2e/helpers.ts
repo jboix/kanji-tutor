@@ -30,7 +30,7 @@ export async function nextStep(page: Page, to: string): Promise<void> {
   await expect(stepHeading(page, to)).toBeVisible();
 }
 
-/** The welcome (D134): presses Start, which also starts the dictionary download. */
+/** The welcome: presses Start, which also starts the dictionary download. */
 export async function startWizard(page: Page): Promise<void> {
   await expect(page).toHaveURL(/\/welcome$/);
   await expect(stepHeading(page, 'Kanji Tutor')).toBeVisible();
@@ -39,7 +39,7 @@ export async function startWizard(page: Page): Promise<void> {
 }
 
 /**
- * Goes through the welcome wizard quickly (P5, D134): Start loads the fixture dictionary in the
+ * Goes through the welcome wizard quickly (P5): Start loads the fixture dictionary in the
  * background; it starts from zero (or at `start`, e.g. /I'm studying N4/), with no class and no
  * key, and lands on Today.
  */
@@ -84,7 +84,7 @@ export async function answerField(page: Page): Promise<Locator> {
 
 /**
  * Marks the fixture's JLPT N5 and N4 words as known: from the first-run Today link, or from the
- * import page directly when the start already marked the N5 list (D38, D59) and Today has words.
+ * import page directly when the start already marked the N5 list and Today has words.
  */
 export async function importKnown(page: Page): Promise<void> {
   const link = page.getByRole('link', { name: 'Mark what you already know' });

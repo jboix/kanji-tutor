@@ -1,5 +1,5 @@
 /**
- * Completeness and sanity checks for content translations (N9, D53). Returns problems as lines,
+ * Completeness and sanity checks for content translations (N9). Returns problems as lines,
  * so a test can show every gap at once.
  */
 import type { ById, FunctionWordText, GrammarText, UnitText } from '../domain/content-types.ts';
