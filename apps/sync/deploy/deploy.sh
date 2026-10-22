@@ -1,5 +1,5 @@
 #!/bin/sh
-# Deploys one released version of the sync server (D142, D145). It is the deploy key's forced
+# Deploys one released version of the sync server. It is the deploy key's forced
 # command (`command="…/deploy.sh",restrict` in authorized_keys), so that key can run nothing
 # else: the Sync workflow connects with the version as its only argument and that release's
 # compose.yaml and Caddyfile as a tar on stdin. The script backs up the database, installs the two

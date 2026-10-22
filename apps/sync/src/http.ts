@@ -23,7 +23,7 @@ export async function body<T>(request: Request, schema: z.ZodType<T>): Promise<T
   return parsed.data;
 }
 
-/** CORS for the app's origin only (D133): it calls with a bearer token and If-Match. */
+/** CORS for the app's origin only: it calls with a bearer token and If-Match. */
 export function cors(origin: string): Record<string, string> {
   return {
     'access-control-allow-origin': origin,

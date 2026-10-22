@@ -1,6 +1,6 @@
-import type { Deps } from './deps.ts';
+import { countUp, type Deps } from './deps.ts';
 import { HttpError, json } from './http.ts';
-import { readSave, writeSave } from './saves.ts';
+import { decrypt, writeSave } from './saves.ts';
 import { signedIn } from './sessions.ts';
 
 /** GET /me: the account as this device sees it. */
@@ -46,13 +46,20 @@ export async function deleteAccount(request: Request, deps: Deps): Promise<Respo
   return json({ ok: true });
 }
 
-/** GET /save: the save, with its version as the ETag; 404 when there is none yet. */
+/**
+ * GET /save: the save, with its version as the ETag; 404 when there is none yet, and 304 when the
+ * device already has this version (If-None-Match), so checking for a newer one costs nothing.
+ */
 export async function getSave(request: Request, deps: Deps): Promise<Response> {
   const device = await signedIn(request, deps);
-  const save = await readSave(deps.saves, deps.saveKey, device.accountId);
-  if (!save) throw new HttpError(404, 'no-save');
-  return new Response(save.data, {
-    headers: { 'content-type': 'application/octet-stream', etag: `"${save.version}"` },
+  const row = await deps.saves.get(device.accountId);
+  if (!row) throw new HttpError(404, 'no-save');
+  const etag = `"${row.version}"`;
+  if (request.headers.get('if-none-match') === etag) {
+    return new Response(null, { status: 304, headers: { etag } });
+  }
+  return new Response(await decrypt(deps.saveKey, row.data), {
+    headers: { 'content-type': 'application/octet-stream', etag },
   });
 }
 
@@ -64,16 +71,23 @@ function expectedVersion(request: Request): number {
   return Number(match[1]);
 }
 
-/** PUT /save: writes over the version the device last saw; 412 if another device saved since. */
+/**
+ * PUT /save: writes over the version the device last saw; 412 if another device saved since, 429
+ * past the hourly cap. The body is the app's save, gzipped by the app; the server never opens it.
+ */
 export async function putSave(request: Request, deps: Deps): Promise<Response> {
   const device = await signedIn(request, deps);
   const expected = expectedVersion(request);
+  if (!(await countUp(deps, `saves:${device.accountId}`, deps.caps.savesPerHour, 3600))) {
+    throw new HttpError(429, 'too-many-saves');
+  }
   const data = await request.arrayBuffer();
   const version = await writeSave(deps.saves, deps.saveKey, {
     accountId: device.accountId,
     data,
     expected,
     at: deps.now(),
+    max: deps.caps.maxSaveBytes,
   });
   return json({ version }, 200, { etag: `"${version}"` });
 }

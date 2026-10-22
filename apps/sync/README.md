@@ -20,9 +20,25 @@ One SQLite file, `/data/sync.db` in the container:
 - **passkeys**, public keys only;
 - **devices**, with a hash of each session token;
 - **invites**, with a hash of each code, used once;
-- **saves**, one per account, encrypted with AES-GCM under `SAVE_KEY` and versioned, so an older
-  device never overwrites a newer save;
+- **saves**, one per account, gzipped by the app, encrypted with AES-GCM under `SAVE_KEY` and
+  versioned, so an older device never overwrites a newer save;
 - **codes** that expire: passkey challenges, pairing and email codes.
+
+## Limits
+
+Each has a default that suits invite-only use, and can be changed in `.env`:
+
+| Setting                 | Default | Limits                                                     |
+| ----------------------- | ------- | ---------------------------------------------------------- |
+| `RATE_PER_MINUTE`       | 120     | Requests per client address, to any endpoint but `/health` |
+| `SIGNED_OUT_PER_MINUTE` | 20      | Signed-out requests that start a sign-in or an account     |
+| `SAVES_PER_HOUR`        | 120     | Saves per account                                          |
+| `MAX_BODY_KB`           | 64      | Any request body but a save                                |
+| `MAX_SAVE_MB`           | 50      | One save                                                   |
+| `MAX_DEVICES`           | 20      | Devices per account: a new one signs out the oldest        |
+
+Every answer is `Cache-Control: no-store` and `X-Content-Type-Options: nosniff`; Caddy adds
+`Strict-Transport-Security`.
 
 ## Build and deploy
 
@@ -39,6 +55,10 @@ The server takes the app's version: run **Release** first, then this.
 
 To roll back, start the workflow with an earlier version, such as `1.2.0`: its image is deployed
 again, unbuilt.
+
+Trivy checks the image before it is published: one with a HIGH or CRITICAL vulnerability that has
+a fix is not. The **Image scan** workflow scans the running images, this one and Caddy's, every
+week and puts what it finds in the repository's Security tab.
 
 The server keeps a `.env` next to `compose.yaml` (from `.env.example`) with the domain, the
 app's origin and `SAVE_KEY` (`openssl rand -base64 32`). It never leaves the server. Keep a copy

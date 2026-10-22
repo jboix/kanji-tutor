@@ -13,7 +13,7 @@ name: Release
 # The Quality workflow gates every commit on main; the release runs the checks once more, and the
 # full end-to-end suite (the Quality workflow runs only a quick subset). The
 # repository's Pages source must be "GitHub Actions" (Settings → Pages), with the custom domain
-# app.kanjitutor.ch, so the base path is "/" (D143). The build uses the real
+# app.kanjitutor.ch, so the base path is "/". The build uses the real
 # Gemini provider, which stays inert until a user types a key on their device: no key is ever in
 # the build. Nothing is published to npm (`npmPublish: false`).
 on:
@@ -144,7 +144,7 @@ jobs:
       - name: Build
         env:
           VITE_BASE: ${{ steps.pages.outputs.base_path }}/
-          # The cloud-save server (D146), a repository variable; unset, the app has no Log in.
+          # The cloud-save server, a repository variable; unset, the app has no Log in.
           VITE_SYNC_URL: ${{ vars.SYNC_URL }}
         run: bun run build
 

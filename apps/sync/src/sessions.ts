@@ -6,7 +6,7 @@ import { randomId, randomToken, sha256 } from './tokens.ts';
 /** A device unused this long signs in again. */
 export const SESSION_IDLE_MS = 90 * 24 * 60 * 60 * 1000;
 
-/** last_seen is written at most this often, to spare D1 a write per request. */
+/** last_seen is written at most this often, to spare SQLite a write per request. */
 const TOUCH_EVERY_MS = 60 * 60 * 1000;
 
 /** A new device for the account, and its session token, which the device keeps. */
@@ -22,7 +22,17 @@ export async function newDevice(deps: Deps, accountId: string, name: string) {
     lastSeen: now,
   };
   await deps.store.addDevice(device);
+  await makeRoom(deps, device);
   return { token, device };
+}
+
+/** Past the cap on devices, the least recently seen others are signed out. */
+async function makeRoom(deps: Deps, kept: Device) {
+  const others = (await deps.store.devicesOf(kept.accountId)).filter((d) => d.id !== kept.id);
+  const over = others.length + 1 - deps.caps.maxDevices;
+  if (over <= 0) return;
+  const oldest = others.sort((a, b) => a.lastSeen - b.lastSeen).slice(0, over);
+  for (const d of oldest) await deps.store.removeDevice(kept.accountId, d.id);
 }
 
 const bearer = (request: Request) =>

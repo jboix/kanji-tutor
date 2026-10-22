@@ -1,6 +1,6 @@
-# The sync server behind Caddy, which gets and renews the HTTPS certificate on its own (D140).
+# The sync server behind Caddy, which gets and renews the HTTPS certificate on its own.
 # Settings come from .env next to this file (copy .env.example). The image is the one the Sync
-# workflow published; deploy.sh writes its tag (SYNC_TAG) into .env (D142).
+# workflow published; deploy.sh writes its tag (SYNC_TAG) into .env.
 name: kanji-sync
 
 services:

@@ -152,6 +152,13 @@ export function testDeps(): TestDeps {
     rpId: 'app.test',
     mail: async (to, code) => void sent.push({ to, code }),
     limit: () => undefined,
+    limitAll: () => undefined,
+    caps: {
+      savesPerHour: 120,
+      maxBodyBytes: 64 * 1024,
+      maxSaveBytes: 50 * 1024 * 1024,
+      maxDevices: 20,
+    },
     now: () => clock.now,
     version: '1.2.3',
     sent,

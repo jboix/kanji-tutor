@@ -15,7 +15,7 @@ async function withEmail(deps: ReturnType<typeof testDeps>, email = 'me@example.
   return phone;
 }
 
-describe('email codes (D133)', () => {
+describe('email codes', () => {
   it('confirms a recovery email with a code', async () => {
     const deps = testDeps();
     const phone = await withEmail(deps, ' Me@Example.com ');

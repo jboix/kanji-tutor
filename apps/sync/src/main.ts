@@ -1,5 +1,5 @@
 /**
- * The cloud-save server (D133, D140): Bun with Hono over one SQLite file, behind Caddy. Started
+ * The cloud-save server: Bun with Hono over one SQLite file, behind Caddy. Started
  * by Docker Compose (`server/compose.yaml`); `bun run server:dev` runs it locally.
  */
 import { createApp } from './app.ts';
@@ -11,9 +11,6 @@ import { createLimiter } from './rate-limit.ts';
 import { sqliteSaves } from './saves.ts';
 import { migrate } from './schema.ts';
 import { sqliteStore } from './sqlite-store.ts';
-
-/** Requests per minute a client may make without an account. */
-const SIGNED_OUT_PER_MINUTE = 20;
 
 const config = readConfig();
 const db = openSqlite(config.DB_PATH);
@@ -28,7 +25,14 @@ const app = createApp({
   origin: config.APP_ORIGIN,
   rpId: config.RP_ID,
   mail: smtpMailer(config),
-  limit: createLimiter(SIGNED_OUT_PER_MINUTE),
+  limit: createLimiter(config.SIGNED_OUT_PER_MINUTE),
+  limitAll: createLimiter(config.RATE_PER_MINUTE),
+  caps: {
+    savesPerHour: config.SAVES_PER_HOUR,
+    maxBodyBytes: config.MAX_BODY_KB * 1024,
+    maxSaveBytes: config.MAX_SAVE_MB * 1024 * 1024,
+    maxDevices: config.MAX_DEVICES,
+  },
   now: Date.now,
   version: config.SYNC_VERSION,
 });

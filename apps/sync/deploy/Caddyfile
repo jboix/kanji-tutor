@@ -1,6 +1,8 @@
 # HTTPS for the sync domain, then everything to the server. Caddy adds X-Forwarded-For, which
 # the server's per-client limit reads.
 {$SYNC_DOMAIN} {
+	# Browsers that have been here once never try plain HTTP again, for a year.
+	header Strict-Transport-Security "max-age=31536000"
 	encode zstd gzip
 	reverse_proxy sync:3000
 }

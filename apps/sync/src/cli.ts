@@ -1,5 +1,5 @@
 /**
- * Server commands, run inside the container (D140):
+ * Server commands, run inside the container:
  *
  *   docker compose exec sync bun cli.js invite "for Marta"   a new invite code, shown once
  *   docker compose exec sync bun cli.js invites              the invites, used or not

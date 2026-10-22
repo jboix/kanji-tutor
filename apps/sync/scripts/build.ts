@@ -1,7 +1,7 @@
 /**
  * `bun run sync:build`: bundles the sync server (`apps/sync/src`) into `apps/sync/deploy/app/`,
  * one file for the server and one for its commands, so the VPS installs nothing: `rsync` the
- * `apps/sync/deploy` folder and `docker compose up -d --build` there (see the guide, D140).
+ * `apps/sync/deploy` folder and `docker compose up -d --build` there (see the guide).
  */
 import { join, resolve } from 'node:path';
 

@@ -20,7 +20,7 @@ interface Challenge {
   accountId: string;
   /** Registering a passkey for an account that exists (a signed-in device), not a new one. */
   existing: boolean;
-  /** For a new account: the invite it uses (D140), hashed. */
+  /** For a new account: the invite it uses, hashed. */
   inviteHash?: string;
 }
 
@@ -47,7 +47,7 @@ async function giveChallenge(deps: Deps, challenge: Challenge) {
 
 const INVITE = z.object({ invite: z.string().max(40).optional() });
 
-/** The hash of an open invite, or a 403: new accounts are by invitation only (D140). */
+/** The hash of an open invite, or a 403: new accounts are by invitation only. */
 async function openInvite(request: Request, deps: Deps): Promise<string> {
   const { invite = '' } = await body(request, INVITE);
   const hash = await sha256(normalInvite(invite));

@@ -2,12 +2,6 @@ import { HttpError } from './http.ts';
 import type { Sql } from './sql.ts';
 import { fromBase64url } from './tokens.ts';
 
-/**
- * A guard on one upload, not a quota: far above any real save (the app's data without photos is
- * well under 1 MB), it only stops a runaway request from filling the server's memory.
- */
-export const MAX_SAVE_BYTES = 50 * 1024 * 1024;
-
 const IV_BYTES = 12;
 
 async function aesKey(secret: string): Promise<CryptoKey> {
@@ -74,12 +68,6 @@ export function sqliteSaves(db: Sql): SaveStore {
   };
 }
 
-/** The account's save, decrypted, or null when there is none. */
-export async function readSave(saves: SaveStore, secret: string, accountId: string) {
-  const row = await saves.get(accountId);
-  return row && { data: await decrypt(secret, row.data), version: row.version };
-}
-
 /**
  * Writes a save over `expected` (the version the device last saw, or 0 for none): another
  * device's newer save is never overwritten (412); the device merges and tries again.
@@ -87,9 +75,9 @@ export async function readSave(saves: SaveStore, secret: string, accountId: stri
 export async function writeSave(
   saves: SaveStore,
   secret: string,
-  write: { accountId: string; data: ArrayBuffer; expected: number; at: number },
+  write: { accountId: string; data: ArrayBuffer; expected: number; at: number; max: number },
 ): Promise<number> {
-  if (write.data.byteLength > MAX_SAVE_BYTES) throw new HttpError(413, 'save-too-big');
+  if (write.data.byteLength > write.max) throw new HttpError(413, 'save-too-big');
   const sealed = await encrypt(secret, write.data);
   const done = await saves.put(write.accountId, sealed, write);
   if (!done) throw new HttpError(412, 'save-changed');

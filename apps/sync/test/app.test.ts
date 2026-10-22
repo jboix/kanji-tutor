@@ -4,7 +4,7 @@ import { handle } from '../src/app.ts';
 import { call, ORIGIN, testDeps } from './fakes.ts';
 import { signedInAccount } from './helpers.ts';
 
-describe('the sync server (D133, D140)', () => {
+describe('the sync server', () => {
   it('answers /health to anyone, with the version running', async () => {
     const response = await handle(new Request('https://worker.test/health'), testDeps());
     expect(await response.json()).toEqual({ ok: true, version: '1.2.3' });

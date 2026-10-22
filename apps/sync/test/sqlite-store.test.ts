@@ -13,7 +13,7 @@ async function ready() {
   return sql;
 }
 
-describe('the SQLite store (D140)', () => {
+describe('the SQLite store', () => {
   it('keeps accounts, passkeys and devices, and drops them with the account', async () => {
     const store = sqliteStore(await ready());
     await store.createAccount({ id: 'a1', email: null, createdAt: 1 });

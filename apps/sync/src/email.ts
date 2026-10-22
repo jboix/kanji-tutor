@@ -1,10 +1,10 @@
 import { z } from 'zod';
-import { type Deps, getJson, putJson } from './deps.ts';
+import { countUp, type Deps, getJson, putJson } from './deps.ts';
 import { body, HttpError, json } from './http.ts';
 import { newDevice, signedIn } from './sessions.ts';
 import { emailCode, sha256 } from './tokens.ts';
 
-/** An email code works for ten minutes and five tries (D133). */
+/** An email code works for ten minutes and five tries. */
 const CODE_TTL = 600;
 const MAX_TRIES = 5;
 /** At most this many codes per address per hour. */
@@ -22,10 +22,9 @@ const CODE = z.string().regex(/^\d{6}$/);
 
 /** Counts sends per address; a 429 past the hourly limit. */
 async function limitSends(deps: Deps, email: string) {
-  const key = `sends:${email}`;
-  const count = Number((await deps.codes.get(key)) ?? '0');
-  if (count >= MAX_SENDS) throw new HttpError(429, 'too-many-codes');
-  await deps.codes.put(key, String(count + 1), 3600);
+  if (!(await countUp(deps, `sends:${email}`, MAX_SENDS, 3600))) {
+    throw new HttpError(429, 'too-many-codes');
+  }
 }
 
 async function sendCode(deps: Deps, key: string, email: string, extra: Partial<PendingCode>) {

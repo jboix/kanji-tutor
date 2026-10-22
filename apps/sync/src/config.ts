@@ -24,6 +24,13 @@ const SCHEMA = z.object({
   SAVE_KEY: z.string().refine(isKey, 'SAVE_KEY: 32 bytes, base64 (openssl rand -base64 32)'),
   DB_PATH: z.string().default('/data/sync.db'),
   PORT: z.coerce.number().int().default(3000),
+  /** The caps, each with a default that suits invite-only use. */
+  RATE_PER_MINUTE: z.coerce.number().int().positive().default(120),
+  SIGNED_OUT_PER_MINUTE: z.coerce.number().int().positive().default(20),
+  SAVES_PER_HOUR: z.coerce.number().int().positive().default(120),
+  MAX_BODY_KB: z.coerce.number().int().positive().default(64),
+  MAX_SAVE_MB: z.coerce.number().int().positive().default(50),
+  MAX_DEVICES: z.coerce.number().int().positive().default(20),
   /** Set by the image to the release it was built from; `dev` when run from the source. */
   SYNC_VERSION: z.string().default('dev'),
   /** Email codes, over any SMTP server; without a host and a sender, email is off. */

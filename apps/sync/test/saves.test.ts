@@ -15,7 +15,7 @@ function put(token: string, data: Uint8Array<ArrayBuffer>, headers: Record<strin
   });
 }
 
-describe('saves (D133)', () => {
+describe('saves', () => {
   it('encrypts with a fresh IV each time, and decrypts back', async () => {
     const plain = bytes('progress').buffer;
     const one = await encrypt(SAVE_KEY, plain);
@@ -35,6 +35,22 @@ describe('saves (D133)', () => {
     const got = await handle(call('GET', '/save', { token }), deps);
     expect(got.headers.get('etag')).toBe('"1"');
     expect(await got.text()).toBe('v1');
+  });
+
+  it('answers 304 when the device already has the latest version', async () => {
+    const deps = testDeps();
+    const { token } = await signedInAccount(deps);
+    await handle(put(token, bytes('v1'), { 'if-none-match': '*' }), deps);
+    const same = await handle(
+      call('GET', '/save', { token, headers: { 'if-none-match': '"1"' } }),
+      deps,
+    );
+    expect([same.status, same.headers.get('etag'), await same.text()]).toEqual([304, '"1"', '']);
+    const older = await handle(
+      call('GET', '/save', { token, headers: { 'if-none-match': '"0"' } }),
+      deps,
+    );
+    expect(await older.text()).toBe('v1');
   });
 
   it("never overwrites another device's newer save (412), and needs a version (428)", async () => {

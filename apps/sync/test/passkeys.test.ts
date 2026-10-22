@@ -20,7 +20,7 @@ const registered = (id: string) => ({
   registrationInfo: { credential: { id, publicKey: new Uint8Array([1, 2, 3]), counter: 0 } },
 });
 
-/** An open invite, as `cli.ts invite` makes it (D140). */
+/** An open invite, as `cli.ts invite` makes it. */
 async function invite(deps: ReturnType<typeof testDeps>, code = 'KD7M-3XQP') {
   const { normalInvite, sha256 } = await import('../src/tokens.ts');
   await deps.store.addInvite({
@@ -46,10 +46,10 @@ const verify = (path: string, challengeId: string, token?: string) =>
     body: { challengeId, name: 'iPhone', response: { id: 'cred-1' } },
   });
 
-describe('passkeys (D133)', () => {
+describe('passkeys', () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it('creates no account without an open invite (D140)', async () => {
+  it('creates no account without an open invite', async () => {
     const deps = testDeps();
     const none = await handle(call('POST', '/passkey/register/options', { body: {} }), deps);
     expect(none.status).toBe(403);
