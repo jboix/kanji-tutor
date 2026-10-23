@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useState, useSyncExternalStore } from 'react';
 import { BACKUP_REMINDER_DAYS } from '../domain/defaults.ts';
 import type { Settings } from '../domain/types.ts';
 import styles from './backup-reminder.module.css';
@@ -115,7 +115,8 @@ export function BackupReminder({ now = Date.now }: { now?: () => number }) {
   const { settings, dataSince, exportNow, later } = useReminder(now);
   const t = useT();
   const due = settings !== undefined && needsBackupReminder(settings, now(), dataSince);
-  useEffect(() => {
+  // Before the paint, so the install banner hides in the same frame: never two banners at once.
+  useLayoutEffect(() => {
     setShown(due);
     return () => setShown(false);
   }, [due]);

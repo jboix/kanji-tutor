@@ -286,7 +286,7 @@ describe('welcome wizard (P5)', () => {
     const { packs } = await setup({ settings: { onboardingStep: 'class' } });
     expect(await heading('Do you follow a class?')).toBeTruthy();
     expect(screen.getByText('3 of 6')).toBeTruthy();
-    expect(packs.loader.install).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(packs.loader.install).toHaveBeenCalledTimes(1));
   });
 
   it('changes a choice from the summary and comes back to it', async () => {
