@@ -94,6 +94,9 @@ jobs:
       - name: Semantic Release (version commit + tag + GitHub Release)
         env:
           GITHUB_TOKEN: ${{ steps.bot-token.outputs.token }}
+          # `npm version` only writes apps/web/package.json: in a workspace it would then reinstall
+          # the tree, which npm cannot read in Bun's node_modules.
+          npm_config_workspaces_update: 'false'
         run: bunx semantic-release
 
       - name: Resolve the released version
