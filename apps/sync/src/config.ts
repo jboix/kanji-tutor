@@ -21,7 +21,7 @@ const SCHEMA = z.object({
    * `app.kanjitutor.ch`), so passkeys still work if the app moves to another subdomain.
    */
   RP_ID: z.string().optional(),
-  SAVE_KEY: z.string().refine(isKey, 'SAVE_KEY: 32 bytes, base64 (openssl rand -base64 32)'),
+  SAVE_KEY: z.string().refine(isKey, '32 bytes, base64 (openssl rand -base64 32)'),
   DB_PATH: z.string().default('/data/sync.db'),
   PORT: z.coerce.number().int().default(3000),
   /** The caps, each with a default that suits invite-only use. */
