@@ -19,6 +19,7 @@ const AI_VIEWS = [
   'src/features/explain/sentence-use.tsx',
   'src/features/explain/reading-hook.tsx',
   'src/features/explain/ai-status.tsx',
+  'src/features/explain/tutor-sheet.tsx',
   'src/features/teach/memory-hook.tsx',
   'src/features/teach/sentence-help.tsx',
   'src/features/teach/ja-prose.tsx',

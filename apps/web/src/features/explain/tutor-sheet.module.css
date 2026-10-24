@@ -1,27 +1,5 @@
 /* The tutor's conversation (Tutor-sheet on the design canvas): questions on the right, the
-   tutor's answers on the left beside its seal. */
-
-.heading {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.titles {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.title {
-  font-size: var(--text-md);
-  font-weight: 700;
-}
-
-.about {
-  font-size: var(--text-sm);
-  color: var(--ink-muted);
-}
+   tutor's answers in the AI box. */
 
 .empty {
   margin: 0;
@@ -58,24 +36,6 @@
   background: var(--paper-soft);
   font-size: var(--text-md);
   line-height: 1.5;
-}
-
-.reply {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
-
-.bubble {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  min-width: 0;
-  padding: 12px 14px;
-  border-radius: 4px 18px 18px 18px;
-  background: color-mix(in srgb, var(--ai) 10%, var(--paper));
-  font-size: var(--text-md);
-  line-height: 1.6;
 }
 
 .suggestions {

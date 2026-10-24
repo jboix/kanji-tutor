@@ -13,8 +13,6 @@ export const explain = {
   answerLabel: 'Respuesta',
   thinking: 'Pensando en tu pregunta…',
   tutorLabel: 'El tutor, sobre {about}',
-  tutorTitle: 'Tu tutor',
-  tutorAbout: 'Sobre {about}',
   tutorEmpty: 'Pregunta lo que quieras, o prueba una frase tuya.',
   tutorAsk: 'Preguntar al tutor',
   tutorPlaceholder: 'Pregunta, o prueba tu frase…',

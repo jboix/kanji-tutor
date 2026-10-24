@@ -5,31 +5,17 @@
  */
 import { useEffect, useRef } from 'react';
 import { AiAction, AiAskInput, type AiRun } from '../../ui/ai-action.tsx';
-import { AiSeal } from '../../ui/ai-seal.tsx';
+import { AiBlock } from '../../ui/ai-block.tsx';
 import { BottomSheet } from '../../ui/bottom-sheet.tsx';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import type { TutorQuestion, TutorSheetSlotProps } from '../../ui/slots.tsx';
+import { TutorHeading } from '../../ui/tutor.tsx';
 import { AiProblem, Pending } from './ai-status.tsx';
 import { ImmersionFooter, JaText } from './ja-text.tsx';
 import { useNoSpoil } from './no-spoil.tsx';
 import styles from './tutor-sheet.module.css';
 import { UncheckedReadings, unverified } from './unchecked-readings.tsx';
 import { type Turn, useConversation } from './use-conversation.ts';
-
-function Heading({ about }: { about: string }) {
-  const t = useT();
-  return (
-    <div className={styles.heading}>
-      <AiSeal size={28} />
-      <span className={styles.titles}>
-        <span className={styles.title}>{t('explain.tutorTitle')}</span>
-        <span className={styles.about}>
-          <JaText text={t('explain.tutorAbout', { about })} />
-        </span>
-      </span>
-    </div>
-  );
-}
 
 function Reply({ turn, onRetry }: { turn: Turn; onRetry: AiRun }) {
   const t = useT();
@@ -39,15 +25,20 @@ function Reply({ turn, onRetry }: { turn: Turn; onRetry: AiRun }) {
   if (state.status === 'error') return <AiProblem error={state.error} onRetry={onRetry} />;
   if (state.status !== 'done') return null;
   const value = clean(state.value);
+  const detail = unverified(value.readings).length > 0 && (
+    <UncheckedReadings readings={value.readings} />
+  );
   return (
-    <div className={styles.reply}>
-      <AiSeal size={22} />
-      <div className={styles.bubble} role="note" aria-label={t('explain.answerLabel')}>
-        <JaText text={value.answer} immersion={value.immersion} />
-        <ImmersionFooter immersion={value.immersion} />
-        {unverified(value.readings).length > 0 && <UncheckedReadings readings={value.readings} />}
-      </div>
-    </div>
+    <AiBlock
+      size="sm"
+      label={t('explain.answerLabel')}
+      readings={value.readings}
+      cached={state.cached}
+      {...(detail ? { detail } : {})}
+    >
+      <JaText text={value.answer} immersion={value.immersion} />
+      <ImmersionFooter immersion={value.immersion} />
+    </AiBlock>
   );
 }
 
@@ -101,7 +92,7 @@ export function TutorSheet({ topic, starters, first, onClose }: TutorSheetSlotPr
       open
       onClose={onClose}
       label={t('explain.tutorLabel', { about: topic.about })}
-      header={<Heading about={topic.about} />}
+      header={<TutorHeading about={topic.about} />}
     >
       {turns.length === 0 && <p className={styles.empty}>{t('explain.tutorEmpty')}</p>}
       <ol className={styles.thread} aria-live="polite">

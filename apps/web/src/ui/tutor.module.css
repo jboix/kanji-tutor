@@ -1,0 +1,100 @@
+/* The ways to the tutor (the Tutor row on the design canvas): the 解 seal on a crimson-ringed
+   tint, so it reads as the tutor at a glance and never as a plain action. */
+
+.round,
+.wide,
+.card,
+.float {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--ai);
+  background: color-mix(in srgb, var(--ai) 12%, var(--paper));
+  color: var(--ink);
+  font-family: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.round {
+  flex: none;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.wide {
+  flex: 1;
+  gap: 10px;
+  min-height: 56px;
+  padding: 0 16px 0 10px;
+  border-radius: var(--radius-pill);
+}
+
+.card {
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: var(--radius-card);
+}
+
+.float {
+  position: fixed;
+  right: max(20px, calc(50% - 220px));
+  bottom: max(28px, calc(env(safe-area-inset-bottom) + 16px));
+  z-index: 5;
+  gap: 10px;
+  min-height: 56px;
+  padding: 0 20px 0 10px;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.25);
+}
+
+.round:focus-visible,
+.wide:focus-visible,
+.card:focus-visible,
+.float:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.strong {
+  font-size: var(--text-md);
+  font-weight: 700;
+}
+
+.sub {
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+.starters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.next {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.grow {
+  flex: 1;
+  min-width: 0;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
