@@ -2,4 +2,5 @@
 export { AskBox } from './ask-box.tsx';
 export { MistakeExplanation } from './mistake-explanation.tsx';
 export { ReadingHook } from './reading-hook.tsx';
+export { TutorSheet } from './tutor-sheet.tsx';
 export { ExplainWordSheet } from './word-sheet.tsx';

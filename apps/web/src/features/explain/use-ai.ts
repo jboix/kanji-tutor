@@ -10,13 +10,15 @@ export type AiState<T> =
   | { status: 'done'; value: T; cached?: boolean }
   | { status: 'error'; error: AiError };
 
-function settle<T>(result: Result<T>): AiState<T> {
+/** The state a finished call leaves. */
+export function settle<T>(result: Result<T>): AiState<T> {
   return result.ok
     ? { status: 'done', value: result.value, cached: result.cached }
     : { status: 'error', error: result.error };
 }
 
-function thrown(error: unknown): AiState<never> {
+/** The state a call that threw leaves. */
+export function thrown(error: unknown): AiState<never> {
   // An empty message reads as "the tutor did not answer" in the learner's language.
   const message = error instanceof Error ? error.message : '';
   return { status: 'error', error: { kind: 'provider', message } };

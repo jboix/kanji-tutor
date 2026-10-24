@@ -1,0 +1,85 @@
+/* The tutor's conversation (Tutor-sheet on the design canvas): questions on the right, the
+   tutor's answers on the left beside its seal. */
+
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.titles {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--text-md);
+  font-weight: 700;
+}
+
+.about {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.empty {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.6;
+  color: var(--ink-muted);
+}
+
+.thread {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.thread:empty {
+  display: none;
+}
+
+.turn {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.question {
+  align-self: flex-end;
+  max-width: 82%;
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 18px 18px 4px 18px;
+  background: var(--paper-soft);
+  font-size: var(--text-md);
+  line-height: 1.5;
+}
+
+.reply {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  padding: 12px 14px;
+  border-radius: 4px 18px 18px 18px;
+  background: color-mix(in srgb, var(--ai) 10%, var(--paper));
+  font-size: var(--text-md);
+  line-height: 1.6;
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}

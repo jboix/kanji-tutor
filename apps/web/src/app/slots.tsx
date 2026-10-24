@@ -39,6 +39,7 @@ export const SLOTS: Slots = {
   mistakeExplanation: lazySlot(async () => (await explain()).MistakeExplanation),
   wordSheet: lazySlot(async () => (await explain()).ExplainWordSheet),
   askBox: lazySlot(async () => (await explain()).AskBox),
+  tutorSheet: lazySlot(async () => (await explain()).TutorSheet),
   readingHook: lazySlot(async () => (await explain()).ReadingHook),
   newItemIntro: lazySlot(async () => (await teach()).NewItemIntro),
   newWordChip: lazySlot(async () => (await teach()).NewWordChip),

@@ -3,6 +3,7 @@
  * import each other). `src/app` fills them; a feature renders `useSlot('name')` if present.
  */
 import { type ComponentType, createContext, type ReactNode, use } from 'react';
+import type { AiClient } from '../ai/types.ts';
 import type { SessionCard, Target } from '../domain/session-types.ts';
 import type { Grade, Sentence, Settings } from '../domain/types.ts';
 
@@ -158,7 +159,35 @@ export interface PointPracticeSlotProps {
   grammarId: string;
 }
 
+/**
+ * What a conversation with the tutor is about: a sentence (or a word or pattern standing in for
+ * one), optionally one word in it and a grammar point. Never anything still to be answered.
+ */
+export interface TutorTopic {
+  /** Shown under "Your tutor" as "About …", e.g. 〜ました or the sentence. */
+  about: string;
+  sentence: { text: string; translation?: string };
+  surface?: string;
+  grammar?: { pattern: string; meaning: string };
+}
+
+/** A question asked as the sheet opens: a suggested question pressed outside it. */
+export interface TutorQuestion {
+  question: string;
+  client: AiClient;
+}
+
+/** The tutor's conversation sheet (explain feature, A4): opened from every 解 button. */
+export interface TutorSheetSlotProps {
+  topic: TutorTopic;
+  /** Suggested questions, shown as chips while nothing is asked. */
+  starters: readonly string[];
+  first?: TutorQuestion | undefined;
+  onClose: () => void;
+}
+
 export interface Slots {
+  tutorSheet?: ComponentType<TutorSheetSlotProps>;
   pointPractice?: ComponentType<PointPracticeSlotProps>;
   pagePeek?: ComponentType<PagePeekSlotProps>;
   grammarIntro?: ComponentType<GrammarIntroSlotProps>;
