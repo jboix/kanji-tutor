@@ -21,7 +21,7 @@ async function ready(page: Page) {
 
 test('today: from zero', async ({ page }) => {
   await onboard(page);
-  await expect(page.getByText(/^Start plays the next lesson part first/)).toBeVisible({
+  await expect(page.getByRole('link', { name: /^Daily mix\s?\d+ sentences?/ })).toBeVisible({
     timeout: 20_000,
   });
   await shot(page, 'today-zero', { full: true });

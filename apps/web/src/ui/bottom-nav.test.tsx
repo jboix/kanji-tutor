@@ -30,11 +30,14 @@ describe('BottomNav (IA3)', () => {
     expect(links.map((link) => link.getAttribute('href'))).toEqual([
       '/',
       '/learn',
-      '/start',
       '/add',
       '/settings',
     ]);
-    expect(within(nav).getByRole('link', { name: 'Start the next round' })).toBe(links[2]);
+    // Start sits between Learn and Add, and opens the sheet of rounds rather than a screen.
+    const start = within(nav).getByRole('button', { name: 'Start a round' });
+    expect(start.getAttribute('aria-haspopup')).toBe('dialog');
+    expect(links[1]?.compareDocumentPosition(start)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(start.compareDocumentPosition(links[2] as Node)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
     expect(current(nav)).toEqual(['Home']);
   });
 

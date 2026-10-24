@@ -249,3 +249,9 @@ export const CloudIcon = () => (
     <path d="M7 18.5h10a4 4 0 0 0 .6-7.95A5.5 5.5 0 0 0 7 9.5a4.5 4.5 0 0 0 0 9Z" />
   </Svg>
 );
+/** The daily mix: two arrows passing each other. */
+export const MixIcon = () => (
+  <Svg>
+    <path d="M4 7h12l-3-3M20 17H8l3 3" />
+  </Svg>
+);

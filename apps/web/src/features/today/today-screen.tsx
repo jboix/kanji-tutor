@@ -12,12 +12,13 @@ import { PlacementRows } from './placement-row.tsx';
 import styles from './today.module.css';
 import { ClassSection } from './today-class.tsx';
 import { dateLine } from './today-copy.ts';
+import { KnownSection, UnitsSection } from './today-known.tsx';
 import { LevelUpRow } from './today-lesson.tsx';
 import { NextUp } from './today-next.tsx';
 import { WeekPlanLine } from './today-plan.tsx';
 import { Practice } from './today-practice.tsx';
-import { Lead } from './today-sections.tsx';
 import { WhereYouAre } from './today-where.tsx';
+import { useHome } from './use-home.ts';
 import { type TodayData, type TodaySessionView, useToday } from './use-today.ts';
 
 /**
@@ -91,18 +92,6 @@ function TodayContent({ data, now, onChange }: TodayContentProps) {
   return <TodayBody overview={overview} session={session} now={now} onChange={onChange} />;
 }
 
-/** "6 sentences … about 5 minutes. Press Start." once the session is built. */
-function MixLine({ overview, session }: Omit<TodayBodyProps, 'now' | 'onChange'>) {
-  const t = useT();
-  if (!session) return <Loading text="today.choosing" />;
-  return (
-    <>
-      <Lead summary={{ ...overview, ...session }} />
-      {session.cards.length > 0 && <p className={styles.muted}>{t('today.pressStart')}</p>}
-    </>
-  );
-}
-
 interface TodayBodyProps {
   overview: TodayOverview;
   session: TodaySessionView | undefined;
@@ -110,20 +99,23 @@ interface TodayBodyProps {
   onChange: () => void;
 }
 
+/** Home 1: the lesson to go on with, a tile per round, what you know, lessons, then the rest. */
 function TodayBody({ overview, session, now, onChange }: TodayBodyProps) {
-  const mix = <MixLine overview={overview} session={session} />;
+  const home = useHome(now);
   return (
     <>
       <WhereYouAre key={now} last={overview.lastTime} />
       {overview.unit && <NextUp unit={overview.unit} />}
-      <Practice now={now} unit={overview.unit} mix={mix} handoff={session?.handoff} />
-      <ClassSection summary={overview} />
-      <WeekPlanLine now={now} />
-      {overview.levelUp && <LevelUpRow levelUp={overview.levelUp} onChange={onChange} />}
+      <Practice session={session} />
+      {home && <KnownSection known={home.known} />}
+      {home && <UnitsSection units={home.units} currentId={home.currentId} />}
       <div>
         {overview.trackedWords === 0 && <MarkRow />}
         <PlacementRows now={now} />
       </div>
+      <ClassSection summary={overview} />
+      <WeekPlanLine now={now} />
+      {overview.levelUp && <LevelUpRow levelUp={overview.levelUp} onChange={onChange} />}
     </>
   );
 }

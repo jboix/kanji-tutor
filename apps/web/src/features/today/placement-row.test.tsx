@@ -34,7 +34,8 @@ describe('Today: level rows (A11)', () => {
     renderWithServices(<PlacementRows now={NOW} />, { services: fakeServices({ repos }) });
     expect(await screen.findByText('Your reviews suggest N4')).toBeTruthy();
     expect(screen.getByText('Your level stays N5 until you change it')).toBeTruthy();
-    expect(screen.queryByText('Find my level')).toBeNull();
+    // Find my level stays within reach whatever the reviews say.
+    expect(screen.getByRole('link', { name: /^Find my level/ })).toBeTruthy();
     expect((await repos.settings.get()).learnerLevel).toBeUndefined();
   });
 });

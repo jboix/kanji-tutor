@@ -1,0 +1,93 @@
+/* The Start sheet: the lesson part first, as a raised row, then the other rounds as plain rows. */
+
+.heading {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  padding: 0 var(--gutter) max(24px, calc(env(safe-area-inset-bottom) + 12px));
+}
+
+.option,
+.first {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 64px;
+  padding: 0 16px;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.option:last-child {
+  border-bottom: 0;
+}
+
+.first {
+  min-height: 76px;
+  margin-bottom: 6px;
+  border: 1.5px solid var(--accent);
+  border-radius: var(--radius-card);
+  background: var(--paper-raised);
+}
+
+.option:focus-visible,
+.first:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  color: var(--accent);
+  font-size: 20px;
+}
+
+.first .icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--paper);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--text-md);
+}
+
+.first .title {
+  font-weight: 700;
+}
+
+.line {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.status {
+  margin: 0;
+  padding: 16px 0;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}

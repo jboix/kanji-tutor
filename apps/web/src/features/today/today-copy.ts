@@ -2,39 +2,11 @@
 import type { ErrorType } from '../../domain/types.ts';
 import type { Translate } from '../../ui/i18n/types.ts';
 
-const SPELLED = [
-  'today.spelled0',
-  'today.spelled1',
-  'today.spelled2',
-  'today.spelled3',
-  'today.spelled4',
-  'today.spelled5',
-  'today.spelled6',
-  'today.spelled7',
-  'today.spelled8',
-  'today.spelled9',
-  'today.spelled10',
-] as const;
-
-/** "Nine" for 9, "12" for 12: small counts are spelled out at the start of a sentence. */
-export function countWord(t: Translate, n: number): string {
-  const key = SPELLED[n];
-  return key ? t(key) : String(n);
-}
-
 /** "10月17日（土）": the date on Today is always in Japanese, whatever the interface language. */
 export function dateLine(now: number): string {
   const parts = new Intl.DateTimeFormat('ja-JP', { month: 'long', day: 'numeric' }).format(now);
   const day = new Intl.DateTimeFormat('ja-JP', { weekday: 'short' }).format(now);
   return `${parts}（${day}）`;
-}
-
-/** The second sentence of the lead: how many sentences carry new readings. */
-export function newReadingsLine(t: Translate, cards: number, fresh: number): string {
-  if (fresh === 0) return t('today.readingsNone');
-  if (cards === 1) return t('today.readingsIt');
-  if (fresh === cards) return t('today.readingsAll');
-  return t('today.readingsSome', { n: fresh, count: countWord(t, fresh) });
 }
 
 const MANY = {

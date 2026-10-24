@@ -221,31 +221,51 @@ a.small {
   background: linear-gradient(90deg, var(--hero-fill) 50%, var(--hero-track) 50%);
 }
 
-/* "What to practise" (IA2): the choice Start follows. */
-.practice {
+/* Continue, inside the hero: the next part, one tap into it. */
+.continue {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 56px;
+  padding: 6px 8px 6px 20px;
+  border-radius: var(--radius-pill);
+  background: var(--on-hero);
+  color: var(--hero);
+  text-decoration: none;
+}
+
+.continue:hover {
+  color: var(--hero);
+  filter: brightness(1.04);
+}
+
+.continueText {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 1px;
+  min-width: 0;
 }
 
-.choice[aria-pressed="true"] {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--on-ink);
+.continueTitle {
+  font-size: var(--text-md);
+  font-weight: 700;
 }
 
-.planLine {
+.continueLine {
+  font-size: 12px;
+}
+
+.continueDisc {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: var(--text-sm);
-  color: var(--ink-muted);
-  line-height: 1.6;
-}
-
-.planLine .text {
-  font-size: var(--text-sm);
-  color: var(--ink);
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--hero);
+  color: var(--on-hero);
 }
 
 /* This week's plan (IA6): one line and Change. */
@@ -300,13 +320,4 @@ a.small:focus-visible > span {
   border-radius: 4px;
   outline: 2px solid var(--accent);
   outline-offset: 3px;
-}
-
-.mixNow {
-  align-self: flex-start;
-  display: flex;
-  align-items: center;
-  min-height: var(--tap);
-  color: var(--accent);
-  text-underline-offset: 3px;
 }

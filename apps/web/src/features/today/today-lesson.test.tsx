@@ -30,7 +30,7 @@ describe('Today and the lesson path (T3, P4)', { timeout: 20_000 }, () => {
     expect(next.textContent).toContain('言葉 · Words, part 1, about 5 minutes');
   });
 
-  it('marks the sections done and says when Start plays the lesson first', async () => {
+  it('marks the sections done, and Continue opens the next part', async () => {
     const repos = await curriculumRepos();
     await knowSome(repos);
     await repos.settings.patch({
@@ -45,11 +45,8 @@ describe('Today and the lesson path (T3, P4)', { timeout: 20_000 }, () => {
     const next = await screen.findByRole('region', { name: 'Next up' });
     expect(within(next).getByText('Words, done')).toBeTruthy();
     expect(within(next).getByText('Grammar, next')).toBeTruthy();
-    expect(
-      await screen.findByText(/^Start plays the next lesson part first: 文法 · Grammar/),
-    ).toBeTruthy();
-    const mix = screen.getByRole('link', { name: 'Just the daily mix' });
-    expect(mix.getAttribute('href')).toBe('/read');
+    const go = within(next).getByRole('link', { name: /^Continue\s?文法 · Grammar, part 1/ });
+    expect(go.getAttribute('href')).toBe('/read?unit=i-am-a-student&section=grammar&part=1');
   });
 
   it('suggests moving up at 80% known, and moves only when asked', async () => {

@@ -10,6 +10,7 @@ import {
 } from '../../domain/services/index.ts';
 import { cx } from '../../ui/cx.ts';
 import { useT } from '../../ui/i18n/i18n.tsx';
+import { PlayIcon } from '../../ui/icons.tsx';
 import { Ja } from '../../ui/ja.tsx';
 import { SECTION_NAME } from '../../ui/lesson-sections.ts';
 import { paths } from '../../ui/paths.ts';
@@ -54,19 +55,27 @@ function Sections({ unit }: { unit: UnitView }) {
   );
 }
 
-function SectionLine({ unit }: { unit: UnitView }) {
+/** Continue: the next part's line, as one tap into it; a done unit says so instead. */
+function ContinueLink({ unit }: { unit: UnitView }) {
   const t = useT();
   if (unit.step === 'done') return <p className={styles.muted}>{t('today.unitDoneLine')}</p>;
   const part = nextPart(unit.progress.sections?.[unit.step]);
+  const line = t('today.sectionLine', {
+    title: SECTION_TITLES[unit.step],
+    name: t(SECTION_NAME[unit.step]),
+    part,
+    minutes: t('today.minutes', { n: PART_MINUTES }),
+  });
   return (
-    <p className={styles.muted}>
-      {t('today.sectionLine', {
-        title: SECTION_TITLES[unit.step],
-        name: t(SECTION_NAME[unit.step]),
-        part,
-        minutes: t('today.minutes', { n: PART_MINUTES }),
-      })}
-    </p>
+    <Link to={paths.lessonPart(unit.unit.id, unit.step, part)} className={styles.continue}>
+      <span className={styles.continueText}>
+        <span className={styles.continueTitle}>{t('today.continue')}</span>
+        <span className={styles.continueLine}>{line}</span>
+      </span>
+      <span className={styles.continueDisc} aria-hidden="true">
+        <PlayIcon />
+      </span>
+    </Link>
   );
 }
 
@@ -84,7 +93,7 @@ export function NextUp({ unit }: { unit: UnitView }) {
         <Ja variant="emph">{unit.unit.titleJa}</Ja>
       </Link>
       <Sections unit={unit} />
-      <SectionLine unit={unit} />
+      <ContinueLink unit={unit} />
     </section>
   );
 }

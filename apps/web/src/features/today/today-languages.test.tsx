@@ -25,27 +25,27 @@ async function renderToday(language: UiLanguage) {
 describe('TodayScreen in other languages (N7b)', () => {
   it('reads in French', async () => {
     await renderToday('fr');
-    // The day's session mixes in exercises (S7): "6 phrases et 2 exercices, environ 5 minutes."
-    const lead = await screen.findByText(/, environ \d+ minutes?\./);
-    expect(lead.textContent).toMatch(/^\d+ phrases? et \d+ exercices?, environ \d+ minutes?\. /);
-    expect(lead.textContent).toContain('de Tobira 第4課.');
+    expect(
+      await screen.findByRole('link', { name: /^Mélange du jour\s?\d+ phrases? · \d+ minutes?$/ }),
+    ).toBeTruthy();
     expect(screen.getByRole('region', { name: 'Où vous en êtes' }).textContent).toContain(
       'La seule erreur portait sur une voyelle longue, comme しょかい pour しょうかい.',
     );
-    expect(await screen.findByRole('button', { name: 'Mélange du jour' })).toBeTruthy();
+    expect(screen.getByRole('region', { name: 'S’entraîner' })).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Réglages' })).toBeTruthy();
-    expect(screen.getByRole('link', { name: 'Commencer la prochaine série' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Commencer une série' })).toBeTruthy();
     expect(screen.getByRole('region', { name: 'Cette semaine en cours' })).toBeTruthy();
   });
 
   it('reads in Spanish', async () => {
     await renderToday('es');
-    const lead = await screen.findByText(/, unos \d+ minutos?\./);
-    expect(lead.textContent).toMatch(/^\d+ frases? y \d+ ejercicios?, unos \d+ minutos?\. /);
+    expect(
+      await screen.findByRole('link', { name: /^Mezcla del día\s?\d+ frases? · \d+ minutos?$/ }),
+    ).toBeTruthy();
     expect(screen.getByRole('region', { name: 'Dónde estás' }).textContent).toContain(
       'El único fallo fue una vocal larga, como しょかい por しょうかい.',
     );
     expect(screen.getByRole('link', { name: 'Aprender' })).toBeTruthy();
-    expect(await screen.findByRole('button', { name: 'Mezcla del día' })).toBeTruthy();
+    expect(screen.getByRole('region', { name: 'Practicar' })).toBeTruthy();
   });
 });

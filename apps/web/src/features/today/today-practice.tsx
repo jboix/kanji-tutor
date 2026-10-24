@@ -1,117 +1,120 @@
-/** "What to practise" on Today (IA2): the choice Start follows (IA3), and what it will play. */
+/** Practise on Today: a tile per kind of round, and the app's other ways to read and write. */
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
-import { SECTION_TITLES, type UnitView } from '../../domain/services/index.ts';
-import type { PracticeChoice } from '../../domain/types.ts';
-import { Chip, ChipRow } from '../../ui/chip.tsx';
 import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
-import type { PlainKey } from '../../ui/i18n/types.ts';
+import { BookIcon, CameraIcon, MixIcon, PenIcon } from '../../ui/icons.tsx';
 import { Ja } from '../../ui/ja.tsx';
-import { SECTION_NAME } from '../../ui/lesson-sections.ts';
 import { paths } from '../../ui/paths.ts';
-import type { HandoffState } from '../../ui/session-handoff.ts';
-import styles from './today.module.css';
-import { type PracticeView, usePractice } from './use-practice.ts';
+import { startPath } from '../../ui/start-path.ts';
+import { type StartOptions, useStartOptions } from '../../ui/use-start-options.ts';
+import styles from './home.module.css';
+import type { TodaySessionView } from './use-today.ts';
 
-const CHOICES = [
-  ['mix', 'today.choiceMix'],
-  ['lesson', 'today.choiceLesson'],
-  ['reading', 'today.choiceReading'],
-  ['grammar', 'today.choiceGrammar'],
-  ['kanji', 'today.choiceKanji'],
-] as const satisfies readonly (readonly [PracticeChoice, PlainKey])[];
-
-const PART_MINUTES = 5;
-
-interface LineProps {
-  view: PracticeView;
-  unit: UnitView | undefined;
-  /** The daily mix's own line: "6 sentences and 4 exercises, about 5 minutes." */
-  mix: ReactNode;
-  /** The session Today built, for "Just the daily mix" (N10). */
-  handoff?: HandoffState | undefined;
+interface TileProps {
+  to: string;
+  icon: ReactNode;
+  title: string;
+  line: ReactNode;
+  state?: unknown;
 }
 
-function LessonLine({ view, unit, handoff }: Omit<LineProps, 'mix'>) {
-  const { t, rich } = useI18n();
-  const { plan } = view;
-  if (plan.kind !== 'lesson') return <>{t('today.noLesson')}</>;
-  const minutes = t('today.minutes', { n: PART_MINUTES });
-  const section = `${SECTION_TITLES[plan.section]} · ${t(SECTION_NAME[plan.section])}`;
-  if (view.choice === 'mix') {
-    return (
-      <>
-        <span>{t('today.mixLessonFirst', { section, minutes })}</span>
-        <Link to={paths.read} state={handoff} className={styles.mixNow}>
-          {t('today.mixNow')}
-        </Link>
-      </>
-    );
-  }
-  const title = <Ja>{unit?.unit.titleJa ?? plan.unit}</Ja>;
+function Tile({ to, icon, title, line, state }: TileProps) {
   return (
-    <>{rich('today.lessonLine', { section, unit: title, part: String(plan.part), minutes })}</>
+    <Link to={to} state={state} className={styles.tile}>
+      <span className={styles.tileIcon} aria-hidden="true">
+        {icon}
+      </span>
+      <span className={styles.tileTitle}>{title}</span>
+      <span className={styles.tileLine}>{line}</span>
+    </Link>
   );
 }
 
-function FocusLine({ view }: { view: PracticeView }) {
-  const { t, rich } = useI18n();
-  const { plan } = view;
-  if (plan.kind === 'grammar') {
-    const pattern = view.pattern ?? plan.grammar;
-    if (!pattern) return <>{t('today.grammarAny')}</>;
-    return <>{rich('today.grammarLine', { pattern: <Ja>{pattern}</Ja> })}</>;
-  }
-  if (plan.kind === 'kanji' && plan.focus) {
-    const { kanji, reading } = plan.focus;
-    return <>{rich('today.kanjiLine', { kanji: <Ja>{kanji}</Ja>, reading: <Ja>{reading}</Ja> })}</>;
-  }
-  return <>{t('today.kanjiAny')}</>;
-}
-
-/** What Start will play for the choice. */
-function PlanLine({ view, unit, mix, handoff }: LineProps) {
+/** The daily mix Today built (N10): its size once known, and the same session on tap. */
+function MixTile({ session }: { session: TodaySessionView | undefined }) {
   const t = useT();
-  const { plan, choice } = view;
-  if (plan.kind === 'lesson' || choice === 'lesson') {
-    return <LessonLine view={view} unit={unit} handoff={handoff} />;
+  const reading = session?.cards.filter((card) => card.reason !== 'drill').length;
+  let line = t('today.choosing');
+  if (reading === 0) line = t('today.tileMixNone');
+  else if (session && reading) {
+    line = t('today.tileMixLine', {
+      sentences: t('today.sentences', { n: reading }),
+      minutes: t('today.minutes', { n: session.minutes }),
+    });
   }
-  if (plan.kind === 'reading') return <>{t('today.readingLine')}</>;
-  if (plan.kind === 'mix') return <>{mix}</>;
-  return <FocusLine view={view} />;
-}
-
-export interface PracticeProps {
-  now: number;
-  unit: UnitView | undefined;
-  mix: ReactNode;
-  handoff?: HandoffState | undefined;
-}
-
-/** Five choices as toggle chips; the line under them says what Start plays. */
-export function Practice({ now, unit, mix, handoff }: PracticeProps) {
-  const t = useT();
-  const { view, choose } = usePractice(now);
   return (
-    <section className={styles.practice} aria-labelledby="practise-title">
-      <h2 id="practise-title" className={styles.panelTitle}>
-        {t('today.practiseLabel')}
+    <Tile
+      to={paths.read}
+      state={session?.handoff}
+      icon={<MixIcon />}
+      title={t('today.tileMix')}
+      line={line}
+    />
+  );
+}
+
+/** Grammar and kanji: the point or reading each would practise, as the Start sheet shows. */
+function FocusTiles({ options }: { options: StartOptions | undefined }) {
+  const { t, rich } = useI18n();
+  const pattern = options?.pattern;
+  const focus = options?.kanji.focus;
+  const kanjiLine = focus
+    ? rich('ui.startKanjiLine', {
+        kanji: <Ja>{focus.kanji}</Ja>,
+        reading: <Ja>{focus.reading}</Ja>,
+      })
+    : t('ui.startKanjiAny');
+  const grammarLine = pattern
+    ? rich('ui.startGrammarLine', { pattern: <Ja>{pattern}</Ja> })
+    : t('ui.startGrammarAny');
+  return (
+    <>
+      <Tile
+        to={startPath(options?.kanji ?? { kind: 'kanji' })}
+        icon={<Ja>漢</Ja>}
+        title={t('today.tileKanji')}
+        line={kanjiLine}
+      />
+      <Tile
+        to={startPath(options?.grammar ?? { kind: 'grammar' })}
+        icon={<Ja>文</Ja>}
+        title={t('today.tileGrammar')}
+        line={grammarLine}
+      />
+    </>
+  );
+}
+
+/** Six tiles (IA2): the mix, reading, kanji, grammar, writing a sentence and reading a photo. */
+export function Practice({ session }: { session: TodaySessionView | undefined }) {
+  const t = useT();
+  const options = useStartOptions(true);
+  return (
+    <section className={styles.block} aria-labelledby="practise-title">
+      <h2 id="practise-title" className={styles.blockTitle}>
+        {t('today.practiseTitle')}
       </h2>
-      <ChipRow>
-        {CHOICES.map(([choice, label]) => (
-          <Chip
-            key={choice}
-            className={styles.choice}
-            aria-pressed={view?.choice === choice}
-            disabled={!view}
-            onClick={() => choose(choice)}
-          >
-            {t(label)}
-          </Chip>
-        ))}
-      </ChipRow>
-      <div className={styles.planLine} aria-live="polite">
-        {view && <PlanLine view={view} unit={unit} mix={mix} handoff={handoff} />}
+      <div className={styles.tiles}>
+        <MixTile session={session} />
+        <Tile
+          to={startPath({ kind: 'reading' })}
+          icon={<BookIcon />}
+          title={t('today.tileRead')}
+          line={t('today.tileReadLine')}
+        />
+        <FocusTiles options={options} />
+        <Tile
+          to={paths.compose}
+          icon={<PenIcon />}
+          title={t('today.tileWrite')}
+          line={t('today.tileWriteLine')}
+        />
+        <Tile
+          to={paths.capture}
+          icon={<CameraIcon />}
+          title={t('today.tilePhoto')}
+          line={t('today.tilePhotoLine')}
+        />
       </div>
     </section>
   );

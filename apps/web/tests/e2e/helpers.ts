@@ -169,16 +169,22 @@ export async function draw(page: Page, strokes = MATSU) {
   }
 }
 
-/**
- * Starts the plain daily mix from Today (R1, N10, IA3). Start plays the next lesson part first
- * when one is due; "Just the daily mix" then skips it. Otherwise Start plays the mix.
- */
+/** The Start sheet (IA3), opened from the bar's centre button. */
+export async function openStart(page: Page): Promise<Locator> {
+  await page
+    .getByRole('navigation', { name: 'Main' })
+    .getByRole('button', { name: 'Start a round' })
+    .click();
+  const sheet = page.getByRole('dialog', { name: 'What now?' });
+  await expect(sheet).toBeVisible();
+  return sheet;
+}
+
+/** Starts the plain daily mix from Today's tile (R1, N10), once Today has built it. */
 export async function beginMix(page: Page): Promise<void> {
-  const settled = page.getByText(/^Press Start\.$|^Start plays the next lesson part first/);
-  await expect(settled.first()).toBeVisible({ timeout: 20_000 });
-  const mix = page.getByRole('link', { name: 'Just the daily mix' });
-  if (await mix.isVisible()) await mix.click();
-  else await page.getByRole('link', { name: 'Start the next round' }).click();
+  const mix = page.getByRole('link', { name: /^Daily mix\s?(\d+ sentences?|Nothing due)/ });
+  await expect(mix).toBeVisible({ timeout: 20_000 });
+  await mix.click();
   await expect(page).toHaveURL(/\/read$/);
 }
 

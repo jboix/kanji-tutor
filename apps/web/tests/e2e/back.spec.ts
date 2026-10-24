@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { onboard } from './helpers.ts';
+import { onboard, openStart } from './helpers.ts';
 
 /**
  * Back follows the history (S1): deep in, then back one screen at a time, never forward; a page
@@ -52,8 +52,8 @@ test("a session's close returns to the screen Start was pressed on", async ({ pa
   await onboard(page);
   await tab(page, 'Learn').click();
   await expect(page).toHaveURL(/\/learn$/);
-  await page.getByRole('link', { name: 'Start the next round' }).click();
-  await expect(page).toHaveURL(/\/read\?/);
+  await (await openStart(page)).getByRole('button', { name: /^Just reading/ }).click();
+  await expect(page).toHaveURL(/\/read\?only=reading$/);
   await page.getByRole('button', { name: 'End session' }).click();
   await expect(page).toHaveURL(/\/learn$/);
 });

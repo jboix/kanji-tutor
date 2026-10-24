@@ -7,6 +7,7 @@ import type { PlainKey } from './i18n/types.ts';
 import { BookIcon, HomeIcon, PlayIcon, PlusIcon, SettingsIcon } from './icons.tsx';
 import { InstallBanner } from './install-banner.tsx';
 import { paths } from './paths.ts';
+import { StartSheet } from './start-sheet.tsx';
 
 interface Tab {
   to: string;
@@ -83,16 +84,26 @@ function TabLink({ tab, active }: { tab: Tab; active: boolean }) {
   );
 }
 
-/** The raised centre button (IA3): one press starts the next round. */
+/** The raised centre button (IA3): it opens the sheet of rounds to start. */
 function StartButton() {
   const t = useT();
+  const [open, setOpen] = useState(false);
   return (
-    <Link to={paths.start} className={styles.start} aria-label={t('ui.navStartLabel')}>
-      <span className={styles.disc}>
-        <PlayIcon />
-      </span>
-      <span aria-hidden="true">{t('ui.navStart')}</span>
-    </Link>
+    <>
+      <button
+        type="button"
+        className={styles.start}
+        aria-label={t('ui.navStartLabel')}
+        aria-haspopup="dialog"
+        onClick={() => setOpen(true)}
+      >
+        <span className={styles.disc}>
+          <PlayIcon />
+        </span>
+        <span aria-hidden="true">{t('ui.navStart')}</span>
+      </button>
+      <StartSheet open={open} onClose={() => setOpen(false)} />
+    </>
   );
 }
 

@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { onboard } from './helpers.ts';
+import { beginMix, onboard } from './helpers.ts';
 
 /** The coverage line of the N5 group of the open tab, e.g. "N5 words: 3 of 120 known". */
 function n5(page: Page, noun: string) {
@@ -14,10 +14,7 @@ async function coverage(page: Page, noun: string): Promise<string> {
 
 test('a learner starting from zero gets a session on Today', async ({ page }) => {
   await onboard(page);
-  // Start plays the first lesson part, then the day's session (IA3).
-  await expect(page.getByText(/^Start plays the next lesson part first/)).toBeVisible();
-  await page.getByRole('link', { name: 'Just the daily mix' }).click();
-  await expect(page).toHaveURL(/\/read$/);
+  await beginMix(page);
   await page.goto('/');
   await expect(page.getByRole('link', { name: /Mark what you already know/ })).toBeVisible();
   await page.goto('/settings/words');

@@ -1,0 +1,194 @@
+/* Today's hub parts (IA2): Practise tiles, what you know, the lessons row and the level card. */
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.blockHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.blockTitle {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.more {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  font-size: var(--text-sm);
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.more:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 116px;
+  padding: 16px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-card);
+  background: var(--paper-soft);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.tile:hover {
+  color: var(--ink);
+  border-color: var(--border);
+}
+
+.tile:focus-visible,
+.count:focus-visible,
+.unit:focus-visible,
+.level:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.tileIcon {
+  display: flex;
+  height: 26px;
+  align-items: center;
+  color: var(--accent);
+  font-size: 22px;
+}
+
+.tileTitle {
+  font-size: var(--text-md);
+  font-weight: 700;
+}
+
+.tileLine {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--ink-muted);
+}
+
+.counts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.count {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 12px;
+  border-radius: 16px;
+  background: var(--paper-soft);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.count:hover {
+  color: var(--ink);
+}
+
+.countValue {
+  font-size: 24px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.countLabel {
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+/* The lessons row scrolls sideways inside itself, never the page. */
+.units {
+  display: flex;
+  gap: 10px;
+  margin: 0 calc(-1 * var(--gutter));
+  padding: 2px var(--gutter);
+  overflow-x: auto;
+  list-style: none;
+  scrollbar-width: none;
+}
+
+.unit {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 150px;
+  min-height: 84px;
+  box-sizing: border-box;
+  padding: 14px;
+  border: 1px solid var(--rule);
+  border-radius: 18px;
+  color: var(--ink);
+  font-size: 17px;
+  text-decoration: none;
+}
+
+.unit:hover {
+  color: var(--ink);
+}
+
+.unit[aria-current="step"] {
+  border: 1.5px solid var(--accent);
+}
+
+.unitOrder {
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+.level {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  border-radius: var(--radius-card);
+  background: var(--paper-soft);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.level:hover {
+  color: var(--ink);
+}
+
+.levelText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.levelTitle {
+  font-size: var(--text-md);
+  font-weight: 700;
+}
+
+.levelLine {
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+.chevron {
+  display: flex;
+  color: var(--ink-muted);
+}

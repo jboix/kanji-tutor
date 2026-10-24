@@ -129,6 +129,11 @@
 .start {
   position: relative;
   z-index: 1;
+  padding-top: 0;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
   gap: 4px;
   color: var(--accent);
   font-weight: 700;

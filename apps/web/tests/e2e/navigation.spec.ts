@@ -1,5 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
-import { onboard } from './helpers.ts';
+import { onboard, openStart } from './helpers.ts';
 
 /**
  * Wave 11's navigation (IA1–IA6): the bar, Start, the Learn hub, the Settings
@@ -14,8 +14,8 @@ test('the bar is Today · Learn · Start · Add · Settings, Start raised in the
 }) => {
   await onboard(page);
   const links = nav(page).getByRole('link');
-  await expect(links).toHaveCount(5);
-  const names = ['Home', 'Learn', 'Start the next round', 'Add', 'Settings'];
+  await expect(links).toHaveCount(4);
+  const names = ['Home', 'Learn', 'Add', 'Settings'];
   for (const [i, name] of names.entries()) {
     await expect(links.nth(i)).toHaveAccessibleName(name);
   }
@@ -24,7 +24,7 @@ test('the bar is Today · Learn · Start · Add · Settings, Start raised in the
     'page',
   );
   // The disc rises above the bar's top edge, and is at least as wide as a tap target.
-  const start = nav(page).getByRole('link', { name: 'Start the next round' });
+  const start = nav(page).getByRole('button', { name: 'Start a round' });
   const disc = await start.locator('span').first().boundingBox();
   const bar = await nav(page).boundingBox();
   expect(disc && bar && disc.y).toBeLessThan(bar?.y ?? 0);
@@ -33,32 +33,28 @@ test('the bar is Today · Learn · Start · Add · Settings, Start raised in the
   await expect(page.getByRole('link', { name: 'Settings' })).toHaveCount(1);
 });
 
-test('Start plays the first lesson part from zero, and its close returns to Today', async ({
+test('Start offers the first lesson part from zero, and its close returns to Today', async ({
   page,
 }) => {
   await onboard(page);
-  await expect(page.getByText(/^Start plays the next lesson part first: 言葉/)).toBeVisible({
-    timeout: 20_000,
-  });
-  await nav(page).getByRole('link', { name: 'Start the next round' }).click();
+  const sheet = await openStart(page);
+  await sheet.getByRole('button', { name: /^Continue the lesson\s?言葉/ }).click();
   await expect(page).toHaveURL(/\/read\?unit=i-am-a-student&section=words&part=1$/);
   await page.getByRole('button', { name: 'End session' }).click();
   await expect(page).toHaveURL(/\/$/);
   await expect(page.getByRole('heading', { name: '今日' })).toBeVisible();
 });
 
-test('the practice choice is saved and Start follows it', async ({ page }) => {
+test('the Start sheet plays the round chosen in it, and closes without starting', async ({
+  page,
+}) => {
   await onboard(page);
-  const reading = page.getByRole('button', { name: 'Reading', exact: true });
-  await expect(reading).toBeEnabled({ timeout: 20_000 });
-  await reading.click();
-  await expect(page.getByText('Sentences only, with no exercises. Press Start.')).toBeVisible();
-  await page.reload();
-  await expect(page.getByRole('button', { name: 'Reading', exact: true })).toHaveAttribute(
-    'aria-pressed',
-    'true',
-  );
-  await nav(page).getByRole('link', { name: 'Start the next round' }).click();
+  let sheet = await openStart(page);
+  await sheet.getByRole('button', { name: 'Close' }).click();
+  await expect(sheet).toBeHidden();
+  await expect(page).toHaveURL(/\/$/);
+  sheet = await openStart(page);
+  await sheet.getByRole('button', { name: /^Just reading/ }).click();
   await expect(page).toHaveURL(/\/read\?only=reading$/);
 });
 
