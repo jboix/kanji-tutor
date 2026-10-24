@@ -1,0 +1,72 @@
+/* The verdict card: green for natural, indigo for needs work, the miss red for not yet. */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  border-radius: var(--radius-panel);
+  background: var(--paper-soft);
+  border: 1.5px solid var(--accent);
+}
+
+.card[data-verdict="natural"] {
+  background: var(--ok-surface);
+  border-color: transparent;
+  color: var(--ok-ink);
+}
+
+.card[data-verdict="not-yet"] {
+  background: var(--miss-surface);
+  border-color: transparent;
+  color: var(--miss-ink);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mark {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--paper);
+  font-family: var(--font-ja);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+[data-verdict="natural"] .mark {
+  background: var(--ok);
+  color: var(--on-ok);
+}
+
+[data-verdict="not-yet"] .mark {
+  background: var(--miss);
+  color: var(--on-miss);
+}
+
+.name {
+  font-size: var(--text-md);
+  font-weight: 700;
+}
+
+.side {
+  margin-left: auto;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* The sentence takes the card's colour, without the ruled line of the draft. */
+.card .text {
+  color: inherit;
+  background-image: none;
+}

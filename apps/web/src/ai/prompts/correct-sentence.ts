@@ -4,7 +4,7 @@ import { joinLines, profileLines, READINGS_RULE, TUTOR } from './shared.ts';
 
 /** A6: red-pen corrections, errors separate from style notes. */
 export const correctSentencePrompt: Prompt<CorrectSentenceInput> = {
-  version: 4,
+  version: 5,
   system: joinLines(
     TUTOR,
     'The learner wrote one sentence using a target grammar point. Correct it like a teacher with',
@@ -13,8 +13,12 @@ export const correctSentencePrompt: Prompt<CorrectSentenceInput> = {
     "before it into before, then give UTF-16 offsets into the learner's sentence exactly as given",
     '(end equals start for an insertion). Use severity "error" for what is wrong and "style" for',
     'what is correct but could read better. Give each mark a short title and a one- or two-sentence',
-    'note. Say whether the target grammar is used. End with one plain summary line, such as',
-    '"Otherwise natural."',
+    'note. Say whether the target grammar is used. Then give a verdict: "natural" when nothing is',
+    'wrong (style notes at most), "needs-work" when errors need a small fix, "not-yet" when the',
+    'sentence does not say what was meant or misses the grammar point. In works, say in one or',
+    'two sentences what the sentence gets right, naming the grammar. In next, suggest one',
+    'concrete thing to try with the same point, such as a longer or more personal sentence;',
+    'leave it empty when there is nothing worth adding.',
     READINGS_RULE,
   ),
   build: (input, profile) =>

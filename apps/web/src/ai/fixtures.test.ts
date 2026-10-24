@@ -218,7 +218,10 @@ describe('tasks over the mock provider', () => {
     expect(insert).toMatchObject({ kind: 'insert', severity: 'error', text: 'な' });
     expect(sentence.slice(0, insert?.start)).toBe('日本語が嫌い');
     expect(style && sentence.slice(style.start, style.end)).toBe('好きじゃない');
-    expect(result.summary).toMatch(/^Otherwise natural/);
+    expect(result).toMatchObject({
+      verdict: 'needs-work',
+      works: expect.stringMatching(/^わけではない/),
+    });
     expect(result).toMatchSnapshot();
   });
 

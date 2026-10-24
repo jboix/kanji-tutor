@@ -16,7 +16,7 @@ test('write a sentence with a grammar point, read the red pen, accept it', async
     await page.getByRole('button', { name: 'Add grammar point' }).click();
   }
   await expect(page.getByRole('heading', { name: /^Use it · grammar 1 of 1$/ })).toBeVisible();
-  await expect(page.getByText('〜わけではない')).toBeVisible();
+  await expect(page.getByText('〜わけではない', { exact: true }).first()).toBeVisible();
 
   await page.getByLabel('Your sentence', { exact: true }).fill(SENTENCE);
   await page.getByRole('button', { name: 'Check' }).click();
@@ -27,13 +27,14 @@ test('write a sentence with a grammar point, read the red pen, accept it', async
     'Correct, but casual.',
   );
   await expect(page.locator('rt', { hasText: 'な' })).toBeVisible();
-  await expect(page.getByText(/^Otherwise natural\./)).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Needs work' })).toContainText('1 fix');
+  await expect(page.getByText('What works')).toBeVisible();
 
   await page.getByRole('button', { name: 'Rewrite' }).click();
   await expect(page.getByLabel('Your sentence', { exact: true })).toHaveValue(SENTENCE);
   await page.getByRole('button', { name: 'Check' }).click();
 
-  await page.getByRole('button', { name: 'Accept corrections' }).click();
+  await page.getByRole('button', { name: 'Save fixed' }).click();
   await expect(page).toHaveURL(/\/$/);
   await expect(page.getByRole('heading', { name: '今日' })).toBeVisible();
 });

@@ -168,11 +168,21 @@ export interface CorrectionMark {
   title: string;
   note: string;
 }
+/**
+ * The tutor's verdict on a sentence (A6): natural (nothing wrong, style notes at most), needs
+ * work (errors a small fix mends) or not yet (it does not say what was meant, or misses the
+ * grammar point).
+ */
+export type Verdict = 'natural' | 'needs-work' | 'not-yet';
+
 export interface Correction extends Immersed {
   corrected: string;
   marks: CorrectionMark[];
-  /** One closing line, e.g. "Otherwise natural." */
-  summary: string;
+  verdict: Verdict;
+  /** What the sentence gets right, in one or two sentences. */
+  works: string;
+  /** One thing to try next, to grow the sentence or the point; empty when there is none. */
+  next: string;
   usesTarget: boolean;
   readings: CheckedReading[];
 }

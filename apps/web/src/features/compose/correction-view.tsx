@@ -3,51 +3,16 @@ import { AiBlock } from '../../ui/ai-block.tsx';
 import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
 import { Ja } from '../../ui/ja.tsx';
 import { Reading } from '../../ui/reading.tsx';
-import { Insertion } from '../../ui/ruby.tsx';
 import { SectionLabel } from '../../ui/section-label.tsx';
 import styles from './compose.module.css';
 import { jaRuns } from './compose-copy.ts';
-import { markSegments, type Segment } from './mark-segments.ts';
+import { markSegments } from './mark-segments.ts';
+import { VerdictCard } from './verdict-card.tsx';
 
 /** AI prose with its Japanese runs in Klee One. */
 export function Prose({ text }: { text: string }) {
   return jaRuns(text).map((run) =>
     run.ja ? <Ja key={run.start}>{run.text}</Ja> : <span key={run.start}>{run.text}</span>,
-  );
-}
-
-function SegmentView({ segment }: { segment: Segment }) {
-  const t = useT();
-  switch (segment.kind) {
-    case 'plain':
-      return segment.text;
-    case 'insert':
-      return <Insertion text={segment.insert} />;
-    case 'style':
-      return <span className={styles.wavy}>{segment.text}</span>;
-    case 'delete':
-      return <del className={styles.struck}>{segment.text}</del>;
-    case 'replace':
-      return (
-        <ruby className={styles.ruby}>
-          <del className={styles.struck}>{segment.text}</del>
-          <rt className={styles.fix}>
-            <span className="visually-hidden">{t('compose.instead')}</span>
-            {segment.insert}
-          </rt>
-        </ruby>
-      );
-  }
-}
-
-/** The learner's sentence with the red pen on it (compose.html). */
-export function MarkedSentence({ segments }: { segments: readonly Segment[] }) {
-  return (
-    <p lang="ja" className={styles.sentence}>
-      {segments.map((segment) => (
-        <SegmentView key={`${segment.kind}${segment.start}`} segment={segment} />
-      ))}
-    </p>
   );
 }
 
@@ -86,7 +51,43 @@ function UnverifiedReadings({ readings }: { readings: readonly CheckedReading[] 
   );
 }
 
-/** The corrected sentence, one note per mark, the summary and any unverified readings. */
+/** "What works" and "One thing to try": a labelled paragraph of the tutor's notes. */
+function Part({ label, text }: { label: string; text: string }) {
+  if (!text.trim()) return null;
+  return (
+    <div className={styles.part}>
+      <SectionLabel>{label}</SectionLabel>
+      <p className={styles.partText}>
+        <Prose text={text} />
+      </p>
+    </div>
+  );
+}
+
+/** The tutor's notes: one per mark, what works, one thing to try, and what to watch. */
+function TutorNotes(props: { correction: Correction; marks: CorrectionMark[]; pattern: string }) {
+  const { correction, marks, pattern } = props;
+  const { t, rich } = useI18n();
+  return (
+    <AiBlock size="sm" label={t('compose.markedLabel')} readings={correction.readings}>
+      <div className={styles.notes}>
+        {marks.map((mark) => (
+          <MarkNote key={`${mark.start}-${mark.end}-${mark.kind}`} mark={mark} />
+        ))}
+        <Part label={t('compose.works')} text={correction.works} />
+        <Part label={t('compose.next')} text={correction.next} />
+        {!correction.usesTarget && (
+          <p className={styles.muted}>
+            {rich('compose.notTarget', { pattern: <Ja>{pattern}</Ja> })}
+          </p>
+        )}
+        <UnverifiedReadings readings={correction.readings} />
+      </div>
+    </AiBlock>
+  );
+}
+
+/** The verdict with the marked sentence, then the tutor's notes (Compose-natural, -needs-work). */
 export function CorrectionView({
   text,
   correction,
@@ -97,27 +98,11 @@ export function CorrectionView({
   pattern: string;
 }) {
   const { segments, marks } = markSegments(text, correction.marks);
-  const { t, rich } = useI18n();
+  const fixes = marks.filter((mark) => mark.severity === 'error').length;
   return (
-    <AiBlock size="sm" label={t('compose.markedLabel')} readings={correction.readings}>
-      <div className={styles.block}>
-        <SectionLabel>{t('compose.yourSentence')}</SectionLabel>
-        <MarkedSentence segments={segments} />
-      </div>
-      <div className={styles.notes}>
-        {marks.map((mark) => (
-          <MarkNote key={`${mark.start}-${mark.end}-${mark.kind}`} mark={mark} />
-        ))}
-        <p className={styles.muted}>
-          <Prose text={correction.summary} />
-        </p>
-        {!correction.usesTarget && (
-          <p className={styles.muted}>
-            {rich('compose.notTarget', { pattern: <Ja>{pattern}</Ja> })}
-          </p>
-        )}
-        <UnverifiedReadings readings={correction.readings} />
-      </div>
-    </AiBlock>
+    <>
+      <VerdictCard verdict={correction.verdict} fixes={fixes} segments={segments} />
+      <TutorNotes correction={correction} marks={marks} pattern={pattern} />
+    </>
   );
 }

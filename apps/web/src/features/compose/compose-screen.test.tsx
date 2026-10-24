@@ -9,6 +9,7 @@ import { createMemoryRepos } from '../../test/memory-repos.ts';
 import { fakeServices, renderWithServices } from '../../test/render.tsx';
 import { ENGLISH } from '../../ui/i18n/load.ts';
 import { createTranslator } from '../../ui/i18n/translate.ts';
+import type { Slots } from '../../ui/slots.tsx';
 import { errorCopy, headerLine, jaRuns } from './compose-copy.ts';
 import { ComposeScreen } from './compose-screen.tsx';
 
@@ -45,7 +46,9 @@ const CORRECTION: Correction = {
       note: 'After ではないが, written style flows better with 好きではない.',
     },
   ],
-  summary: 'Otherwise natural.',
+  verdict: 'needs-work',
+  works: 'わけではない softens it just right.',
+  next: 'Say why.',
   usesTarget: true,
   readings: [{ surface: '嫌い', reading: 'きらい', verified: true }],
 };
@@ -82,6 +85,7 @@ function renderCompose(
   ai: Partial<AiClient>,
   path = '/compose',
   language: 'en' | 'fr' | 'es' = 'en',
+  slots: Slots = {},
 ) {
   const lang = stub<Lang>({ tokenize: async () => TOKENS });
   const services = fakeServices({ repos, ai: stub<AiClient>(ai), lang });
@@ -91,7 +95,7 @@ function renderCompose(
       <Route path="/" element={<Today />} />
       <Route path="/settings/tutor" element={<p>Settings screen</p>} />
     </Routes>,
-    { services, path, language },
+    { services, path, language, slots },
   );
 }
 
@@ -107,6 +111,9 @@ async function typeAndCheck(text = SENTENCE) {
 }
 
 afterEach(() => localStorage.clear());
+
+/** A stand-in tutor sheet, so the tutor's buttons show. */
+const SHEET: Slots = { tutorSheet: () => null };
 
 describe('compose copy', () => {
   it('names the grammar position and splits Japanese runs', () => {
@@ -126,9 +133,9 @@ describe('compose copy', () => {
 describe('ComposeScreen', () => {
   it('asks for the next unused grammar point and shows the red pen after Check', async () => {
     const correctSentence = vi.fn(ok(CORRECTION));
-    renderCompose(await withGrammar(), { correctSentence });
+    renderCompose(await withGrammar(), { correctSentence }, '/compose', 'en', SHEET);
     expect(await screen.findByRole('heading', { name: 'Use it · grammar 1 of 1' })).toBeTruthy();
-    expect(screen.getByText('〜わけではない')).toBeTruthy();
+    expect(screen.getByText('〜わけではない', { selector: 'p' })).toBeTruthy();
     // The meaning and the instruction are two lines, never one run-on sentence.
     const meaning = (_: string, el: Element | null) => el?.textContent === "“It's not that…”";
     expect(screen.getByText(meaning, { selector: 'p' })).toBeTruthy();
@@ -148,8 +155,42 @@ describe('ComposeScreen', () => {
     const sentence = document.querySelector('p[lang="ja"].sentence, p[lang="ja"]:has(ruby)');
     expect(sentence?.textContent).toContain('Insert: な');
     expect(screen.getByText('好きじゃない').className).toContain('wavy');
-    expect(screen.getByText('Otherwise natural.')).toBeTruthy();
-    expect(screen.getByText('Your corrected sentence joins your review deck')).toBeTruthy();
+    expect(screen.getByRole('region', { name: 'Needs work' }).textContent).toContain('1 fix');
+    expect(screen.getByText('What works')).toBeTruthy();
+    expect(screen.getByText('One thing to try')).toBeTruthy();
+    expect(screen.getByText('It joins your review deck')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Rewrite' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Why add な?, 1 request, uses AI' })).toBeTruthy();
+  });
+
+  it('calls a right sentence natural, in green, with Save and go on and no Rewrite', async () => {
+    const natural: Correction = { ...CORRECTION, marks: [], verdict: 'natural' };
+    renderCompose(await withGrammar(), { correctSentence: ok(natural) }, '/compose', 'en', SHEET);
+    await typeAndCheck();
+    const card = await screen.findByRole('region', { name: 'Natural' });
+    expect(card.dataset.verdict).toBe('natural');
+    expect(card.textContent).toContain('Nothing to correct');
+    expect(screen.getByRole('button', { name: 'Save and go on' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Rewrite' })).toBeNull();
+    expect(
+      screen.getByRole('button', { name: 'Another way to say it, 1 request, uses AI' }),
+    ).toBeTruthy();
+  });
+
+  it('says what the tutor looks at while it reads the sentence', async () => {
+    renderCompose(await withGrammar(), { correctSentence: () => new Promise(() => {}) });
+    await typeAndCheck();
+    expect(await screen.findByText('The tutor is reading it')).toBeTruthy();
+    expect(screen.getByText('Particles and word order')).toBeTruthy();
+  });
+
+  it('opens the tutor on the grammar point from beside Check', async () => {
+    const tutorSheet: Slots['tutorSheet'] = ({ topic }) => <p>tutor on {topic.about}</p>;
+    renderCompose(await withGrammar(), {}, '/compose', 'en', { tutorSheet });
+    fireEvent.click(
+      await screen.findByRole('button', { name: 'Ask the tutor about 〜わけではない' }),
+    );
+    expect(screen.getByText('tutor on 〜わけではない')).toBeTruthy();
   });
 
   it('keeps the draft when offline and links to Settings without a key', async () => {
@@ -186,7 +227,7 @@ describe('ComposeScreen', () => {
     const repos = await withGrammar();
     renderCompose(repos, { correctSentence: ok(CORRECTION) });
     await typeAndCheck();
-    fireEvent.click(await screen.findByRole('button', { name: 'Accept corrections' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Save fixed' }));
     expect(
       await screen.findByText(/^Today screen: Saved to your sentences\. You have/),
     ).toBeTruthy();
@@ -206,7 +247,7 @@ describe('ComposeScreen', () => {
     const repos = await withGrammar([WAKE, tai]);
     renderCompose(repos, { correctSentence: ok(CORRECTION) });
     await typeAndCheck();
-    fireEvent.click(await screen.findByRole('button', { name: 'Accept corrections' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Save fixed' }));
     expect(await screen.findByText('〜たい')).toBeTruthy();
     expect(screen.getByRole('status').textContent).toBe('Saved to your sentences.');
     expect(screen.getByLabelText<HTMLTextAreaElement>('Your sentence').value).toBe('');
@@ -232,12 +273,9 @@ describe('ComposeScreen', () => {
     repos.sentences.put = () => Promise.reject(new Error('disk full'));
     renderCompose(repos, { correctSentence: ok(CORRECTION) });
     await typeAndCheck();
-    fireEvent.click(await screen.findByRole('button', { name: 'Accept corrections' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Save fixed' }));
     expect(await screen.findByText(/Couldn't save the sentence/)).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Accept corrections' })).toHaveProperty(
-      'disabled',
-      false,
-    );
+    expect(screen.getByRole('button', { name: 'Save fixed' })).toHaveProperty('disabled', false);
   });
 
   it('takes the grammar point from the query', async () => {
@@ -280,7 +318,7 @@ describe('ComposeScreen in French and Spanish', () => {
     fireEvent.click(screen.getByRole('button', { name: /^Vérifier, / }));
     expect(await screen.findByRole('note', { name: 'Correction' })).toBeTruthy();
     expect(screen.getByRole('note', { name: 'Note de style' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Accepter les corrections' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Enregistrer corrigée' })).toBeTruthy();
   });
 
   it('offers to add a grammar point in Spanish', async () => {

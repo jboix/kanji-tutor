@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { anchorMarks } from '../anchor-marks.ts';
 import { checkWithProse } from '../prose-readings.ts';
 import type { Verifier } from '../task-def.ts';
-import type { Correction, CorrectSentenceInput } from '../types.ts';
+import type { Correction, CorrectionMark, CorrectSentenceInput, Verdict } from '../types.ts';
 import { readingClaims } from './shared.ts';
 
 const mark = z.object({
@@ -27,10 +27,24 @@ const mark = z.object({
 export const correctionSchema = z.object({
   corrected: z.string().describe('The corrected sentence.'),
   marks: z.array(mark),
-  summary: z.string().describe('One closing line, e.g. "Otherwise natural."'),
+  verdict: z
+    .enum(['natural', 'needs-work', 'not-yet'])
+    .describe(
+      'natural: nothing wrong, style notes at most; needs-work: errors a small fix mends; not-yet: it does not say what was meant or misses the grammar point.',
+    ),
+  works: z.string().describe('What the sentence gets right, in one or two sentences.'),
+  next: z
+    .string()
+    .describe('One concrete thing to try next with this grammar point; empty when there is none.'),
   usesTarget: z.boolean().describe('Whether the sentence uses the target grammar point.'),
   readings: readingClaims,
 });
+
+/** A sentence with an error, or without the grammar point, is never called natural. */
+function verdictOf(said: Verdict, marks: readonly CorrectionMark[], usesTarget: boolean): Verdict {
+  const wrong = marks.some((mark) => mark.severity === 'error') || !usesTarget;
+  return said === 'natural' && wrong ? 'needs-work' : said;
+}
 
 /**
  * Places each mark by the text it quotes (offsets only pick between repeats), drops marks whose
@@ -42,6 +56,6 @@ export async function finalizeCorrection(
   lang: Verifier,
 ): Promise<Correction> {
   const marks = anchorMarks(input.sentence, raw.marks);
-  const shown = { ...raw, marks };
+  const shown = { ...raw, marks, verdict: verdictOf(raw.verdict, marks, raw.usesTarget) };
   return { ...shown, readings: await checkWithProse(lang, raw.readings, shown) };
 }

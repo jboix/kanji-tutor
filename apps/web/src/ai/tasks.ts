@@ -136,7 +136,7 @@ export const correctSentence = task({
   name: 'correctSentence',
   tier: 'teacher',
   immersive: true,
-  prose: (raw) => [raw.summary, ...raw.marks.map((mark) => mark.note)],
+  prose: (raw) => [raw.works, raw.next, ...raw.marks.map((mark) => mark.note)],
   prompt: correctSentencePrompt,
   schema: correctionSchema,
   finalize: finalizeCorrection,

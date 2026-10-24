@@ -172,6 +172,7 @@ exports[`tasks over the mock provider > correctSentence: な insertion (error) a
       "title": "Correct, but casual.",
     },
   ],
+  "next": "Add why: 漢字は難しいから、書くのは好きではない。",
   "readings": [
     {
       "reading": "にほんご",
@@ -204,8 +205,9 @@ exports[`tasks over the mock provider > correctSentence: な insertion (error) a
       "verified": false,
     },
   ],
-  "summary": "Otherwise natural. That's how you'd explain your relationship with kanji.",
   "usesTarget": true,
+  "verdict": "needs-work",
+  "works": "わけではない is used just right: it softens "I dislike Japanese" into "it's not that I dislike it", which is how you'd explain your relationship with kanji.",
 }
 `;
 

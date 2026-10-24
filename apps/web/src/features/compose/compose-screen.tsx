@@ -3,15 +3,19 @@ import type { AiClient } from '../../ai/types.ts';
 import type { ComposeTarget } from '../../domain/services/index.ts';
 import { ActionBar, ActionHint, ActionRow } from '../../ui/action-bar.tsx';
 import { AiAction } from '../../ui/ai-action.tsx';
+import { AiWriting } from '../../ui/ai-block.tsx';
 import { BackButton } from '../../ui/back-button.tsx';
 import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
+import { Ja } from '../../ui/ja.tsx';
 import { paths } from '../../ui/paths.ts';
 import { PillButton } from '../../ui/pill-button.tsx';
 import { Screen } from '../../ui/screen.tsx';
 import { TopBar } from '../../ui/top-bar.tsx';
+import { type Tutor, TutorNext } from '../../ui/tutor.tsx';
 import { AddGrammarForm } from './add-grammar-form.tsx';
 import styles from './compose.module.css';
 import { headerLine } from './compose-copy.ts';
+import { useComposeTutor } from './compose-tutor.ts';
 import { CorrectionView, Prose } from './correction-view.tsx';
 import { DraftEditor, ErrorLine } from './draft-editor.tsx';
 import { useComposeTarget } from './use-compose-target.ts';
@@ -27,33 +31,49 @@ function ComposeTopBar({ target }: { target?: ComposeTarget }) {
   );
 }
 
-function Footer({ composer }: { composer: Composer }) {
+/** Rewrite (unless natural) and Save: "Save and go on" for a natural sentence, else "Save fixed". */
+function SaveActions({ composer, natural }: { composer: Composer; natural: boolean }) {
+  const t = useT();
+  return (
+    <ActionRow>
+      {!natural && (
+        <PillButton variant="secondary" disabled={composer.busy} onClick={composer.rewrite}>
+          {t('compose.rewrite')}
+        </PillButton>
+      )}
+      <PillButton grow={1.4} disabled={composer.busy} onClick={() => void composer.accept()}>
+        {t(natural ? 'compose.saveNatural' : 'compose.saveFixed')}
+      </PillButton>
+    </ActionRow>
+  );
+}
+
+/** Check, or once corrected Rewrite and Save, each with the tutor beside it (Compose-*). */
+function Footer({ composer, tutor }: { composer: Composer; tutor: Tutor | undefined }) {
   const { correction, busy, text } = composer;
   const t = useT();
   if (!correction) {
     return (
       <ActionBar>
-        <AiAction
-          look="primary"
-          label={busy ? t('compose.checking') : t('compose.check')}
-          disabled={busy || text.trim() === ''}
-          run={(client) => void composer.check(client)}
-          peek={composer.peek}
-        />
+        <TutorNext tutor={tutor}>
+          <AiAction
+            look="primary"
+            block
+            label={busy ? t('compose.checking') : t('compose.check')}
+            disabled={busy || text.trim() === ''}
+            run={(client) => void composer.check(client)}
+            peek={composer.peek}
+          />
+        </TutorNext>
       </ActionBar>
     );
   }
   return (
     <ActionBar>
-      <ActionRow>
-        <PillButton variant="secondary" disabled={busy} onClick={composer.rewrite}>
-          {t('compose.rewrite')}
-        </PillButton>
-        <PillButton grow={1.4} disabled={busy} onClick={() => void composer.accept()}>
-          {t('compose.accept')}
-        </PillButton>
-      </ActionRow>
-      <ActionHint>{t('compose.acceptHint')}</ActionHint>
+      <TutorNext tutor={tutor}>
+        <SaveActions composer={composer} natural={correction.verdict === 'natural'} />
+      </TutorNext>
+      <ActionHint>{t('compose.saveHint')}</ActionHint>
     </ActionBar>
   );
 }
@@ -73,13 +93,14 @@ function SavedNotice() {
 
 function Composing({ target }: { target: ComposeTarget }) {
   const composer = useComposer(target);
+  const tutor = useComposeTutor(target, composer.text, composer.correction);
   const { grammar } = target;
   const { t, rich } = useI18n();
   return (
     <Screen
       topBar={<ComposeTopBar target={target} />}
       top={16}
-      footer={<Footer composer={composer} />}
+      footer={<Footer composer={composer} tutor={tutor} />}
     >
       <SavedNotice />
       <div className={styles.heading}>
@@ -96,20 +117,39 @@ function Composing({ target }: { target: ComposeTarget }) {
   );
 }
 
+/** While the tutor reads the sentence: how long it takes, and what it looks at (Compose-checking). */
+function Checking({ pattern }: { pattern: string }) {
+  const { t, rich } = useI18n();
+  return (
+    <AiWriting>
+      <span className={styles.checking}>
+        <b>{t('compose.readingIt')}</b>
+        <span className={styles.checkingTime}>{t('compose.readingTime')}</span>
+        <span>{rich('compose.checksTarget', { pattern: <Ja>{pattern}</Ja> })}</span>
+        <span>{t('compose.checksParticles')}</span>
+        <span>{t('compose.checksNatural')}</span>
+      </span>
+    </AiWriting>
+  );
+}
+
 /** The draft, or the tutor's correction; a tutor problem with its countdown and Retry (A14). */
 function ComposeBody({ composer, pattern }: { composer: Composer; pattern: string }) {
   const retry = (client: AiClient) => void composer.check(client);
   const { correction, error, waitMs } = composer;
   if (!correction) {
     return (
-      <DraftEditor
-        text={composer.text}
-        onChange={composer.setText}
-        error={error}
-        waitMs={waitMs}
-        onRetry={retry}
-        disabled={composer.busy}
-      />
+      <>
+        <DraftEditor
+          text={composer.text}
+          onChange={composer.setText}
+          error={error}
+          waitMs={waitMs}
+          onRetry={retry}
+          disabled={composer.busy}
+        />
+        {composer.busy && <Checking pattern={pattern} />}
+      </>
     );
   }
   return (

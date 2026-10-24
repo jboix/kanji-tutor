@@ -125,6 +125,19 @@
   gap: 16px;
 }
 
+/* "What works", "One thing to try": a small label over a paragraph. */
+.part {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.partText {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.6;
+}
+
 .muted {
   margin: 0;
   font-size: 14px;
@@ -193,4 +206,15 @@
   content: "〜 ";
   color: var(--ai);
   font-family: var(--font-ja);
+}
+
+/* While checking: what the tutor looks at, one line each. */
+.checking {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.checkingTime {
+  color: var(--ink-muted);
 }
