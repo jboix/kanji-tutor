@@ -6,11 +6,13 @@ import { ActionBar } from '../../ui/action-bar.tsx';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { PillButton } from '../../ui/pill-button.tsx';
 import { Screen } from '../../ui/screen.tsx';
+import { TutorNext } from '../../ui/tutor.tsx';
 import { ItemTeaching } from './item-teaching.tsx';
 import { ChoiceBody } from './question-choice.tsx';
 import { PassageScreen } from './question-comprehension.tsx';
 import { OrderBody } from './question-order.tsx';
 import { QuestionHeader } from './question-parts.tsx';
+import { useQuestionTutor } from './question-tutor.ts';
 import read from './read.module.css';
 import { useFocus } from './read-actions.tsx';
 import type { DrillResult } from './session-state.ts';
@@ -24,16 +26,20 @@ export type SessionQuestion = ChoiceQuestion | OrderQuestion;
 const surfaceOf = (question: SessionQuestion) =>
   question.kind === 'sentence-order' ? '' : question.stem.target;
 
-function NextFooter({ onNext }: { onNext: () => void }) {
+/** Once answered: the tutor's suggested questions and 解 button beside Next (Tutor-drill). */
+function NextFooter({ question, onNext }: { question: SessionQuestion; onNext: () => void }) {
   const box = useFocus('[data-next]', 'answered');
+  const tutor = useQuestionTutor(question);
   const t = useT();
   return (
     <ActionBar>
-      <div ref={box} className={read.next}>
-        <PillButton data-next onClick={onNext}>
-          {t('readSession.nextSentence')}
-        </PillButton>
-      </div>
+      <TutorNext tutor={tutor}>
+        <div ref={box} className={read.next}>
+          <PillButton data-next onClick={onNext}>
+            {t('readSession.nextSentence')}
+          </PillButton>
+        </div>
+      </TutorNext>
     </ActionBar>
   );
 }
@@ -53,7 +59,7 @@ export function QuestionScreen({ question, card, topBar, onDone }: QuestionScree
   useGradeSound(answer?.grade);
   const done = () => onDone({ kind: question.kind, right: answer?.grade.verdict === 'correct' });
   // Before the answer, "I don't know" sits in the help bar under the question (U6).
-  const footer = answer && <NextFooter onNext={done} />;
+  const footer = answer && <NextFooter question={question} onNext={done} />;
   return (
     <Screen topBar={topBar} footer={footer} gap={22} enter={false}>
       <QuestionHeader question={question} />

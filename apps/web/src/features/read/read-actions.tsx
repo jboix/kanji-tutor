@@ -1,13 +1,15 @@
-import { createContext, use, useEffect, useRef } from 'react';
+import { createContext, use, useEffect, useMemo, useRef } from 'react';
 import { answerSpan } from '../../domain/services/index.ts';
 import type { SessionCard, Target } from '../../domain/session-types.ts';
 import { ActionBar } from '../../ui/action-bar.tsx';
 import { AnswerInput } from '../../ui/answer-input.tsx';
-import { useT } from '../../ui/i18n/i18n.tsx';
+import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
 import { IconButton } from '../../ui/icon-button.tsx';
 import { MicIcon } from '../../ui/icons.tsx';
 import { PillButton } from '../../ui/pill-button.tsx';
 import { useSlot } from '../../ui/slots.tsx';
+import { TutorNext, useTutor } from '../../ui/tutor.tsx';
+import { sentenceTopic } from './drill-tutor.ts';
 import styles from './read.module.css';
 import { SessionCopy, useCopyText } from './session-copy.tsx';
 import { SkipButton } from './skip-button.tsx';
@@ -95,21 +97,41 @@ export interface NextActionsProps {
   onNext: () => void;
 }
 
+/** The tutor on a sentence whose every target is answered, so nothing it says can spoil one. */
+function useSentenceTutor(card: SessionCard, last: boolean) {
+  const { t, language } = useI18n();
+  const options = useMemo(() => {
+    const words = card.targets.map((target) => target.surface);
+    const starters = [
+      t('exercises.tutorExplain'),
+      ...words.slice(0, 1).map((x) => t('exercises.tutorReadAs', { x })),
+    ];
+    return {
+      topic: { about: card.sentence.text, sentence: sentenceTopic(card.sentence, language) },
+      starters,
+    };
+  }, [card, t, language]);
+  const tutor = useTutor(options);
+  return last ? tutor : undefined;
+}
+
 /**
- * After an answer: the question box slot (A4) and "Next sentence" (read.html). The box waits for
- * the sentence's last target, so asking can't reveal a reading still to be answered.
+ * After an answer: "Next sentence" (read.html), and once the sentence's last target is answered
+ * the tutor beside it (Tutor-drill). It waits for the last target, so asking can't reveal a
+ * reading still to be answered.
  */
 export function NextActions({ card, last, onNext }: NextActionsProps) {
-  const Ask = useSlot('askBox');
   const box = useFocus('[data-next]', card.sentence.id);
+  const tutor = useSentenceTutor(card, last);
   return (
     <ActionBar>
-      {Ask && last && <Ask sentence={card.sentence} />}
-      <div ref={box} className={styles.next}>
-        <PillButton data-next onClick={onNext}>
-          <SessionCopy k={last ? 'nextSentence' : 'nextWord'} />
-        </PillButton>
-      </div>
+      <TutorNext tutor={tutor}>
+        <div ref={box} className={styles.next}>
+          <PillButton data-next onClick={onNext}>
+            <SessionCopy k={last ? 'nextSentence' : 'nextWord'} />
+          </PillButton>
+        </div>
+      </TutorNext>
     </ActionBar>
   );
 }

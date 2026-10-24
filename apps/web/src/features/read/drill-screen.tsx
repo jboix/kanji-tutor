@@ -12,6 +12,7 @@ import { ExerciseHelp } from '../../ui/exercise-help.tsx';
 import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
 import { PillButton } from '../../ui/pill-button.tsx';
 import { Screen } from '../../ui/screen.tsx';
+import { TutorNext } from '../../ui/tutor.tsx';
 import { BuildActions, type BuildOrder, BuildView, useBuildOrder } from './drill-build.tsx';
 import { ChoiceActions, ClozeView, LookalikeView } from './drill-choices.tsx';
 import {
@@ -22,6 +23,7 @@ import {
   ParticleView,
 } from './drill-exercises.tsx';
 import { ConjugationView, PatternView } from './drill-forms.tsx';
+import { useDrillTutor } from './drill-tutor.ts';
 import { FamilyView, ReadingsView, TypedActions } from './drill-typed.tsx';
 import { ItemTeaching } from './item-teaching.tsx';
 import { asShown, listeningQuiet, listenLater } from './listen-later.ts';
@@ -150,18 +152,27 @@ function AnswerFooter(props: BodyProps) {
   return <TypedActions key={label} label={label} placeholder={placeholder} onAnswer={answer} />;
 }
 
-function NextFooter(props: { controls: DrillControls; nextLabel?: string | undefined }) {
-  const { controls, nextLabel } = props;
+interface NextFooterProps {
+  drill: Drill;
+  controls: DrillControls;
+  nextLabel?: string | undefined;
+}
+
+/** Once answered: the tutor's suggested questions and 解 button beside Next (Tutor-drill). */
+function NextFooter({ drill, controls, nextLabel }: NextFooterProps) {
   const box = useFocus('[data-next]', `step${controls.step}`);
+  const tutor = useDrillTutor(drill);
   const t = useT();
   const label = t(controls.last ? 'readSession.nextSentence' : 'readSession.nextWord');
   return (
     <ActionBar>
-      <div ref={box} className={read.next}>
-        <PillButton data-next onClick={controls.next}>
-          {controls.last && nextLabel ? nextLabel : label}
-        </PillButton>
-      </div>
+      <TutorNext tutor={tutor}>
+        <div ref={box} className={read.next}>
+          <PillButton data-next onClick={controls.next}>
+            {controls.last && nextLabel ? nextLabel : label}
+          </PillButton>
+        </div>
+      </TutorNext>
     </ActionBar>
   );
 }
@@ -222,7 +233,7 @@ export function DrillCard({ drill: given, card, onDone, nextLabel, layout }: Dri
   const order = useBuildOrder();
   useGradeSound(controls.answered ? controls.answers[controls.step]?.grade : undefined);
   const footer = controls.answered ? (
-    <NextFooter controls={controls} nextLabel={nextLabel} />
+    <NextFooter drill={drill} controls={controls} nextLabel={nextLabel} />
   ) : (
     <AnswerFooter drill={drill} controls={controls} order={order} />
   );

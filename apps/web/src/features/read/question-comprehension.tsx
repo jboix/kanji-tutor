@@ -9,10 +9,12 @@ import { cx } from '../../ui/cx.ts';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { PillButton } from '../../ui/pill-button.tsx';
 import { Screen } from '../../ui/screen.tsx';
+import { TutorNext } from '../../ui/tutor.tsx';
 import { TapText } from '../../ui/word-tap.tsx';
 import styles from './question.module.css';
 import { AnswerLine, OptionList, OptionNotes, QuestionHeader } from './question-parts.tsx';
 import { PassageText, usePassageLines } from './question-tap.tsx';
+import { usePassageTutor } from './question-tutor.ts';
 import read from './read.module.css';
 import { useFocus } from './read-actions.tsx';
 import type { DrillResult } from './session-state.ts';
@@ -69,18 +71,44 @@ interface StepProps {
   layout: PassageLayout;
 }
 
-/** "Next question", or "Done" after the last, once answered: in the action bar, always in view. */
-function NextQuestion(props: { last: boolean; onNext: () => void }) {
+interface NextQuestionProps {
+  set: ComprehensionSet;
+  question: ComprehensionQuestion;
+  last: boolean;
+  onNext: () => void;
+}
+
+/**
+ * "Next question", or "Done" after the last, once answered: in the action bar, always in view,
+ * with the tutor on the passage beside it (Tutor-drill).
+ */
+function NextQuestion(props: NextQuestionProps) {
   const box = useFocus('[data-next]', 'answered');
+  const tutor = usePassageTutor(props.set, props.question);
   const t = useT();
   return (
     <ActionBar>
-      <div ref={box} className={read.next}>
-        <PillButton data-next onClick={props.onNext}>
-          {t(props.last ? 'common.done' : 'questions.nextQuestion')}
-        </PillButton>
-      </div>
+      <TutorNext tutor={tutor}>
+        <div ref={box} className={read.next}>
+          <PillButton data-next onClick={props.onNext}>
+            {t(props.last ? 'common.done' : 'questions.nextQuestion')}
+          </PillButton>
+        </div>
+      </TutorNext>
     </ActionBar>
+  );
+}
+
+/** The question, its words tappable once answered. */
+function Asked({ question, answered }: { question: ComprehensionQuestion; answered: boolean }) {
+  return (
+    <p lang="ja" className={styles.question}>
+      {answered ? (
+        <TapText text={question.question} id={`${question.id}:question`} />
+      ) : (
+        question.question
+      )}
+    </p>
   );
 }
 
@@ -91,7 +119,12 @@ function Step({ set, question, last, onNext, layout }: StepProps) {
   const proof = set.sentences[question.evidence];
   const t = useT();
   const footer = answer && (
-    <NextQuestion last={last} onNext={() => onNext(answer.grade.verdict === 'correct')} />
+    <NextQuestion
+      set={set}
+      question={question}
+      last={last}
+      onNext={() => onNext(answer.grade.verdict === 'correct')}
+    />
   );
   const body = (
     <>
@@ -102,13 +135,7 @@ function Step({ set, question, last, onNext, layout }: StepProps) {
         question={question}
         answered={answer !== undefined}
       />
-      <p lang="ja" className={styles.question}>
-        {answer ? (
-          <TapText text={question.question} id={`${question.id}:question`} />
-        ) : (
-          question.question
-        )}
-      </p>
+      <Asked question={question} answered={answer !== undefined} />
       <OptionList question={question} answer={answer} onChoose={controls.choose} words />
       {!answer && <SkipButton onSkip={controls.skip} />}
       {answer && proof && (
