@@ -1,5 +1,5 @@
-import { expect, type Page, test } from '@playwright/test';
 import { onboard } from './helpers.ts';
+import { expect, type Page, test } from './test.ts';
 
 /**
  * The lesson path (T3, T4) and level gating (G3) with the fixture pack: from zero, Today shows
@@ -87,7 +87,7 @@ test('from zero: the first unit, practised and read, then in progress', async ({
   await expect(row).toHaveAttribute('data-state', 'current');
   await expect(row).toContainText('Current · Words');
   await expect(page.getByRole('region', { name: 'N5 known' })).toBeVisible();
-  await expect(row).toContainText(/\d+ of \d+ words · \d of \d grammar/);
+  await expect(row).toContainText(/\d+ of \d+ words known · \d of \d grammar/);
 });
 
 test('an N4 learner never sees a sentence above N4', async ({ page }) => {

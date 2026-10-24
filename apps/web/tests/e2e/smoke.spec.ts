@@ -1,5 +1,5 @@
-import { expect, test } from '@playwright/test';
 import { onboard } from './helpers.ts';
+import { expect, test } from './test.ts';
 
 test('first run loads the dictionary, then the bottom nav reaches every tab', async ({ page }) => {
   await onboard(page);

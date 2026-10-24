@@ -1,5 +1,5 @@
-import { expect, test } from '@playwright/test';
 import { answerField, beginMix, importKnown, onboard } from './helpers.ts';
+import { expect, test } from './test.ts';
 
 /**
  * N1: after one online visit, the app reloads offline from the service worker, and the reading
@@ -19,7 +19,7 @@ test('the reading loop and kanji pages work after an offline reload', async ({ p
 
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByText(/sentences? (to read|and \d+ exercises?)/)).toBeVisible();
+  await expect(page.getByText(/\d+ sentences? · \d+ minutes?/)).toBeVisible();
 
   await beginMix(page);
   const input = await answerField(page);

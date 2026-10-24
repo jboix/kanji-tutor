@@ -1,5 +1,5 @@
-import { expect, test } from '@playwright/test';
 import { answerField, importKnown, onboard } from './helpers.ts';
+import { expect, test } from './test.ts';
 
 /**
  * A1–A4 with the mock provider: a wrong answer gets the app's note, "Ask the tutor why" the 解

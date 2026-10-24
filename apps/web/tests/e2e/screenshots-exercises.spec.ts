@@ -1,7 +1,7 @@
-import { expect, type Page, test } from '@playwright/test';
 import { onboard } from './helpers.ts';
 import { fakeJapaneseVoice, playCard, playUntil } from './lesson-play.ts';
 import { onlyWithScreenshots, shot } from './shots.ts';
+import { expect, type Page, test } from './test.ts';
 
 /** The S4 exercise types, asked and answered, and a grammar page's inline practice (S5). */
 onlyWithScreenshots();

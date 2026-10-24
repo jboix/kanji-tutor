@@ -1,5 +1,5 @@
-import { expect, test } from '@playwright/test';
 import { onboard } from './helpers.ts';
+import { expect, test } from './test.ts';
 
 /** The mockup's sentence: the mock correctSentence fixture answers it (A6). */
 const SENTENCE = '日本語が嫌いわけではないが、漢字を書くのは好きじゃない。';

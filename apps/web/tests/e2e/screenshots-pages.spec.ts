@@ -1,7 +1,7 @@
-import { expect, type Page, test } from '@playwright/test';
 import { importKnown, onboard } from './helpers.ts';
 import { playSession } from './lesson-play.ts';
 import { onlyWithScreenshots, seedAiLog, shot, shotBothThemes } from './shots.ts';
+import { expect, type Page, test } from './test.ts';
 
 /** Revision 2 pages without a mockup: units, grammar, learned, placement, settings (T, G, P, A). */
 onlyWithScreenshots();

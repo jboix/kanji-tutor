@@ -1,5 +1,5 @@
-import { expect, type Page, test } from '@playwright/test';
 import { onboard, openStart } from './helpers.ts';
+import { expect, type Page, test } from './test.ts';
 
 /**
  * Wave 11's navigation (IA1–IA6): the bar, Start, the Learn hub, the Settings

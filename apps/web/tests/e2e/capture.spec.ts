@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
-import { expect, test } from '@playwright/test';
 import { onboard, photograph } from './helpers.ts';
+import { expect, test } from './test.ts';
 
 /** Three generic lines rendered to a PNG; the mock OCR returns the same lines for any image. */
 const HANDOUT = fileURLToPath(new URL('./fixtures/handout.png', import.meta.url));

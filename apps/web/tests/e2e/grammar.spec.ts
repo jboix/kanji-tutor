@@ -1,5 +1,5 @@
-import { expect, test } from '@playwright/test';
 import { onboard } from './helpers.ts';
+import { expect, test } from './test.ts';
 
 test('the learned screen opens a grammar page with examples and related points', async ({
   page,

@@ -1,6 +1,6 @@
-import { expect, type Page, test } from '@playwright/test';
 import { layoutReport, scanHere } from './a11y-checks.ts';
 import { importKnown, launched, onboard } from './helpers.ts';
+import { expect, type Page, test } from './test.ts';
 
 /** Screens reachable by URL once the dictionary is loaded and known words are imported. */
 const SCREENS = [

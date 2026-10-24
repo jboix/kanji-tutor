@@ -1,5 +1,5 @@
-import { expect, type Page, test } from '@playwright/test';
 import { answerField, beginMix, importKnown, onboard } from './helpers.ts';
+import { expect, type Page, test } from './test.ts';
 
 /**
  * M1–M3 and A11 against the mock build. Japanese mode: the session copy turns Japanese, and the

@@ -1,5 +1,5 @@
-import { expect, test } from '@playwright/test';
 import { onboard } from './helpers.ts';
+import { expect, test } from './test.ts';
 
 // A request a service worker answers never reaches page.route, so it is kept out here.
 test.use({ serviceWorkers: 'block' });

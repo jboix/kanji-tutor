@@ -1,6 +1,6 @@
-import { expect, type Page, test } from '@playwright/test';
 import { blockGemini, stepHeading } from './helpers.ts';
 import { onlyWithScreenshots, shot } from './shots.ts';
+import { expect, type Page, test } from './test.ts';
 
 /** Each welcome wizard step (P5, P6), as `wizard-<step>.png`. */
 onlyWithScreenshots();

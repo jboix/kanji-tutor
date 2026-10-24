@@ -1,5 +1,5 @@
-import { expect, test } from '@playwright/test';
 import { answerField, importKnown, onboard } from './helpers.ts';
+import { expect, test } from './test.ts';
 
 /**
  * A session keeps its place (R14): a grammar link inside it opens in a sheet instead of leaving,

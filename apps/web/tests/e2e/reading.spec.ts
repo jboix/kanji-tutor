@@ -1,5 +1,5 @@
-import { expect, type Page, test } from '@playwright/test';
 import { answerField, beginMix, importKnown, onboard } from './helpers.ts';
+import { expect, type Page, test } from './test.ts';
 
 async function answer(page: Page, text: string) {
   const input = await answerField(page);
@@ -13,7 +13,7 @@ test('import known words, read a session with a wrong and a right answer, open a
 }) => {
   await onboard(page);
   await importKnown(page);
-  await expect(page.getByText(/sentences? (to read|and \d+ exercises?), about/)).toBeVisible();
+  await expect(page.getByText(/\d+ sentences? · \d+ minutes?/)).toBeVisible();
   await beginMix(page);
 
   await answer(page, 'nu');

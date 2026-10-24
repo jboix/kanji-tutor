@@ -1,8 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
-import { expect, type Locator, type Page, test } from '@playwright/test';
 import { answerField, importKnown, onboard } from './helpers.ts';
+import { expect, type Locator, type Page, test } from './test.ts';
 
 /** The fixture pack's sentences, to work out each question's right answer from the source. */
 interface PackToken {

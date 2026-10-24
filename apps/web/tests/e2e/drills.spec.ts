@@ -1,5 +1,5 @@
-import { expect, type Page, test } from '@playwright/test';
 import { answerField, importKnown, onboard } from './helpers.ts';
+import { expect, type Page, test } from './test.ts';
 
 /** The drill prompts (R8); CSS uppercases them, the text stays as written. */
 const PROMPT =

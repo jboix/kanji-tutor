@@ -1,11 +1,12 @@
+import { answerField, beginMix, importKnown, onboard } from './helpers.ts';
 import {
   type Browser,
   type BrowserContextOptions,
   expect,
   type Page,
+  startOnTheSameDay,
   test,
-} from '@playwright/test';
-import { answerField, beginMix, importKnown, onboard } from './helpers.ts';
+} from './test.ts';
 
 /**
  * Backup round trip (K7): export everything from Settings, start again on a device with no
@@ -42,6 +43,7 @@ async function freshPage(browser: Browser): Promise<Page> {
   options.isMobile = isMobile ?? false;
   options.hasTouch = hasTouch ?? false;
   const context = await browser.newContext(options);
+  await startOnTheSameDay(context);
   return context.newPage();
 }
 
@@ -72,7 +74,7 @@ test('export a backup, wipe, import it and get the words and history back', asyn
   await expect(wiped.getByRole('status').filter({ hasText: 'Backup restored.' })).toBeVisible();
 
   await wiped.goto('/');
-  await expect(wiped.getByText(/sentences? (to read|and \d+ exercises?), about/)).toBeVisible();
+  await expect(wiped.getByText(/\d+ sentences? · \d+ minutes?/)).toBeVisible();
   await expect(wiped.getByRole('link', { name: 'Mark what you already know' })).toHaveCount(0);
   // The one answer of the first device: read as ぬ, a miss.
   await expect(wiped.getByRole('region', { name: 'Where you are' })).toContainText('ぬ for');

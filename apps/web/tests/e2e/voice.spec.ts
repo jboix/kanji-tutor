@@ -1,5 +1,5 @@
-import { expect, test } from '@playwright/test';
 import { importKnown, onboard } from './helpers.ts';
+import { expect, test } from './test.ts';
 
 /**
  * Answer by voice (I2) with the mock AI, which always transcribes しょかい. Chromium gets a fake

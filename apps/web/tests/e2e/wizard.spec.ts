@@ -1,5 +1,5 @@
-import { expect, type Page, test } from '@playwright/test';
 import { blockGemini, nextStep, startWizard, stepHeading } from './helpers.ts';
+import { expect, type Page, test } from './test.ts';
 
 /**
  * The welcome wizard (P5, P6), the long way: N4, Minna with its earlier lessons known, a

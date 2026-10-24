@@ -1,5 +1,5 @@
-import { expect, type Page, test } from '@playwright/test';
 import { answerField, beginMix, importKnown, onboard } from './helpers.ts';
+import { expect, type Page, test } from './test.ts';
 
 const input = (page: Page) => page.locator('form input[lang="ja"]');
 const sentence = (page: Page) => page.locator('main p[lang="ja"]').first();

@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
-import { expect, type Page, test } from '@playwright/test';
 import { answerField, beginMix, draw, importKnown, onboard, photograph } from './helpers.ts';
+import { expect, type Page, test } from './test.ts';
 
 /**
  * Screenshots of every mockup screen next to the mockup itself (BUILD-PLAN Wave 5 step 2), in
@@ -47,7 +47,7 @@ async function answerWrong(page: Page) {
 
 test('today', async ({ page }) => {
   await ready(page);
-  await expect(page.getByText(/sentences? (to read|and \d+ exercises?)/)).toBeVisible();
+  await expect(page.getByText(/\d+ sentences? · \d+ minutes?/)).toBeVisible();
   await shoot(page, 'today');
 });
 

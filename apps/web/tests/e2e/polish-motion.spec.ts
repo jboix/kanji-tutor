@@ -1,6 +1,6 @@
-import { expect, type Page, test } from '@playwright/test';
 import { answerField, beginMix, importKnown, launched, onboard } from './helpers.ts';
 import { fakeJapaneseVoice } from './lesson-play.ts';
+import { expect, type Page, test } from './test.ts';
 
 /** The polish round: the entrance, sound off everywhere, the Settings icons. */
 

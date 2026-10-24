@@ -1,5 +1,5 @@
-import { expect, type Page, test } from '@playwright/test';
 import { blockGemini, importKnown, onboard, startWizard, stepHeading } from './helpers.ts';
+import { expect, type Page, test } from './test.ts';
 
 /**
  * The interface in the learner's language (N7b): French chosen in Settings switches Today, a
@@ -49,12 +49,10 @@ test('French chosen in Settings: Today, a session card, the word sheet and Setti
   await page.goto('/');
   await expect(page.getByRole('navigation', { name: 'Principal' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Accueil' })).toBeVisible();
-  // The plain mix: Start, or past the lesson part Start would play first (IA3).
-  const settled = page.getByText(/^Appuyez sur Commencer\.$|^Commencer joue d’abord/);
-  await expect(settled.first()).toBeVisible({ timeout: 20_000 });
-  const mix = page.getByRole('link', { name: 'Seulement le mélange du jour' });
-  if (await mix.isVisible()) await mix.click();
-  else await page.getByRole('link', { name: 'Commencer la prochaine série' }).click();
+  // The daily mix tile, once its size is known.
+  const mix = page.getByRole('link', { name: /^Mélange du jour\s?\d+ phrases?/ });
+  await expect(mix).toBeVisible({ timeout: 20_000 });
+  await mix.click();
 
   await frenchAnswerField(page);
   await page.getByRole('button', { name: 'Je ne sais pas' }).click();

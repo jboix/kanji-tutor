@@ -1,8 +1,8 @@
-import { expect, type Page, test } from '@playwright/test';
 import { toRomaji } from 'wanakana';
 import { layoutReport, scanHere } from './a11y-checks.ts';
 import { importKnown, onboard } from './helpers.ts';
 import { card, playCard, playSession, sessionDone } from './lesson-play.ts';
+import { expect, type Page, test } from './test.ts';
 
 /**
  * The session's end (W-end): the check, お疲れさまでした, three counts, what was new,
@@ -58,7 +58,7 @@ test('the end shows the check, the counts, the misses and both actions', async (
     expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
   }
   // The raised Start disc stays below the buttons.
-  const disc = page.getByRole('navigation').getByRole('link', { name: /Start/ });
+  const disc = page.getByRole('navigation').getByRole('button', { name: /Start/ });
   const discTop = (await disc.locator('span').first().boundingBox())?.y ?? 0;
   const nextBox = await next.boundingBox();
   expect(discTop).toBeGreaterThanOrEqual((nextBox?.y ?? 0) + (nextBox?.height ?? 0));

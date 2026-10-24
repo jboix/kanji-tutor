@@ -1,8 +1,8 @@
-import { expect, type Page, test } from '@playwright/test';
 import { layoutReport, scanHere } from './a11y-checks.ts';
 import { answerField, beginMix, importKnown, onboard } from './helpers.ts';
 import { playUntil } from './lesson-play.ts';
 import { patchSettings, seedAiLog } from './shots.ts';
+import { expect, type Page, test } from './test.ts';
 
 /**
  * Axe (light and dark), sideways scroll and 44 px targets on revision 2 states that are not a

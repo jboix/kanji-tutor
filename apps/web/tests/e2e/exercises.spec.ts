@@ -1,7 +1,7 @@
-import { expect, type Page, test } from '@playwright/test';
 import { N5_FIRST } from '../../src/domain/themes/n5-first.ts';
 import { onboard } from './helpers.ts';
 import { card, fakeJapaneseVoice, playCard, playUntil, sessionDone } from './lesson-play.ts';
+import { expect, type Page, test } from './test.ts';
 
 /**
  * Each S4 exercise type in a unit lesson, answered on the phone: a meaning check, a pattern

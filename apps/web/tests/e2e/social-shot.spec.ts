@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
-import { expect, test } from '@playwright/test';
 import { answerField, importKnown, onboard } from './helpers.ts';
+import { expect, test } from './test.ts';
 
 /**
  * The phone screen in the social preview (`bun run social`): a wrong reading of 待って and the

@@ -1,5 +1,5 @@
-import { expect, type Locator, type Page, test } from '@playwright/test';
 import { answerField, importKnown, onboard } from './helpers.ts';
+import { expect, type Locator, type Page, test } from './test.ts';
 
 /**
  * The popup sits right by the kana at `index`: its bottom just above the line's glyphs (or its top

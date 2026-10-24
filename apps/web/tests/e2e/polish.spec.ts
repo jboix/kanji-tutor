@@ -1,5 +1,5 @@
-import { expect, type Locator, type Page, test } from '@playwright/test';
 import { answerField, importKnown, onboard } from './helpers.ts';
+import { expect, type Locator, type Page, test } from './test.ts';
 
 const FOCUS = `/read?kanji=${encodeURIComponent('紹')}&reading=${encodeURIComponent('ショウ')}`;
 

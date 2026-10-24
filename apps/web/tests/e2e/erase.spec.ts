@@ -1,5 +1,5 @@
-import { expect, test } from '@playwright/test';
 import { onboard, stepHeading } from './helpers.ts';
+import { expect, test } from './test.ts';
 
 /** Settings → Delete all my data: one confirmation, then the app starts again at the welcome. */
 test('deleting all local data starts the app again from the welcome', async ({ page }) => {

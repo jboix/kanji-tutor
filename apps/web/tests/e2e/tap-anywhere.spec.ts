@@ -1,5 +1,5 @@
-import { expect, type Locator, type Page, test } from '@playwright/test';
 import { importKnown, onboard } from './helpers.ts';
+import { expect, type Locator, type Page, test } from './test.ts';
 
 const DRILL =
   /^(Which kanji fits\?|Which pattern fits\?|One kanji, several readings|Same part, same sound)/;

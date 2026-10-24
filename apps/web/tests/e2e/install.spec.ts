@@ -1,5 +1,5 @@
-import { expect, type Page, test } from '@playwright/test';
 import { onboard } from './helpers.ts';
+import { expect, type Page, test } from './test.ts';
 
 /** Install help in Settings (N1b), with a faked install event and a faked iPhone. */
 

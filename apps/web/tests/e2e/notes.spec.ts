@@ -1,5 +1,5 @@
-import { expect, type Page, test } from '@playwright/test';
 import { answerField, beginMix, importKnown, onboard } from './helpers.ts';
+import { expect, type Page, test } from './test.ts';
 
 async function answerWrong(page: Page) {
   const input = await answerField(page);

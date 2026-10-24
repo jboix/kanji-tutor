@@ -1,9 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
-import { expect, type Page, test } from '@playwright/test';
 import { answerField, beginMix, importKnown, onboard } from './helpers.ts';
 import { onlyWithScreenshots, patchSettings, shot, shotBothThemes, typeAnswer } from './shots.ts';
+import { expect, type Page, test } from './test.ts';
 
 /** Revision 2 session screens without a mockup: Today, the card states, questions (G, J, L, U). */
 onlyWithScreenshots();

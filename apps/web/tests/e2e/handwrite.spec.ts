@@ -1,5 +1,5 @@
-import { expect, test } from '@playwright/test';
 import { draw, importKnown, MATSU, onboard } from './helpers.ts';
+import { expect, test } from './test.ts';
 
 /**
  * Draw a kanji (I4) with the offline recognizer, then describe one (I5) with the mock AI. The

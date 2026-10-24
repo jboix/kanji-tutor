@@ -1,6 +1,6 @@
-import { expect, type Page, test } from '@playwright/test';
 import { onboard } from './helpers.ts';
 import { card, passIntro, playSession, sessionDone } from './lesson-play.ts';
+import { expect, type Page, test } from './test.ts';
 
 /**
  * A unit lesson in textbook sections (S3): from zero, the first unit's 言葉, 文法, 練習, 読み物

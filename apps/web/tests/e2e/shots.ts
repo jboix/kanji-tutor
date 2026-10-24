@@ -1,5 +1,5 @@
 import { fileURLToPath } from 'node:url';
-import { expect, type Locator, type Page, test } from '@playwright/test';
+import { expect, type Locator, type Page, test } from './test.ts';
 
 /**
  * Shared by the screenshot specs (`bun run screenshots`): each image goes to
@@ -100,7 +100,8 @@ export async function patchSettings(page: Page, patch: Record<string, unknown>) 
 
 /** Seeds about 30 days of AI use into the aiLog store, for the AI use charts (A16). */
 export async function seedAiLog(page: Page) {
-  const now = Date.now();
+  // The app's day, which the tests pin, not this machine's.
+  const now = await page.evaluate(() => Date.now());
   const entries = Array.from({ length: 30 }, (_, day) => day).flatMap((day) =>
     Array.from({ length: (day * 7) % 5 }, (_, i) => logEntry(day, day * 5 + i, now)),
   );

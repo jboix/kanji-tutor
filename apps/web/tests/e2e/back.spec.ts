@@ -1,5 +1,5 @@
-import { expect, test } from '@playwright/test';
 import { onboard, openStart } from './helpers.ts';
+import { expect, test } from './test.ts';
 
 /**
  * Back follows the history (S1): deep in, then back one screen at a time, never forward; a page

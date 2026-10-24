@@ -1,5 +1,5 @@
-import { expect, type Locator, type Page, test } from '@playwright/test';
 import { answerField, importKnown, launched, onboard } from './helpers.ts';
+import { expect, type Locator, type Page, test } from './test.ts';
 
 /**
  * The real-iPhone checks (N1, U10, U12) as far as WebKit with iPhone emulation can take them

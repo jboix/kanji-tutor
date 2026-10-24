@@ -1,5 +1,5 @@
-import { expect, type Page, test } from '@playwright/test';
 import { answerField, beginMix, importKnown, onboard } from './helpers.ts';
+import { expect, type Page, test } from './test.ts';
 
 /**
  * Teaching (L1, L2, L3, L5) with the mock provider: a new word is introduced before its first

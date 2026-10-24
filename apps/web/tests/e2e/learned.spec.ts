@@ -1,5 +1,5 @@
-import { expect, type Page, test } from '@playwright/test';
 import { beginMix, onboard } from './helpers.ts';
+import { expect, type Page, test } from './test.ts';
 
 /** The coverage line of the N5 group of the open tab, e.g. "N5 words: 3 of 120 known". */
 function n5(page: Page, noun: string) {

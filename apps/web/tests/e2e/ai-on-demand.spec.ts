@@ -1,5 +1,5 @@
-import { expect, type Page, test } from '@playwright/test';
 import { answerField, beginMix, importKnown, onboard } from './helpers.ts';
+import { expect, type Page, test } from './test.ts';
 
 /**
  * A13, A14, A16, G5 against the mock build: the mock's request counter (`window.__kanjiMockAi`)
