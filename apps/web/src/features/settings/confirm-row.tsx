@@ -15,7 +15,7 @@ export function ConfirmRow({ children, confirmLabel, onConfirm, onCancel }: Prop
   return (
     <div className={styles.confirm}>
       <p className={styles.status}>{children}</p>
-      <div className={styles.row}>
+      <div className={styles.wrap}>
         <button type="button" className={styles.primary} onClick={onConfirm}>
           {confirmLabel}
         </button>

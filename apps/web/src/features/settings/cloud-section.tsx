@@ -50,7 +50,7 @@ function CloudOff() {
     <section className={styles.section}>
       <h2 className={styles.label}>{t('account.cloudTitle')}</h2>
       <p className={styles.status}>{t('account.cloudOff')}</p>
-      <div className={styles.row}>
+      <div className={styles.wrap}>
         <PillLink to={paths.cloudJoin}>{t('account.cloudTurnOn')}</PillLink>
         <PillLink to={paths.logIn} variant="secondary">
           {t('account.cloudLogIn')}

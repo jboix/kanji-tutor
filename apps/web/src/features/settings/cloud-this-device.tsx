@@ -27,7 +27,7 @@ export function CloudThisDevice({ cloud }: { cloud: CloudPort }) {
     <section className={styles.section}>
       <h2 className={styles.label}>{t('account.thisDeviceTitle')}</h2>
       <p className={styles.hint}>{t('account.passkeyHint')}</p>
-      <div className={styles.row}>
+      <div className={styles.wrap}>
         <button type="button" className={styles.button} onClick={addPasskey} disabled={busy}>
           {t('account.passkeyAdd')}
         </button>

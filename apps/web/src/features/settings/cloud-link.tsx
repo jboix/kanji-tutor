@@ -23,7 +23,7 @@ function LinkAsk({ name, busy, onApprove, onCancel }: AskProps) {
   return (
     <div className={styles.confirm}>
       <p className={styles.status}>{t('account.linkAsk', { name })}</p>
-      <div className={styles.row}>
+      <div className={styles.wrap}>
         <button type="button" className={styles.primary} onClick={onApprove} disabled={busy}>
           {t('account.linkApprove')}
         </button>
