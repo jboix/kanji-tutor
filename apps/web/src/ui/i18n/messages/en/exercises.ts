@@ -19,6 +19,8 @@ export const exercises = {
   removePiece: 'Take back {piece}',
   play: 'Play the sentence',
   playAgain: 'Play again',
+  cantListen: "I can't listen now",
+  cantListenHint: 'Written for the next 15 minutes',
   itMeans: 'It means',
   itIs: 'It is',
   readAs: 'Read as',

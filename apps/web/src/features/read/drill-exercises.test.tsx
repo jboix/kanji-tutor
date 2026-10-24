@@ -17,6 +17,7 @@ import { fixturePack } from '../../test/fixture-pack.ts';
 import { NOW, readingRepos, W } from '../../test/reading-fixtures.ts';
 import { fakeServices, renderWithServices } from '../../test/render.tsx';
 import { DrillScreen } from './drill-screen.tsx';
+import { LISTEN_LATER_MS, listeningQuiet, listenLater } from './listen-later.ts';
 
 const line = (i: number): Sentence => {
   const found = fixturePack().sentences.find((s) => s.id === `unit:i-am-a-student:${i}`);
@@ -43,8 +44,23 @@ const cue = (written: string, reading: string) => ({
 const NOUNS = [W.eki, W.hon, W.gakusei, { ...W.sensei, glosses: ['teacher'] }];
 
 afterEach(() => {
+  listenLater(Date.now() - LISTEN_LATER_MS);
   vi.unstubAllGlobals();
 });
+
+function stubSpeech(spoken: string[]) {
+  const synth = { cancel: vi.fn(), speak: (u: { text: string }) => spoken.push(u.text) };
+  vi.stubGlobal('speechSynthesis', synth);
+  vi.stubGlobal(
+    'SpeechSynthesisUtterance',
+    class {
+      lang = '';
+      rate = 1;
+      constructor(readonly text: string) {}
+    },
+  );
+  return synth;
+}
 
 describe('S4 exercises', () => {
   it('checks a meaning, logs it against the word, and shows the reading after', async () => {
@@ -140,18 +156,7 @@ describe('S4 exercises', () => {
 
   it('plays a listening drill and keeps its sentence and meaning back until the answer', async () => {
     const spoken: string[] = [];
-    vi.stubGlobal('speechSynthesis', {
-      cancel: vi.fn(),
-      speak: (u: { text: string }) => spoken.push(u.text),
-    });
-    vi.stubGlobal(
-      'SpeechSynthesisUtterance',
-      class {
-        lang = '';
-        rate = 1;
-        constructor(readonly text: string) {}
-      },
-    );
+    stubSpeech(spoken);
     const drill = listeningDrill({ sentence: line(4), others: lines(), seed: 'a' });
     await show(drill);
     await waitFor(() => expect(spoken).toEqual(['リンさんは中国人です。']));
@@ -162,6 +167,27 @@ describe('S4 exercises', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Lin is Chinese.' }));
     expect(document.querySelector('[data-answer="correct"]')).toBeTruthy();
     expect(document.querySelector('main')?.textContent).toContain('中国人');
+  });
+
+  it("turns a listening drill into its written twin on I can't listen now", async () => {
+    const synth = stubSpeech([]);
+    await show(listeningDrill({ sentence: line(4), others: lines(), seed: 'a' }));
+    await userEvent.click(screen.getByRole('button', { name: "I can't listen now" }));
+    expect(synth.cancel).toHaveBeenCalled();
+    expect(screen.getByText('What does this sentence mean?')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Play the sentence' })).toBeNull();
+    expect(document.querySelector('main')?.textContent).toContain('中国人');
+    expect(listeningQuiet()).toBe(true);
+    expect(listeningQuiet(Date.now() + LISTEN_LATER_MS)).toBe(false);
+    await userEvent.click(screen.getByRole('button', { name: 'Lin is Chinese.' }));
+    expect(document.querySelector('[data-answer="correct"]')).toBeTruthy();
+  });
+
+  it('shows the next listening drill written while quiet', async () => {
+    listenLater();
+    await show(listeningDrill({ sentence: line(4), others: lines(), seed: 'a' }));
+    expect(screen.getByText('What does this sentence mean?')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: "I can't listen now" })).toBeNull();
   });
 
   it('shows the sentence of a sentence meaning check, with nothing to play', async () => {

@@ -2,7 +2,7 @@
  * A drill card in the reading session (R8) or an S4 exercise: its body, its answer actions and
  * "Next". `DrillCard` lays them out in a full screen or inline (a grammar page's practice, S5).
  */
-import type { ReactNode } from 'react';
+import { type ReactNode, useMemo, useState } from 'react';
 import { type Drill, KANJI_BLANK, PATTERN_BLANK } from '../../domain/drills/index.ts';
 import type { SessionCard } from '../../domain/session-types.ts';
 import type { ItemId } from '../../domain/types.ts';
@@ -24,6 +24,7 @@ import {
 import { ConjugationView, PatternView } from './drill-forms.tsx';
 import { FamilyView, ReadingsView, TypedActions } from './drill-typed.tsx';
 import { ItemTeaching } from './item-teaching.tsx';
+import { asShown, listeningQuiet, listenLater } from './listen-later.ts';
 import read from './read.module.css';
 import { useFocus } from './read-actions.tsx';
 import type { DrillResult } from './session-state.ts';
@@ -35,13 +36,17 @@ interface BodyProps {
   drill: Drill;
   controls: DrillControls;
   order: BuildOrder;
+  /** "I can't listen now" on a listening exercise. */
+  onWritten?: (() => void) | undefined;
 }
 
-function ExerciseBody({ drill, controls, order }: BodyProps) {
+function ExerciseBody({ drill, controls, order, onWritten }: BodyProps) {
   const answer = controls.answered ? controls.answers[controls.step] : undefined;
   if (drill.kind === 'meaning') return <MeaningView drill={drill} answer={answer} />;
   if (drill.kind === 'particle') return <ParticleView drill={drill} answer={answer} />;
-  if (drill.kind === 'listening') return <ListeningView drill={drill} answer={answer} />;
+  if (drill.kind === 'listening') {
+    return <ListeningView drill={drill} answer={answer} onWritten={onWritten} />;
+  }
   if (drill.kind === 'pattern') return <PatternView drill={drill} answer={answer} />;
   if (drill.kind === 'conjugation') return <ConjugationView drill={drill} answer={answer} />;
   if (drill.kind === 'build') return <BuildView drill={drill} order={order} answer={answer} />;
@@ -76,7 +81,7 @@ function blankOf(drill: Drill) {
  */
 function helpSentence(drill: Drill, answered: boolean) {
   if (!('sentence' in drill)) return undefined;
-  const hidden = drill.kind === 'listening' || drill.kind === 'build';
+  const hidden = (drill.kind === 'listening' && !drill.read) || drill.kind === 'build';
   return hidden && !answered ? undefined : drill.sentence;
 }
 
@@ -199,8 +204,20 @@ export interface DrillCardProps {
   layout: (body: ReactNode, footer: ReactNode) => ReactNode;
 }
 
+/** The drill as shown, written instead of played after "I can't listen now". */
+function useShownDrill(drill: Drill) {
+  const [quiet, setQuiet] = useState(listeningQuiet);
+  const shown = useMemo(() => asShown(drill, quiet), [drill, quiet]);
+  const onWritten = () => {
+    listenLater();
+    setQuiet(true);
+  };
+  return { shown, onWritten };
+}
+
 /** One drill: choices, tiles or a typed answer, plain feedback, then on to the next one. */
-export function DrillCard({ drill, card, onDone, nextLabel, layout }: DrillCardProps) {
+export function DrillCard({ drill: given, card, onDone, nextLabel, layout }: DrillCardProps) {
+  const { shown: drill, onWritten } = useShownDrill(given);
   const controls = useDrill(drill, onDone);
   const order = useBuildOrder();
   useGradeSound(controls.answered ? controls.answers[controls.step]?.grade : undefined);
@@ -211,7 +228,7 @@ export function DrillCard({ drill, card, onDone, nextLabel, layout }: DrillCardP
   );
   const body = (
     <>
-      <DrillBody drill={drill} controls={controls} order={order} />
+      <DrillBody drill={drill} controls={controls} order={order} onWritten={onWritten} />
       <DrillHelp drill={drill} controls={controls} />
       <StepTeaching drill={drill} card={card} controls={controls} />
     </>

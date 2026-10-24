@@ -61,3 +61,20 @@ export function hasJapaneseVoice(fresh = false, wait = VOICE_WAIT_MS): Promise<b
   if (fresh || !japanese) japanese = lookForVoice(wait).catch(() => false);
   return japanese;
 }
+
+let listeningOff = false;
+
+/** Settings → Sound → Listening exercises: off, sessions leave them out, voice or not. */
+export function muteListening(value: boolean): void {
+  listeningOff = value;
+}
+
+/** True when sessions may make listening exercises: the learner wants them, and a voice speaks. */
+export function canListen(): Promise<boolean> {
+  return listeningOff ? Promise.resolve(false) : hasJapaneseVoice();
+}
+
+/** Stops whatever is being spoken. */
+export function stopSpeaking(): void {
+  if (typeof globalThis.speechSynthesis !== 'undefined') speechSynthesis.cancel();
+}

@@ -8,7 +8,7 @@ import {
   type SessionFocus,
 } from '../../domain/services/index.ts';
 import type { AnswerMode, LessonSection } from '../../domain/types.ts';
-import { hasJapaneseVoice } from '../../lang/speech.ts';
+import { canListen } from '../../lang/speech.ts';
 import { useServices } from '../../ui/services.tsx';
 import { takeSession } from '../../ui/session-handoff.ts';
 import { loadSession, requestKey, saveSession } from './saved-session.ts';
@@ -83,7 +83,7 @@ const PLAIN_KEY = requestKey({});
 
 /** Builds the session, with listening exercises where the device has a Japanese voice (S4). */
 async function build(repos: Repos, options: Omit<BuildSessionOptions, 'now'>) {
-  const listening = await hasJapaneseVoice();
+  const listening = await canListen();
   return buildSession(repos, { now: Date.now(), ...options, listening });
 }
 

@@ -84,6 +84,11 @@ export const settings = {
   sounds: 'Sonido',
   soundHint:
     'Los tonos de las respuestas y el japonés en voz alta. Desactivado, la app no suena: los botones de altavoz se ocultan y las sesiones no incluyen escucha.',
+  listening: 'Ejercicios de escucha',
+  listeningOn: 'Activados',
+  listeningOff: 'Desactivados',
+  listeningHint:
+    'Desactivados: no hay ejercicios que reproducen una frase para elegir su significado.',
   lesson: 'Lección actual',
   lessonNone: 'Los elementos nuevos no llevan etiqueta de lección.',
   lessonTagged: 'Los elementos nuevos se etiquetan {lesson}.',

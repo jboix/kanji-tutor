@@ -7,7 +7,7 @@
 import { type ReactNode, useEffect, useState } from 'react';
 import { pointPractice } from '../../domain/services/index.ts';
 import type { SessionCard } from '../../domain/session-types.ts';
-import { hasJapaneseVoice } from '../../lang/speech.ts';
+import { canListen } from '../../lang/speech.ts';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { PillButton } from '../../ui/pill-button.tsx';
 import { useServices } from '../../ui/services.tsx';
@@ -23,7 +23,7 @@ function usePointCards(grammarId: string, round: number): SessionCard[] | undefi
   const key = `${grammarId}|${round}`;
   useEffect(() => {
     let live = true;
-    void hasJapaneseVoice()
+    void canListen()
       .then((listening) => pointPractice(repos, grammarId, { now: Date.now(), listening }))
       .then((cards) => {
         if (live) setLoaded({ key, cards });

@@ -6,7 +6,7 @@ import {
   todayOverview,
   todaySession,
 } from '../../domain/services/index.ts';
-import { hasJapaneseVoice } from '../../lang/speech.ts';
+import { canListen } from '../../lang/speech.ts';
 import { useServices } from '../../ui/services.tsx';
 import { type HandoffState, offerSession } from '../../ui/session-handoff.ts';
 
@@ -35,7 +35,7 @@ export function useToday(now: number): TodayData {
     const merge = (patch: TodayData) => live && setData((prev) => ({ ...prev, ...patch }));
     const shared = sharedReads(repos);
     void todayOverview(shared, now).then((overview) => merge({ overview }));
-    const session = hasJapaneseVoice().then((listening) => todaySession(shared, now, listening));
+    const session = canListen().then((listening) => todaySession(shared, now, listening));
     void session.then((session) => {
       if (!live) return;
       merge({ session: { ...session, handoff: offerSession(session.cards, Date.now()) } });

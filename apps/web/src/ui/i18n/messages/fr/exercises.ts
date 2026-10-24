@@ -21,6 +21,8 @@ export const exercises = {
   removePiece: 'Reprendre {piece}',
   play: 'Écouter la phrase',
   playAgain: 'Réécouter',
+  cantListen: 'Je ne peux pas écouter',
+  cantListenHint: 'À l’écrit pendant 15 minutes',
   itMeans: 'Cela veut dire',
   itIs: 'C’est',
   readAs: 'Se lit',

@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { createMemoryRepos } from '../../test/memory-repos.ts';
 import { fakeServices } from '../../test/render.tsx';
@@ -18,6 +18,14 @@ describe('Appearance → Sound', () => {
     await waitFor(async () =>
       expect(await repos.settings.get()).toMatchObject({ sound: true, soundVolume: 0.4 }),
     );
+  });
+
+  it('turns listening exercises off on their own', async () => {
+    const repos = createMemoryRepos();
+    renderSettingsSection('appearance', { services: fakeServices({ repos }) });
+    const group = await screen.findByRole('group', { name: 'Listening exercises' });
+    fireEvent.click(within(group).getByLabelText('Off'));
+    await waitFor(async () => expect((await repos.settings.get()).listening).toBe(false));
   });
 
   it('is in French and Spanish too', async () => {

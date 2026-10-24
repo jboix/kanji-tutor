@@ -1,5 +1,13 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { canSpeak, hasJapaneseVoice, muteSpeech, speak } from './speech.ts';
+import {
+  canListen,
+  canSpeak,
+  hasJapaneseVoice,
+  muteListening,
+  muteSpeech,
+  speak,
+  stopSpeaking,
+} from './speech.ts';
 
 class FakeUtterance {
   lang = '';
@@ -11,6 +19,7 @@ class FakeUtterance {
 
 afterEach(() => {
   muteSpeech(false);
+  muteListening(false);
   vi.unstubAllGlobals();
 });
 
@@ -62,6 +71,20 @@ describe('with sound off', () => {
     muteSpeech(false);
     expect(canSpeak()).toBe(true);
     await expect(hasJapaneseVoice(true)).resolves.toBe(true);
+  });
+});
+
+describe('with listening exercises off', () => {
+  it('makes none, though a voice still speaks', async () => {
+    const synth = { cancel: vi.fn(), speak: vi.fn(), getVoices: () => [{ lang: 'ja-JP' }] };
+    vi.stubGlobal('speechSynthesis', synth);
+    await hasJapaneseVoice(true);
+    await expect(canListen()).resolves.toBe(true);
+    muteListening(true);
+    await expect(canListen()).resolves.toBe(false);
+    expect(canSpeak()).toBe(true);
+    stopSpeaking();
+    expect(synth.cancel).toHaveBeenCalledOnce();
   });
 });
 

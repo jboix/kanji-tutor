@@ -13,7 +13,7 @@ import {
 } from '../../domain/drills/index.ts';
 import { glossesIn, translationIn } from '../../domain/localized.ts';
 import { answerSpan } from '../../domain/services/index.ts';
-import { speak } from '../../lang/speech.ts';
+import { speak, stopSpeaking } from '../../lang/speech.ts';
 import { AnswerState, answerLook } from '../../ui/answer-state.tsx';
 import { Chip, ChipRow } from '../../ui/chip.tsx';
 import { EnMark } from '../../ui/en-mark.tsx';
@@ -154,27 +154,46 @@ function ListeningText({ drill, index }: { drill: ListeningDrill; index: number 
   );
 }
 
-/** Play and Play again; the sentence is spoken once when the drill shows. */
-function PlayChip({ text, again }: { text: string; again: boolean }) {
+/**
+ * Play and Play again; the sentence is spoken once when the drill shows. Before the answer,
+ * "I can't listen now" turns the exercise into its written twin.
+ */
+function PlayChip(props: { text: string; again: boolean; onWritten?: (() => void) | undefined }) {
+  const { text, again, onWritten } = props;
   const t = useT();
   useEffect(() => {
     void speak(text);
   }, [text]);
+  const written = () => {
+    stopSpeaking();
+    onWritten?.();
+  };
   return (
     <ChipRow>
       <Chip onClick={() => void speak(text)}>
         {t(again ? 'exercises.playAgain' : 'exercises.play')}
       </Chip>
+      {!again && onWritten && (
+        <Chip onClick={written} title={t('exercises.cantListenHint')}>
+          {t('exercises.cantListen')}
+        </Chip>
+      )}
     </ChipRow>
   );
+}
+
+export interface ListeningViewProps {
+  drill: ListeningDrill;
+  answer: DrillAnswer | undefined;
+  /** "I can't listen now": shows the sentence to read instead. */
+  onWritten?: (() => void) | undefined;
 }
 
 /**
  * The sentence spoken (on show and on Play), or shown for a sentence meaning check; once
  * answered, the sentence itself and its meaning.
  */
-export function ListeningView(props: { drill: ListeningDrill; answer: DrillAnswer | undefined }) {
-  const { drill, answer } = props;
+export function ListeningView({ drill, answer, onWritten }: ListeningViewProps) {
   const t = useT();
   const read = drill.read === true;
   return (
@@ -182,7 +201,9 @@ export function ListeningView(props: { drill: ListeningDrill; answer: DrillAnswe
       <p className={styles.prompt}>
         {t(read ? 'exercises.promptSentenceMeaning' : 'exercises.promptListening')}
       </p>
-      {!read && <PlayChip text={drill.sentence.text} again={answer !== undefined} />}
+      {!read && (
+        <PlayChip text={drill.sentence.text} again={answer !== undefined} onWritten={onWritten} />
+      )}
       {(read || answer) && <TapSentence sentence={drill.sentence} target={[]} />}
       {answer && (
         <Outcome

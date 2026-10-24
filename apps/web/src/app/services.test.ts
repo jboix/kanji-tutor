@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { SettingsRepo } from '../domain/repos.ts';
-import { canSpeak } from '../lang/speech.ts';
+import { canListen, canSpeak, muteListening } from '../lang/speech.ts';
 import { createMemoryRepos } from '../test/memory-repos.ts';
 import { WELCOMED_KEY } from '../ui/launch.ts';
 import { applySound } from '../ui/sound.ts';
@@ -32,6 +32,16 @@ describe('Sound follows the settings', () => {
     const repo = soundFollows(createMemoryRepos().settings);
     expect((await repo.get()).sound).toBeUndefined();
     expect(canSpeak()).toBe(true);
+  });
+
+  it('turns listening exercises off when the learner does', async () => {
+    vi.stubGlobal('speechSynthesis', { getVoices: () => [{ lang: 'ja-JP' }] });
+    const repo = soundFollows(createMemoryRepos().settings);
+    await repo.patch({ listening: false });
+    await expect(canListen()).resolves.toBe(false);
+    await repo.patch({ listening: true });
+    await expect(canListen()).resolves.toBe(true);
+    muteListening(false);
   });
 });
 

@@ -396,6 +396,8 @@ export interface Settings {
   sound?: boolean;
   /** How loud the answer tones are, 0.1 to 1 (U2); full when unset. Off is `sound: false`. */
   soundVolume?: number;
+  /** Listening exercises in sessions (S4); on when unset. Off, sessions leave them out. */
+  listening?: boolean;
   /** About how long a session or lesson takes, in minutes (L6); absent means 5. */
   sessionMinutes?: SessionMinutes;
   /**
