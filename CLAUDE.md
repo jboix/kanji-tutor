@@ -13,6 +13,7 @@ Local notes live in `notes/`, which git ignores (`.git/info/exclude`) and which 
 - No gamification anywhere: no streaks, XP, points, badges, levels, confetti, celebratory copy, guilt notifications.
 - Every reading shown to the user that came from AI must pass `verifyReading` or be visibly marked unverified.
 - The AI red (`--ai`, hanko crimson) is reserved for AI explanations, the 解 seal and corrections. Japanese text always uses `--font-ja` (Klee One).
+- The tutor is the app's heart, never an afterthought: every exercise, explanation and introduction (grammar, kanji, words, drills) shows a prominent, distinctive way to ask the tutor about what is on screen, reachable at once without scrolling.
 
 ## Workspace
 
