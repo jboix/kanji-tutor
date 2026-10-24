@@ -38,29 +38,31 @@ const strokeTiming = (start: number, length: number) =>
  */
 export function WelcomeLogo({ id }: { id: string }) {
   return (
-    <svg className={styles.logo} viewBox="0 0 100 100" aria-hidden="true">
-      <defs>
-        <mask id={id} maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
-          <path transform={GLYPH_TRANSFORM} fill="#fff" d={GLYPH} />
-        </mask>
-      </defs>
-      <rect width="100" height="100" rx="22" className={styles.tile} />
-      <g mask={`url(#${id})`}>
-        <g transform={GLYPH_TRANSFORM}>
-          {STROKES.map(([d, start, length]) => (
-            <path
-              key={d}
-              className={styles.stroke}
-              pathLength={1}
-              style={strokeTiming(start, length)}
-              d={d}
-            />
-          ))}
+    <span className={styles.logo}>
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <defs>
+          <mask id={id} maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+            <path transform={GLYPH_TRANSFORM} fill="#fff" d={GLYPH} />
+          </mask>
+        </defs>
+        <rect width="100" height="100" rx="22" className={styles.tile} />
+        <g mask={`url(#${id})`}>
+          <g transform={GLYPH_TRANSFORM}>
+            {STROKES.map(([d, start, length]) => (
+              <path
+                key={d}
+                className={styles.stroke}
+                pathLength={1}
+                style={strokeTiming(start, length)}
+                d={d}
+              />
+            ))}
+          </g>
+          <rect width="100" height="100" className={styles.ink} />
         </g>
-        <rect width="100" height="100" className={styles.ink} />
-      </g>
-      <circle cx="81.5" cy="81.5" r="7" className={styles.ring} />
-      <rect x="75.5" y="75.5" width="12" height="12" rx="1.92" className={styles.seal} />
-    </svg>
+        <circle cx="81.5" cy="81.5" r="7" className={styles.ring} />
+        <rect x="75.5" y="75.5" width="12" height="12" rx="1.92" className={styles.seal} />
+      </svg>
+    </span>
   );
 }
