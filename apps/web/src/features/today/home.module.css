@@ -22,6 +22,8 @@
 .more {
   display: inline-flex;
   align-items: center;
+  justify-content: flex-end;
+  min-width: var(--tap);
   min-height: var(--tap);
   font-size: var(--text-sm);
   color: var(--accent);
