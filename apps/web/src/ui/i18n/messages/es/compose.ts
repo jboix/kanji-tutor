@@ -7,6 +7,7 @@ export const compose = {
   meaningQuoted: '«{meaning}»',
   prompt: 'Di algo cierto sobre ti con esta estructura.',
   saved: 'Guardada en tus frases.',
+  savedAll: 'Guardada en tus frases. Has escrito con cada punto de gramática de la lección.',
   errorOffline: 'Las correcciones necesitan conexión. Tu frase queda guardada aquí como borrador.',
   errorNoKey:
     'Añade una clave de Gemini en Ajustes para recibir correcciones. Tu frase queda guardada como borrador.',

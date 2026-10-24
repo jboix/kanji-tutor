@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router';
 import type { AiClient } from '../../ai/types.ts';
 import type { ComposeTarget } from '../../domain/services/index.ts';
 import { ActionBar, ActionHint, ActionRow } from '../../ui/action-bar.tsx';
@@ -57,6 +58,19 @@ function Footer({ composer }: { composer: Composer }) {
   );
 }
 
+/** "Saved to your sentences.", handed over by the sentence just accepted. */
+function SavedNotice() {
+  const state: unknown = useLocation().state;
+  const notice =
+    typeof state === 'object' && state !== null && 'notice' in state ? String(state.notice) : '';
+  if (!notice) return null;
+  return (
+    <p className={styles.prompt} role="status">
+      {notice}
+    </p>
+  );
+}
+
 function Composing({ target }: { target: ComposeTarget }) {
   const composer = useComposer(target);
   const { grammar } = target;
@@ -67,6 +81,7 @@ function Composing({ target }: { target: ComposeTarget }) {
       top={16}
       footer={<Footer composer={composer} />}
     >
+      <SavedNotice />
       <div className={styles.heading}>
         <p lang="ja" className={styles.pattern}>
           {grammar.pattern}

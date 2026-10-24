@@ -182,12 +182,14 @@ describe('ComposeScreen', () => {
     expect(screen.getByLabelText<HTMLTextAreaElement>('Your sentence').value).toBe(SENTENCE);
   });
 
-  it('saves the corrected sentence on Accept and goes back to Today', async () => {
+  it('saves the corrected sentence on Accept and goes back to Today after the last point', async () => {
     const repos = await withGrammar();
     renderCompose(repos, { correctSentence: ok(CORRECTION) });
     await typeAndCheck();
     fireEvent.click(await screen.findByRole('button', { name: 'Accept corrections' }));
-    expect(await screen.findByText('Today screen: Saved to your sentences.')).toBeTruthy();
+    expect(
+      await screen.findByText(/^Today screen: Saved to your sentences\. You have/),
+    ).toBeTruthy();
     const [saved] = await repos.sentences.bySource('compose');
     expect(saved).toMatchObject({
       text: CORRECTION.corrected,
@@ -197,6 +199,18 @@ describe('ComposeScreen', () => {
     });
     expect((await repos.items.get('grammar:わけではない'))?.level).toBe(3);
     expect(localStorage.length).toBe(0);
+  });
+
+  it('goes on to the next grammar point of the lesson on Accept', async () => {
+    const tai: GrammarPoint = { ...WAKE, id: 'たい', pattern: '〜たい', meaning: 'want to' };
+    const repos = await withGrammar([WAKE, tai]);
+    renderCompose(repos, { correctSentence: ok(CORRECTION) });
+    await typeAndCheck();
+    fireEvent.click(await screen.findByRole('button', { name: 'Accept corrections' }));
+    expect(await screen.findByText('〜たい')).toBeTruthy();
+    expect(screen.getByRole('status').textContent).toBe('Saved to your sentences.');
+    expect(screen.getByLabelText<HTMLTextAreaElement>('Your sentence').value).toBe('');
+    expect((await repos.items.get('grammar:わけではない'))?.level).toBe(3);
   });
 
   it('marks unverified readings and a sentence that misses the target', async () => {

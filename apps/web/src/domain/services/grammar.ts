@@ -75,6 +75,25 @@ export async function composeTarget(
   return { grammar: found.point, position, total: found.points.length };
 }
 
+/**
+ * After a sentence with `grammarId` is saved: the next point among its siblings not used yet,
+ * going round from the one just written. Undefined when every other point is used.
+ */
+export async function nextComposeTarget(
+  repos: Repos,
+  grammarId: string,
+): Promise<ComposeTarget | undefined> {
+  const found = await pick(repos, grammarId);
+  if (!found) return undefined;
+  const { points } = found;
+  const at = points.findIndex((p) => p.id === grammarId);
+  const round = [...points.slice(at + 1), ...points.slice(0, Math.max(at, 0))];
+  const items = await repos.items.getMany(round.map((p) => itemId('grammar', p.id)));
+  const next = round.find((_, i) => !isGrammarUsed(items[i]));
+  if (!next) return undefined;
+  return { grammar: next, position: points.indexOf(next) + 1, total: points.length };
+}
+
 /** What a learner types to add a grammar point by hand. */
 export interface AddGrammarInput {
   pattern: string;

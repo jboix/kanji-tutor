@@ -1,7 +1,11 @@
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router';
 import type { AiClient, AiErrorKind, Correction } from '../../ai/index.ts';
-import { acceptComposition, type ComposeTarget } from '../../domain/services/index.ts';
+import {
+  acceptComposition,
+  type ComposeTarget,
+  nextComposeTarget,
+} from '../../domain/services/index.ts';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { paths } from '../../ui/paths.ts';
 import { useServices } from '../../ui/services.tsx';
@@ -54,6 +58,10 @@ async function runCheck(
   }
 }
 
+/**
+ * Saves the sentence, then goes on to the lesson's next grammar point not written with yet;
+ * back to Today only once there is none.
+ */
 function useAccept(target: ComposeTarget) {
   const { repos, lang } = useServices();
   const navigate = useNavigate();
@@ -62,7 +70,13 @@ function useAccept(target: ComposeTarget) {
     const input = { grammar: target.grammar, original, correction, now: Date.now(), lang };
     await acceptComposition(repos, input);
     saveDraft(target.grammar.id, '');
-    await navigate(paths.today, { replace: true, state: { notice: t('compose.saved') } });
+    const next = await nextComposeTarget(repos, target.grammar.id);
+    if (!next) {
+      await navigate(paths.today, { replace: true, state: { notice: t('compose.savedAll') } });
+      return;
+    }
+    const to = `${paths.compose}?grammar=${encodeURIComponent(next.grammar.id)}`;
+    await navigate(to, { replace: true, state: { notice: t('compose.saved') } });
   };
 }
 

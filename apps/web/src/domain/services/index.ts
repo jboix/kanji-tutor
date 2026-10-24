@@ -58,6 +58,7 @@ export {
   grammarIdFor,
   isGrammarUsed,
   lessonGrammar,
+  nextComposeTarget,
 } from './grammar.ts';
 export { introduceGrammar } from './grammar-intro.ts';
 export {

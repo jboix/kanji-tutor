@@ -9,6 +9,7 @@ import {
   grammarIdFor,
   isGrammarUsed,
   lessonGrammar,
+  nextComposeTarget,
 } from './grammar.ts';
 import { todaySummary } from './summary.ts';
 
@@ -39,6 +40,27 @@ async function seed(repos: Repos, points: GrammarPoint[], levels: Record<string,
     });
   }
 }
+
+describe('nextComposeTarget', () => {
+  it('goes on to the next unused point of the same lesson, round from the one written', async () => {
+    const repos = createMemoryRepos({ settings: { currentLesson: LESSON } });
+    await seed(repos, [point('a'), point('x', 'Other'), point('b'), point('c')], { b: 4 });
+    expect(await nextComposeTarget(repos, 'b')).toEqual({
+      grammar: point('c'),
+      position: 3,
+      total: 3,
+    });
+    await seed(repos, [], { c: 3 });
+    expect((await nextComposeTarget(repos, 'c'))?.grammar.id).toBe('a');
+  });
+
+  it('is undefined once every other point is used, or for a point that is gone', async () => {
+    const repos = createMemoryRepos({ settings: { currentLesson: LESSON } });
+    await seed(repos, [point('a'), point('b')], { a: 3 });
+    expect(await nextComposeTarget(repos, 'b')).toBeUndefined();
+    expect(await nextComposeTarget(createMemoryRepos(), 'gone')).toBeUndefined();
+  });
+});
 
 describe('composeTarget', () => {
   it('is undefined with no grammar points', async () => {

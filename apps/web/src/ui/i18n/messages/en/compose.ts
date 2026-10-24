@@ -5,6 +5,7 @@ export const compose = {
   meaningQuoted: '“{meaning}”',
   prompt: 'Say something true about yourself with it.',
   saved: 'Saved to your sentences.',
+  savedAll: 'Saved to your sentences. You have written with every grammar point of the lesson.',
   errorOffline: 'Corrections need a connection. Your sentence is kept here as a draft.',
   errorNoKey: 'Add a Gemini key in Settings to get corrections. Your sentence is kept as a draft.',
   errorRateLimit: 'Gemini says too many requests. Try again in a minute; your draft is kept.',

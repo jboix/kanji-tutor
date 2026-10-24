@@ -7,6 +7,8 @@ export const compose = {
   meaningQuoted: '« {meaning} »',
   prompt: 'Dites quelque chose de vrai sur vous avec ce point.',
   saved: 'Enregistrée dans vos phrases.',
+  savedAll:
+    'Enregistrée dans vos phrases. Vous avez écrit avec chaque point de grammaire de la leçon.',
   errorOffline:
     'Les corrections demandent une connexion. Votre phrase est gardée ici comme brouillon.',
   errorNoKey:
