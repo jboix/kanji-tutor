@@ -72,8 +72,8 @@ run **Release** first, then this.
 To go back to an earlier version, start the workflow with it, such as `1.2.0`: its image is
 deployed again, without building.
 
-The `sync` environment holds the secret `SYNC_SSH_KEY` and the variables `SYNC_HOST`,
-`SYNC_USER`, `SYNC_DOMAIN` and `SYNC_KNOWN_HOSTS`. On the server, the deploy key's line in
+The `sync` environment holds the secrets `SYNC_SSH_KEY`, `SYNC_HOST`, `SYNC_USER` and
+`SYNC_KNOWN_HOSTS`, and the variable `SYNC_DOMAIN`, which the deploy page links to. On the server, the deploy key's line in
 `~/.ssh/authorized_keys` is `command="…/deploy.sh",restrict` followed by the public key.
 
 To build your own image instead: `bun run sync:build`, then `docker build -t kanji-sync:local

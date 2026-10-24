@@ -139,9 +139,9 @@ jobs:
         env:
           VERSION: ${{ steps.version.outputs.version }}
           SSH_KEY: ${{ secrets.SYNC_SSH_KEY }}
-          KNOWN_HOSTS: ${{ vars.SYNC_KNOWN_HOSTS }}
-          SYNC_HOST: ${{ vars.SYNC_HOST }}
-          SYNC_USER: ${{ vars.SYNC_USER }}
+          KNOWN_HOSTS: ${{ secrets.SYNC_KNOWN_HOSTS }}
+          SYNC_HOST: ${{ secrets.SYNC_HOST }}
+          SYNC_USER: ${{ secrets.SYNC_USER }}
         run: |
           install -m 700 -d ~/.ssh
           printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy-key
