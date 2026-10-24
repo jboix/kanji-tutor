@@ -6,10 +6,10 @@
   font-weight: 700;
 }
 
+/* The sheet already pads its sides and the home indicator: the rows take its full width. */
 .options {
   display: flex;
   flex-direction: column;
-  padding: 0 var(--gutter) max(24px, calc(env(safe-area-inset-bottom) + 12px));
 }
 
 .option,
