@@ -33,7 +33,7 @@ export function stateLine(t: Translate, view: UnitView): string {
 }
 
 /**
- * "6 of 13 words · 1 of 3 grammar": the unit's own progress (T7). Words drop out when the
+ * "6 of 13 words known · 1 of 3 grammar": the unit's own progress (T7). Words drop out when the
  * installed packs lack the unit, so there are none to count yet.
  */
 export function progressLine(t: Translate, view: UnitView): string {

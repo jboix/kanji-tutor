@@ -37,7 +37,7 @@ describe('UnitsScreen (T4)', { timeout: 20_000 }, () => {
     const first = within(n5).getByRole('link', { name: /わたしは学生です/ });
     expect(first.getAttribute('href')).toBe('/units/i-am-a-student');
     expect(first.textContent).toContain('Current · Words');
-    expect(first.textContent).toMatch(/0 of \d+ words · 0 of 3 grammar/);
+    expect(first.textContent).toMatch(/0 of \d+ words known · 0 of 3 grammar/);
     expect(within(first).getByRole('progressbar').getAttribute('aria-valuenow')).toBe('0');
     const known = await within(n5).findByRole('region', { name: 'N5 known' });
     expect(known.textContent).toMatch(/Words\s*0 of \d+/);
@@ -52,7 +52,7 @@ describe('UnitScreen (T3)', { timeout: 30_000 }, () => {
     const repos = await curriculumRepos();
     renderUnit(repos, 'self-introduction');
     expect(await screen.findByRole('heading', { name: 'はじめまして' })).toBeTruthy();
-    expect(screen.getByRole('progressbar', { name: /Progress: 0 of \d+ words/ })).toBeTruthy();
+    expect(screen.getByRole('progressbar', { name: /Progress: 0 of 5 sections/ })).toBeTruthy();
     const sections = screen.getByRole('region', { name: 'Sections' });
     const rows = within(sections).getAllByRole('button');
     expect(rows.map((row) => row.textContent?.split('·').slice(0, 3).join('·'))).toEqual([

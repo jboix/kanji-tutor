@@ -9,6 +9,8 @@ import {
   SECTION_TITLES,
   type SectionProgress,
   sectionDone,
+  sectionShare,
+  sectionsDone,
   type UnitView,
   unitShare,
 } from '../../domain/services/index.ts';
@@ -17,6 +19,7 @@ import { BackButton } from '../../ui/back-button.tsx';
 import { EnMark } from '../../ui/en-mark.tsx';
 import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
 import type { PlainKey, Translate } from '../../ui/i18n/types.ts';
+import { CheckIcon } from '../../ui/icons.tsx';
 import { Ja } from '../../ui/ja.tsx';
 import { SECTION_NAME } from '../../ui/lesson-sections.ts';
 import { ListRow } from '../../ui/list-row.tsx';
@@ -44,9 +47,9 @@ const DETAIL: Readonly<Record<LessonSection, PlainKey>> = {
   review: 'units.detailReview',
 };
 
-/** "Part 1 of 2 done", "Done", or what the section holds when it is not started. */
+/** "Part 1 of 2 done", or what the section holds when it is not started; a done one has none. */
 function sectionDetail(t: Translate, section: LessonSection, progress?: SectionProgress) {
-  if (sectionDone(progress)) return t('units.sectionDone');
+  if (sectionDone(progress)) return undefined;
   if (progress && progress.done > 0) {
     return t('units.sectionParts', { done: progress.done, parts: progress.parts });
   }
@@ -66,6 +69,7 @@ function SectionRow({ view, section, n, onMode }: SectionRowProps) {
   const title = <Ja>{SECTION_TITLES[section]}</Ja>;
   const navigate = useNavigate();
   const progress = view.progress.sections?.[section];
+  const done = sectionDone(progress);
   const open = () => {
     if (section === 'reading') onMode('read');
     else void navigate(paths.lessonPart(view.unit.id, section, nextPart(progress)));
@@ -77,7 +81,15 @@ function SectionRow({ view, section, n, onMode }: SectionRowProps) {
       aria-current={view.step === section ? 'step' : undefined}
     >
       <ListRow onClick={open} detail={sectionDetail(t, section, progress)}>
-        {rich('units.sectionRow', { n, title, name: t(SECTION_NAME[section]) })}
+        <span className={styles.sectionLine}>
+          {rich('units.sectionRow', { n, title, name: t(SECTION_NAME[section]) })}
+          {done && (
+            <span className={styles.sectionCheck}>
+              <CheckIcon />
+              <span className="visually-hidden">{t('units.sectionDone')}</span>
+            </span>
+          )}
+        </span>
       </ListRow>
     </div>
   );
@@ -103,14 +115,32 @@ function Sections({ view, onMode }: { view: UnitView; onMode: (mode: Mode) => vo
   );
 }
 
-/** The unit's own progress, as on its row of the path (T7). */
+/**
+ * The lesson's sections done, as the bar shows them, then the words and grammar known (T7).
+ * Without the unit in the packs there are no sections, so the bar shows what is known.
+ */
 function Progress({ view }: { view: UnitView }) {
   const t = useT();
-  const line = progressLine(t, view);
+  const known = progressLine(t, view);
+  if (!view.pack) {
+    return (
+      <div className={styles.rowDetail}>
+        <p className={styles.muted}>{known}</p>
+        <ProgressLine value={unitShare(view)} label={t('units.unitProgress', { line: known })} />
+      </div>
+    );
+  }
+  const sections = t('units.sectionsOf', {
+    done: sectionsDone(view),
+    total: LESSON_SECTIONS.length,
+  });
   return (
     <div className={styles.rowDetail}>
-      <p className={styles.muted}>{line}</p>
-      <ProgressLine value={unitShare(view)} label={t('units.unitProgress', { line })} />
+      <p className={styles.muted}>{t('units.withSections', { sections, line: known })}</p>
+      <ProgressLine
+        value={sectionShare(view)}
+        label={t('units.unitProgress', { line: sections })}
+      />
     </div>
   );
 }

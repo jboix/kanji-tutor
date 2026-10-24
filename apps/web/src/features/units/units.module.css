@@ -129,6 +129,23 @@
   font-weight: 600;
 }
 
+/* Each row sits in its own .step, so the rule between rows is drawn here. */
+.step + .step {
+  border-top: 1px solid var(--rule);
+}
+
+.sectionLine {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* A done section: a check after its name, in place of a "Done" line. */
+.sectionCheck {
+  display: inline-flex;
+  color: var(--ok);
+}
+
 .words {
   display: flex;
   flex-wrap: wrap;

@@ -161,7 +161,13 @@ export {
   todaySession,
   todaySummary,
 } from './summary.ts';
-export { type LevelUnits, levelUnits, unitShare } from './unit-progress.ts';
+export {
+  type LevelUnits,
+  levelUnits,
+  sectionShare,
+  sectionsDone,
+  unitShare,
+} from './unit-progress.ts';
 export {
   finishLessonPart,
   lessonNext,

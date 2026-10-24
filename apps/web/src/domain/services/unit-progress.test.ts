@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { UnitView } from './unit-path.ts';
-import { levelUnits, unitShare } from './unit-progress.ts';
+import { levelUnits, sectionShare, sectionsDone, unitShare } from './unit-progress.ts';
 
 const counts = (known: number, total: number, reviewed: number, points: number) => ({
   words: { known, met: known, total },
@@ -15,6 +15,27 @@ describe('unitShare (T7)', () => {
   it('is 1 for a done unit and 0 for an empty one', () => {
     expect(unitShare({ ...counts(2, 13, 0, 3), state: 'done' })).toBe(1);
     expect(unitShare({ ...counts(0, 0, 0, 0), state: 'not-started' })).toBe(0);
+  });
+});
+
+describe('sectionShare and sectionsDone', () => {
+  const sections = {
+    words: { parts: 2, done: 2 },
+    grammar: { parts: 1, done: 1 },
+    practice: { parts: 2, done: 2 },
+    reading: { parts: 1, done: 1 },
+    review: { parts: 2, done: 1 },
+  };
+  const progress = { sections } as unknown as UnitView['progress'];
+
+  it('counts the sections done, with a started one in part', () => {
+    expect(sectionsDone({ progress })).toBe(4);
+    expect(sectionShare({ progress, state: 'current' })).toBeCloseTo(4.5 / 5);
+  });
+
+  it('is 1 for a done unit and 0 before any section', () => {
+    expect(sectionShare({ progress, state: 'done' })).toBe(1);
+    expect(sectionShare({ progress: {} as UnitView['progress'], state: 'open' })).toBe(0);
   });
 });
 
