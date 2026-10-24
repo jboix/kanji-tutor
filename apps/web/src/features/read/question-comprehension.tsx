@@ -4,6 +4,7 @@
  */
 import { type ReactNode, useState } from 'react';
 import type { ComprehensionQuestion, ComprehensionSet } from '../../domain/questions/index.ts';
+import { ActionBar } from '../../ui/action-bar.tsx';
 import { cx } from '../../ui/cx.ts';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { PillButton } from '../../ui/pill-button.tsx';
@@ -12,6 +13,8 @@ import { TapText } from '../../ui/word-tap.tsx';
 import styles from './question.module.css';
 import { AnswerLine, OptionList, OptionNotes, QuestionHeader } from './question-parts.tsx';
 import { PassageText, usePassageLines } from './question-tap.tsx';
+import read from './read.module.css';
+import { useFocus } from './read-actions.tsx';
 import type { DrillResult } from './session-state.ts';
 import { SkipButton } from './skip-button.tsx';
 import { useGradeSound } from './use-answer-sound.ts';
@@ -36,30 +39,61 @@ function Passage({ set, evidence, question, answered }: PassageProps) {
         <p
           key={line.ja}
           lang="ja"
-          className={cx(styles.passageLine, i === evidence && styles.evidence)}
+          className={styles.passageLine}
           data-evidence={i === evidence ? '' : undefined}
         >
-          <PassageText text={line.ja} line={lines[i]} open={open} beforeAnswer={!answered} />
+          <span className={cx(i === evidence && styles.evidence)}>
+            <PassageText text={line.ja} line={lines[i]} open={open} beforeAnswer={!answered} />
+          </span>
         </p>
       ))}
     </section>
   );
 }
 
+/** Lays out a step's body and its footer: under a screen's top bar, or one after the other. */
+export type PassageLayout = (body: ReactNode, footer: ReactNode) => ReactNode;
+
+const stacked: PassageLayout = (body, footer) => (
+  <>
+    {body}
+    {footer}
+  </>
+);
+
 interface StepProps {
   set: ComprehensionSet;
   question: ComprehensionQuestion;
   last: boolean;
   onNext: (right: boolean) => void;
+  layout: PassageLayout;
 }
 
-function Step({ set, question, last, onNext }: StepProps) {
+/** "Next question", or "Done" after the last, once answered: in the action bar, always in view. */
+function NextQuestion(props: { last: boolean; onNext: () => void }) {
+  const box = useFocus('[data-next]', 'answered');
+  const t = useT();
+  return (
+    <ActionBar>
+      <div ref={box} className={read.next}>
+        <PillButton data-next onClick={props.onNext}>
+          {t(props.last ? 'common.done' : 'questions.nextQuestion')}
+        </PillButton>
+      </div>
+    </ActionBar>
+  );
+}
+
+function Step({ set, question, last, onNext, layout }: StepProps) {
   const controls = useQuestion(question);
   const { answer } = controls;
   useGradeSound(answer?.grade);
   const proof = set.sentences[question.evidence];
   const t = useT();
-  return (
+  const footer = answer && (
+    <NextQuestion last={last} onNext={() => onNext(answer.grade.verdict === 'correct')} />
+  );
+  const body = (
     <>
       <QuestionHeader question={question} />
       <Passage
@@ -84,23 +118,21 @@ function Step({ set, question, last, onNext }: StepProps) {
       )}
       {answer && <AnswerLine question={question} answer={answer} />}
       {answer && <OptionNotes question={question} />}
-      {answer && (
-        <PillButton onClick={() => onNext(answer.grade.verdict === 'correct')}>
-          {t(last ? 'common.done' : 'questions.nextQuestion')}
-        </PillButton>
-      )}
     </>
   );
+  return layout(body, footer);
 }
 
 export interface ComprehensionViewProps {
   set: ComprehensionSet;
   /** After the last question: right when every answer was right. */
   onDone: (result: DrillResult) => void;
+  /** Where "Next question" goes; after the step when not given. */
+  layout?: PassageLayout;
 }
 
 /** A passage and its 2–4 questions, one at a time (T6). */
-export function ComprehensionView({ set, onDone }: ComprehensionViewProps) {
+export function ComprehensionView({ set, onDone, layout = stacked }: ComprehensionViewProps) {
   const [step, setStep] = useState(0);
   const [right, setRight] = useState(true);
   const question = set.questions[step];
@@ -113,14 +145,24 @@ export function ComprehensionView({ set, onDone }: ComprehensionViewProps) {
       setStep(step + 1);
     }
   };
-  return <Step key={question.id} set={set} question={question} last={last} onNext={next} />;
+  return (
+    <Step
+      key={question.id}
+      set={set}
+      question={question}
+      last={last}
+      onNext={next}
+      layout={layout}
+    />
+  );
 }
 
 /** A passage card in the reading session (T6), under the session's top bar. */
 export function PassageScreen(props: ComprehensionViewProps & { topBar: ReactNode }) {
-  return (
-    <Screen topBar={props.topBar} gap={22} enter={false}>
-      <ComprehensionView set={props.set} onDone={props.onDone} />
+  const layout: PassageLayout = (body, footer) => (
+    <Screen topBar={props.topBar} footer={footer} gap={22} enter={false}>
+      {body}
     </Screen>
   );
+  return <ComprehensionView set={props.set} onDone={props.onDone} layout={layout} />;
 }

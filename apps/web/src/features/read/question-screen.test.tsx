@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import {
@@ -202,9 +202,9 @@ describe('a 読解 passage', () => {
     expect(screen.getByRole('region', { name: 'Passage' }).textContent).toContain('健康');
     expect(document.querySelector('[data-evidence]')).toBeNull();
     await userEvent.click(option(/健康のため$/));
-    expect(
-      (await screen.findByText('それは健康のためです。', { selector: 'p' })).dataset.evidence,
-    ).toBe('');
+    await waitFor(() =>
+      expect(document.querySelector('[data-evidence]')?.textContent).toBe('それは健康のためです。'),
+    );
     expect(screen.getByText('Line 2: That is for my health.')).toBeTruthy();
     await userEvent.click(screen.getByRole('button', { name: 'Next question' }));
     expect(screen.getByText('どこまで歩きますか。')).toBeTruthy();

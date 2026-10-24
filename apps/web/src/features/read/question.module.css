@@ -262,9 +262,15 @@
   margin: 0;
 }
 
+/* A highlighter stroke across the lower half of the text, wrapping with it line by line. */
 .evidence {
-  border-radius: 6px;
-  background: var(--paper-soft);
-  box-shadow: inset 3px 0 0 var(--accent);
-  padding: 0 6px;
+  background: linear-gradient(
+    transparent 52%,
+    color-mix(in srgb, var(--accent) 28%, transparent) 52%,
+    color-mix(in srgb, var(--accent) 28%, transparent) 92%,
+    transparent 92%
+  );
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding: 0 2px;
 }
