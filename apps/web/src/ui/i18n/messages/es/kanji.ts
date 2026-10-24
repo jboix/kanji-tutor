@@ -2,6 +2,8 @@
 import type { Messages } from '../../types.ts';
 
 export const kanji = {
+  tutorReadings: '¿Cuándo se lee {x} de cada forma?',
+  tutorRemember: 'Un truco para recordar {x}',
   markedKnown: 'Marcado como conocido',
   markedKnownLesson: 'Marcado como conocido · {lesson}',
   knownSince: 'Conocido desde {since}',

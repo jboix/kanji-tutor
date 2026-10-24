@@ -1,13 +1,15 @@
+import { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { type KanjiDetail, readingLabel } from '../../domain/services/index.ts';
 import type { Source } from '../../domain/types.ts';
 import { Chip, ChipRow } from '../../ui/chip.tsx';
 import { ExternalLink, ExternalLinks } from '../../ui/external-link.tsx';
 import { jishoKanjiUrl, wiktionaryKanjiUrl } from '../../ui/external-links.ts';
-import { type I18n, useI18n } from '../../ui/i18n/i18n.tsx';
+import { type I18n, useI18n, useT } from '../../ui/i18n/i18n.tsx';
 import { Ja } from '../../ui/ja.tsx';
 import { paths } from '../../ui/paths.ts';
 import { SectionLabel } from '../../ui/section-label.tsx';
+import { TutorCard, TutorFloat, useTutor } from '../../ui/tutor.tsx';
 import styles from './kanji.module.css';
 import { ReadingRows } from './reading-rows.tsx';
 
@@ -91,11 +93,46 @@ function Practice({ detail }: { detail: KanjiDetail }) {
   );
 }
 
-/** The kanji page (kanji.html, K3): readings and how well each is read, family, practice. */
-export function KanjiDetailView({ detail }: { detail: KanjiDetail }) {
+/** The tutor on the kanji: under the hero, and on its own screen also floating. */
+function KanjiTutor({ detail, floating }: { detail: KanjiDetail; floating: boolean }) {
+  const t = useT();
+  const { kanji, rows } = detail;
+  const options = useMemo(() => {
+    const words = rows.flatMap((row) => row.examples).slice(0, 4);
+    const text = [kanji.char, ...words].join('、');
+    return {
+      topic: {
+        about: kanji.char,
+        sentence: { text, translation: kanji.meanings.slice(0, 3).join(', ') },
+        surface: kanji.char,
+      },
+      starters: [
+        t('kanji.tutorReadings', { x: kanji.char }),
+        t('kanji.tutorRemember', { x: kanji.char }),
+      ],
+    };
+  }, [kanji, rows, t]);
+  const tutor = useTutor(options);
+  if (!tutor) return null;
+  return (
+    <>
+      <TutorCard tutor={tutor} />
+      {floating && <TutorFloat tutor={tutor} />}
+      {tutor.sheet}
+    </>
+  );
+}
+
+/**
+ * The kanji page (kanji.html, K3): readings and how well each is read, the tutor, family,
+ * practice. `floating` (its own screen, not a peek over a session) adds the floating Ask.
+ */
+export function KanjiDetailView(props: { detail: KanjiDetail; floating?: boolean }) {
+  const { detail } = props;
   return (
     <>
       <Hero detail={detail} />
+      <KanjiTutor detail={detail} floating={props.floating ?? false} />
       <ReadingRows detail={detail} />
       {detail.family && <Family family={detail.family} />}
       <Practice detail={detail} />

@@ -23,7 +23,6 @@ export const grammar = {
   levelGroup: 'N{level} · {group}',
   confuse: 'Fácil de confundir con',
   confuseLead: '{pattern} significa «{meaning}». Estos son parecidos:',
-  askTutor: 'Preguntar al tutor',
   formed: 'Cómo se forma',
   whereSeen: 'Dónde lo verás',
   whatItDoes: 'Qué expresa',
@@ -44,6 +43,8 @@ export const grammar = {
   aboutLabel: 'Sobre esta gramática · N{level}',
   introRegion: 'Gramática nueva: {pattern}',
   introLabel: 'Gramática nueva · N{level}',
+  tutorWhen: '¿Cuándo uso {x}?',
+  tutorCasual: '{x} en el habla informal',
   gotIt: 'Entendido',
   moreAbout: 'Más sobre esto',
 } satisfies Messages['grammar'];

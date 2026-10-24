@@ -11,7 +11,7 @@ import { KanjiDetailView } from './kanji-detail-view.tsx';
 import { KanjiIndex } from './kanji-index.tsx';
 import { useKanjiDetail } from './use-kanji.ts';
 
-function Detail({ char }: { char: string }) {
+function Detail({ char, floating = false }: { char: string; floating?: boolean }) {
   const { t, rich } = useI18n();
   const result = useKanjiDetail(char);
   if (result.state === 'loading') return <p className={styles.meta}>{t('kanji.lookingUp')}</p>;
@@ -25,7 +25,7 @@ function Detail({ char }: { char: string }) {
       </>
     );
   }
-  return <KanjiDetailView detail={result.value} />;
+  return <KanjiDetailView detail={result.value} floating={floating} />;
 }
 
 /** A kanji's page inside a sheet over a session (the `pagePeek` slot, R14). */
@@ -45,7 +45,7 @@ export function KanjiScreen() {
   const title = char ? undefined : <span lang="ja">漢字</span>;
   return (
     <Screen topBar={<TopBar start={back} title={title} />}>
-      {char ? <Detail key={char} char={char} /> : <KanjiIndex />}
+      {char ? <Detail key={char} char={char} floating /> : <KanjiIndex />}
     </Screen>
   );
 }

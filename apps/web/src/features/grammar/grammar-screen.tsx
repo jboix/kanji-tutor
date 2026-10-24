@@ -38,7 +38,7 @@ function Detail({ id }: { id: string }) {
       />
     );
   }
-  return <GrammarPage key={id} entry={entry} />;
+  return <GrammarPage key={id} entry={entry} floating />;
 }
 
 /** `/grammar` (index, P3) and `/grammar/:id` (a point's page, G4). Offline, no AI. */

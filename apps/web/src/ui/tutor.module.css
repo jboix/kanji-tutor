@@ -98,3 +98,14 @@
   align-items: center;
   gap: 12px;
 }
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.fixed {
+  flex: none;
+}

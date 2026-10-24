@@ -9,11 +9,13 @@ import { PillButton } from '../../ui/pill-button.tsx';
 import { SectionLabel } from '../../ui/section-label.tsx';
 import type { GrammarIntroSlotProps } from '../../ui/slots.tsx';
 import { StickyActions } from '../../ui/sticky-actions.tsx';
+import { TutorIntroActions } from '../../ui/tutor.tsx';
 import { useContentLanguage } from '../../ui/use-content-language.ts';
 import { Formation } from './formation.tsx';
 import styles from './grammar.module.css';
 import { entryById, isFunctionWord, type Point } from './grammar-data.ts';
 import { ExampleList } from './grammar-examples.tsx';
+import { useGrammarTutor } from './grammar-tutor.ts';
 import { JaRuns } from './ja-runs.tsx';
 import { useExamples } from './use-grammar.ts';
 import { Uses } from './uses.tsx';
@@ -50,6 +52,7 @@ function WordBody({ word }: { word: FunctionWord }) {
 function IntroCard({ entry: source, onDone }: { entry: Point; onDone: () => void }) {
   const t = useT();
   const { value: entry, english } = localPoint(useContentLanguage(), source);
+  const tutor = useGrammarTutor(entry);
   return (
     <section
       className={styles.intro}
@@ -66,9 +69,11 @@ function IntroCard({ entry: source, onDone }: { entry: Point; onDone: () => void
       {isFunctionWord(entry) ? <WordBody word={entry} /> : <PointBody entry={entry} />}
       <StickyActions>
         <div className={styles.actions}>
-          <PillButton block onClick={onDone}>
-            {t('grammar.gotIt')}
-          </PillButton>
+          <TutorIntroActions tutor={tutor}>
+            <PillButton block onClick={onDone}>
+              {t('grammar.gotIt')}
+            </PillButton>
+          </TutorIntroActions>
           <Link to={paths.grammar(entry.id)} className={styles.link}>
             {t('grammar.moreAbout')}
           </Link>

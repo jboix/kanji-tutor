@@ -21,7 +21,6 @@ export const grammar = {
   levelGroup: 'N{level} · {group}',
   confuse: 'Easy to confuse with',
   confuseLead: '{pattern} means “{meaning}”. These are close:',
-  askTutor: 'Ask the tutor',
   formed: "How it's formed",
   whereSeen: "Where you'll see it",
   whatItDoes: 'What it does',
@@ -42,6 +41,8 @@ export const grammar = {
   aboutLabel: 'About this grammar · N{level}',
   introRegion: 'New grammar: {pattern}',
   introLabel: 'New grammar · N{level}',
+  tutorWhen: 'When do I use {x}?',
+  tutorCasual: '{x} in casual speech',
   gotIt: 'Got it',
   moreAbout: 'More about this',
 } as const;

@@ -154,3 +154,22 @@ export function TutorNext({ tutor, children }: { tutor: Tutor | undefined; child
     </>
   );
 }
+
+/**
+ * An introduction's actions (Tutor-grammar-intro): the suggested questions, then Ask the tutor
+ * beside its "Got it", passed as `children`. Without the tutor wired, "Got it" alone.
+ */
+export function TutorIntroActions(props: { tutor: Tutor | undefined; children: ReactNode }) {
+  const { tutor, children } = props;
+  if (!tutor) return <>{children}</>;
+  return (
+    <div className={styles.intro}>
+      <TutorStarters tutor={tutor} />
+      <div className={styles.next}>
+        <TutorWideButton tutor={tutor} />
+        <div className={styles.fixed}>{children}</div>
+      </div>
+      {tutor.sheet}
+    </div>
+  );
+}

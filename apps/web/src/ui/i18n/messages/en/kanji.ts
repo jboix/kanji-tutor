@@ -1,5 +1,7 @@
 /** English messages: the kanji index and the kanji page (K3, I1). */
 export const kanji = {
+  tutorReadings: 'When is {x} read which way?',
+  tutorRemember: 'A way to remember {x}',
   markedKnown: 'Marked as known',
   markedKnownLesson: 'Marked as known · {lesson}',
   knownSince: 'Known since {since}',

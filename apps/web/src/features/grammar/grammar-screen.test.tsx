@@ -81,13 +81,26 @@ describe('grammar page (G4)', () => {
     expect(practise.getAttribute('href')).toBe('/read?grammar=te-mo-ii');
   });
 
-  it('asks the tutor only after the button, through the ask box slot', async () => {
-    const askBox: Slots['askBox'] = ({ surface }) => <p>ask about {surface}</p>;
-    await open('/grammar/te-mo-ii', { slots: { askBox } });
-    const button = await screen.findByRole('button', { name: 'Ask the tutor' });
-    expect(screen.queryByText(/ask about/)).toBeNull();
-    fireEvent.click(button);
-    expect(screen.getByText('ask about てもいい')).toBeTruthy();
+  it('puts the tutor under the pattern and floating over the page, opening on the point', async () => {
+    const tutorSheet: Slots['tutorSheet'] = ({ topic }) => (
+      <p>
+        tutor on {topic.grammar?.pattern}: {topic.grammar?.meaning}
+      </p>
+    );
+    await open('/grammar/te-mo-ii', { slots: { tutorSheet } });
+    fireEvent.click(await screen.findByRole('button', { name: /^Talk it through with the tutor/ }));
+    expect(screen.getByText(/^tutor on 〜てもいい: /)).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Ask the tutor about 〜てもいい' })).toBeTruthy();
+  });
+
+  it('offers the tutor beside Got it on the intro card', async () => {
+    const tutorSheet: Slots['tutorSheet'] = ({ first }) => <p>asked {first?.question}</p>;
+    await open('/grammar/te-mo-ii?intro=1', { slots: { tutorSheet } });
+    expect(screen.getByRole('button', { name: /^Ask the tutor/ })).toBeTruthy();
+    fireEvent.click(
+      screen.getByRole('button', { name: 'When do I use 〜てもいい?, 1 request, uses AI' }),
+    );
+    expect(screen.getByText('asked When do I use 〜てもいい?')).toBeTruthy();
   });
 
   it('falls back to harder sentences for a point above the level, and says so', async () => {

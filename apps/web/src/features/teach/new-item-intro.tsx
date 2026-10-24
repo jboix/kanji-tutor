@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { answerSpan } from '../../domain/services/index.ts';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { PillButton } from '../../ui/pill-button.tsx';
@@ -6,12 +6,14 @@ import { SectionLabel } from '../../ui/section-label.tsx';
 import { useServices } from '../../ui/services.tsx';
 import type { IntroSlotProps, TeachingSlotProps } from '../../ui/slots.tsx';
 import { StickyActions } from '../../ui/sticky-actions.tsx';
+import { TutorIntroActions, useTutor } from '../../ui/tutor.tsx';
 import { TapSentence } from '../../ui/word-tap.tsx';
 import { introDue, markIntroduced } from './intro-once.ts';
 import { MemoryHookView, PartsHooks } from './memory-hook.tsx';
 import styles from './teach.module.css';
 import { TeachingContent } from './teaching-content.tsx';
 import { useTeaching } from './use-teaching.ts';
+import type { WordTeaching } from './word-teaching.ts';
 
 /** Whether the intro is due for this target: undefined while checking (L1). */
 function useDue({ target, onDone }: IntroSlotProps): boolean | undefined {
@@ -38,9 +40,28 @@ function laterTargets(card: IntroSlotProps['card'], target: IntroSlotProps['targ
     .flatMap((t) => answerSpan(card.sentence, t.tokenIndex));
 }
 
+/**
+ * The tutor on the new word alone, never its sentence, whose later targets are still to be
+ * answered (Tutor-grammar-intro, for words).
+ */
+function useWordTutor(teaching: WordTeaching | undefined) {
+  const t = useT();
+  const options = useMemo(() => {
+    const word = teaching?.surface ?? '';
+    const text = teaching?.reading ? `${word}（${teaching.reading}）` : word;
+    const translation = teaching?.meanings.join('; ') ?? '';
+    return {
+      topic: { about: word, sentence: { text, translation }, surface: word },
+      starters: [t('exercises.tutorUseIt', { x: word }), t('exercises.tutorLike', { x: word })],
+    };
+  }, [teaching, t]);
+  return useTutor(options);
+}
+
 function IntroCard({ card, target, onDone }: IntroSlotProps) {
   const t = useT();
   const teaching = useTeaching(card, target);
+  const tutor = useWordTutor(teaching);
   if (!teaching) return null;
   const gotIt = () => {
     markIntroduced(target.itemId);
@@ -67,9 +88,11 @@ function IntroCard({ card, target, onDone }: IntroSlotProps) {
         hook={<MemoryHookView teaching={teaching} sentence={card.sentence.text} />}
       />
       <StickyActions>
-        <PillButton block onClick={gotIt}>
-          {t('teach.gotIt')}
-        </PillButton>
+        <TutorIntroActions tutor={tutor}>
+          <PillButton block onClick={gotIt}>
+            {t('teach.gotIt')}
+          </PillButton>
+        </TutorIntroActions>
       </StickyActions>
     </section>
   );

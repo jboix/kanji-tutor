@@ -8,7 +8,7 @@ import { createLang } from '../../lang/index.ts';
 import { NOW, readingRepos, track, W } from '../../test/reading-fixtures.ts';
 import { fakeServices, renderWithServices } from '../../test/render.tsx';
 import type { UiLanguage } from '../../ui/languages.ts';
-import type { ReadingHookSlotProps } from '../../ui/slots.tsx';
+import type { ReadingHookSlotProps, TutorSheetSlotProps } from '../../ui/slots.tsx';
 import { KanjiScreen } from './kanji-screen.tsx';
 
 function render(repos: Repos, path: string, slots = {}, language: UiLanguage = 'en') {
@@ -183,5 +183,17 @@ describe('KanjiScreen in French and Spanish (N7b, N9)', () => {
     await userEvent.type(await screen.findByLabelText('Buscar un kanji o una lectura'), 'gakuse');
     await userEvent.click(await screen.findByRole('button', { name: '学生' }));
     expect(screen.getByText(/estudiante/).textContent).not.toContain('(en)');
+  });
+
+  describe('the tutor on a kanji page', () => {
+    it('sits under the hero and floats over the page, opening on the kanji and its words', async () => {
+      const tutorSheet = ({ topic }: TutorSheetSlotProps) => <p>tutor: {topic.sentence.text}</p>;
+      render(await seiRepos(), '/kanji/生', { tutorSheet });
+      await userEvent.click(
+        await screen.findByRole('button', { name: /^Talk it through with the tutor/ }),
+      );
+      expect(screen.getByText(/^tutor: 生、/).textContent).toContain('学生');
+      expect(screen.getByRole('button', { name: 'Ask the tutor about 生' })).toBeTruthy();
+    });
   });
 });

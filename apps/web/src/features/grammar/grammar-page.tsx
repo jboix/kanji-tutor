@@ -1,7 +1,6 @@
-import { type ReactNode, useState } from 'react';
+import type { ReactNode } from 'react';
 import { type ContentLookup, localPoint } from '../../domain/content-language.ts';
 import type { GrammarEntry } from '../../domain/grammar/index.ts';
-import { Chip, ChipRow } from '../../ui/chip.tsx';
 import { EnMark } from '../../ui/en-mark.tsx';
 import { ExternalLink, ExternalLinks } from '../../ui/external-link.tsx';
 import { jishoGrammarUrl } from '../../ui/external-links.ts';
@@ -13,13 +12,15 @@ import { paths } from '../../ui/paths.ts';
 import { PillLink } from '../../ui/pill-button.tsx';
 import { SectionLabel } from '../../ui/section-label.tsx';
 import { useSlot } from '../../ui/slots.tsx';
+import { TutorCard, TutorFloat } from '../../ui/tutor.tsx';
 import { useContentLanguage } from '../../ui/use-content-language.ts';
 import { Formation } from './formation.tsx';
 import styles from './grammar.module.css';
 import { groupLabel, isFunctionWord, type Point, relatedOf } from './grammar-data.ts';
 import { WhereYoullSeeIt } from './grammar-examples.tsx';
+import { useGrammarTutor } from './grammar-tutor.ts';
 import { JaRuns } from './ja-runs.tsx';
-import { type Examples, type PointProgress, useExamples, usePointProgress } from './use-grammar.ts';
+import { type PointProgress, useExamples, usePointProgress } from './use-grammar.ts';
 import { Uses } from './uses.tsx';
 
 const STATE_TEXT = {
@@ -105,24 +106,6 @@ function Related({ entry, lookup }: { entry: Point; lookup: ContentLookup }) {
   );
 }
 
-/** The ask box about the first example, scoped to the grammar span; AI only on submit. */
-function AskTutor({ loaded }: { loaded: Examples | undefined }) {
-  const t = useT();
-  const Ask = useSlot('askBox');
-  const [open, setOpen] = useState(false);
-  const first = loaded?.examples[0];
-  if (!(Ask && first)) return null;
-  const surface = first.span.map((i) => first.sentence.tokens[i]?.surface ?? '').join('');
-  if (!open) {
-    return (
-      <ChipRow>
-        <Chip onClick={() => setOpen(true)}>{t('grammar.askTutor')}</Chip>
-      </ChipRow>
-    );
-  }
-  return <Ask sentence={first.sentence} {...(surface ? { surface } : {})} />;
-}
-
 /** How a catalogue point is formed, and where the packs use it, with the tutor on demand. */
 function CatalogueParts({ entry, english }: { entry: GrammarEntry; english: boolean }) {
   const t = useT();
@@ -135,7 +118,6 @@ function CatalogueParts({ entry, english }: { entry: GrammarEntry; english: bool
       <Explanation text={entry.explanation} english={english} />
       <Section label={t('grammar.whereSeen')}>
         <WhereYoullSeeIt loaded={loaded} level={entry.level} />
-        <AskTutor loaded={loaded} />
       </Section>
     </>
   );
@@ -165,11 +147,31 @@ function Practice({ grammarId }: { grammarId: string }) {
   );
 }
 
+/** The tutor under the hero, and on a full page also floating, so it stays in reach (Tutor-grammar-page). */
+function PageTutor({ entry, floating }: { entry: Point; floating: boolean }) {
+  const tutor = useGrammarTutor(entry);
+  if (!tutor) return null;
+  return (
+    <>
+      <TutorCard tutor={tutor} />
+      {floating && <TutorFloat tutor={tutor} />}
+      {tutor.sheet}
+    </>
+  );
+}
+
 /**
- * The grammar page (G4): pattern, formation, explanation, examples, related points, practice.
- * A particle or function word (G5) shows its uses with their examples instead.
+ * The grammar page (G4): pattern, the tutor, formation, explanation, examples, related points,
+ * practice. A particle or function word (G5) shows its uses with their examples instead.
+ * `floating` (the page's own screen, not a peek over a session) adds the floating Ask.
  */
-export function GrammarPage({ entry: source }: { entry: Point }) {
+export function GrammarPage({
+  entry: source,
+  floating = false,
+}: {
+  entry: Point;
+  floating?: boolean;
+}) {
   const t = useT();
   const lookup = useContentLanguage();
   const { value: entry, english: fallback } = localPoint(lookup, source);
@@ -177,6 +179,7 @@ export function GrammarPage({ entry: source }: { entry: Point }) {
   return (
     <>
       <Hero entry={entry} english={fallback} />
+      <PageTutor entry={entry} floating={floating} />
       {isFunctionWord(entry) ? (
         <>
           <Explanation text={entry.explanation} english={fallback} />
