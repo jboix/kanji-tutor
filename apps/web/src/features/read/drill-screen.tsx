@@ -81,7 +81,7 @@ function blankOf(drill: Drill) {
  */
 function helpSentence(drill: Drill, answered: boolean) {
   if (!('sentence' in drill)) return undefined;
-  const hidden = (drill.kind === 'listening' && !drill.read) || drill.kind === 'build';
+  const hidden = drill.kind === 'listening' || drill.kind === 'build';
   return hidden && !answered ? undefined : drill.sentence;
 }
 

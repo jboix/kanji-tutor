@@ -176,6 +176,7 @@ describe('S4 exercises', () => {
     expect(synth.cancel).toHaveBeenCalled();
     expect(screen.getByText('What does this sentence mean?')).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Play the sentence' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Show meaning' })).toBeNull();
     expect(document.querySelector('main')?.textContent).toContain('中国人');
     expect(listeningQuiet()).toBe(true);
     expect(listeningQuiet(Date.now() + LISTEN_LATER_MS)).toBe(false);
