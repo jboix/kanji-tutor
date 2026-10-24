@@ -129,6 +129,11 @@
   scrollbar-width: none;
 }
 
+/* Every card as tall as the tallest: the row stretches the items, each item its card. */
+.units > li {
+  display: flex;
+}
+
 .unit {
   display: flex;
   flex-direction: column;
