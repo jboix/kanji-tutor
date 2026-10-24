@@ -141,6 +141,23 @@ describe('prompts', () => {
     expect(built.split('\n')[0]).toBe('Target: 間に');
   });
 
+  it('carries the grammar point and the earlier turns of a conversation', () => {
+    const built = answerQuestionPrompt.build(
+      {
+        scope: 'sentence',
+        sentence: SENTENCE,
+        question: 'And in casual speech?',
+        grammar: { pattern: '〜ました', meaning: 'polite past' },
+        history: [{ question: 'Why は?', answer: 'It sets\nthe topic.' }],
+      },
+      PROFILE,
+    );
+    expect(built).toContain('Grammar: 〜ました (polite past)');
+    expect(built).toContain(
+      'Earlier in this conversation:\nLearner: Why は?\nTutor: It sets the topic.',
+    );
+  });
+
   it('every prompt that returns Japanese text asks for its readings', () => {
     const withReadings = [explainMistakePrompt, explainWordPrompt, breakdownSentencePrompt];
     for (const prompt of [...withReadings, answerQuestionPrompt, followUpPrompt]) {

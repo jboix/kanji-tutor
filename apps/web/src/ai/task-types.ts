@@ -117,11 +117,21 @@ export interface SentenceBreakdown {
   readings: CheckedReading[];
 }
 
+/** One earlier question and answer of a conversation with the tutor. */
+export interface ConversationTurn {
+  question: string;
+  answer: string;
+}
+
 export interface QuestionInput {
   scope: 'sentence' | 'word';
   sentence: SentenceContext;
   surface?: string;
   question: string;
+  /** The grammar point the conversation is about, when there is one. */
+  grammar?: { pattern: string; meaning: string };
+  /** Earlier turns of the same conversation, oldest first, so a question can build on them. */
+  history?: ConversationTurn[];
 }
 export interface Answer extends Immersed {
   answer: string;
