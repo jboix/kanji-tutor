@@ -6,6 +6,7 @@ import { ai } from './ai.ts';
 import { capture } from './capture.ts';
 import { common } from './common.ts';
 import { compose } from './compose.ts';
+import { dialogues } from './dialogues.ts';
 import { drills } from './drills.ts';
 import { exercises } from './exercises.ts';
 import { explain } from './explain.ts';
@@ -43,6 +44,7 @@ export const en = {
   sessionEnd,
   questions,
   drills,
+  dialogues,
   exercises,
   voice,
   settings,

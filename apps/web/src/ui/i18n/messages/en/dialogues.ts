@@ -1,0 +1,22 @@
+/** English messages: grammar dialogues on the intro card, the grammar page and their drill. */
+export const dialogues = {
+  introLabel: 'In a conversation',
+  pageLabel: 'In conversation',
+  between: 'A conversation between {a} and {b}',
+  speaker: '{name}:',
+  play: 'Play',
+  playLabel: 'Play the conversation',
+  showTranslation: 'Show translation',
+  settingFriends: 'Friends',
+  settingFamily: 'Family',
+  settingWork: 'At work',
+  settingSchool: 'At school',
+  settingShop: 'In a shop',
+  registerPlain: 'plain',
+  registerPolite: 'polite',
+  register: '{setting} · {register}',
+  compare: 'Compare with {pattern}',
+  prompt: 'Complete the line',
+  tutorExplain: 'Explain this conversation',
+  tutorWhy: 'Why {x} here?',
+} as const;

@@ -15,6 +15,7 @@ import { useEnterKey } from '../../ui/use-enter-key.ts';
 import { Formation } from './formation.tsx';
 import styles from './grammar.module.css';
 import { entryById, isFunctionWord, type Point } from './grammar-data.ts';
+import { IntroDialogue } from './grammar-dialogues.tsx';
 import { ExampleList } from './grammar-examples.tsx';
 import { useGrammarTutor } from './grammar-tutor.ts';
 import { JaRuns } from './ja-runs.tsx';
@@ -24,7 +25,7 @@ import { Uses } from './uses.tsx';
 /** Examples shown on the intro card (G4: "two examples"). */
 const INTRO_EXAMPLES = 2;
 
-/** Formation and two pack examples for a catalogue point. */
+/** Formation, two pack examples and, when it has one, a conversation, for a catalogue point. */
 function PointBody({ entry }: { entry: GrammarEntry }) {
   const loaded = useExamples(entry, INTRO_EXAMPLES);
   return (
@@ -34,6 +35,7 @@ function PointBody({ entry }: { entry: GrammarEntry }) {
         <JaRuns text={entry.explanation} />
       </p>
       {loaded && loaded.examples.length > 0 && <ExampleList examples={loaded.examples} />}
+      <IntroDialogue grammarId={entry.id} />
     </>
   );
 }

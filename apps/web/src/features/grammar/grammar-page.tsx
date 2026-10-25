@@ -17,6 +17,7 @@ import { useContentLanguage } from '../../ui/use-content-language.ts';
 import { Formation } from './formation.tsx';
 import styles from './grammar.module.css';
 import { groupLabel, isFunctionWord, type Point, relatedOf } from './grammar-data.ts';
+import { PageDialogues } from './grammar-dialogues.tsx';
 import { WhereYoullSeeIt } from './grammar-examples.tsx';
 import { useGrammarTutor } from './grammar-tutor.ts';
 import { JaRuns } from './ja-runs.tsx';
@@ -106,7 +107,7 @@ function Related({ entry, lookup }: { entry: Point; lookup: ContentLookup }) {
   );
 }
 
-/** How a catalogue point is formed, and where the packs use it, with the tutor on demand. */
+/** How a catalogue point is formed, where the packs use it, and its dialogues. */
 function CatalogueParts({ entry, english }: { entry: GrammarEntry; english: boolean }) {
   const t = useT();
   const loaded = useExamples(entry);
@@ -119,6 +120,7 @@ function CatalogueParts({ entry, english }: { entry: GrammarEntry; english: bool
       <Section label={t('grammar.whereSeen')}>
         <WhereYoullSeeIt loaded={loaded} level={entry.level} />
       </Section>
+      <PageDialogues grammarId={entry.id} />
     </>
   );
 }

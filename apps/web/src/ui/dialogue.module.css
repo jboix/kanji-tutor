@@ -1,0 +1,115 @@
+/* A grammar dialogue (dialogue.tsx): ruled rows on paper, one per line, a round initial chip for
+   each speaker, the grammar form underlined in indigo like a target. App data, not the tutor: no
+   tint of --ai anywhere, and no chat bubbles. */
+.lines {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 0 8px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.row:first-child {
+  border-top: 1px solid var(--rule);
+}
+
+.line {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  min-height: var(--tap);
+  margin: 0;
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+}
+
+button.line {
+  cursor: pointer;
+}
+
+button.line:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  margin-top: 3px;
+  border-radius: 50%;
+  background: var(--paper-soft);
+  color: var(--ink);
+  font-family: var(--font-ja);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.other {
+  background: color-mix(in srgb, var(--accent) 14%, var(--paper));
+  color: var(--accent);
+}
+
+.ja {
+  font-family: var(--font-ja);
+  font-size: 20px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+/* The grammar form: a 2px underline, indigo as a target before its answer (U2). */
+.focus {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  text-decoration-color: var(--accent);
+}
+
+.blank {
+  text-decoration-color: var(--ink-faint);
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+}
+
+.correct {
+  color: var(--ok);
+  text-decoration-color: var(--ok);
+}
+
+.missed {
+  color: var(--miss);
+  text-decoration-color: var(--miss);
+}
+
+.shown {
+  text-decoration-color: var(--ink);
+}
+
+.translation {
+  margin: 0 0 0 42px;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+.register {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
