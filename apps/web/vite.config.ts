@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { kuromojiDict } from './scripts/vite-kuromoji-dict.ts';
+import { versionFile } from './scripts/vite-version-file.ts';
 
 /**
  * `VITE_BASE` is the GitHub Pages base path: `/` on app.kanjitutor.ch, as for local builds.
@@ -34,8 +35,10 @@ export default defineConfig({
   plugins: [
     react(),
     kuromojiDict(),
+    versionFile(version),
     VitePWA({
-      registerType: 'autoUpdate',
+      // A new version waits for the learner: Home offers it, Update now applies it.
+      registerType: 'prompt',
       injectRegister: false,
       // Send cookies with the manifest request, so a gated host (an ngrok tunnel) serves the manifest, not its warning page.
       useCredentials: true,

@@ -127,6 +127,8 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ needs.release.outputs.version }}
+          # The tags, so version.json can list the feat commits since the last release.
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Setup Bun
