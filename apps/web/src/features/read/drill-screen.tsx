@@ -3,7 +3,13 @@
  * "Next". `DrillCard` lays them out in a full screen or inline (a grammar page's practice, S5).
  */
 import { type ReactNode, useMemo, useState } from 'react';
-import { type Drill, KANJI_BLANK, PATTERN_BLANK } from '../../domain/drills/index.ts';
+import {
+  type ClozeDrill,
+  type DialogueDrill,
+  type Drill,
+  KANJI_BLANK,
+  PATTERN_BLANK,
+} from '../../domain/drills/index.ts';
 import type { SessionCard } from '../../domain/session-types.ts';
 import type { ItemId } from '../../domain/types.ts';
 import { ActionBar } from '../../ui/action-bar.tsx';
@@ -17,6 +23,7 @@ import { TutorNext } from '../../ui/tutor.tsx';
 import { asTyped, drawingQuiet, drawLater } from './draw-later.ts';
 import { BuildActions, type BuildOrder, BuildView, useBuildOrder } from './drill-build.tsx';
 import { ChoiceActions, ClozeView, LookalikeView } from './drill-choices.tsx';
+import { DialogueView } from './drill-dialogue.tsx';
 import {
   ListeningView,
   listeningChoices,
@@ -76,6 +83,7 @@ function DrillBody(props: BodyProps) {
   const answer = controls.answered ? controls.answers[controls.step] : undefined;
   if (drill.kind === 'lookalike') return <LookalikeView drill={drill} answer={answer} />;
   if (drill.kind === 'cloze') return <ClozeView drill={drill} answer={answer} />;
+  if (drill.kind === 'dialogue') return <DialogueView drill={drill} answer={answer} />;
   if (drill.kind === 'family') return <FamilyView drill={drill} answer={answer} />;
   if (drill.kind === 'readings') {
     return <ReadingsView drill={drill} step={controls.step} answers={controls.answers} />;
@@ -150,6 +158,12 @@ function ExerciseFooter({ drill, controls, order }: BodyProps) {
   );
 }
 
+/** A cloze's patterns, or a dialogue's forms, as choices. */
+function formChoices(drill: ClozeDrill | DialogueDrill) {
+  if (drill.kind === 'dialogue') return drill.choices.map((c) => ({ value: c, label: c }));
+  return drill.choices.map((c) => ({ value: c.grammarId, label: c.pattern }));
+}
+
 function AnswerFooter(props: BodyProps) {
   const { drill, controls } = props;
   const { answer } = controls;
@@ -158,9 +172,8 @@ function AnswerFooter(props: BodyProps) {
     const choices = drill.choices.map((c) => ({ value: c.char, label: c.char }));
     return <ChoiceActions choices={choices} stacked={false} onChoose={answer} />;
   }
-  if (drill.kind === 'cloze') {
-    const choices = drill.choices.map((c) => ({ value: c.grammarId, label: c.pattern }));
-    return <ChoiceActions choices={choices} stacked onChoose={answer} />;
+  if (drill.kind === 'cloze' || drill.kind === 'dialogue') {
+    return <ChoiceActions choices={formChoices(drill)} stacked onChoose={answer} />;
   }
   if (drill.kind !== 'family' && drill.kind !== 'readings') return <ExerciseFooter {...props} />;
   const label =

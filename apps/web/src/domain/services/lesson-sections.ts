@@ -82,6 +82,8 @@ const DRILL_ITEMS: {
   lookalike: () => [],
   readings: () => [],
   family: () => [],
+  // A dialogue comes on top of a point's drills: it does not stand in for one of its types.
+  dialogue: () => [],
 };
 
 /** The items a card exercises and the type it counts as; none for intros and passages. */

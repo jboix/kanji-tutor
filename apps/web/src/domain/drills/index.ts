@@ -8,6 +8,7 @@ export {
   piecesOf,
 } from './build.ts';
 export { type ClozeInput, clozeDrill, patternText } from './cloze.ts';
+export { type DialogueInput, dialogueDrill } from './dialogue.ts';
 export {
   type ExerciseAnswer,
   expectedOf,

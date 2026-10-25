@@ -1,11 +1,12 @@
 /**
  * Records drill answers (R8) as `Review`s with mode 'drill'. Reading a word in a "many readings"
- * drill goes through the same level and FSRS update as a session answer. A cloze choice is the
- * grammar point's review: it updates that item's FSRS card (right → Good, wrong → Again) but not
+ * drill goes through the same level and FSRS update as a session answer. A cloze choice, like a
+ * dialogue's "complete the line", is the grammar point's review: it updates that item's FSRS card (right → Good, wrong → Again) but not
  * its level. Choosing a kanji and guessing a family member's on'yomi are only logged.
  */
 import {
   type ClozeDrill,
+  type DialogueDrill,
   type Drill,
   type ExerciseDrill,
   type FamilyDrill,
@@ -92,6 +93,25 @@ export async function recordDrillChoice(repos: Repos, input: DrillChoiceInput): 
 }
 
 /**
+ * Grades and logs a "complete the line" choice on a dialogue. Like a cloze, it is the grammar
+ * point's review: it reschedules the point's FSRS card, never its level.
+ */
+async function recordDialogueChoice(
+  repos: Repos,
+  input: Timing & { drill: DialogueDrill; choice: string },
+): Promise<Grade> {
+  const { drill, choice } = input;
+  const expected = drill.answer;
+  const right = !input.skipped && choice === expected;
+  const grade: Grade = input.skipped
+    ? { verdict: 'wrong', expected, given: '', skipped: true }
+    : { verdict: right ? 'correct' : 'wrong', expected, given: choice };
+  await repos.reviews.add(reviewOf(drill.itemId, grade, grade.given, input));
+  await reviewGrammar(repos, drill.itemId, right, input.now);
+  return grade;
+}
+
+/**
  * Grades one word of a "many readings" drill (R5 rules) and applies it like a session answer:
  * level, FSRS card and derived kanji readings, never as a new context.
  */
@@ -171,7 +191,7 @@ export interface DrillAnswerInput extends Timing {
   drill: Drill;
   /** Word index in a "many readings" drill; 0 otherwise. */
   step: number;
-  /** The kanji or grammar id chosen, or the kana typed. */
+  /** The kanji, grammar id or dialogue form chosen, or the kana typed. */
   answer: string;
 }
 
@@ -184,6 +204,9 @@ export async function recordDrillAnswer(repos: Repos, input: DrillAnswerInput): 
     return recordDrillChoice(repos, { drill, choice: answer, ...timing });
   }
   if (drill.kind === 'family') return recordFamilyGuess(repos, { drill, answer, ...timing });
+  if (drill.kind === 'dialogue') {
+    return recordDialogueChoice(repos, { drill, choice: answer, ...timing });
+  }
   const item = drill.items[input.step];
   if (!item) throw new Error(`No word ${input.step} in this drill.`);
   return recordDrillReading(repos, { item, answer, ...timing });

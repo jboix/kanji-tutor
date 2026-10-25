@@ -1,7 +1,8 @@
 /**
  * The cards of a unit lesson's 言葉, 文法 and まとめ sections (S3), over the `Repos` port. 言葉
  * reads each new word (with its intro card, L1) and checks its meaning; 文法 explains each point
- * and drills it two to four times; まとめ brings back every word and point that has come back
+ * and drills it two to four times, then for a point with dialogues has a line of one completed;
+ * まとめ brings back every word and point that has come back
  * fewer than three times, each time in a type it has not had. The 練習 and 読み物 sections are
  * sessions of their own (see `buildSession`).
  */
@@ -15,6 +16,7 @@ import type { Repos } from '../repos.ts';
 import type { SessionCard, Target } from '../session-types.ts';
 import { type Unit, unitById } from '../themes/index.ts';
 import type { LearnerLevel, Sentence, Word } from '../types.ts';
+import { dialogueCard } from './dialogue-card.ts';
 import { drillCard } from './drills.ts';
 import {
   buildCard,
@@ -195,11 +197,13 @@ async function pointDrills(data: LessonData, grammarId: string): Promise<Session
   return cloze ? [...drills, cloze] : drills;
 }
 
-/** 文法: each point's explanation and examples, then its drills. */
+/** 文法: each point's explanation and examples, then its drills, then a line of its dialogues. */
 export async function grammarSection(data: LessonData): Promise<SessionCard[]> {
   const out: SessionCard[] = [];
   for (const id of data.unit.grammar) {
     out.push(grammarIntroCard(id), ...(await pointDrills(data, id)));
+    const dialogue = await dialogueCard(id, data.m.seed);
+    if (dialogue) out.push(dialogue);
   }
   return out;
 }

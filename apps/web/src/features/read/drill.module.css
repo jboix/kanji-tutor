@@ -235,3 +235,9 @@
   line-height: 1.2;
   text-align: center;
 }
+
+/* Why the form fits a dialogue (drill-dialogue.tsx), under the answer: plain prose. */
+.why {
+  font-size: var(--text-md);
+  line-height: 1.55;
+}

@@ -5,6 +5,7 @@
  */
 import { type ReactNode, useState } from 'react';
 import { AiSeal } from './ai-seal.tsx';
+import { Chip } from './chip.tsx';
 import { useT } from './i18n/i18n.tsx';
 import { JaRuns } from './ja-runs.tsx';
 import { type TutorQuestion, type TutorTopic, useSlot } from './slots.tsx';
@@ -100,6 +101,21 @@ export function TutorFloat({ tutor }: { tutor: Tutor }) {
       <AiSeal size={28} />
       <span className={styles.strong}>{t('ui.tutorFloat')}</span>
     </button>
+  );
+}
+
+/**
+ * The tutor as a chip with its 解 seal and what to ask ("Explain this conversation"), among an
+ * exercise's chips before its answer, so it is in reach at once. Renders the sheet too.
+ */
+export function TutorChip({ tutor, label }: { tutor: Tutor; label: string }) {
+  return (
+    <>
+      <Chip icon={<AiSeal size={22} />} data-tutor="" onClick={() => tutor.open()}>
+        {label}
+      </Chip>
+      {tutor.sheet}
+    </>
   );
 }
 

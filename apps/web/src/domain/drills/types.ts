@@ -4,12 +4,13 @@
  * ways, a phonetic family, and a grammar cloze. Pure data, no React or storage.
  */
 import type { VerbForm } from '../conjugation/forms.ts';
+import type { Dialogue } from '../dialogues/types.ts';
 import type { ItemId, Sentence } from '../types.ts';
 
 /** The R8 reading drills, mixed in by the learner's mistakes and the plan. */
 export type ReadingDrillKind = 'lookalike' | 'readings' | 'family' | 'cloze';
 
-/** The R8 drills, then the S4 exercise types. */
+/** The R8 drills, then the S4 exercise types, then "complete the line" on a dialogue. */
 export type DrillKind =
   | ReadingDrillKind
   | 'meaning'
@@ -19,7 +20,8 @@ export type DrillKind =
   | 'build'
   | 'listening'
   | 'write'
-  | 'kanji-card';
+  | 'kanji-card'
+  | 'dialogue';
 
 /** A kanji with its dictionary readings (KANJIDIC: on in katakana, kun as い.きる). */
 export interface KanjiChoice {
@@ -263,4 +265,25 @@ export type ExerciseDrill =
   | WriteDrill
   | KanjiCardDrill;
 
-export type Drill = LookalikeDrill | ReadingsDrill | FamilyDrill | ClozeDrill | ExerciseDrill;
+/**
+ * "Complete the line" on a grammar dialogue: one line's form blanked, the right form and three
+ * easy to confuse, and the rest of the conversation to decide by.
+ */
+export interface DialogueDrill {
+  kind: 'dialogue';
+  grammarId: string;
+  itemId: ItemId;
+  dialogue: Dialogue;
+  /** The form that fits: the blanked line's focus. */
+  answer: string;
+  /** The answer and its three distractors, in a seeded order. */
+  choices: string[];
+}
+
+export type Drill =
+  | LookalikeDrill
+  | ReadingsDrill
+  | FamilyDrill
+  | ClozeDrill
+  | DialogueDrill
+  | ExerciseDrill;

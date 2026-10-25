@@ -3,7 +3,8 @@
  * sentence, or the word, form or kanji it drills standing in for one (Tutor-drill).
  */
 import { useMemo } from 'react';
-import type { Drill } from '../../domain/drills/index.ts';
+import { blankedText, dialogueText } from '../../domain/dialogues/index.ts';
+import type { DialogueDrill, Drill } from '../../domain/drills/index.ts';
 import { GRAMMAR_CATALOGUE } from '../../domain/grammar/index.ts';
 import { translationIn } from '../../domain/localized.ts';
 import type { Sentence } from '../../domain/types.ts';
@@ -21,6 +22,26 @@ export function sentenceTopic(sentence: Sentence, language: string): TutorTopic[
 function grammarOf(id: string, pattern: string, meaning?: string) {
   const entry = GRAMMAR_CATALOGUE.find((e) => e.id === id);
   return { pattern: entry?.pattern ?? pattern, meaning: meaning ?? entry?.meaning ?? '' };
+}
+
+/**
+ * A dialogue as the tutor reads it: each line after its speaker's name, with the translations.
+ * Before the answer the blanked line keeps its blank and the point is not named, so asking the
+ * tutor about the conversation does not give the answer away.
+ */
+export function dialogueTopic(d: DialogueDrill, language: string, answered: boolean): TutorTopic {
+  const { dialogue } = d;
+  const hidden = (i: number) => !answered && i === dialogue.blank.line;
+  const text = dialogue.lines
+    .map((line, i) => `${dialogue.speakers[line.by]}：${hidden(i) ? blankedText(line) : line.ja}`)
+    .join('\n');
+  const translation = dialogue.lines
+    .map((line, i) => (hidden(i) ? '…' : dialogueText(line.tr, language).value))
+    .join('\n');
+  const sentence = { text, translation };
+  if (!answered) return { about: dialogue.speakers.join('・'), sentence };
+  const grammar = grammarOf(d.grammarId, d.answer);
+  return { about: grammar.pattern, sentence, grammar };
 }
 
 /** A word, form or kanji standing in for a sentence. */
@@ -101,6 +122,10 @@ const BUILDERS: {
       }),
       t('exercises.tutorFamily', { x: d.kanji }),
     ],
+  }),
+  dialogue: (d, t, l) => ({
+    topic: dialogueTopic(d, l, true),
+    starters: [t('dialogues.tutorExplain'), t('dialogues.tutorWhy', { x: d.answer })],
   }),
   family: (d, t) => ({
     topic: { ...bare([...d.known, d.guess].join('、'), d.part), surface: d.part },

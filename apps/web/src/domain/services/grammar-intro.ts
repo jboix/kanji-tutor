@@ -75,11 +75,11 @@ export function grammarIntroCard(grammarId: string): SessionCard {
 }
 
 /**
- * A cloze or pattern drill asks the point; a particle fill, a sentence to build or one to hear
- * uses it when its sentence does (S4).
+ * A cloze, pattern or dialogue drill asks the point; a particle fill, a sentence to build or one
+ * to hear uses it when its sentence does (S4).
  */
 function drillUses(drill: Drill, grammarId: string): boolean {
-  if (drill.kind === 'cloze' || drill.kind === 'pattern') return drill.grammarId === grammarId;
+  if ('grammarId' in drill) return drill.grammarId === grammarId;
   if (drill.kind === 'particle' || drill.kind === 'build' || drill.kind === 'listening') {
     return drill.sentence.grammarIds?.includes(grammarId) ?? false;
   }

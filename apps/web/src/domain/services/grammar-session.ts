@@ -1,8 +1,8 @@
 /**
  * A session focused on one grammar point (`/read?grammar=…`, the grammar page's "Practise
  * this"): reading cards in sentences that use it, at or below the learner's level (G3), then
- * 文法形式の判断 and 文の組み立て questions on its sentences. A point not introduced yet gets its
- * introduction card first (G4).
+ * 文法形式の判断 and 文の組み立て questions on its sentences, and last a line to complete in one of
+ * its dialogues. A point not introduced yet gets its introduction card first (G4).
  */
 import { GRAMMAR_CATALOGUE } from '../grammar/catalogue.ts';
 import { hasKanji } from '../kana.ts';
@@ -11,8 +11,9 @@ import type { Repos } from '../repos.ts';
 import { selectSession } from '../selector.ts';
 import type { SessionCard } from '../session-types.ts';
 import type { Item, Sentence } from '../types.ts';
+import { dialogueCard } from './dialogue-card.ts';
 import { grammarIntroCard, introducedGrammar } from './grammar-intro.ts';
-import { newWordItem } from './items.ts';
+import { DAY_MS, newWordItem } from './items.ts';
 import { learnerLevelOf } from './learner-level.ts';
 import { gateSentences, type LevelGate } from './level-gate.ts';
 import { trustedSentences } from './sentence-trust.ts';
@@ -78,6 +79,24 @@ export async function buildGrammarSession(
     size,
   );
   const mixed = cards.length > 0 ? mixCards(cards, questions) : questions;
+  return withIntroAndDialogue(repos, grammarId, mixed, now);
+}
+
+/**
+ * The session's cards, then a line to complete in one of the point's dialogues, when it has
+ * some; a point not introduced yet gets its introduction first.
+ */
+async function withIntroAndDialogue(
+  repos: Repos,
+  grammarId: string,
+  mixed: SessionCard[],
+  now: number,
+): Promise<SessionCard[]> {
+  const dialogue = await dialogueCard(
+    grammarId,
+    `grammar|${grammarId}|${Math.floor(now / DAY_MS)}`,
+  );
+  const cards = dialogue ? [...mixed, dialogue] : mixed;
   const known = introducedGrammar(await repos.items.byKind('grammar')).has(grammarId);
-  return known || mixed.length === 0 ? mixed : [grammarIntroCard(grammarId), ...mixed];
+  return known || cards.length === 0 ? cards : [grammarIntroCard(grammarId), ...cards];
 }

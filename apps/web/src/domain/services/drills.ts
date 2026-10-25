@@ -10,6 +10,7 @@ import {
   type MistakeSignals,
   type ReadingDrillKind,
 } from '../drills/index.ts';
+import type { DialogueDrill, KanjiCardDrill } from '../drills/types.ts';
 import { parseItemId } from '../ids.ts';
 import type { Repos } from '../repos.ts';
 import type { SessionCard } from '../session-types.ts';
@@ -106,8 +107,21 @@ function wordList(
 const oneWord = (id: string, form: string, reading: string, wordId?: string) =>
   wordList(id, [{ form, reading, ...(wordId ? { wordId } : {}) }]);
 
-function drillSentence(drill: Drill): Sentence {
+/** The sentence of a drill that has one, or the bare one of a kanji card or a dialogue. */
+function ownSentence(
+  drill: Extract<Drill, { sentence: Sentence }> | KanjiCardDrill | DialogueDrill,
+) {
   if ('sentence' in drill) return drill.sentence;
+  if (drill.kind === 'kanji-card') {
+    return oneWord(`drill:kanji-card:${drill.kanji}`, drill.kanji, drill.accepted[0] ?? '');
+  }
+  return wordList(`drill:dialogue:${drill.dialogue.id}`, []);
+}
+
+function drillSentence(drill: Drill): Sentence {
+  if ('sentence' in drill || drill.kind === 'kanji-card' || drill.kind === 'dialogue') {
+    return ownSentence(drill);
+  }
   if (drill.kind === 'readings') {
     const parts = drill.items.map((i) => ({
       form: i.form,
@@ -118,9 +132,6 @@ function drillSentence(drill: Drill): Sentence {
   }
   if (drill.kind === 'family') {
     return oneWord(`drill:family:${drill.guess}`, drill.guess, drill.accepted[0] ?? '');
-  }
-  if (drill.kind === 'kanji-card') {
-    return oneWord(`drill:kanji-card:${drill.kanji}`, drill.kanji, drill.accepted[0] ?? '');
   }
   if (drill.kind === 'meaning') {
     return oneWord(
