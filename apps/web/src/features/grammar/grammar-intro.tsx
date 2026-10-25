@@ -11,6 +11,7 @@ import type { GrammarIntroSlotProps } from '../../ui/slots.tsx';
 import { StickyActions } from '../../ui/sticky-actions.tsx';
 import { TutorNext } from '../../ui/tutor.tsx';
 import { useContentLanguage } from '../../ui/use-content-language.ts';
+import { useEnterKey } from '../../ui/use-enter-key.ts';
 import { Formation } from './formation.tsx';
 import styles from './grammar.module.css';
 import { entryById, isFunctionWord, type Point } from './grammar-data.ts';
@@ -53,6 +54,7 @@ function IntroCard({ entry: source, onDone }: { entry: Point; onDone: () => void
   const t = useT();
   const { value: entry, english } = localPoint(useContentLanguage(), source);
   const tutor = useGrammarTutor(entry);
+  useEnterKey(onDone);
   return (
     <section
       className={styles.intro}

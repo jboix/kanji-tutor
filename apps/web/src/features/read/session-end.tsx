@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import {
   finishLessonPart,
   type LessonSection,
@@ -21,6 +21,7 @@ import { paths } from '../../ui/paths.ts';
 import { PillButton, PillLink } from '../../ui/pill-button.tsx';
 import { Screen } from '../../ui/screen.tsx';
 import { useServices } from '../../ui/services.tsx';
+import { useEnterKey } from '../../ui/use-enter-key.ts';
 import styles from './read.module.css';
 import { type AgainPlan, useAgain, useRetry } from './session-again.ts';
 import end from './session-end.module.css';
@@ -93,8 +94,11 @@ function useLessonNext(lesson: LessonPart | undefined): LessonNext {
 function NextPart({ unit, next }: { unit: string; next: NonNullable<Next> }) {
   const { t, rich } = useI18n();
   const section = <Ja>{SECTION_TITLES[next.section]}</Ja>;
+  const to = paths.lessonPart(unit, next.section, next.part);
+  const navigate = useNavigate();
+  useEnterKey(() => void navigate(to));
   return (
-    <PillLink to={paths.lessonPart(unit, next.section, next.part)} arrow>
+    <PillLink to={to} arrow>
       <span>{rich('read.nextSection', { section, name: t(SECTION_NAME[next.section]) })}</span>
     </PillLink>
   );
@@ -104,6 +108,7 @@ function NextPart({ unit, next }: { unit: string; next: NonNullable<Next> }) {
 function NextSession({ plan }: { plan: AgainPlan }) {
   const t = useT();
   const { again, busy } = useAgain(plan);
+  useEnterKey(busy ? undefined : () => void again());
   return (
     <PillButton disabled={busy} onClick={() => void again()}>
       {t('sessionEnd.nextSession')}

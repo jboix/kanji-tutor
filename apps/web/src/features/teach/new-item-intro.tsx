@@ -7,6 +7,7 @@ import { useServices } from '../../ui/services.tsx';
 import type { IntroSlotProps, TeachingSlotProps } from '../../ui/slots.tsx';
 import { StickyActions } from '../../ui/sticky-actions.tsx';
 import { TutorNext, useTutor } from '../../ui/tutor.tsx';
+import { useEnterKey } from '../../ui/use-enter-key.ts';
 import { TapSentence } from '../../ui/word-tap.tsx';
 import { introDue, markIntroduced } from './intro-once.ts';
 import { MemoryHookView, PartsHooks } from './memory-hook.tsx';
@@ -62,11 +63,12 @@ function IntroCard({ card, target, onDone }: IntroSlotProps) {
   const t = useT();
   const teaching = useTeaching(card, target);
   const tutor = useWordTutor(teaching);
-  if (!teaching) return null;
   const gotIt = () => {
     markIntroduced(target.itemId);
     onDone();
   };
+  useEnterKey(teaching ? gotIt : undefined);
+  if (!teaching) return null;
   return (
     <section
       className={styles.card}
