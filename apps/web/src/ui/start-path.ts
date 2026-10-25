@@ -15,7 +15,7 @@ export function startPath(plan: StartPlan): string {
     case 'grammar':
       return plan.grammar ? query({ grammar: plan.grammar }) : query({ drills: '1' });
     case 'kanji':
-      return plan.focus ? query({ ...plan.focus }) : query({ drills: '1' });
+      return query({ cards: 'kanji' });
     default:
       return paths.read;
   }

@@ -25,6 +25,7 @@ import {
   ParticleView,
 } from './drill-exercises.tsx';
 import { ConjugationView, PatternView } from './drill-forms.tsx';
+import { KanjiCardActions, KanjiCardView } from './drill-kanji-card.tsx';
 import { useDrillTutor } from './drill-tutor.ts';
 import { FamilyView, ReadingsView, TypedActions } from './drill-typed.tsx';
 import { WriteActions, WriteView, writeRange } from './drill-write.tsx';
@@ -50,8 +51,17 @@ interface BodyProps {
 function ExerciseBody({ drill, controls, order, onWritten, onTyped }: BodyProps) {
   const answer = controls.answered ? controls.answers[controls.step] : undefined;
   if (drill.kind === 'write') return <WriteView drill={drill} answer={answer} onTyped={onTyped} />;
+  if (drill.kind === 'kanji-card') {
+    return <KanjiCardView drill={drill} answer={answer} onTyped={onTyped} />;
+  }
   if (drill.kind === 'meaning') return <MeaningView drill={drill} answer={answer} />;
   if (drill.kind === 'particle') return <ParticleView drill={drill} answer={answer} />;
+  return <FormBody drill={drill} controls={controls} order={order} onWritten={onWritten} />;
+}
+
+/** Listening, the typed forms and sentence building. */
+function FormBody({ drill, controls, order, onWritten }: BodyProps) {
+  const answer = controls.answered ? controls.answers[controls.step] : undefined;
   if (drill.kind === 'listening') {
     return <ListeningView drill={drill} answer={answer} onWritten={onWritten} />;
   }
@@ -130,6 +140,7 @@ function ExerciseFooter({ drill, controls, order }: BodyProps) {
   }
   if (drill.kind === 'build') return <BuildActions drill={drill} order={order} onAnswer={answer} />;
   if (drill.kind === 'write') return <WriteActions drill={drill} onAnswer={answer} />;
+  if (drill.kind === 'kanji-card') return <KanjiCardActions drill={drill} onAnswer={answer} />;
   return (
     <TypedActions
       label={t('exercises.typeIt')}
@@ -171,7 +182,8 @@ function NextFooter({ drill, controls, nextLabel }: NextFooterProps) {
   const box = useFocus('[data-next]', `step${controls.step}`);
   const tutor = useDrillTutor(drill);
   const t = useT();
-  const label = t(controls.last ? 'readSession.nextSentence' : 'readSession.nextWord');
+  const step = controls.last ? 'readSession.nextSentence' : 'readSession.nextWord';
+  const label = t(drill.kind === 'kanji-card' ? 'exercises.nextCard' : step);
   return (
     <ActionBar>
       <TutorNext tutor={tutor}>
@@ -185,22 +197,22 @@ function NextFooter({ drill, controls, nextLabel }: NextFooterProps) {
   );
 }
 
+/** The word or kanji a drill shows, for the teaching under a miss. */
+function surfaceOf(drill: Drill): string | undefined {
+  if (drill.kind === 'lookalike') return drill.sentence.tokens[drill.tokenIndex]?.surface ?? '';
+  if (drill.kind === 'meaning' || drill.kind === 'write') return drill.word.written;
+  return drill.kind === 'kanji-card' ? drill.kanji : undefined;
+}
+
 /** The item a drill step reviews, and the word as shown: for the teaching under a miss (L4). */
 function stepItem(drill: Drill, step: number): { itemId?: ItemId; surface?: string } {
   if (drill.kind === 'readings') {
     const item = drill.items[step];
     return item ? { itemId: item.itemId, surface: item.form } : {};
   }
-  if (drill.kind === 'lookalike') {
-    return {
-      itemId: drill.itemId,
-      surface: drill.sentence.tokens[drill.tokenIndex]?.surface ?? '',
-    };
-  }
-  if (drill.kind === 'meaning' || drill.kind === 'write') {
-    return { itemId: drill.itemId, surface: drill.word.written };
-  }
-  return drill.itemId ? { itemId: drill.itemId } : {};
+  const surface = surfaceOf(drill);
+  if (!drill.itemId) return {};
+  return surface === undefined ? { itemId: drill.itemId } : { itemId: drill.itemId, surface };
 }
 
 function StepTeaching(props: {

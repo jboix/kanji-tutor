@@ -21,8 +21,12 @@ export function drawingQuiet(now = Date.now()): boolean {
   return kanjiTyped() || now < typedUntil;
 }
 
-/** The drill as shown: a writing exercise turns into its typed twin while quiet. */
+/** Whether a drill asks for a drawing: a writing exercise, or a kanji card to write. */
+const draws = (drill: Drill) =>
+  drill.kind === 'write' || (drill.kind === 'kanji-card' && drill.direction === 'write');
+
+/** The drill as shown: a drill to draw turns into its typed twin while quiet. */
 export function asTyped(drill: Drill, quiet: boolean): Drill {
-  if (!quiet || drill.kind !== 'write' || drill.typed) return drill;
-  return { ...drill, typed: true };
+  if (!quiet || !draws(drill) || ('typed' in drill && drill.typed)) return drill;
+  return { ...drill, typed: true } as Drill;
 }

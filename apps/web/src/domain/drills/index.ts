@@ -15,6 +15,7 @@ export {
   gradeExercise,
 } from './exercise-grade.ts';
 export { type FamilyInput, familyDrill } from './family.ts';
+export { CARD_CHOICES, type KanjiCardInput, kanjiCardDrill, typedReadings } from './kanji-card.ts';
 export { type LessonClozeInput, lessonCloze } from './lesson-cloze.ts';
 export { type LookalikeInput, type LookalikePair, lookalikeDrill } from './lookalike.ts';
 export { type MeaningInput, meaningDrill, wordKind } from './meaning.ts';

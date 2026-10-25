@@ -37,7 +37,8 @@ export interface PlacedExercise {
   after: number;
 }
 
-type Kind = ExerciseDrill['kind'];
+/** Kanji cards are a round of their own (Start → Kanji), never mixed into a session. */
+type Kind = Exclude<ExerciseDrill['kind'], 'kanji-card'>;
 const KINDS: readonly Kind[] = [
   'meaning',
   'particle',

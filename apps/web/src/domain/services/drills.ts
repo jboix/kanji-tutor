@@ -119,6 +119,9 @@ function drillSentence(drill: Drill): Sentence {
   if (drill.kind === 'family') {
     return oneWord(`drill:family:${drill.guess}`, drill.guess, drill.accepted[0] ?? '');
   }
+  if (drill.kind === 'kanji-card') {
+    return oneWord(`drill:kanji-card:${drill.kanji}`, drill.kanji, drill.accepted[0] ?? '');
+  }
   if (drill.kind === 'meaning') {
     return oneWord(
       `drill:meaning:${drill.wordId}`,

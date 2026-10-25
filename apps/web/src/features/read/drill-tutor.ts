@@ -93,6 +93,15 @@ const BUILDERS: {
       t('exercises.tutorUseIt', { x: d.word.written }),
     ],
   }),
+  'kanji-card': (d, t) => ({
+    topic: { ...bare(d.kanji), surface: d.kanji },
+    starters: [
+      t(d.direction === 'write' ? 'exercises.tutorRemember' : 'exercises.tutorReadings', {
+        x: d.kanji,
+      }),
+      t('exercises.tutorFamily', { x: d.kanji }),
+    ],
+  }),
   family: (d, t) => ({
     topic: { ...bare([...d.known, d.guess].join('、'), d.part), surface: d.part },
     starters: [t('exercises.tutorFamily', { x: d.part })],

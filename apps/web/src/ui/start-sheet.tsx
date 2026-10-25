@@ -54,19 +54,13 @@ function LessonOption({ plan }: { plan: NonNullable<StartOptions['lesson']> }) {
   );
 }
 
-/** Grammar and kanji, each on the point or reading it would practise when there is one. */
+/** Grammar, on the point it would practise when there is one, and kanji cards. */
 function FocusOptions({ grammar, pattern, kanji }: Omit<StartOptions, 'lesson'>) {
   const { t, rich } = useI18n();
-  const focus = kanji.focus;
   const grammarLine = pattern
     ? rich('ui.startGrammarLine', { pattern: <Ja>{pattern}</Ja> })
     : t('ui.startGrammarAny');
-  const kanjiLine = focus
-    ? rich('ui.startKanjiLine', {
-        kanji: <Ja>{focus.kanji}</Ja>,
-        reading: <Ja>{focus.reading}</Ja>,
-      })
-    : t('ui.startKanjiAny');
+  const kanjiLine = t('ui.startKanjiAny');
   return (
     <>
       <Option icon={<Ja>文</Ja>} title={t('ui.startGrammar')} line={grammarLine} plan={grammar} />

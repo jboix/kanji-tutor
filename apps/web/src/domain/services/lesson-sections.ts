@@ -78,6 +78,7 @@ const DRILL_ITEMS: {
     { type: d.read ? 'sentence-meaning' : 'listening', items: sentenceItems(card) },
   ],
   write: (d) => [{ type: 'write', items: [d.itemId] }],
+  'kanji-card': () => [],
   lookalike: () => [],
   readings: () => [],
   family: () => [],

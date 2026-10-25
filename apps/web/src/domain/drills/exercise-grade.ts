@@ -1,12 +1,12 @@
 /**
  * Grading the S4 exercises, pure: a choice (meaning, particle, listening), the pieces in an
  * order (building), a typed form checked against the conjugation engine's answers (pattern,
- * conjugation), or the kanji drawn for a word (write). A form is right or wrong: a missing っ
+ * conjugation), or the kanji drawn for a word or a kanji card. A form is right or wrong: a missing っ
  * in 行って is the conjugation, not a slip.
  */
 import { toKanaFold } from '../kana.ts';
 import type { Grade } from '../types.ts';
-import type { ExerciseDrill, WriteDrill } from './types.ts';
+import type { ExerciseDrill, KanjiCardDrill, WriteDrill } from './types.ts';
 
 /** What the learner gave: the index chosen, the particle, the built text or the typed form. */
 export type ExerciseAnswer = string;
@@ -28,6 +28,7 @@ export function expectedOf(drill: ExerciseDrill): string {
   if (drill.kind === 'particle') return drill.answer;
   if (drill.kind === 'build') return drill.pieces.join('');
   if (drill.kind === 'write') return drill.word.written;
+  if (drill.kind === 'kanji-card') return cardExpected(drill);
   return drill.answer.written;
 }
 
@@ -50,6 +51,15 @@ function writeMatches(drill: WriteDrill, answer: ExerciseAnswer): boolean {
   return formMatches([...drill.readings, drill.word.written], answer);
 }
 
+/** A kanji card reads as one of the kanji's readings, or writes the kanji itself. */
+const cardExpected = (drill: KanjiCardDrill) =>
+  drill.direction === 'read' ? (drill.readings[0] ?? '') : drill.kanji;
+
+function cardMatches(drill: KanjiCardDrill, answer: ExerciseAnswer): boolean {
+  if (drill.direction === 'write') return answer === drill.kanji;
+  return formMatches(drill.accepted, answer);
+}
+
 function given(drill: ExerciseDrill, answer: ExerciseAnswer): string {
   if (drill.kind === 'meaning' || drill.kind === 'listening') {
     return optionText(drill, Number(answer));
@@ -63,6 +73,7 @@ function right(drill: ExerciseDrill, answer: ExerciseAnswer): boolean {
   if (drill.kind === 'particle') return answer === drill.answer;
   if (drill.kind === 'build') return clean(answer) === clean(drill.pieces.join(''));
   if (drill.kind === 'write') return writeMatches(drill, answer);
+  if (drill.kind === 'kanji-card') return cardMatches(drill, answer);
   return formMatches(drill.accepted, answer);
 }
 

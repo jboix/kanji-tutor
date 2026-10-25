@@ -53,17 +53,11 @@ function MixTile({ session }: { session: TodaySessionView | undefined }) {
   );
 }
 
-/** Grammar and kanji: the point or reading each would practise, as the Start sheet shows. */
+/** Grammar, on the point it would practise as the Start sheet shows, and kanji cards. */
 function FocusTiles({ options }: { options: StartOptions | undefined }) {
   const { t, rich } = useI18n();
   const pattern = options?.pattern;
-  const focus = options?.kanji.focus;
-  const kanjiLine = focus
-    ? rich('ui.startKanjiLine', {
-        kanji: <Ja>{focus.kanji}</Ja>,
-        reading: <Ja>{focus.reading}</Ja>,
-      })
-    : t('ui.startKanjiAny');
+  const kanjiLine = t('ui.startKanjiAny');
   const grammarLine = pattern
     ? rich('ui.startGrammarLine', { pattern: <Ja>{pattern}</Ja> })
     : t('ui.startGrammarAny');

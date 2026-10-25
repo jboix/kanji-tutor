@@ -48,6 +48,7 @@ function sectionOf(params: URLSearchParams): { section?: LessonSection; part?: n
 
 /**
  * `/read?kanji=生&reading=ショウ` focuses the session on one kanji reading (kanji page).
+ * `/read?cards=kanji` is a round of kanji cards: read a kanji, or write it (Start → Kanji).
  * `/read?drills=1` mixes in as many drills as the session allows, up to one per sentence (R8).
  * `/read?questions=1` puts a JLPT-shaped question (J1–J5) after every sentence it can.
  * `/read?only=reading` reads sentences only, with no drills or questions (Start's Reading, IA3).
@@ -65,6 +66,7 @@ function useRequest(): SessionRequest {
   const questions = params.get('questions') === '1' ? { questionEvery: 1 } : {};
   const readOnly = params.get('only') === 'reading' ? { drillShare: 0, questionEvery: 0 } : {};
   const lesson = unit ? { unit, passage: params.get('passage') === '1', ...sectionOf(params) } : {};
+  if (params.get('cards') === 'kanji') return { kanjiCards: true };
   const mix = { ...drills, ...questions, ...readOnly, ...lesson, ...(grammar ? { grammar } : {}) };
   return kanji && reading ? { focus: { kanji, reading }, ...mix } : mix;
 }

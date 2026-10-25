@@ -132,6 +132,7 @@ const EXERCISE_KINDS: ReadonlySet<Drill['kind']> = new Set([
   'build',
   'listening',
   'write',
+  'kanji-card',
 ]);
 
 /** Whether a drill is one of the S4 exercise types. */

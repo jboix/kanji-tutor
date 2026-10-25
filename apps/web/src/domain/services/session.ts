@@ -22,6 +22,7 @@ import {
 } from './grammar-intro.ts';
 import { buildGrammarSession } from './grammar-session.ts';
 import { DAY_MS } from './items.ts';
+import { kanjiCardSession } from './kanji-cards.ts';
 import { buildLessonPart } from './lesson-session.ts';
 import { spanReadings, spanVariants } from './reading-check.ts';
 import { trustedSentences } from './sentence-trust.ts';
@@ -75,6 +76,8 @@ export interface BuildSessionOptions {
   passage?: boolean;
   /** Practise one grammar point (`/read?grammar=…`): see `buildGrammarSession`. */
   grammar?: string;
+  /** A round of kanji cards (`/read?cards=kanji`, Start → Kanji): see `kanjiCardSession`. */
+  kanjiCards?: boolean;
   /** With `unit`: the lesson's 練習 section (S3), the unit's practice without its passage. */
   practice?: boolean;
   /** The device has a Japanese voice, so listening exercises can be made (S4). */
@@ -294,6 +297,7 @@ export async function buildSession(
   repos: Repos,
   options: BuildSessionOptions,
 ): Promise<SessionCard[]> {
+  if (options.kanjiCards) return kanjiCardSession(repos, options.now);
   if (options.grammar) {
     return buildGrammarSession(repos, options.grammar, options.now, (c) => finish(c, false));
   }

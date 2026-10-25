@@ -18,7 +18,8 @@ export type DrillKind =
   | 'conjugation'
   | 'build'
   | 'listening'
-  | 'write';
+  | 'write'
+  | 'kanji-card';
 
 /** A kanji with its dictionary readings (KANJIDIC: on in katakana, kun as い.きる). */
 export interface KanjiChoice {
@@ -229,6 +230,28 @@ export interface WriteDrill {
   meaning: Pick<MeaningOption, 'glosses' | 'glossesByLang'>;
 }
 
+/**
+ * A kanji card: a kanji the learner reads, shown alone to read (`read`), or its readings and
+ * meaning shown to write it (`write`), drawn on the pad. With `typed`, writing is a choice among
+ * kanji instead, for a learner who cannot draw.
+ */
+export interface KanjiCardDrill {
+  kind: 'kanji-card';
+  direction: 'read' | 'write';
+  typed?: true;
+  kanji: string;
+  itemId: ItemId;
+  meanings: string[];
+  /** Its readings as KANJIDIC writes them (セイ, い.きる), the learner's own first. */
+  readings: string[];
+  /** The readings a writing card shows: the learner's own, else the dictionary's first two. */
+  cue: string[];
+  /** Readings that count when typed, in hiragana (せい, いきる, い). */
+  accepted: string[];
+  /** The kanji and others to choose from when typed, in a seeded order. */
+  choices: string[];
+}
+
 /** The S4 exercise types. */
 export type ExerciseDrill =
   | MeaningDrill
@@ -237,6 +260,7 @@ export type ExerciseDrill =
   | ConjugationDrill
   | BuildDrill
   | ListeningDrill
-  | WriteDrill;
+  | WriteDrill
+  | KanjiCardDrill;
 
 export type Drill = LookalikeDrill | ReadingsDrill | FamilyDrill | ClozeDrill | ExerciseDrill;

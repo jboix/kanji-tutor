@@ -225,3 +225,13 @@
   flex-direction: column;
   gap: 2px;
 }
+
+/* A kanji card's kanji, alone in the middle like a flash card. */
+.cardKanji {
+  margin: 8px 0 0;
+  font-family: var(--font-ja);
+  font-size: 96px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+}

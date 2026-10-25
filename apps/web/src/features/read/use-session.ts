@@ -47,13 +47,19 @@ export interface SessionRequest {
   passage?: boolean | undefined;
   /** Practise one grammar point (`?grammar=…`, the grammar page's "Practise this"). */
   grammar?: string | undefined;
+  /** A round of kanji cards (`?cards=kanji`, Start → Kanji). */
+  kanjiCards?: boolean | undefined;
   /** With `unit`: one section of the unit lesson (`&section=words`, S3) and its part. */
   section?: LessonSection | undefined;
   part?: number | undefined;
 }
 
-/** The session builder's options for a request (focus, forced mix, unit). */
-function sessionOptions(request: SessionRequest): Omit<BuildSessionOptions, 'now'> {
+/** The session builder's options for a request: kanji cards, or a session's focus and mix. */
+const sessionOptions = (request: SessionRequest): Omit<BuildSessionOptions, 'now'> =>
+  request.kanjiCards ? { kanjiCards: true } : mixOptions(request);
+
+/** The options of a reading session: its focus, a forced mix, a unit or a grammar point. */
+function mixOptions(request: SessionRequest): Omit<BuildSessionOptions, 'now'> {
   const { focus, drillShare, questionEvery, unit, passage, grammar, section, part } = request;
   return {
     ...(focus ? { focus } : {}),
