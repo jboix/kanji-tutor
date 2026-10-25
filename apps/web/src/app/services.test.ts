@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { SettingsRepo } from '../domain/repos.ts';
 import { canListen, canSpeak, muteListening } from '../lang/speech.ts';
 import { createMemoryRepos } from '../test/memory-repos.ts';
+import { kanjiTyped } from '../ui/kanji-drawing.ts';
 import { WELCOMED_KEY } from '../ui/launch.ts';
 import { applySound } from '../ui/sound.ts';
 import { soundFollows } from './services.ts';
@@ -42,6 +43,14 @@ describe('Sound follows the settings', () => {
     await repo.patch({ listening: true });
     await expect(canListen()).resolves.toBe(true);
     muteListening(false);
+  });
+
+  it('types writing exercises instead of drawing them when the learner chooses Type', async () => {
+    const repo = soundFollows(createMemoryRepos().settings);
+    await repo.patch({ writeKanji: 'type' });
+    expect(kanjiTyped()).toBe(true);
+    await repo.patch({ writeKanji: 'draw' });
+    expect(kanjiTyped()).toBe(false);
   });
 });
 

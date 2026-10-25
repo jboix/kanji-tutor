@@ -53,6 +53,9 @@ export const SLOTS: Slots = {
   ),
   grammarIntro: lazySlot(async () => (await import('../features/grammar/index.ts')).GrammarIntro),
   aiSetup: lazySlot(async () => (await import('../features/settings/ai-setup.tsx')).AiSetup),
+  kanjiDraw: lazySlot(
+    async () => (await import('../features/handwrite/kanji-answer.tsx')).KanjiAnswer,
+  ),
   // Same detection as voiceSlots(): no recorder, no voice entry point.
   ...(canRecord()
     ? {

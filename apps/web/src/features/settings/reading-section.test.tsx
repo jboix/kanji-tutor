@@ -45,6 +45,14 @@ describe('Reading settings', () => {
     ).toBeTruthy();
   });
 
+  it('switches "Write the kanji" from drawn to typed, drawn by default', async () => {
+    const repos = setup();
+    const group = await screen.findByRole('group', { name: 'Write the kanji' });
+    expect(within(group).getByLabelText('Draw')).toHaveProperty('checked', true);
+    await userEvent.click(within(group).getByLabelText('Type'));
+    expect((await repos.settings.get()).writeKanji).toBe('type');
+  });
+
   it('saves the current lesson and shows its Japanese in Japanese type (K5, issue 57)', async () => {
     const repos = setup();
     const field = await screen.findByLabelText('Current lesson');

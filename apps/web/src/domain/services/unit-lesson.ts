@@ -249,6 +249,8 @@ const MAKERS: Readonly<Record<ExerciseType, Maker | undefined>> = {
   },
   cloze: (data, key) =>
     key.startsWith('grammar:') ? clozeFor(data, key.slice(8)) : Promise.resolve(undefined),
+  // Writing a word met minutes ago is too early: daily sessions write words already read.
+  write: undefined,
 };
 
 /** The types tried for an item in まとめ, in order. */

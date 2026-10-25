@@ -33,15 +33,23 @@ export function optionMeaning(option: MeaningOption, language: string) {
   return { text: local.value.slice(0, 2).join('; '), english: local.fallback };
 }
 
+export interface OutcomeProps {
+  answer: DrillAnswer;
+  right: ReactNode;
+  chosen: ReactNode;
+  /** What the wrong answer is called, when not "You chose" (a drawing: "You wrote"). */
+  chosenLabel?: string | undefined;
+}
+
 /** What was right, and what was chosen when it was not (U2, L4). */
-export function Outcome(props: { answer: DrillAnswer; right: ReactNode; chosen: ReactNode }) {
+export function Outcome(props: OutcomeProps) {
   const look = answerLook(props.answer.grade);
   const t = useT();
   return (
     <AnswerState look={look}>
       {look === 'wrong' && (
         <p className={read.line}>
-          <span className={read.muted}>{t('drills.youChose')}</span>
+          <span className={read.muted}>{props.chosenLabel ?? t('drills.youChose')}</span>
           <del className={styles.struckText}>{props.chosen}</del>
         </p>
       )}

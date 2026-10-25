@@ -17,7 +17,8 @@ export type DrillKind =
   | 'pattern'
   | 'conjugation'
   | 'build'
-  | 'listening';
+  | 'listening'
+  | 'write';
 
 /** A kanji with its dictionary readings (KANJIDIC: on in katakana, kun as い.きる). */
 export interface KanjiChoice {
@@ -204,6 +205,30 @@ export interface ListeningDrill {
   itemId?: ItemId;
 }
 
+/**
+ * Write the kanji: a word of the sentence blanked, its reading shown, and its kanji drawn one
+ * after the other. With `typed`, its meaning is shown instead and its reading typed in kana: for
+ * a learner who cannot draw, now or at all.
+ */
+export interface WriteDrill {
+  kind: 'write';
+  typed?: true;
+  sentence: Sentence;
+  tokenIndex: number;
+  /** Offset of the word in `sentence.text`. */
+  at: number;
+  wordId: string;
+  itemId: ItemId;
+  /** The word as the sentence writes it (食べ), and its reading there (たべ). */
+  word: WrittenWord;
+  /** The kanji to draw, in order (学生 → 学, 生); its kana are given. */
+  kanji: string[];
+  /** Readings that count when typed, in hiragana, the sentence's first. */
+  readings: string[];
+  /** The word's meaning, shown when typed. */
+  meaning: Pick<MeaningOption, 'glosses' | 'glossesByLang'>;
+}
+
 /** The S4 exercise types. */
 export type ExerciseDrill =
   | MeaningDrill
@@ -211,6 +236,7 @@ export type ExerciseDrill =
   | PatternDrill
   | ConjugationDrill
   | BuildDrill
-  | ListeningDrill;
+  | ListeningDrill
+  | WriteDrill;
 
 export type Drill = LookalikeDrill | ReadingsDrill | FamilyDrill | ClozeDrill | ExerciseDrill;

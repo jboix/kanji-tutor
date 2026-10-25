@@ -131,6 +131,7 @@ const EXERCISE_KINDS: ReadonlySet<Drill['kind']> = new Set([
   'conjugation',
   'build',
   'listening',
+  'write',
 ]);
 
 /** Whether a drill is one of the S4 exercise types. */
@@ -142,10 +143,10 @@ function sentenceOf(drill: ExerciseDrill): string | undefined {
 }
 
 /**
- * Grades and logs an S4 exercise (meaning, particle, pattern, conjugation, building, listening)
- * against its item, when it has one. A pattern drill is its grammar point's review, as a cloze
- * is: it reschedules the point's FSRS card. The others are only logged, so the unit counts and
- * Today's notes see them; a word's level moves only with its reading.
+ * Grades and logs an S4 exercise (meaning, particle, pattern, conjugation, building, listening,
+ * writing) against its item, when it has one. A pattern drill is its grammar point's review, as
+ * a cloze is: it reschedules the point's FSRS card. The others are only logged, so the unit
+ * counts and Today's notes see them; a word's level moves only with its reading.
  */
 export async function recordExercise(
   repos: Repos,

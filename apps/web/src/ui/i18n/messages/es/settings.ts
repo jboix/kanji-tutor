@@ -89,6 +89,11 @@ export const settings = {
   listeningOff: 'Desactivados',
   listeningHint:
     'Desactivados: no hay ejercicios que reproducen una frase para elegir su significado.',
+  writeKanji: 'Escribir el kanji',
+  writeKanjiDraw: 'Dibujar',
+  writeKanjiType: 'Teclear',
+  writeKanjiHint:
+    'Dibuja cada kanji con el dedo, o escribe la lectura de la palabra cuando dibujar cueste.',
   lesson: 'Lección actual',
   lessonNone: 'Los elementos nuevos no llevan etiqueta de lección.',
   lessonTagged: 'Los elementos nuevos se etiquetan {lesson}.',

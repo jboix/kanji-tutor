@@ -12,7 +12,9 @@ import { ExerciseHelp } from '../../ui/exercise-help.tsx';
 import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
 import { PillButton } from '../../ui/pill-button.tsx';
 import { Screen } from '../../ui/screen.tsx';
+import { useSlot } from '../../ui/slots.tsx';
 import { TutorNext } from '../../ui/tutor.tsx';
+import { asTyped, drawingQuiet, drawLater } from './draw-later.ts';
 import { BuildActions, type BuildOrder, BuildView, useBuildOrder } from './drill-build.tsx';
 import { ChoiceActions, ClozeView, LookalikeView } from './drill-choices.tsx';
 import {
@@ -25,6 +27,7 @@ import {
 import { ConjugationView, PatternView } from './drill-forms.tsx';
 import { useDrillTutor } from './drill-tutor.ts';
 import { FamilyView, ReadingsView, TypedActions } from './drill-typed.tsx';
+import { WriteActions, WriteView, writeRange } from './drill-write.tsx';
 import { ItemTeaching } from './item-teaching.tsx';
 import { asShown, listeningQuiet, listenLater } from './listen-later.ts';
 import read from './read.module.css';
@@ -40,10 +43,13 @@ interface BodyProps {
   order: BuildOrder;
   /** "I can't listen now" on a listening exercise. */
   onWritten?: (() => void) | undefined;
+  /** "I can't draw now" on a writing exercise. */
+  onTyped?: (() => void) | undefined;
 }
 
-function ExerciseBody({ drill, controls, order, onWritten }: BodyProps) {
+function ExerciseBody({ drill, controls, order, onWritten, onTyped }: BodyProps) {
   const answer = controls.answered ? controls.answers[controls.step] : undefined;
+  if (drill.kind === 'write') return <WriteView drill={drill} answer={answer} onTyped={onTyped} />;
   if (drill.kind === 'meaning') return <MeaningView drill={drill} answer={answer} />;
   if (drill.kind === 'particle') return <ParticleView drill={drill} answer={answer} />;
   if (drill.kind === 'listening') {
@@ -74,6 +80,7 @@ function blankOf(drill: Drill) {
   if (drill.kind === 'particle') {
     return { from: drill.at, to: drill.at + drill.answer.length, fill: PATTERN_BLANK };
   }
+  if (drill.kind === 'write') return writeRange(drill);
   return undefined;
 }
 
@@ -122,6 +129,7 @@ function ExerciseFooter({ drill, controls, order }: BodyProps) {
     return <ChoiceActions choices={choices} stacked={false} onChoose={answer} />;
   }
   if (drill.kind === 'build') return <BuildActions drill={drill} order={order} onAnswer={answer} />;
+  if (drill.kind === 'write') return <WriteActions drill={drill} onAnswer={answer} />;
   return (
     <TypedActions
       label={t('exercises.typeIt')}
@@ -189,7 +197,9 @@ function stepItem(drill: Drill, step: number): { itemId?: ItemId; surface?: stri
       surface: drill.sentence.tokens[drill.tokenIndex]?.surface ?? '',
     };
   }
-  if (drill.kind === 'meaning') return { itemId: drill.itemId, surface: drill.word.written };
+  if (drill.kind === 'meaning' || drill.kind === 'write') {
+    return { itemId: drill.itemId, surface: drill.word.written };
+  }
   return drill.itemId ? { itemId: drill.itemId } : {};
 }
 
@@ -215,20 +225,32 @@ export interface DrillCardProps {
   layout: (body: ReactNode, footer: ReactNode) => ReactNode;
 }
 
-/** The drill as shown, written instead of played after "I can't listen now". */
+/**
+ * The drill as shown: written instead of played after "I can't listen now", typed instead of
+ * drawn after "I can't draw now", by the settings, or when no drawing pad is wired.
+ */
 function useShownDrill(drill: Drill) {
   const [quiet, setQuiet] = useState(listeningQuiet);
-  const shown = useMemo(() => asShown(drill, quiet), [drill, quiet]);
+  const [typed, setTyped] = useState(drawingQuiet);
+  const pad = useSlot('kanjiDraw') !== undefined;
+  const shown = useMemo(
+    () => asTyped(asShown(drill, quiet), typed || !pad),
+    [drill, quiet, typed, pad],
+  );
   const onWritten = () => {
     listenLater();
     setQuiet(true);
   };
-  return { shown, onWritten };
+  const onTyped = () => {
+    drawLater();
+    setTyped(true);
+  };
+  return { shown, onWritten, onTyped };
 }
 
 /** One drill: choices, tiles or a typed answer, plain feedback, then on to the next one. */
 export function DrillCard({ drill: given, card, onDone, nextLabel, layout }: DrillCardProps) {
-  const { shown: drill, onWritten } = useShownDrill(given);
+  const { shown: drill, onWritten, onTyped } = useShownDrill(given);
   const controls = useDrill(drill, onDone);
   const order = useBuildOrder();
   useGradeSound(controls.answered ? controls.answers[controls.step]?.grade : undefined);
@@ -239,7 +261,13 @@ export function DrillCard({ drill: given, card, onDone, nextLabel, layout }: Dri
   );
   const body = (
     <>
-      <DrillBody drill={drill} controls={controls} order={order} onWritten={onWritten} />
+      <DrillBody
+        drill={drill}
+        controls={controls}
+        order={order}
+        onWritten={onWritten}
+        onTyped={onTyped}
+      />
       <DrillHelp drill={drill} controls={controls} />
       <StepTeaching drill={drill} card={card} controls={controls} />
     </>

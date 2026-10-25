@@ -1,11 +1,12 @@
 /**
  * Grading the S4 exercises, pure: a choice (meaning, particle, listening), the pieces in an
- * order (building), or a typed form checked against the conjugation engine's answers (pattern,
- * conjugation). A form is right or wrong: a missing っ in 行って is the conjugation, not a slip.
+ * order (building), a typed form checked against the conjugation engine's answers (pattern,
+ * conjugation), or the kanji drawn for a word (write). A form is right or wrong: a missing っ
+ * in 行って is the conjugation, not a slip.
  */
 import { toKanaFold } from '../kana.ts';
 import type { Grade } from '../types.ts';
-import type { ExerciseDrill } from './types.ts';
+import type { ExerciseDrill, WriteDrill } from './types.ts';
 
 /** What the learner gave: the index chosen, the particle, the built text or the typed form. */
 export type ExerciseAnswer = string;
@@ -26,6 +27,7 @@ export function expectedOf(drill: ExerciseDrill): string {
     return optionText(drill, drill.answer);
   if (drill.kind === 'particle') return drill.answer;
   if (drill.kind === 'build') return drill.pieces.join('');
+  if (drill.kind === 'write') return drill.word.written;
   return drill.answer.written;
 }
 
@@ -37,6 +39,15 @@ export function formMatches(accepted: readonly string[], typed: string): boolean
   if (given === '') return false;
   const kana = toKanaFold(given);
   return accepted.some((a) => clean(a) === given || toKanaFold(clean(a)) === kana);
+}
+
+/**
+ * Drawn, the kanji as the recognizer read them, each in turn (学生); typed, the word's reading
+ * in kana or romaji, or the word as written.
+ */
+function writeMatches(drill: WriteDrill, answer: ExerciseAnswer): boolean {
+  if (!drill.typed) return answer === drill.kanji.join('');
+  return formMatches([...drill.readings, drill.word.written], answer);
 }
 
 function given(drill: ExerciseDrill, answer: ExerciseAnswer): string {
@@ -51,6 +62,7 @@ function right(drill: ExerciseDrill, answer: ExerciseAnswer): boolean {
     return Number(answer) === drill.answer;
   if (drill.kind === 'particle') return answer === drill.answer;
   if (drill.kind === 'build') return clean(answer) === clean(drill.pieces.join(''));
+  if (drill.kind === 'write') return writeMatches(drill, answer);
   return formMatches(drill.accepted, answer);
 }
 

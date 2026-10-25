@@ -87,6 +87,28 @@ function ExplainField({ settings, onPatch }: Props) {
   );
 }
 
+const WRITE = [
+  { value: 'draw', key: 'settings.writeKanjiDraw' },
+  { value: 'type', key: 'settings.writeKanjiType' },
+] as const satisfies readonly { value: string; key: PlainKey }[];
+
+/** "Write the kanji" drawn on a pad, or its reading typed, for a learner who cannot draw. */
+function WriteField({ settings, onPatch }: Props) {
+  const t = useT();
+  return (
+    <div className={styles.field}>
+      <SectionLabelText>{t('settings.writeKanji')}</SectionLabelText>
+      <SegmentedControl
+        label={t('settings.writeKanji')}
+        options={WRITE.map((o) => ({ value: o.value, label: t(o.key) }))}
+        value={settings.writeKanji ?? 'draw'}
+        onChange={(writeKanji) => onPatch({ writeKanji })}
+      />
+      <p className={styles.hint}>{t('settings.writeKanjiHint')}</p>
+    </div>
+  );
+}
+
 function LessonStatus({ lesson }: { lesson: string | undefined }) {
   const { t, rich } = useI18n();
   if (!lesson) return <>{t('settings.lessonNone')}</>;
@@ -129,13 +151,17 @@ function LessonField({ settings, onPatch }: Props) {
   );
 }
 
-/** How sessions read: length, intro cards, furigana default and the lesson. Sound is in Appearance. */
+/**
+ * How sessions read: length, intro cards, drawing or typing kanji, furigana default and the
+ * lesson. Sound is in Appearance.
+ */
 export function ReadingSection(props: Props) {
   const t = useT();
   return (
     <section className={styles.section} aria-label={t('settings.reading')}>
       <LengthField {...props} />
       <ExplainField {...props} />
+      <WriteField {...props} />
       <FuriganaField {...props} />
       <LessonField {...props} />
     </section>

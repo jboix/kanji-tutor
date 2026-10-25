@@ -82,6 +82,17 @@ const BUILDERS: {
     topic: { ...bare(d.items.map((i) => i.form).join('、'), d.kanji), surface: d.kanji },
     starters: [t('exercises.tutorReadings', { x: d.kanji })],
   }),
+  write: (d, t, l) => ({
+    topic: {
+      about: d.word.written,
+      sentence: sentenceTopic(d.sentence, l),
+      surface: d.word.written,
+    },
+    starters: [
+      t('exercises.tutorRemember', { x: d.word.written }),
+      t('exercises.tutorUseIt', { x: d.word.written }),
+    ],
+  }),
   family: (d, t) => ({
     topic: { ...bare([...d.known, d.guess].join('、'), d.part), surface: d.part },
     starters: [t('exercises.tutorFamily', { x: d.part })],

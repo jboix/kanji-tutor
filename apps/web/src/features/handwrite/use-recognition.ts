@@ -25,7 +25,8 @@ function loadOnce(): Promise<Recognizer> {
   return loading;
 }
 
-function useRecognizer() {
+/** The recognizer, loaded on first use, and whether it is ready. */
+export function useRecognizer() {
   const [state, setState] = useState<{ status: RecognizerStatus; recognizer?: Recognizer }>({
     status: 'loading',
   });

@@ -208,6 +208,7 @@ const settings = z.object({
   sound: z.boolean().exactOptional(),
   soundVolume: z.number().min(0).max(1).exactOptional(),
   listening: z.boolean().exactOptional(),
+  writeKanji: z.enum(['draw', 'type']).exactOptional(),
   sessionMinutes: z.union([z.literal(5), z.literal(10), z.literal(15)]).exactOptional(),
   explainFirst: z.boolean().exactOptional(),
   tutor: z.enum(['on-ask', 'auto-mistakes']).exactOptional(),

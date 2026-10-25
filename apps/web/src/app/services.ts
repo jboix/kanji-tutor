@@ -20,6 +20,7 @@ import type { Repos, SettingsRepo } from '../domain/repos.ts';
 import { createLearnerView } from '../domain/services/learner-profile.ts';
 import type { Settings } from '../domain/types.ts';
 import { createLang, createWorkerTokenizer, muteListening } from '../lang/index.ts';
+import { typeKanji } from '../ui/kanji-drawing.ts';
 import { rememberWelcomed } from '../ui/launch.ts';
 import type { Services } from '../ui/services.tsx';
 import { applySound } from '../ui/sound.ts';
@@ -74,13 +75,15 @@ function aiContext(
 
 /**
  * Settings → Sound follows every settings read and write, so boot, a change, an import
- * and the welcome all mute or unmute the tones, speech and listening exercises at once. So
+ * and the welcome all mute or unmute the tones, speech and listening exercises at once, and
+ * switch writing exercises between drawn and typed. So
  * does the launch screen's "welcome done" mark, which index.html reads before the first paint.
  */
 export function soundFollows(repo: SettingsRepo): SettingsRepo {
   const apply = (settings: Settings) => {
     applySound(settings.sound, settings.soundVolume);
     muteListening(settings.listening === false);
+    typeKanji(settings.writeKanji === 'type');
     rememberWelcomed(settings.onboarded);
     return settings;
   };

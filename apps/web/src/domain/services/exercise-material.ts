@@ -14,7 +14,9 @@ import {
   meaningDrill,
   particleDrill,
   patternDrill,
+  type WriteInput,
   wordKind,
+  writeDrill,
 } from '../drills/index.ts';
 import { fitsLevel } from '../questions/level-fit.ts';
 import type { Repos } from '../repos.ts';
@@ -164,6 +166,13 @@ export async function listeningCard(
   if (!m.listening) return undefined;
   const drill = listeningDrill({ sentence, others, seed: m.seed, itemId });
   if (!drill || !(await sentenceFits(m, sentence, []))) return undefined;
+  return drillCard(drill);
+}
+
+/** Write the kanji of a word the card just read, in a sentence that fits the level. */
+export async function writeCard(m: ExerciseMaterial, input: WriteInput) {
+  const drill = writeDrill(input);
+  if (!drill || !(await sentenceFits(m, input.sentence, []))) return undefined;
   return drillCard(drill);
 }
 

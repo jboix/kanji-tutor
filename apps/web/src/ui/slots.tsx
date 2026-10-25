@@ -53,6 +53,20 @@ export interface VoiceAnswerSlotProps {
   onTypeInstead: () => void;
 }
 
+/**
+ * Drawing a word's kanji one after the other, for "Write the kanji" (handwrite feature): the
+ * pad, the boxes still to fill, and Next or Check.
+ */
+export interface KanjiDrawSlotProps {
+  /** The kanji to draw, in order. */
+  kanji: readonly string[];
+  /**
+   * Called after the last one, with the kanji as drawn: each one the kanji meant when the
+   * recognizer ranks it close, else its best guess (？ for nothing).
+   */
+  onAnswer: (drawn: string) => void;
+}
+
 /** Memory hook under a kanji reading on the kanji page (explain feature, A5). */
 export interface ReadingHookSlotProps {
   kanji: string;
@@ -203,6 +217,7 @@ export interface Slots {
   wordSheet?: ComponentType<WordSheetSlotProps>;
   askBox?: ComponentType<AskSlotProps>;
   voiceAnswer?: ComponentType<VoiceAnswerSlotProps>;
+  kanjiDraw?: ComponentType<KanjiDrawSlotProps>;
 }
 
 const SlotsContext = createContext<Slots>({});

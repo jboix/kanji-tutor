@@ -2,9 +2,9 @@
  * The S4 exercises of a daily session (S7): every session mixes exercise types, even a
  * beginner's whose sentences give few questions. A meaning check on a word just met, a particle
  * fill, a sentence to build or one to hear on a sentence just read, a pattern drill on a point
- * already introduced, and a conjugation drill on a verb the learner knows, in an order that
- * changes from day to day. Each one on the session's own sentences comes after the card that
- * reads them, so nothing is shown before it is taught.
+ * already introduced, a conjugation drill on a verb the learner knows, and a word just read to
+ * write in kanji, in an order that changes from day to day. Each one on the session's own
+ * sentences comes after the card that reads them, so nothing is shown before it is taught.
  */
 
 import { patternRule } from '../conjugation/patterns.ts';
@@ -22,6 +22,7 @@ import {
   meaningCard,
   particleCard,
   patternCard,
+  writeCard,
 } from './exercise-material.ts';
 import { DAY_MS } from './items.ts';
 import type { Pool } from './session-pool.ts';
@@ -44,6 +45,7 @@ const KINDS: readonly Kind[] = [
   'listening',
   'pattern',
   'conjugation',
+  'write',
 ];
 
 interface Round {
@@ -89,6 +91,18 @@ async function meaningOf(round: Round, card: SessionCard) {
     .find(Boolean);
 }
 
+/** Write the kanji of a target of the card, as the card writes it: a word read before, not one just met. */
+async function writeOf(round: Round, card: SessionCard) {
+  if (card.reason === 'new') return undefined;
+  const words = await round.m.repos.dictionary.words(card.targets.map((t) => t.wordId));
+  for (const [i, target] of card.targets.entries()) {
+    const word = words[i];
+    const made = word && (await writeCard(round.m, { sentence: card.sentence, target, word }));
+    if (made) return made;
+  }
+  return undefined;
+}
+
 const MAKERS: Record<Kind, (round: Round) => Promise<PlacedExercise | undefined>> = {
   meaning: (round) => onReadCard(round, meaningOf),
   particle: (round) => onReadCard(round, (r, c) => particleCard(r.m, [c.sentence])),
@@ -103,6 +117,7 @@ const MAKERS: Record<Kind, (round: Round) => Promise<PlacedExercise | undefined>
     const card = conjugationCard(round.m);
     return card && { card, after: 0 };
   },
+  write: (round) => onReadCard(round, writeOf),
 };
 
 export interface SessionExerciseInput {

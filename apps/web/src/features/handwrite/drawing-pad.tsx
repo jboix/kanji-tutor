@@ -1,4 +1,5 @@
 import { type Dispatch, type PointerEvent, useRef } from 'react';
+import { cx } from '../../ui/cx.ts';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { IconButton } from '../../ui/icon-button.tsx';
 import { CloseIcon, UndoIcon } from '../../ui/icons.tsx';
@@ -58,16 +59,18 @@ function Guide() {
 export interface DrawingPadProps {
   ink: Ink;
   dispatch: Dispatch<InkAction>;
+  /** Shorter, under an exercise ("Write the kanji") rather than filling a screen. */
+  compact?: boolean;
 }
 
 /** The drawing canvas: pointer input (touch, pen, mouse), undo and clear (I4). */
-export function DrawingPad({ ink, dispatch }: DrawingPadProps) {
+export function DrawingPad({ ink, dispatch, compact }: DrawingPadProps) {
   const canvas = useRef<HTMLCanvasElement>(null);
   useInkCanvas(canvas, paintedStrokes(ink));
   const count = ink.strokes.length;
   const t = useT();
   return (
-    <div className={styles.pad}>
+    <div className={cx(styles.pad, compact && styles.compact)}>
       <Guide />
       <canvas
         ref={canvas}

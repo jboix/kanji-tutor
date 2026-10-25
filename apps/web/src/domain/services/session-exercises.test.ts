@@ -63,6 +63,24 @@ describe("Today's session mixes exercise types (S7)", { timeout: 60_000 }, () =>
   });
 });
 
+describe('Write the kanji in a session', { timeout: 60_000 }, () => {
+  it('writes a word of a card read earlier in the session, never a word just met', async () => {
+    const repos = await curriculumRepos();
+    await importKnown(repos, { lists: ['n5'], now: NOW });
+    const writes: { card: SessionCard; cards: SessionCard[] }[] = [];
+    for (let day = 0; day < 12; day++) {
+      const cards = await buildSession(repos, { now: NOW + day * DAY_MS });
+      for (const card of cards) if (card.drill?.kind === 'write') writes.push({ card, cards });
+    }
+    expect(writes.length).toBeGreaterThan(0);
+    for (const { card, cards } of writes) {
+      const read = cards.find((c) => c.targets.length > 0 && c.sentence.id === card.sentence.id);
+      expect(read?.reason, card.sentence.text).not.toBe('new');
+      expect(cards.indexOf(card)).toBeGreaterThan(cards.indexOf(read as SessionCard));
+    }
+  });
+});
+
 describe('Practise this point (S5)', { timeout: 30_000 }, () => {
   it("gives a short set of the point's drills, every one on the point", async () => {
     const repos = await curriculumRepos();

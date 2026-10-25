@@ -33,6 +33,8 @@ export const handwrite = {
   cantDraw: "Can't draw it? Describe it.",
   pad: 'Drawing area. Draw a kanji with your finger.',
   strokes: { one: '{n} stroke', other: '{n} strokes' },
+  kanjiOf: 'Kanji {n} of {total}',
+  nextKanji: 'Next kanji',
   clear: 'Clear drawing',
   undo: 'Undo last stroke',
   noKey: 'Add a Gemini key in {settings} to {task}.',

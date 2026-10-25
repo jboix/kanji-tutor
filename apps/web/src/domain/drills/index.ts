@@ -36,3 +36,4 @@ export {
 } from './pattern.ts';
 export { type ReadingsInput, readingsDrill } from './readings.ts';
 export type * from './types.ts';
+export { blankedWord, kanjiToDraw, WRITE_MAX_KANJI, type WriteInput, writeDrill } from './write.ts';

@@ -43,7 +43,8 @@ export type ExerciseType =
   | 'build'
   | 'listening'
   | 'sentence-meaning'
-  | 'cloze';
+  | 'cloze'
+  | 'write';
 
 /** Item key → the exercise types that brought it back. */
 export type Coverage = Map<string, Set<ExerciseType>>;
@@ -76,6 +77,7 @@ const DRILL_ITEMS: {
   listening: (d, card) => [
     { type: d.read ? 'sentence-meaning' : 'listening', items: sentenceItems(card) },
   ],
+  write: (d) => [{ type: 'write', items: [d.itemId] }],
   lookalike: () => [],
   readings: () => [],
   family: () => [],

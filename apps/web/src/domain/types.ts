@@ -398,6 +398,8 @@ export interface Settings {
   soundVolume?: number;
   /** Listening exercises in sessions (S4); on when unset. Off, sessions leave them out. */
   listening?: boolean;
+  /** "Write the kanji" exercises: drawn on a pad (absent or 'draw'), or the reading typed. */
+  writeKanji?: 'draw' | 'type';
   /** About how long a session or lesson takes, in minutes (L6); absent means 5. */
   sessionMinutes?: SessionMinutes;
   /**

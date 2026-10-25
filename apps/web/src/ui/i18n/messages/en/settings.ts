@@ -103,6 +103,11 @@ export const settings = {
   listeningOn: 'On',
   listeningOff: 'Off',
   listeningHint: 'Off: no exercises that play a sentence to choose its meaning.',
+  writeKanji: 'Write the kanji',
+  writeKanjiDraw: 'Draw',
+  writeKanjiType: 'Type',
+  writeKanjiHint:
+    'Draw each kanji with your finger, or type the word’s reading instead when drawing is hard.',
   lesson: 'Current lesson',
   lessonNone: 'New items get no lesson tag.',
   lessonTagged: 'New items are tagged {lesson}.',

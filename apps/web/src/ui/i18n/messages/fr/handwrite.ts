@@ -36,6 +36,8 @@ export const handwrite = {
   cantDraw: 'Impossible de le dessiner ? Décrivez-le.',
   pad: 'Zone de dessin. Dessinez un kanji avec le doigt.',
   strokes: { one: '{n} trait', other: '{n} traits' },
+  kanjiOf: 'Kanji {n} sur {total}',
+  nextKanji: 'Kanji suivant',
   clear: 'Effacer le dessin',
   undo: 'Annuler le dernier trait',
   noKey: 'Ajoutez une clé Gemini dans les {settings} pour {task}.',

@@ -89,6 +89,11 @@ export const settings = {
   listeningOff: 'Désactivés',
   listeningHint:
     'Désactivés : plus d’exercices qui font écouter une phrase pour en choisir le sens.',
+  writeKanji: 'Écrire le kanji',
+  writeKanjiDraw: 'Dessiner',
+  writeKanjiType: 'Taper',
+  writeKanjiHint:
+    'Dessinez chaque kanji du doigt, ou tapez plutôt la lecture du mot quand dessiner est difficile.',
   lesson: 'Leçon en cours',
   lessonNone: 'Les nouveaux éléments n’ont pas d’étiquette de leçon.',
   lessonTagged: 'Les nouveaux éléments sont étiquetés {lesson}.',
