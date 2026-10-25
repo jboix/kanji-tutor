@@ -8,7 +8,6 @@ import type { ScannedLesson } from './scan-types.ts';
 import type {
   AiCacheEntry,
   AiLogEntry,
-  Capture,
   Cluster,
   GrammarPoint,
   Item,
@@ -96,10 +95,6 @@ export interface UnitRepo {
   all(): Promise<UnitPack[]>;
 }
 
-export interface CaptureRepo extends Store<Capture> {
-  recent(limit: number): Promise<Capture[]>;
-}
-
 /** Scanned lessons, newest first when listed. */
 export interface ScanRepo extends Store<ScannedLesson> {
   recent(limit: number): Promise<ScannedLesson[]>;
@@ -155,7 +150,6 @@ export interface Repos {
   reviews: ReviewRepo;
   sentences: SentenceRepo;
   grammar: Store<GrammarPoint>;
-  captures: CaptureRepo;
   scans: ScanRepo;
   notes: Store<Note>;
   plans: Store<WeeklyPlan>;

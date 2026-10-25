@@ -4,7 +4,8 @@ import type { Messages } from '../../types.ts';
 export const add = {
   title: 'Añadir',
   capture: 'Fotografiar una página',
-  captureDetail: 'O pegar su texto: ver lo que sabes leer y guardar sus palabras nuevas',
+  captureDetail:
+    'Una o más páginas de una hoja forman una lección escaneada, que se practica aparte',
   compose: 'Escribir una frase',
   composeDetail: 'Usa lo que aprendes; el tutor lo corrige en el margen',
   class: 'Palabras de clase',

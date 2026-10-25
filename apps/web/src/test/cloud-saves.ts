@@ -23,7 +23,7 @@ export function save(data: Partial<SaveData> = {}): BackupFile {
       reviews: [],
       sentences: [],
       grammar: [],
-      captures: [],
+      scans: [],
       notes: [],
       plans: [],
       aiLog: [],

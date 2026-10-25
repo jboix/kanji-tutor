@@ -17,7 +17,7 @@ describe('createAiClient', () => {
       });
     };
     const client = ai.createAiClient(getContext);
-    expect(Object.keys(client)).toHaveLength(18);
+    expect(Object.keys(client)).toHaveLength(17);
     const input = { description: 'temple on the right' };
     expect(await client.describeKanji(input)).toMatchObject({ ok: true, cached: false });
     expect(await client.describeKanji(input)).toMatchObject({ ok: true, cached: true });

@@ -20,7 +20,7 @@ async function unregisterWorkers(): Promise<void> {
 }
 
 /**
- * Deletes all local data: the IndexedDB database (progress, reviews, notes, captures, settings,
+ * Deletes all local data: the IndexedDB database (progress, reviews, notes, scanned lessons, settings,
  * the API key, the AI cache and the dictionary packs), local and session storage, the offline
  * caches and the service worker. The next load starts at the welcome wizard.
  */

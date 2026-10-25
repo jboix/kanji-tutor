@@ -8,7 +8,6 @@ import type { ScannedLesson } from '../domain/scan-types.ts';
 import type {
   AiCacheEntry,
   AiLogEntry,
-  Capture,
   Cluster,
   Item,
   Kanji,
@@ -133,7 +132,6 @@ export function createMemoryRepos(
 ): Repos {
   const sentences = memoryStore<Sentence, string>((row) => row.id);
   const readings = memoryStore<KanjiReading, string>((row) => row.id);
-  const captures = memoryStore<Capture, string>((row) => row.id);
   const scans = memoryStore<ScannedLesson, string>((row) => row.id);
   const cache = new Map<string, AiCacheEntry>();
   const log: AiLogEntry[] = [];
@@ -146,11 +144,6 @@ export function createMemoryRepos(
     reviews: reviewRepo(),
     sentences: memorySentences(sentences),
     grammar: memoryStore((row) => row.id),
-    captures: {
-      ...captures,
-      recent: async (limit) =>
-        (await captures.all()).sort((a, b) => b.createdAt - a.createdAt).slice(0, limit),
-    },
     scans: {
       ...scans,
       recent: async (limit) =>

@@ -10,29 +10,6 @@ export {
 } from './ai-sentences.ts';
 export { type RecordAnswerInput, recordAnswer } from './answer.ts';
 export {
-  type AddCaptureInput,
-  type AddCaptureResult,
-  addCaptureItems,
-  type CaptureDraft,
-  captureSentenceId,
-  type ExerciseInput,
-  type ExerciseOutcome,
-  exerciseFromLine,
-  type GrammarDraft,
-  grammarIdOf,
-  saveCapture,
-} from './capture.ts';
-export {
-  type AnalysedLine,
-  analyseCapture,
-  type CandidateWord,
-  type CaptureAnalysis,
-  citedPhrases,
-  type Readiness,
-  readiness,
-  unknownIndices,
-} from './capture-analysis.ts';
-export {
   type AcceptCompositionInput,
   type AcceptCompositionResult,
   type AcceptedCorrection,

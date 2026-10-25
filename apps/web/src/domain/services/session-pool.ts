@@ -211,7 +211,7 @@ async function queues(repos: Repos, plan: LessonPlan, options: PoolOptions) {
 /**
  * Everything a session draws from, gated at the learner's level (G3). With a focus, only the
  * words proving that kanji reading are queued; otherwise the learner's own new sentences first
- * (capture, Use it, AI), then due words, the class lesson's (or this week's) new words, the
+ * (Use it, AI), then due words, the class lesson's (or this week's) new words, the
  * current unit's and cluster's new words (T3, V1), then, when those do not fill `size`, new
  * words that are the only unknown word of a sentence (i+1).
  */

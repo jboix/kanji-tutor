@@ -95,13 +95,6 @@ export const CAPTURE_LINES = [LINE_1, LINE_2, LINE_3].map((parts) => {
   return { text: toks.map((t) => t.surface).join(''), tokens: toks };
 });
 
-/** A tokenizer over the fixture lines; other text becomes one unresolved token per line. */
-export async function fixtureTokenize(text: string): Promise<Token[]> {
-  const line = CAPTURE_LINES.find((l) => l.text === text);
-  if (line) return structuredClone(line.tokens);
-  return [{ surface: text, reading: '', base: text, pos: 'noun', start: 0 }];
-}
-
 /** A dictionary over the fixture words only (kanji lookups find nothing). */
 export function captureDictionary(words: readonly Word[] = Object.values(W)): DictionaryRepo {
   const byId = new Map(words.map((entry) => [entry.id, entry]));

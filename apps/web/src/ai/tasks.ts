@@ -12,7 +12,6 @@ import { describeKanjiPrompt } from './prompts/describe-kanji.ts';
 import { explainMistakePrompt, isNamedSlip } from './prompts/explain-mistake.ts';
 import { explainSentencePrompt } from './prompts/explain-sentence.ts';
 import { explainWordPrompt } from './prompts/explain-word.ts';
-import { extractFromImagePrompt } from './prompts/extract-from-image.ts';
 import { followUpPrompt } from './prompts/follow-up.ts';
 import { generateSentencesPrompt } from './prompts/generate-sentences.ts';
 import { memoryHookPrompt } from './prompts/memory-hook.ts';
@@ -30,7 +29,6 @@ import { finalizeKanjiCandidates, kanjiCandidatesSchema } from './schemas/descri
 import { explainMistakeSchema, finalizeMistake } from './schemas/explain-mistake.ts';
 import { explainSentenceSchema, finalizeSentenceExplanation } from './schemas/explain-sentence.ts';
 import { explainWordSchema, finalizeWord } from './schemas/explain-word.ts';
-import { extractionSchema, finalizeExtraction } from './schemas/extract-from-image.ts';
 import { finalizeFollowUp, followUpSchema } from './schemas/follow-up.ts';
 import { finalizeSentences, generatedSentencesSchema } from './schemas/generate-sentences.ts';
 import { finalizeMemoryHook, memoryHookSchema } from './schemas/memory-hook.ts';
@@ -142,17 +140,6 @@ export const correctSentence = task({
   prompt: correctSentencePrompt,
   schema: correctionSchema,
   finalize: finalizeCorrection,
-});
-
-/** C1: OCR of a photo; Japanese lines only. */
-export const extractFromImage = task({
-  name: 'extractFromImage',
-  tier: 'fast',
-  thinking: 'minimal',
-  prompt: extractFromImagePrompt,
-  schema: extractionSchema,
-  media: (input) => [input.image],
-  finalize: finalizeExtraction,
 });
 
 /** Scanned lessons: one photographed page, what it is and what it teaches; readings verified. */

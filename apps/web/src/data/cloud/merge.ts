@@ -34,6 +34,19 @@ function unnumbered<T extends { id?: number }>(record: T): Omit<T, 'id'> {
 
 const byId = (record: { id: string }) => record.id;
 
+/** The record changed last; on a tie, the preferred side's. */
+const newer =
+  (side: <T>(a: T, b: T) => T) =>
+  <T extends { updatedAt: number }>(a: T, b: T) =>
+    a.updatedAt === b.updatedAt ? side(a, b) : a.updatedAt > b.updatedAt ? a : b;
+
+/** Captures of a save written before scanned lessons, kept until it is imported. */
+function legacyCaptures(mine: SaveData, theirs: SaveData, prefer: Prefer) {
+  const pick = <T>(a: T, b: T) => (prefer === 'mine' ? a : b);
+  const captures = union(mine.captures ?? [], theirs.captures ?? [], byId, pick);
+  return captures.length > 0 ? { captures } : {};
+}
+
 /**
  * Two saves made apart, as one. Items, which carry the review schedule, keep the newer
  * `updatedAt`. Reviews and the AI log are histories: both devices' entries are kept, matched by
@@ -45,9 +58,7 @@ export function mergeSaves(mine: SaveData, theirs: SaveData, prefer: Prefer): Sa
   const side = <T>(a: T, b: T) => (prefer === 'mine' ? a : b);
   const sameId = <T extends { id: string }>(a: T[], b: T[]) => union(a, b, byId, side);
   return {
-    items: union(mine.items, theirs.items, byId, (a, b) =>
-      a.updatedAt === b.updatedAt ? side(a, b) : a.updatedAt > b.updatedAt ? a : b,
-    ),
+    items: union(mine.items, theirs.items, byId, newer(side)),
     reviews: union(
       mine.reviews.map(unnumbered),
       theirs.reviews.map(unnumbered),
@@ -63,7 +74,8 @@ export function mergeSaves(mine: SaveData, theirs: SaveData, prefer: Prefer): Sa
     kanjiReadings: sameId(mine.kanjiReadings, theirs.kanjiReadings),
     sentences: sameId(mine.sentences, theirs.sentences),
     grammar: sameId(mine.grammar, theirs.grammar),
-    captures: sameId(mine.captures, theirs.captures),
+    scans: sameId(mine.scans, theirs.scans),
+    ...legacyCaptures(mine, theirs, prefer),
     notes: sameId(mine.notes, theirs.notes),
     plans: sameId(mine.plans, theirs.plans),
     settings: side(mine.settings, theirs.settings),

@@ -4,7 +4,6 @@ import { scanFromCapture } from '../domain/services/scans.ts';
 import type {
   AiCacheEntry,
   AiLogEntry,
-  Capture,
   Cluster,
   GrammarPoint,
   Item,
@@ -38,7 +37,7 @@ async function capturesToScans(tx: Transaction): Promise<void> {
 }
 
 /**
- * Kanji Tutor's IndexedDB database, schema v5. It keeps its first name, `kanji-reader`, as do the
+ * Kanji Tutor's IndexedDB database, schema v6. It keeps its first name, `kanji-reader`, as do the
  * localStorage keys: renaming them would empty every install.
  */
 export class KanjiTutorDb extends Dexie {
@@ -49,7 +48,6 @@ export class KanjiTutorDb extends Dexie {
   items!: Table<Item, ItemId>;
   kanjiReadings!: Table<KanjiReading, string>;
   reviews!: EntityTable<Review, 'id'>;
-  captures!: Table<Capture, string>;
   scans!: Table<ScannedLesson, string>;
   notes!: Table<Note, string>;
   plans!: Table<WeeklyPlan, string>;
@@ -90,6 +88,8 @@ export class KanjiTutorDb extends Dexie {
     // v5: scanned lessons (several pages, matched items, handout questions). Every capture
     // becomes a scanned lesson of one page, keeping its id, photo, lines and added items.
     this.version(5).stores({ scans: 'id, createdAt' }).upgrade(capturesToScans);
+    // v6: captures live on as scanned lessons only.
+    this.version(6).stores({ captures: null });
     this.use(sentenceKeysMiddleware);
   }
 }
@@ -100,7 +100,6 @@ export const USER_STORES = [
   'kanjiReadings',
   'reviews',
   'grammar',
-  'captures',
   'scans',
   'notes',
   'plans',

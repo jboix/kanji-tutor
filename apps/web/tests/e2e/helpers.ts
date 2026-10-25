@@ -6,17 +6,13 @@ export async function blockGemini(page: Page): Promise<void> {
 }
 
 /**
- * "Photograph a page" is an AI press (A18): it opens the picker with the client of that press, so
- * the photo goes through the button and its file chooser, never straight into the input.
+ * Picks photos for a new scan through "From your photos" and its file chooser. Picking sends
+ * nothing; "Read N pages" is the AI press (A18).
  */
-export async function photograph(
-  page: Page,
-  file: string,
-  name = /^Photograph a page, 1 request, uses AI/,
-) {
+export async function photograph(page: Page, files: string | string[]) {
   const chooser = page.waitForEvent('filechooser');
-  await page.getByRole('button', { name }).click();
-  await (await chooser).setFiles(file);
+  await page.getByRole('button', { name: 'From your photos' }).click();
+  await (await chooser).setFiles(files);
 }
 
 /** The welcome wizard's current step title. */

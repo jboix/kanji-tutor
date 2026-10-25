@@ -283,8 +283,8 @@ async function tailFor(repos: Repos, options: BuildSessionOptions) {
 }
 
 /**
- * Builds today's session (R2): the learner's own new sentences first (a captured line turned
- * into an exercise, an accepted Use it sentence, a verified AI sentence; see `ownPriority`),
+ * Builds today's session (R2): the learner's own new sentences first (an accepted Use it
+ * sentence, a verified AI sentence; see `ownPriority`),
  * then due words, then fresh ones of the current lesson or unit and cluster (T3, V1), then new
  * words that are a sentence's only unknown. Every sentence is at or below the learner's level
  * (G3), verified and i+1, with 1–2 targets, and every content token's reading fits JMdict; a

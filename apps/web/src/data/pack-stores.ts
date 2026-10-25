@@ -41,7 +41,7 @@ export function rowId(store: PackStore, row: unknown): string {
 /**
  * A catalogue point merged over what the learner has. A point the learner made keeps its own
  * pattern, meaning and lesson; a catalogue point is refreshed. Either way the learner's own
- * examples (captures, compose) stay after the pack's, and progress lives in `items`, untouched.
+ * examples (scanned lines, compose) stay after the pack's, and progress lives in `items`, untouched.
  */
 export function mergeGrammar(next: GrammarPoint, stored: GrammarPoint | undefined): GrammarPoint {
   if (!stored) return next;

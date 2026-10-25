@@ -12,7 +12,7 @@ import { fakeVerifier, testContext } from '../ai/testing/context.ts';
 import type { AiProvider, AiRequest } from '../ai/types.ts';
 import type { Repos } from '../domain/repos.ts';
 import { CAPTURE_LINES } from '../domain/services/capture-fixtures.ts';
-import { saveCapture } from '../domain/services/index.ts';
+import { buildScan, emptyScan, saveScan } from '../domain/services/index.ts';
 import type { Settings } from '../domain/types.ts';
 import { CaptureScreen } from '../features/capture/capture-screen.tsx';
 import { NotesScreen } from '../features/notes/notes-screen.tsx';
@@ -151,20 +151,29 @@ describe('AI only on demand (A13)', () => {
     expect(provider.tasks).toEqual([]);
   });
 
-  it('notes and capture call nothing until asked', async () => {
+  it('notes and a scanned lesson call nothing until asked', async () => {
     const { services, provider, repos } = await setup();
-    await saveCapture(repos as Repos, { id: 'saved', createdAt: Date.now(), lines: CAPTURE_LINES });
+    const base = emptyScan({ id: 'saved', now: Date.now() });
+    const pages = [
+      {
+        kind: 'reading' as const,
+        lines: CAPTURE_LINES.map((l) => ({ ...l, verified: true })),
+        questions: [],
+      },
+    ];
+    await saveScan(
+      repos as Repos,
+      await buildScan(repos as Repos, { base, pages, level: 3 }),
+      Date.now(),
+    );
     const notes = renderWithServices(<NotesScreen />, { services, path: '/notes' });
     await screen.findByRole('heading', { name: 'This week' });
     await settle();
     notes.unmount();
-    renderWithServices(<CaptureScreen />, { services, path: '/capture?id=saved' });
-    const line = await screen.findByRole('button', { name: CAPTURE_LINES[1]?.text ?? '' });
-    await userEvent.click(line);
+    renderWithServices(<CaptureScreen />, { services, slots: SLOTS, path: '/capture?id=saved' });
+    await screen.findByRole('region', { name: 'The pages' });
+    await userEvent.click(screen.getByRole('button', { name: /^Ask the tutor about / }));
     await settle();
     expect(provider.tasks).toEqual([]);
-    await userEvent.click(screen.getByRole('button', { name: /^Ask the tutor about this line, / }));
-    await screen.findByRole('note', { name: 'Explanation of this line' });
-    expect(provider.tasks).toEqual(['answerQuestion']);
   });
 });

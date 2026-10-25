@@ -196,10 +196,8 @@ const CLOZE_WORDS = 10;
 
 async function clozeSentences(src: DrillSource, examples: readonly string[]) {
   const stored = (await src.repos.sentences.getMany(examples)).flatMap((s) => (s ? [s] : []));
-  const own = [
-    ...(await src.repos.sentences.bySource('compose')),
-    ...(await src.repos.sentences.bySource('capture')),
-  ];
+  // Scanned lines (source `capture`) stay in their own lesson's practice.
+  const own = await src.repos.sentences.bySource('compose');
   const read = await sentencesWith(src, src.words.slice(0, CLOZE_WORDS));
   return freshTrusted(src, [...stored, ...own, ...read, ...src.pool]);
 }

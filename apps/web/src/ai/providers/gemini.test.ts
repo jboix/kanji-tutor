@@ -5,7 +5,7 @@ import type { AiRequest, ToolRunner } from '../types.ts';
 import { createGeminiProvider, type GenAiSdk, isLegacyModel, toParams } from './gemini.ts';
 
 const REQUEST: AiRequest = {
-  task: 'extractFromImage',
+  task: 'analysePage',
   promptVersion: 1,
   model: 'gemini-3.5-flash-lite',
   system: 'System text',

@@ -12,7 +12,6 @@ import { kanjiCandidatesSchema } from './schemas/describe-kanji.ts';
 import { explainMistakeSchema } from './schemas/explain-mistake.ts';
 import { explainSentenceSchema } from './schemas/explain-sentence.ts';
 import { explainWordSchema } from './schemas/explain-word.ts';
-import { extractionSchema } from './schemas/extract-from-image.ts';
 import { followUpSchema } from './schemas/follow-up.ts';
 import { generatedSentencesSchema } from './schemas/generate-sentences.ts';
 import { memoryHookSchema } from './schemas/memory-hook.ts';
@@ -31,7 +30,6 @@ const SCHEMAS: Record<TaskName, z.ZodType> = {
   answerQuestion: answerSchema,
   followUp: followUpSchema,
   correctSentence: correctionSchema,
-  extractFromImage: extractionSchema,
   analysePage: pageAnalysisSchema,
   transcribeReading: transcriptionSchema,
   weeklyNotes: weeklyNotesSchema,
@@ -242,15 +240,6 @@ describe('tasks over the mock provider', () => {
   it('correctSentence: drops marks whose offsets do not fit a shorter sentence', async () => {
     const input = { grammar: { pattern: '〜わけではない', meaning: '' }, sentence: '短い。' };
     expect((await value(tasks.correctSentence(input, context()))).marks).toEqual([]);
-  });
-
-  it('extractFromImage: the three handout lines (capture.html)', async () => {
-    const result = await value(tasks.extractFromImage({ image: IMAGE }, context()));
-    expect(result.lines).toEqual([
-      '日本には地域によって様々な方言がある。',
-      'テレビの影響で、若い人は標準語を話すことが多い。',
-      'しかし、方言を話す人が減っているわけではない。',
-    ]);
   });
 
   it('transcribeReading: しょかい stays しょかい', async () => {

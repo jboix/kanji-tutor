@@ -312,18 +312,6 @@ export interface Review {
   questionKind?: QuestionKind;
 }
 
-export interface Capture {
-  id: string;
-  createdAt: number;
-  photo?: Blob;
-  /** OCR text, one line per entry. */
-  lines: string[];
-  lesson?: string;
-  week: string;
-  addedItemIds: ItemId[];
-  sentenceIds: string[];
-}
-
 /** An explanation the user kept with "Keep in my notes" (A3). */
 export interface Note {
   id: string;

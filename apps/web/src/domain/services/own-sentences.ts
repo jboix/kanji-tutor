@@ -1,7 +1,6 @@
 /**
- * The learner's own sentences (capture, Use it, AI) that the next session serves first (C4, R6).
- * "Turn into an exercise" says the line is in the next session, so such a sentence gets priority
- * while it passes i+1, every unknown word in it is a tracked word added in the last 7 days
+ * The learner's own sentences (Use it, AI) that the next session serves first (R6). Such a
+ * sentence gets priority while it passes i+1, every unknown word in it is a tracked word added in the last 7 days
  * (level ≤ 2) or due, and it has not been shown in the last 7 days. Being unshown, it is exempt
  * from the two-day avoid rule.
  */
@@ -15,7 +14,11 @@ import { trustedSentences } from './sentence-trust.ts';
 /** How long a new own sentence keeps priority, and how far back "shown" is checked. */
 export const OWN_WINDOW_MS = 7 * DAY_MS;
 
-const OWN_SOURCES: readonly SentenceSource[] = ['capture', 'compose', 'ai'];
+/**
+ * Lines of a scanned lesson (source `capture`) are not among them: a scan is practised on its own,
+ * and nothing in it is served in the daily sessions.
+ */
+const OWN_SOURCES: readonly SentenceSource[] = ['compose', 'ai'];
 
 /** What the priority check reads: tracked word items by JMdict id and their levels. */
 export interface OwnContext {
@@ -65,7 +68,7 @@ export async function prioritised(
   return { sentences: trusted, items: [...items.values()] };
 }
 
-/** Every own sentence (capture, compose, AI) the next session should serve first. */
+/** Every own sentence (compose, AI) the next session should serve first. */
 export async function ownPriority(repos: Repos, ctx: OwnContext): Promise<OwnPriority> {
   const lists = await Promise.all(OWN_SOURCES.map((source) => repos.sentences.bySource(source)));
   return prioritised(repos, lists.flat(), ctx);

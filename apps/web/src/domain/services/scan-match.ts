@@ -93,8 +93,13 @@ function detected(pages: readonly MatchPage[]): Map<string, number> {
   return found;
 }
 
-/** Endings nearly every sentence has (です, ます, the plain forms): never items on their own. */
-const EVERYWHERE: ReadonlySet<GrammarFamily> = new Set(['copula', 'politeness', 'plain-form']);
+/** Endings nearly every sentence has (です, ます, plain forms, ね, か): never items on their own. */
+const EVERYWHERE: ReadonlySet<GrammarFamily> = new Set([
+  'copula',
+  'politeness',
+  'plain-form',
+  'sentence-ending',
+]);
 
 /** A point the detectors found that is worth listing: at the learner's level, not everywhere. */
 function worthListing(entry: GrammarEntry, level: LearnerLevel): boolean {

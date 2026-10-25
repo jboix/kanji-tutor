@@ -1,4 +1,5 @@
-import type { Capture, Settings } from '../domain/types.ts';
+import type { Settings } from '../domain/types.ts';
+import { exportScans, importedScans } from './backup-scans.ts';
 import { BACKUP_APP, type BackupFile, backupSchema } from './backup-schema.ts';
 import { type KanjiTutorDb, USER_STORES } from './db.ts';
 import { PACK_SOURCES } from './pack-stores.ts';
@@ -6,29 +7,6 @@ import { createDexieRepos } from './repos.ts';
 import { toSentence } from './sentence-keys.ts';
 
 export type { BackupFile } from './backup-schema.ts';
-
-async function blobToDataUrl(blob: Blob): Promise<string> {
-  const bytes = new Uint8Array(await blob.arrayBuffer());
-  // Chunked: one String.fromCharCode call per 32 KB, so multi-MB photos stay fast.
-  let binary = '';
-  for (let at = 0; at < bytes.length; at += 0x8000) {
-    binary += String.fromCharCode(...bytes.subarray(at, at + 0x8000));
-  }
-  return `data:${blob.type || 'application/octet-stream'};base64,${btoa(binary)}`;
-}
-
-function dataUrlToBlob(url: string): Blob {
-  const [head = '', body = ''] = url.split(',', 2);
-  const type = head.slice(5).replace(';base64', '');
-  const binary = atob(body);
-  const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
-  return new Blob([bytes], { type });
-}
-
-async function exportCapture(capture: Capture): Promise<BackupFile['data']['captures'][number]> {
-  const { photo, ...rest } = capture;
-  return photo ? { ...rest, photo: await blobToDataUrl(photo) } : rest;
-}
 
 /**
  * The key never leaves the device (N3); the pack version and languages describe this device's
@@ -60,7 +38,7 @@ export async function exportBackup(db: KanjiTutorDb, now = Date.now()): Promise<
       reviews: await db.reviews.toArray(),
       sentences: userSentences,
       grammar: await db.grammar.toArray(),
-      captures: await Promise.all((await db.captures.toArray()).map(exportCapture)),
+      scans: await exportScans(await db.scans.toArray()),
       notes: await db.notes.toArray(),
       plans: await db.plans.toArray(),
       aiLog: await db.aiLog.toArray(),
@@ -86,9 +64,7 @@ export function parseBackup(json: unknown): ParsedBackup {
  */
 export async function importBackup(db: KanjiTutorDb, backup: BackupFile): Promise<void> {
   const { data } = backup;
-  const captures = data.captures.map(({ photo, ...rest }) =>
-    photo ? { ...rest, photo: dataUrlToBlob(photo) } : rest,
-  );
+  const scans = importedScans(data);
   const tables = [...USER_STORES.map((name) => db.table(name)), db.sentences, db.settings];
   await db.transaction('rw', tables, async () => {
     await Promise.all(USER_STORES.map((name) => db.table(name).clear()));
@@ -98,7 +74,7 @@ export async function importBackup(db: KanjiTutorDb, backup: BackupFile): Promis
     await db.reviews.bulkPut(data.reviews);
     await db.sentences.bulkPut(data.sentences);
     await db.grammar.bulkPut(data.grammar);
-    await db.captures.bulkPut(captures);
+    await db.scans.bulkPut(scans);
     await db.notes.bulkPut(data.notes);
     await db.plans.bulkPut(data.plans);
     await db.aiLog.bulkPut(data.aiLog);

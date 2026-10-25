@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { cacheKey, parseReply, runTask } from './run.ts';
 import { explainWordSchema, finalizeWord } from './schemas/explain-word.ts';
 import type { TaskDef } from './task-def.ts';
-import { explainWord, extractFromImage } from './tasks.ts';
+import { analysePage, explainWord } from './tasks.ts';
 import { scriptedProvider, testContext } from './testing/context.ts';
 import type { ExplainWordInput } from './types.ts';
 
@@ -92,10 +92,11 @@ describe('runTask', () => {
   });
 
   it('passes the abort signal and sends media with the request', async () => {
-    const provider = scriptedProvider(['{"lines": ["日本語"]}']);
+    const reply = { kind: 'reading', title: 'T', lines: [], kanji: [], words: [], grammar: [] };
+    const provider = scriptedProvider([JSON.stringify({ ...reply, questions: [], readings: [] })]);
     const signal = new AbortController().signal;
     const image = { mime: 'image/jpeg', data: 'AAAA' };
-    await extractFromImage({ image }, testContext({ provider, signal }));
+    await analysePage({ image, page: 1, pages: 1 }, testContext({ provider, signal }));
     expect(provider.signals[0]).toBe(signal);
     expect(provider.requests[0]?.media).toEqual([image]);
   });
@@ -156,14 +157,12 @@ describe('runTask', () => {
 
 describe('cacheKey', () => {
   it('depends on task, prompt version, model and input (media included), not key order', async () => {
-    const base = await cacheKey('extractFromImage', 1, 'm', { image: { mime: 'a', data: 'x' } });
-    expect(await cacheKey('extractFromImage', 1, 'm', { image: { data: 'x', mime: 'a' } })).toBe(
-      base,
-    );
+    const base = await cacheKey('analysePage', 1, 'm', { image: { mime: 'a', data: 'x' } });
+    expect(await cacheKey('analysePage', 1, 'm', { image: { data: 'x', mime: 'a' } })).toBe(base);
     const variants = await Promise.all([
-      cacheKey('extractFromImage', 1, 'm', { image: { mime: 'a', data: 'y' } }),
-      cacheKey('extractFromImage', 2, 'm', { image: { mime: 'a', data: 'x' } }),
-      cacheKey('extractFromImage', 1, 'n', { image: { mime: 'a', data: 'x' } }),
+      cacheKey('analysePage', 1, 'm', { image: { mime: 'a', data: 'y' } }),
+      cacheKey('analysePage', 2, 'm', { image: { mime: 'a', data: 'x' } }),
+      cacheKey('analysePage', 1, 'n', { image: { mime: 'a', data: 'x' } }),
       cacheKey('recognizeHandwriting', 1, 'm', { image: { mime: 'a', data: 'x' } }),
     ]);
     expect(new Set([base, ...variants]).size).toBe(5);

@@ -69,8 +69,6 @@ Recent error types: long-vowel, wrong-kanji
 Current lesson: Tobira 第4課"
 `;
 
-exports[`prompts > extractFromImage is versioned, calm and asks for JSON 1`] = `"Transcribe the Japanese text in this photo."`;
-
 exports[`prompts > followUp is versioned, calm and asks for JSON 1`] = `
 "Follow-up: quiz
 Write one multiple-choice question that checks the point, in "quiz", with a one-line lead-in.

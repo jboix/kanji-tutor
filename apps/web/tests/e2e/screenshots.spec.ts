@@ -122,18 +122,14 @@ test('handwrite: draw a kanji', async ({ page }) => {
   await shoot(page, 'handwrite');
 });
 
-test('capture: explain a line', async ({ page }) => {
+test('capture: what the scan found', async ({ page }) => {
   await ready(page);
   await page.goto('/capture');
-  await photograph(page, HANDOUT);
-  await expect(page.getByRole('heading', { name: /You can read/ })).toBeVisible({
+  await photograph(page, [HANDOUT, HANDOUT, HANDOUT]);
+  await page.getByRole('button', { name: /^Read 3 pages/ }).click();
+  await expect(page.getByLabel('Title · suggested, edit it')).toHaveValue('Weather and plans', {
     timeout: 30_000,
   });
-  await page
-    .getByRole('button', { name: 'しかし、方言を話す人が減っているわけではない。' })
-    .click();
-  await page.getByRole('button', { name: 'Ask the tutor about this line' }).click();
-  await expect(page.getByRole('note', { name: 'Explanation of this line' })).toBeVisible();
   await shoot(page, 'capture');
 });
 

@@ -123,13 +123,6 @@ function packRepos(db: KanjiTutorDb): Pick<Repos, 'clusters' | 'units'> {
   };
 }
 
-function captureRepo(db: KanjiTutorDb): Repos['captures'] {
-  return {
-    ...tableStore(db.captures),
-    recent: (limit) => db.captures.orderBy('createdAt').reverse().limit(limit).toArray(),
-  };
-}
-
 function scanRepo(db: KanjiTutorDb): Repos['scans'] {
   return {
     ...tableStore(db.scans),
@@ -163,7 +156,6 @@ export function createDexieRepos(db: KanjiTutorDb): Repos {
     reviews: reviewRepo(db),
     sentences: sentenceRepo(db),
     grammar: tableStore(db.grammar),
-    captures: captureRepo(db),
     scans: scanRepo(db),
     notes: tableStore(db.notes),
     plans: tableStore(db.plans),

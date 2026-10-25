@@ -148,14 +148,6 @@ export interface Correction extends Immersed {
   readings: CheckedReading[];
 }
 
-export interface ExtractInput {
-  image: Media;
-}
-export interface Extraction {
-  /** OCR text, one entry per printed line, Japanese only (C1). */
-  lines: string[];
-}
-
 export interface TranscribeInput {
   audio: Media;
 }
@@ -317,7 +309,6 @@ export interface Tasks {
   answerQuestion: [QuestionInput, Answer];
   followUp: [FollowUpInput, FollowUpResult];
   correctSentence: [CorrectSentenceInput, Correction];
-  extractFromImage: [ExtractInput, Extraction];
   analysePage: [AnalysePageInput, PageAnalysis];
   transcribeReading: [TranscribeInput, Transcription];
   weeklyNotes: [WeeklyNotesInput, WeeklyNotes];

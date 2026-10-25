@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { legacyCaptureSchema, scanSchema } from './backup-scan-schema.ts';
 
 const level = z.union([z.literal(0), z.literal(1), z.literal(2), z.literal(3), z.literal(4)]);
 const itemKind = z.enum(['word', 'kanji', 'kanjiReading', 'grammar']);
@@ -114,18 +115,6 @@ const grammar = z.object({
   catalogue: z.literal(true).exactOptional(),
 });
 
-/** Captures carry their photo as a data URL inside the backup file. */
-const capture = z.object({
-  id: z.string(),
-  createdAt: z.number(),
-  photo: z.string().startsWith('data:').exactOptional(),
-  lines: z.array(z.string()),
-  lesson: z.string().exactOptional(),
-  week: z.string(),
-  addedItemIds: z.array(itemIdSchema),
-  sentenceIds: z.array(z.string()),
-});
-
 const note = z.object({
   id: z.string(),
   createdAt: z.number(),
@@ -234,7 +223,10 @@ export const backupSchema = z.object({
     reviews: z.array(review),
     sentences: z.array(sentence),
     grammar: z.array(grammar),
-    captures: z.array(capture),
+    /** Scanned lessons, their page photos as data URLs. Older files have none. */
+    scans: z.array(scanSchema).default([]),
+    /** Captures, in files made before scanned lessons: imported as scanned lessons. */
+    captures: z.array(legacyCaptureSchema).exactOptional(),
     notes: z.array(note),
     plans: z.array(plan),
     aiLog: z.array(aiLog),

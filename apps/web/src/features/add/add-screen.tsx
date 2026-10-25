@@ -22,7 +22,7 @@ const CHOICES: Choice[] = [
 ];
 
 /**
- * The Add tab (IA3): bring something in. Photograph or paste a page (Capture), write a sentence
+ * The Add tab (IA3): bring something in. Scan handout pages into a lesson (Capture), write a sentence
  * of your own (Use it), or add this week's words from class. Each one's back returns here.
  */
 export function AddScreen() {

@@ -25,9 +25,8 @@ const AI_VIEWS = [
   'src/features/teach/ja-prose.tsx',
   'src/features/compose/correction-view.tsx',
   'src/features/compose/draft-editor.tsx',
-  'src/features/capture/capture-lines.tsx',
-  'src/features/capture/capture-view.tsx',
-  'src/features/capture/start-controls.tsx',
+  'src/features/capture/scan-import.tsx',
+  'src/features/capture/review-items.tsx',
   'src/features/notes/letter-view.tsx',
   'src/features/placement/tutor-assessment.tsx',
   'src/features/handwrite/candidate-picker.tsx',
@@ -51,7 +50,7 @@ const STATIC_VIEWS = [
   'src/features/kanji/kanji-detail-view.tsx',
   'src/features/kanji/reading-rows.tsx',
   'src/features/read/word-sheet.tsx',
-  'src/features/capture/line-static.tsx',
+  'src/features/capture/review-pages.tsx',
 ];
 
 const AI_BOX = /ui\/ai-block\.tsx/;

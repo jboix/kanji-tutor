@@ -154,7 +154,7 @@ describe('buildSession', () => {
 });
 
 describe('buildSession own sentences', () => {
-  it('serves a capture sentence and a verified AI sentence over stored ones (R6)', async () => {
+  it('serves a verified AI sentence over stored ones, never a scanned line (R6)', async () => {
     const repos = await readingRepos({ learnerLevel: 3 });
     await knowBasics(repos);
     await track(repos, [
@@ -166,10 +166,11 @@ describe('buildSession own sentences', () => {
     const unverified = { ...S.waitPlain, id: 'ai:unchecked', source: 'ai' as const };
     await repos.sentences.putMany([capture, ai, { ...unverified, verified: false }]);
     const ids = (await buildSession(repos, { now: NOW, size: 5 })).map((c) => c.sentence.id);
-    expect(ids).toContain(capture.id);
+    expect(ids).not.toContain(capture.id);
     expect(ids).toContain(ai.id);
     expect(ids).not.toContain(unverified.id);
-    expect(ids).not.toContain(S.student.id);
+    // 学生 is read in its stored sentence instead of the scanned line.
+    expect(ids).toContain(S.student.id);
   });
 });
 
@@ -181,5 +182,13 @@ describe('buildSession fresh words', () => {
     const cards = await buildSession(repos, { now: NOW, size: 5 });
     expect(cards.map((c) => c.sentence.id)).not.toContain(S.student.id);
     expect(cards.length).toBeGreaterThan(0);
+  });
+
+  it('never brings in as new a word first practised in a scanned lesson', async () => {
+    const repos = await readingRepos({ learnerLevel: 3 });
+    await knowBasics(repos);
+    await track(repos, [[W.gakusei, 1]], { dueIn: DAY, kind: 'scan' });
+    const cards = await buildSession(repos, { now: NOW, size: 5 });
+    expect(cards.map((c) => c.sentence.id)).not.toContain(S.student.id);
   });
 });

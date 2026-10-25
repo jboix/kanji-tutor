@@ -9,7 +9,6 @@ import { describeKanjiPrompt } from './describe-kanji.ts';
 import { explainMistakePrompt } from './explain-mistake.ts';
 import { explainSentencePrompt } from './explain-sentence.ts';
 import { explainWordPrompt } from './explain-word.ts';
-import { extractFromImagePrompt } from './extract-from-image.ts';
 import { followUpPrompt } from './follow-up.ts';
 import { generateSentencesPrompt } from './generate-sentences.ts';
 import { memoryHookPrompt } from './memory-hook.ts';
@@ -66,7 +65,6 @@ const BUILT: [string, Prompt<never>, unknown][] = [
       sentence: '日本語が嫌いわけではない。',
     },
   ],
-  ['extractFromImage', extractFromImagePrompt, { image: MEDIA }],
   ['analysePage', analysePagePrompt, { image: MEDIA, page: 2, pages: 3 }],
   ['transcribeReading', transcribeReadingPrompt, { audio: MEDIA }],
   [

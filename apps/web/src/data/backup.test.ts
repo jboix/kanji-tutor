@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import type { Capture, Item, Review, Sentence } from '../domain/types.ts';
+import type { ScannedLesson } from '../domain/scan-types.ts';
+import type { Item, Review, Sentence } from '../domain/types.ts';
 import { exportBackup, importBackup, parseBackup } from './backup.ts';
 import { KanjiTutorDb } from './db.ts';
 import { createDexieRepos } from './repos.ts';
@@ -42,14 +43,49 @@ const sentence = (id: string, kind: Sentence['source']): Sentence => ({
   wordIds: ['1'],
   verified: true,
 });
-const capture: Capture = {
-  id: 'cap-1',
+const photo = () => new Blob([new Uint8Array([1, 2, 3, 250])], { type: 'image/jpeg' });
+const scan: ScannedLesson = {
+  id: 'scan-1',
   createdAt: 3,
-  photo: new Blob([new Uint8Array([1, 2, 3, 250])], { type: 'image/jpeg' }),
-  lines: ['日本には方言がある。'],
+  updatedAt: 4,
+  title: 'Weather and plans',
+  suggestedTitle: 'Weather',
   week: '2026-W42',
-  addedItemIds: ['word:1358280'],
-  sentenceIds: ['cap-1:0'],
+  pages: [
+    {
+      photo: photo(),
+      kind: 'handout',
+      read: true,
+      lines: [{ text: '雨が降り＿＿です。', verified: false, sentenceId: 'c1' }],
+    },
+    { kind: 'reading', lines: [] },
+  ],
+  items: [
+    { kind: 'kanji', text: '雨', ref: '雨', page: 0, from: 'tutor' },
+    {
+      kind: 'word',
+      text: '雪見日和',
+      page: 0,
+      from: 'tutor',
+      meaning: 'a fine day for viewing snow',
+      reading: { surface: '雪見日和', reading: 'ゆきみびより', verified: false },
+    },
+  ],
+  questions: [
+    {
+      id: '0-1',
+      page: 0,
+      type: 'choose-form',
+      stem: '雨が降り＿＿です。',
+      choices: ['そう', 'よう'],
+      answer: 'そう',
+      answerVerified: true,
+      explanation: 'そう joins the ます stem.',
+      readings: [],
+      practises: ['kanji:雨'],
+    },
+  ],
+  practised: { 'kanji:雨': 9 },
 };
 
 let db: KanjiTutorDb;
@@ -62,7 +98,7 @@ beforeEach(async () => {
   await repos.items.put(item);
   await repos.reviews.add({ ...review });
   await repos.sentences.putMany([sentence('t1', 'tatoeba'), sentence('c1', 'capture')]);
-  await repos.captures.put(capture);
+  await repos.scans.put(scan);
   await repos.settings.patch({ apiKey: 'secret-key', currentLesson: 'Tobira 第4課' });
 });
 
@@ -83,10 +119,17 @@ describe('backup (K7)', () => {
     expect(await repos.items.get('word:1358280')).toEqual(item);
     expect((await repos.reviews.all()).map(({ id: _id, ...rest }) => rest)).toEqual([review]);
     expect((await repos.sentences.all()).map((row) => row.id)).toEqual(['c1']);
-    const restored = await repos.captures.get('cap-1');
-    expect(new Uint8Array(await restored!.photo!.arrayBuffer())).toEqual(
+    const restored = await repos.scans.get('scan-1');
+    const { pages, ...rest } = restored ?? scan;
+    const { pages: _pages, ...expected } = scan;
+    expect(rest).toEqual(expected);
+    expect(pages.map(({ photo: _photo, ...page }) => page)).toEqual(
+      scan.pages.map(({ photo: _photo, ...page }) => page),
+    );
+    expect(new Uint8Array(await pages[0]!.photo!.arrayBuffer())).toEqual(
       new Uint8Array([1, 2, 3, 250]),
     );
+    expect(pages[1]?.photo).toBeUndefined();
     expect((await repos.settings.get()).currentLesson).toBe('Tobira 第4課');
     await fresh.delete();
   });
@@ -126,6 +169,40 @@ describe('backup (K7)', () => {
     const fresh = new KanjiTutorDb(`backup-old-${name}`);
     await importBackup(fresh, old.backup);
     expect(await createDexieRepos(fresh).items.get('word:1358280')).toEqual(item);
+    await fresh.delete();
+  });
+
+  it('imports the captures of a file made before scanned lessons as lessons of one page', async () => {
+    const backup = JSON.parse(JSON.stringify(await exportBackup(db)));
+    const { scans: _scans, ...data } = backup.data;
+    const capture = {
+      id: 'cap-1',
+      createdAt: 3,
+      photo: 'data:image/jpeg;base64,AQID+g==',
+      lines: ['日本には方言がある。'],
+      week: '2026-W42',
+      addedItemIds: ['word:1358280'],
+      sentenceIds: ['c1'],
+    };
+    const old = parseBackup({ ...backup, data: { ...data, captures: [capture] } });
+    if (!old.ok) throw new Error(old.error);
+    const fresh = new KanjiTutorDb(`backup-captures-${name}`);
+    await importBackup(fresh, old.backup);
+    const lesson = await createDexieRepos(fresh).scans.get('cap-1');
+    expect(lesson).toMatchObject({
+      title: '日本には方言がある',
+      unmatched: true,
+      addedItemIds: ['word:1358280'],
+      pages: [
+        {
+          kind: 'mixed',
+          lines: [{ text: '日本には方言がある。', verified: true, sentenceId: 'c1' }],
+        },
+      ],
+    });
+    expect(new Uint8Array(await lesson!.pages[0]!.photo!.arrayBuffer())).toEqual(
+      new Uint8Array([1, 2, 3, 250]),
+    );
     await fresh.delete();
   });
 
