@@ -27,7 +27,7 @@ export interface ScanAnswerBase {
   durationMs: number;
   now: number;
   /** "I don't know" (L4): the answer is shown and graded as a skip. */
-  skipped?: boolean;
+  skipped?: boolean | undefined;
 }
 
 function scanSource(lessonId: string, now: number): Source {

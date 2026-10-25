@@ -16,7 +16,8 @@ export interface Answered {
 
 /** A finished drill or question: right when every answer in it was right. */
 export interface DrillResult {
-  kind: DrillKind | QuestionKind;
+  /** The drill or question kind, or a scanned lesson's handout question. */
+  kind: DrillKind | QuestionKind | 'handout';
   right: boolean;
   /** The index of its card (the end's missed list and retry). */
   card?: number;

@@ -4,6 +4,8 @@ import type { Repos } from '../../domain/repos.ts';
 import {
   type BuildSessionOptions,
   buildSession,
+  countScanCard,
+  prepareScanCard,
   recordAnswer,
   type SessionFocus,
 } from '../../domain/services/index.ts';
@@ -52,11 +54,15 @@ export interface SessionRequest {
   /** With `unit`: one section of the unit lesson (`&section=words`, S3) and its part. */
   section?: LessonSection | undefined;
   part?: number | undefined;
+  /** Practise a scanned lesson (`?scan=…`), apart from the daily mix. */
+  scan?: string | undefined;
 }
 
 /** The session builder's options for a request: kanji cards, or a session's focus and mix. */
-const sessionOptions = (request: SessionRequest): Omit<BuildSessionOptions, 'now'> =>
-  request.kanjiCards ? { kanjiCards: true } : mixOptions(request);
+function sessionOptions(request: SessionRequest): Omit<BuildSessionOptions, 'now'> {
+  if (request.scan) return { scan: request.scan };
+  return request.kanjiCards ? { kanjiCards: true } : mixOptions(request);
+}
 
 /** The options of a reading session: its focus, a forced mix, a unit or a grammar point. */
 function mixOptions(request: SessionRequest): Omit<BuildSessionOptions, 'now'> {
@@ -148,9 +154,35 @@ function useRecord(state: SessionState, dispatch: Dispatch<SessionAction>) {
       const grade = await recordAnswer(repos, input).finally(() => {
         busy.current = false;
       });
+      void countScanCard(repos, now.card, grade.verdict === 'correct', at);
       dispatch({ type: 'answered', answered: { target: now.target, answer, mode, grade } });
     },
     [repos, state, dispatch],
+  );
+}
+
+/**
+ * A scanned lesson's card: what it practises is tracked from the lesson as it shows, so the
+ * answer reviews those items and the daily sessions never take them as new.
+ */
+function usePrepareScan(state: SessionState) {
+  const { repos } = useServices();
+  const card = state.cards?.[state.index];
+  useEffect(() => {
+    if (card?.scan) void prepareScanCard(repos, card, Date.now());
+  }, [repos, card]);
+}
+
+/** Ends a drill card with its result; a scanned lesson's card counts in its progress when right. */
+function useFinishDrill(state: SessionState, dispatch: Dispatch<SessionAction>) {
+  const { repos } = useServices();
+  const card = state.cards?.[state.index];
+  return useCallback(
+    (result: DrillResult) => {
+      if (card) void countScanCard(repos, card, result.right, Date.now());
+      dispatch({ type: 'drilled', result, at: Date.now() });
+    },
+    [repos, card, dispatch],
   );
 }
 
@@ -165,6 +197,7 @@ export function useSession(request: SessionRequest = {}): SessionControls {
   const { key, handoff } = useSessionKey(request);
   useLoad(dispatch, key, handoff);
   useSaved(state, key);
+  usePrepareScan(state);
   const record = useRecord(state, dispatch);
   const submit = useCallback(
     (answer: string, mode: AnswerMode, durationMs?: number) =>
@@ -176,10 +209,7 @@ export function useSession(request: SessionRequest = {}): SessionControls {
     [record],
   );
   const next = useCallback(() => dispatch({ type: 'next', at: Date.now() }), []);
-  const finishDrill = useCallback(
-    (result: DrillResult) => dispatch({ type: 'drilled', result, at: Date.now() }),
-    [],
-  );
+  const finishDrill = useFinishDrill(state, dispatch);
   const finishIntro = useCallback(() => dispatch({ type: 'introduced', at: Date.now() }), []);
   return { state, submit, skip, next, finishDrill, finishIntro };
 }

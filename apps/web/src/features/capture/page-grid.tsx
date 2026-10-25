@@ -1,27 +1,10 @@
 /** The pages of a new scan as thumbnails, each removable, and the tile that adds one. */
-import { type RefObject, useEffect, useRef, useState } from 'react';
+import { type RefObject, useRef } from 'react';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { CameraIcon, CloseIcon, PlusIcon } from '../../ui/icons.tsx';
+import { useObjectUrl } from '../../ui/photo-sheet.tsx';
 import styles from './capture.module.css';
 import type { ImportPage } from './read-pages.ts';
-
-/** A blob as an object URL, revoked when it changes or the component unmounts. */
-export function useObjectUrl(blob: Blob | undefined): string | undefined {
-  const [url, setUrl] = useState<string>();
-  useEffect(() => {
-    if (!blob || typeof URL.createObjectURL !== 'function') return;
-    let next: string;
-    try {
-      next = URL.createObjectURL(blob);
-    } catch {
-      // A blob this browser cannot show: the page keeps its text placeholder.
-      return;
-    }
-    setUrl(next);
-    return () => URL.revokeObjectURL(next);
-  }, [blob]);
-  return url;
-}
 
 /** A page's picture: the photo, or the first lines of pasted text. */
 export function PageThumb(props: { photo?: Blob | undefined; text?: string; label: string }) {

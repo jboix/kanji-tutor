@@ -25,6 +25,7 @@ import { useSlot } from '../../ui/slots.tsx';
 import { TopBar } from '../../ui/top-bar.tsx';
 import { DrillScreen } from './drill-screen.tsx';
 import { GrammarIntroScreen } from './grammar-intro-screen.tsx';
+import { HandoutScreen } from './handout-screen.tsx';
 import { NewChips } from './new-chips.tsx';
 import { QuestionCardScreen } from './question-screen.tsx';
 import styles from './read.module.css';
@@ -55,9 +56,16 @@ function sectionOf(params: URLSearchParams): { section?: LessonSection; part?: n
  * `/read?unit=vending-machine` practises a unit (T3); `&passage=1` asks its passage questions.
  * `/read?grammar=te-mo-ii` practises one grammar point (the grammar page's "Practise this").
  * `/read?unit=…&section=grammar&part=1` is one part of a unit lesson's section (S3).
+ * `/read?scan=<id>` practises a scanned lesson, apart from the daily mix.
  */
 function useRequest(): SessionRequest {
   const [params] = useSearchParams();
+  const scan = params.get('scan');
+  return scan ? { scan } : mixRequest(params);
+}
+
+/** Every request but a scanned lesson's (see `useRequest`). */
+function mixRequest(params: URLSearchParams): SessionRequest {
   const kanji = params.get('kanji');
   const reading = params.get('reading');
   const unit = params.get('unit');
@@ -216,6 +224,7 @@ function exerciseScreen(card: SessionCard, topBar: ReactNode, controls: SessionC
     const id = card.grammarIntro;
     return <GrammarIntroScreen grammarId={id} topBar={topBar} onDone={controls.finishIntro} />;
   }
+  if (card.handout) return <HandoutScreen card={card} topBar={topBar} onDone={onDone} />;
   if (card.question || card.passage) {
     return <QuestionCardScreen card={card} topBar={topBar} onDone={onDone} />;
   }
@@ -301,6 +310,7 @@ function RequestedSession({ request }: { request: SessionRequest }) {
         results={results}
         drills={drills}
         unit={request.unit}
+        scan={request.scan}
         lesson={lessonPart(request)}
         again={againPlan(request)}
       />

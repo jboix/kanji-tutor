@@ -48,6 +48,8 @@ export interface SessionEndProps {
   startedAt?: number | undefined;
   /** The unit practised, for a way back to it (T3). */
   unit?: string | undefined;
+  /** The scanned lesson practised, for a way back to it. */
+  scan?: string | undefined;
   /** The lesson part the session was (S3): it is marked done, and the next one offered. */
   lesson?: LessonPart | undefined;
   /** What "Next session" starts. */
@@ -207,7 +209,7 @@ function timeline(newShown: boolean) {
  * gamification); Today is one tap away in the bottom bar.
  */
 export function SessionEnd(props: SessionEndProps) {
-  const { cards, results, drills = [], startedAt, unit, lesson, again } = props;
+  const { cards, results, drills = [], startedAt, unit, scan, lesson, again } = props;
   const tally = useMemo(() => ({ cards, results, drills }), [cards, results, drills]);
   const missed = useMemo(() => missedOf(tally), [tally]);
   const met = useMet(tally, startedAt);
@@ -223,6 +225,7 @@ export function SessionEnd(props: SessionEndProps) {
       {met && <NewToday shown={shown} rest={rest} at={at.news} />}
       {met && <LookAgain missed={missed} at={at.again} />}
       {unit && <BackToUnit unit={unit} />}
+      {scan && <BackToLesson scan={scan} />}
     </Screen>
   );
 }
@@ -233,6 +236,16 @@ function BackToUnit({ unit }: { unit: string }) {
   return (
     <PillLink to={paths.unit(unit)} variant="secondary">
       {t('read.backToUnit')}
+    </PillLink>
+  );
+}
+
+/** A scanned lesson's practice goes back to its lesson page. */
+function BackToLesson({ scan }: { scan: string }) {
+  const t = useT();
+  return (
+    <PillLink to={`${paths.capture}?id=${encodeURIComponent(scan)}`} variant="secondary">
+      {t('read.backToLesson')}
     </PillLink>
   );
 }

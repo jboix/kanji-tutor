@@ -1,0 +1,21 @@
+/* A photographed page, as large as the sheet allows. */
+.body {
+  padding: 0 var(--gutter) 24px;
+}
+
+.photo {
+  display: block;
+  width: 100%;
+  max-height: 78vh;
+  object-fit: contain;
+  border-radius: 12px;
+  background: var(--paper-raised);
+}
+
+.text {
+  margin: 0;
+  font-family: var(--font-ja);
+  font-size: var(--text-lg);
+  line-height: 1.9;
+  white-space: pre-line;
+}
