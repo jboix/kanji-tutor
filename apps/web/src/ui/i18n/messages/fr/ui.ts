@@ -157,5 +157,6 @@ export const ui = {
   practisedOf: '{done} sur {total} travaillés',
   notStarted: 'Pas commencé',
   progressOf: 'Progression : {line}',
+  partOf: '{done} sur {total}',
   percent: '{n} %',
 } satisfies Messages['ui'];

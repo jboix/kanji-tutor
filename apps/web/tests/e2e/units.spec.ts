@@ -65,7 +65,7 @@ test('from zero: the first unit, practised and read, then in progress', async ({
   const sections = page.getByRole('region', { name: 'Sections' });
 
   // 練習: a few cards, none above N5.
-  await sections.getByRole('button', { name: /3 · 練習/ }).click();
+  await sections.getByRole('button', { name: /^練習/ }).click();
   await expect(page).toHaveURL(/\/read\?unit=i-am-a-student&section=practice&part=1$/);
   const levels = await playCards(page, 4);
   expect(levels.length).toBeGreaterThan(0);
@@ -73,7 +73,7 @@ test('from zero: the first unit, practised and read, then in progress', async ({
 
   // 読み物: the passage, then a comprehension question with the line that proves it.
   await page.goto('/units/i-am-a-student');
-  await sections.getByRole('button', { name: /4 · 読み物/ }).click();
+  await sections.getByRole('button', { name: /^読み物/ }).click();
   await expect(page.getByRole('region', { name: 'Passage' })).toContainText('わたしはアンナです');
   await page.getByRole('button', { name: /Answer the questions/ }).click();
   await expect(card(page)).toHaveAttribute('data-card', 'passage');

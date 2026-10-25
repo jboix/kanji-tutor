@@ -1,146 +1,58 @@
 import { useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 import { localGrammar, localUnit } from '../../domain/content-language.ts';
 import {
   LESSON_SECTIONS,
-  type LessonSection,
+  lastPractised,
   markUnitDone,
-  nextPart,
-  SECTION_TITLES,
-  type SectionProgress,
-  sectionDone,
-  sectionShare,
   sectionsDone,
   type UnitView,
-  unitShare,
+  unitPractised,
 } from '../../domain/services/index.ts';
 import { unitGrammar } from '../../domain/themes/index.ts';
 import { BackButton } from '../../ui/back-button.tsx';
 import { EnMark } from '../../ui/en-mark.tsx';
 import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
-import type { PlainKey, Translate } from '../../ui/i18n/types.ts';
-import { CheckIcon } from '../../ui/icons.tsx';
 import { Ja } from '../../ui/ja.tsx';
-import { SECTION_NAME } from '../../ui/lesson-sections.ts';
-import { ListRow } from '../../ui/list-row.tsx';
 import { paths } from '../../ui/paths.ts';
 import { PillButton } from '../../ui/pill-button.tsx';
-import { ProgressLine } from '../../ui/progress-line.tsx';
+import { PractisedProgress } from '../../ui/practised-progress.tsx';
 import { Screen } from '../../ui/screen.tsx';
 import { SectionHeader } from '../../ui/section-label.tsx';
 import { useServices } from '../../ui/services.tsx';
 import { TopBar } from '../../ui/top-bar.tsx';
 import { useContentLanguage } from '../../ui/use-content-language.ts';
 import { TapText } from '../../ui/word-tap.tsx';
+import { UnitFooter } from './unit-footer.tsx';
+import { type Mode, UnitParts } from './unit-parts.tsx';
 import { UnitRead } from './unit-read.tsx';
 import styles from './units.module.css';
-import { progressLine, stateLine } from './units-copy.ts';
+import { holdsLine, progressLine } from './units-copy.ts';
 import { useUnit } from './use-units.ts';
 
-type Mode = 'overview' | 'read';
-
-const DETAIL: Readonly<Record<LessonSection, PlainKey>> = {
-  words: 'units.detailWords',
-  grammar: 'units.detailGrammar',
-  practice: 'units.detailPractice',
-  reading: 'units.detailReading',
-  review: 'units.detailReview',
-};
-
-/** "Part 1 of 2 done", or what the section holds when it is not started; a done one has none. */
-function sectionDetail(t: Translate, section: LessonSection, progress?: SectionProgress) {
-  if (sectionDone(progress)) return undefined;
-  if (progress && progress.done > 0) {
-    return t('units.sectionParts', { done: progress.done, parts: progress.parts });
-  }
-  return t(DETAIL[section]);
-}
-
-interface SectionRowProps {
-  view: UnitView;
-  section: LessonSection;
-  n: number;
-  onMode: (mode: Mode) => void;
-}
-
-/** One section of the lesson (S3): its Japanese title and name, and where it is. */
-function SectionRow({ view, section, n, onMode }: SectionRowProps) {
-  const { t, rich } = useI18n();
-  const title = <Ja>{SECTION_TITLES[section]}</Ja>;
-  const navigate = useNavigate();
-  const progress = view.progress.sections?.[section];
-  const done = sectionDone(progress);
-  const open = () => {
-    if (section === 'reading') onMode('read');
-    else void navigate(paths.lessonPart(view.unit.id, section, nextPart(progress)));
-  };
-  return (
-    <div
-      className={styles.step}
-      data-section={section}
-      aria-current={view.step === section ? 'step' : undefined}
-    >
-      <ListRow onClick={open} detail={sectionDetail(t, section, progress)}>
-        <span className={styles.sectionLine}>
-          {rich('units.sectionRow', { n, title, name: t(SECTION_NAME[section]) })}
-          {done && (
-            <span className={styles.sectionCheck}>
-              <CheckIcon />
-              <span className="visually-hidden">{t('units.sectionDone')}</span>
-            </span>
-          )}
-        </span>
-      </ListRow>
-    </div>
-  );
-}
-
-/** The lesson's sections in textbook order (S3); without the unit in the packs, 読み物 only. */
-function Sections({ view, onMode }: { view: UnitView; onMode: (mode: Mode) => void }) {
-  const t = useT();
-  const shown = view.pack ? LESSON_SECTIONS : (['reading'] as const);
-  return (
-    <section className={styles.section} aria-label={t('units.steps')}>
-      <SectionHeader title={t('units.steps')} meta={stateLine(t, view)} />
-      {shown.map((section) => (
-        <SectionRow
-          key={section}
-          view={view}
-          section={section}
-          n={LESSON_SECTIONS.indexOf(section) + 1}
-          onMode={onMode}
-        />
-      ))}
-    </section>
-  );
-}
-
 /**
- * The lesson's sections done, as the bar shows them, then the words and grammar known (T7).
- * Without the unit in the packs there are no sections, so the bar shows what is known.
+ * The unit's items practised, as the line shows them, with when it was last practised; under it
+ * the sections done and the words and grammar known (T7).
  */
 function Progress({ view }: { view: UnitView }) {
-  const t = useT();
+  const { t, format } = useI18n();
+  const at = lastPractised(view);
+  const date = at === undefined ? undefined : format.date(at, { day: 'numeric', month: 'short' });
   const known = progressLine(t, view);
-  if (!view.pack) {
-    return (
-      <div className={styles.rowDetail}>
-        <p className={styles.muted}>{known}</p>
-        <ProgressLine value={unitShare(view)} label={t('units.unitProgress', { line: known })} />
-      </div>
-    );
-  }
   const sections = t('units.sectionsOf', {
     done: sectionsDone(view),
     total: LESSON_SECTIONS.length,
   });
   return (
-    <div className={styles.rowDetail}>
-      <p className={styles.muted}>{t('units.withSections', { sections, line: known })}</p>
-      <ProgressLine
-        value={sectionShare(view)}
-        label={t('units.unitProgress', { line: sections })}
+    <div className={styles.progress}>
+      <PractisedProgress
+        layout="stacked"
+        {...unitPractised(view)}
+        aside={date && t('units.lastPractised', { date })}
       />
+      <p className={styles.muted}>
+        {view.pack ? t('units.withSections', { sections, line: known }) : known}
+      </p>
     </div>
   );
 }
@@ -201,6 +113,29 @@ function ReviewActions({ view, onChange }: { view: UnitView; onChange: () => voi
   );
 }
 
+/** The unit's title, what it is about and holds, and its progress (Lesson page). */
+function Header({ view, english }: { view: UnitView; english: boolean }) {
+  const t = useT();
+  const { unit } = view;
+  const order = t('units.unitOrder', { level: unit.level, order: unit.order });
+  return (
+    <header className={styles.header}>
+      <div className={styles.titles}>
+        <h1 lang="ja" className={styles.titleJa}>
+          {unit.titleJa}
+        </h1>
+        <p className={styles.text}>
+          {unit.theme}
+          <EnMark english={english} />
+        </p>
+        <p className={styles.muted}>{`${order} · ${holdsLine(t, view)}`}</p>
+      </div>
+      <p className={styles.muted}>{unit.summary}</p>
+      <Progress view={view} />
+    </header>
+  );
+}
+
 interface OverviewProps {
   view: UnitView;
   /** The unit's texts are in English: none in the learner's language (N9). */
@@ -209,29 +144,14 @@ interface OverviewProps {
   onChange: () => void;
 }
 
-function Overview(props: OverviewProps) {
-  const t = useT();
-  const { view } = props;
-  const { unit } = view;
+function Overview({ view, english, onMode, onChange }: OverviewProps) {
   return (
     <>
-      <header className={styles.section}>
-        <p className={styles.muted}>
-          {t('units.unitOrder', { level: unit.level, order: unit.order })}
-        </p>
-        <h1 lang="ja" className={styles.titleJa}>
-          {unit.titleJa}
-        </h1>
-        <p className={styles.text}>
-          {unit.theme}
-          <EnMark english={props.english} />
-        </p>
-        <p className={styles.muted}>{unit.summary}</p>
-        <Progress view={view} />
-      </header>
-      <Sections view={view} onMode={props.onMode} />
-      <ReviewActions view={view} onChange={props.onChange} />
+      <Header view={view} english={english} />
+      <UnitParts view={view} onMode={onMode} />
+      <ReviewActions view={view} onChange={onChange} />
       <Contents view={view} />
+      <UnitFooter view={view} onMode={onMode} />
     </>
   );
 }
@@ -249,7 +169,7 @@ function Body(props: {
   return <Overview view={view} english={local.english} onMode={setMode} onChange={reload} />;
 }
 
-/** One thematic unit (T3): its theme, counts and steps, at /units/:id. */
+/** One thematic unit (T3) as a lesson page: its progress, its sections, the tutor, at /units/:id. */
 export function UnitScreen() {
   const t = useT();
   const { id = '' } = useParams();

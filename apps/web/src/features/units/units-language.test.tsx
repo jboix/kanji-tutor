@@ -51,7 +51,7 @@ describe('units in the learner’s language (N9)', { timeout: 30_000 }, () => {
     await openUnit('es', 'self-introduction');
     const text = ES_UNITS['self-introduction'];
     expect(await screen.findByText(text?.summary ?? '')).toBeTruthy();
-    await userEvent.click(screen.getByRole('button', { name: /4 · 読み物/ }));
+    await userEvent.click(screen.getByRole('button', { name: /^読み物/ }));
     const passage = await screen.findByRole('region', { name: 'Passage' });
     await userEvent.click(screen.getByRole('button', { name: 'Show the English' }));
     expect(passage.textContent).toContain(text?.sentences[1]);

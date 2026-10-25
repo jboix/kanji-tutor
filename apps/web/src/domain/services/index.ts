@@ -109,6 +109,7 @@ export {
   LESSON_SECTIONS,
   type LessonSection,
   nextPart,
+  PART_SECONDS,
   SECTION_TITLES,
   type SectionProgress,
   sectionDone,
@@ -164,12 +165,11 @@ export {
 } from './summary.ts';
 export {
   type LevelUnits,
+  lastPractised,
   levelUnits,
   type Practised,
-  sectionShare,
   sectionsDone,
   unitPractised,
-  unitShare,
 } from './unit-progress.ts';
 export {
   finishLessonPart,

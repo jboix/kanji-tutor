@@ -1,30 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import type { UnitView } from './unit-path.ts';
-import {
-  levelUnits,
-  sectionShare,
-  sectionsDone,
-  unitPractised,
-  unitShare,
-} from './unit-progress.ts';
+import { lastPractised, levelUnits, sectionsDone, unitPractised } from './unit-progress.ts';
 
 const counts = (known: number, total: number, reviewed: number, points: number) => ({
   words: { known, met: known, total },
   grammar: { reviewed, total: points },
 });
 
-describe('unitShare (T7)', () => {
-  it('counts known words and right grammar points together', () => {
-    expect(unitShare({ ...counts(6, 13, 1, 3), state: 'open' })).toBeCloseTo(7 / 16);
-  });
-
-  it('is 1 for a done unit and 0 for an empty one', () => {
-    expect(unitShare({ ...counts(2, 13, 0, 3), state: 'done' })).toBe(1);
-    expect(unitShare({ ...counts(0, 0, 0, 0), state: 'not-started' })).toBe(0);
-  });
-});
-
-describe('sectionShare and sectionsDone', () => {
+describe('sectionsDone', () => {
   const sections = {
     words: { parts: 2, done: 2 },
     grammar: { parts: 1, done: 1 },
@@ -34,14 +17,9 @@ describe('sectionShare and sectionsDone', () => {
   };
   const progress = { sections } as unknown as UnitView['progress'];
 
-  it('counts the sections done, with a started one in part', () => {
+  it('counts the sections with all their parts done', () => {
     expect(sectionsDone({ progress })).toBe(4);
-    expect(sectionShare({ progress, state: 'current' })).toBeCloseTo(4.5 / 5);
-  });
-
-  it('is 1 for a done unit and 0 before any section', () => {
-    expect(sectionShare({ progress, state: 'done' })).toBe(1);
-    expect(sectionShare({ progress: {} as UnitView['progress'], state: 'open' })).toBe(0);
+    expect(sectionsDone({ progress: {} as UnitView['progress'] })).toBe(0);
   });
 });
 
@@ -60,7 +38,7 @@ describe('levelUnits (T4, T7)', () => {
   });
 });
 
-describe('unitPractised', () => {
+describe('unitPractised and lastPractised', () => {
   const none = {} as UnitView['progress'];
 
   it('counts words met and grammar reviewed right, not started before any', () => {
@@ -68,7 +46,11 @@ describe('unitPractised', () => {
     const grammar = { reviewed: 1, total: 3 };
     expect(
       unitPractised({ words, grammar, state: 'open', skipped: false, progress: none }),
-    ).toEqual({ done: 6, total: 16, started: true });
+    ).toEqual({
+      done: 6,
+      total: 16,
+      started: true,
+    });
     const fresh = {
       ...counts(0, 13, 0, 3),
       state: 'current' as const,
@@ -88,5 +70,14 @@ describe('unitPractised', () => {
       total: 16,
       started: true,
     });
+  });
+
+  it('takes the latest part or passage read', () => {
+    expect(lastPractised({ progress: none })).toBeUndefined();
+    const progress = {
+      readAt: 5,
+      sections: { words: { parts: 2, done: 1, at: 9 }, grammar: { parts: 1, done: 0 } },
+    } as UnitView['progress'];
+    expect(lastPractised({ progress })).toBe(9);
   });
 });

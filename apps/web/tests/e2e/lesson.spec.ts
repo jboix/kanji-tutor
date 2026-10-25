@@ -17,11 +17,11 @@ test('a unit lesson, section by section, then every section done', async ({ page
   await page.goto('/units/i-am-a-student');
   const rows = sections(page).getByRole('button');
   await expect(rows).toHaveText([
-    /^1 · 言葉 · Words/,
-    /^2 · 文法 · Grammar/,
-    /^3 · 練習 · Practice/,
-    /^4 · 読み物 · Reading/,
-    /^5 · まとめ · Wrap-up/,
+    /^言葉 · Words/,
+    /^文法 · Grammar/,
+    /^練習 · Practice/,
+    /^読み物 · Reading/,
+    /^まとめ · Wrap-up/,
   ]);
   await expect(sections(page).locator('[aria-current="step"]')).toHaveAttribute(
     'data-section',
@@ -65,16 +65,12 @@ test('a section resumes where it was left', async ({ page }) => {
   test.setTimeout(120_000);
   await onboard(page);
   await page.goto('/units/i-am-a-student');
-  await sections(page)
-    .getByRole('button', { name: /2 · 文法/ })
-    .click();
+  await sections(page).getByRole('button', { name: /^文法/ }).click();
   await expect(card(page)).toHaveAttribute('data-card', 'grammar-intro');
   await passIntro(page);
   const second = await card(page).getAttribute('data-card');
   await page.goto('/units/i-am-a-student');
-  await sections(page)
-    .getByRole('button', { name: /2 · 文法/ })
-    .click();
+  await sections(page).getByRole('button', { name: /^文法/ }).click();
   await expect(card(page)).toHaveAttribute('data-card', second ?? '');
 });
 

@@ -148,4 +148,5 @@ export const ui = {
   practisedOf: '{done} of {total} practised',
   notStarted: 'Not started',
   progressOf: 'Progress: {line}',
+  partOf: '{done} of {total}',
 } as const;

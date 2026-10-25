@@ -147,7 +147,7 @@ test('units, grammar, learned, placement and the AI use charts', async ({ page }
     await audit.check(path);
   }
   await page.goto('/units/self-introduction');
-  await page.getByRole('button', { name: /4 · 読み物/ }).click();
+  await page.getByRole('button', { name: /^読み物/ }).click();
   await audit.check('unit passage');
   await page.getByRole('button', { name: /Answer the questions/ }).click();
   await page.getByRole('list', { name: 'Options' }).getByRole('button').first().click();

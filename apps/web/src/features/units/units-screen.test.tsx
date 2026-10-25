@@ -54,25 +54,55 @@ describe('UnitScreen (T3)', { timeout: 30_000 }, () => {
     const repos = await curriculumRepos();
     renderUnit(repos, 'self-introduction');
     expect(await screen.findByRole('heading', { name: 'はじめまして' })).toBeTruthy();
-    expect(screen.getByRole('progressbar', { name: /Progress: 0 of 5 sections/ })).toBeTruthy();
+    expect(screen.getByRole('progressbar', { name: 'Progress: Not started' })).toBeTruthy();
+    expect(
+      screen.getByText(/^0 of 5 sections · 0 of \d+ words known · 0 of \d grammar$/),
+    ).toBeTruthy();
     const sections = screen.getByRole('region', { name: 'Sections' });
     const rows = within(sections).getAllByRole('button');
-    expect(rows.map((row) => row.textContent?.split('·').slice(0, 3).join('·'))).toEqual([
-      '1 · 言葉 · WordsNew words, then quick checks',
-      '2 · 文法 · GrammarEach point explained, then its drills',
-      '3 · 練習 · PracticeMixed exercises from the unit',
-      '4 · 読み物 · ReadingThe passage and its questions',
-      '5 · まとめ · Wrap-upA mixed review of the lesson',
-    ]);
+    const names = [
+      '言葉 · Words',
+      '文法 · Grammar',
+      '練習 · Practice',
+      '読み物 · Reading',
+      'まとめ · Wrap-up',
+    ];
+    expect(rows).toHaveLength(5);
+    for (const [i, name] of names.entries()) {
+      expect(rows[i]?.textContent?.startsWith(name)).toBe(true);
+    }
+    // The parts that teach show a Japanese sample; the mixed ones say what they hold.
+    expect(
+      within(rows[3] as HTMLElement)
+        .getByText(/^はじめまして/)
+        .getAttribute('lang'),
+    ).toBe('ja');
+    expect(rows[2]?.textContent).toBe('練習 · PracticeMixed exercises from the unit');
+    expect(rows[4]?.textContent).toBe('まとめ · Wrap-upA mixed review of the lesson');
     expect(sections.querySelector('[aria-current="step"]')?.getAttribute('data-section')).toBe(
       'words',
     );
     for (const ja of within(sections).getAllByText(/^(言葉|文法|練習|読み物|まとめ)$/)) {
       expect(ja.getAttribute('lang')).toBe('ja');
     }
-    await userEvent.click(within(sections).getByRole('button', { name: /1 · 言葉/ }));
+    await userEvent.click(within(sections).getByRole('button', { name: /^言葉/ }));
     expect((await screen.findByTestId('where')).textContent).toBe(
       '/read?unit=self-introduction&section=words&part=1',
+    );
+  });
+
+  it('starts the lesson from its footer, then continues it where it is', async () => {
+    const repos = await curriculumRepos();
+    await startLessonSection(repos, 'family', 'words', 2, Date.now());
+    await finishLessonPart(repos, 'family', 'words', 2, Date.now());
+    renderUnit(repos, 'family');
+    const action = await screen.findByRole('button', {
+      name: /^Continue the lesson\s?文法 · 5 min$/,
+    });
+    expect(screen.getByText(/^last practised /)).toBeTruthy();
+    await userEvent.click(action);
+    expect((await screen.findByTestId('where')).textContent).toBe(
+      '/read?unit=family&section=grammar&part=1',
     );
   });
 
@@ -81,9 +111,9 @@ describe('UnitScreen (T3)', { timeout: 30_000 }, () => {
     await startLessonSection(repos, 'family', 'words', 2, Date.now());
     await finishLessonPart(repos, 'family', 'words', 1, Date.now());
     renderUnit(repos, 'family');
-    const row = await screen.findByRole('button', { name: /1 · 言葉/ });
-    expect(row.textContent).toContain('Part 1 of 2 done');
-    await userEvent.click(await screen.findByRole('button', { name: /3 · 練習/ }));
+    const row = await screen.findByRole('button', { name: /^言葉/ });
+    expect(row.textContent).toMatch(/1 of 2$/);
+    await userEvent.click(await screen.findByRole('button', { name: /^練習/ }));
     expect((await screen.findByTestId('where')).textContent).toBe(
       '/read?unit=family&section=practice&part=1',
     );
@@ -92,7 +122,7 @@ describe('UnitScreen (T3)', { timeout: 30_000 }, () => {
   it('reads the passage, then goes to its questions', async () => {
     const repos = await curriculumRepos();
     renderUnit(repos, 'self-introduction');
-    await userEvent.click(await screen.findByRole('button', { name: /4 · 読み物/ }));
+    await userEvent.click(await screen.findByRole('button', { name: /^読み物/ }));
     const passage = await screen.findByRole('region', { name: 'Passage' });
     await waitFor(() => expect(passage.textContent).toContain('はじめまして。'));
     await userEvent.click(screen.getByRole('button', { name: 'Show the English' }));
@@ -142,7 +172,7 @@ describe('units in French and Spanish (N7b)', { timeout: 20_000 }, () => {
       { services: fakeServices({ repos }), path: '/units/self-introduction', language: 'es' },
     );
     const steps = await screen.findByRole('region', { name: 'Secciones' });
-    expect(within(steps).getByRole('button', { name: /1 · 言葉 · Vocabulario/ })).toBeTruthy();
+    expect(within(steps).getByRole('button', { name: /^言葉 · Vocabulario/ })).toBeTruthy();
     expect(screen.getByRole('region', { name: 'En esta unidad' })).toBeTruthy();
   });
 });

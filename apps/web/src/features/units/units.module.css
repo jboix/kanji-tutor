@@ -1,16 +1,11 @@
-/* The lesson path (T3, T4): ruled rows and quiet counts in the kit's type and tokens. */
-.title {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 700;
-}
-
+/* The lesson path (T3, T4) as lesson cards, and a unit as a lesson page: plain counts, thin
+   indigo lines, ruled parts. */
 .titleJa {
   margin: 0;
   font-family: var(--font-ja);
-  font-size: 34px;
+  font-size: 30px;
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 .intro,
@@ -59,6 +54,12 @@
 
 .summary::-webkit-details-marker {
   display: none;
+}
+
+.summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 .foldIcon {
@@ -116,41 +117,39 @@
   white-space: nowrap;
 }
 
-/* A unit row's state and counts, with its thin line under them. */
-.rowDetail {
+/* The unit page's top: title, theme and meta, its summary, then its progress. */
+.header {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding-bottom: 4px;
+  gap: 14px;
 }
 
-.steps {
+.titles {
   display: flex;
   flex-direction: column;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  gap: 4px;
 }
 
-.step[aria-current="step"] {
-  font-weight: 600;
-}
-
-/* Each row sits in its own .step, so the rule between rows is drawn here. */
-.step + .step {
-  border-top: 1px solid var(--rule);
-}
-
-.sectionLine {
-  display: inline-flex;
-  align-items: center;
+.progress {
+  display: flex;
+  flex-direction: column;
   gap: 8px;
 }
 
-/* A done section: a check after its name, in place of a "Done" line. */
-.sectionCheck {
+/* The primary pill's label and its quieter section and time, on one line. */
+.pillText {
   display: inline-flex;
-  color: var(--ok);
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 700;
+}
+
+.pillText [data-sub] {
+  font-size: var(--text-sm);
+  font-weight: 400;
 }
 
 .words {
@@ -187,33 +186,8 @@
   color: var(--ink-muted);
 }
 
-.card {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.pattern {
-  margin: 0;
-  font-family: var(--font-ja);
-  font-size: 30px;
-  font-weight: 600;
-}
-
-.example {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
 .link {
   color: var(--accent);
   font-size: var(--text-sm);
   text-underline-offset: 3px;
-}
-
-.summary:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-  border-radius: 2px;
 }

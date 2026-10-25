@@ -16,19 +16,17 @@ test('units: the path, a unit lesson in sections and a part done', async ({ page
   await page.goto('/units/i-am-a-student');
   await expect(sections(page)).toBeVisible();
   await shot(page, 'unit-page', { full: true });
-  await sections(page)
-    .getByRole('button', { name: /1 · 言葉/ })
-    .click();
+  await sections(page).getByRole('button', { name: /^言葉/ }).click();
   await expect(page.locator('[data-card]').first()).toBeVisible({ timeout: 15_000 });
   await shot(page, 'unit-words');
   await playSession(page);
   await expect(page.getByRole('link', { name: /^Next: / })).toBeVisible();
   await shot(page, 'unit-part-done', { full: true });
   await page.goto('/units/i-am-a-student');
-  await expect(sections(page)).toContainText('Part 1 of');
+  await expect(sections(page)).toContainText(/1 of \d/);
   await shot(page, 'unit-page-progress', { full: true });
   await sections(page)
-    .getByRole('button', { name: /4 · 読み物/ })
+    .getByRole('button', { name: /^読み物/ })
     .click();
   await expect(page.getByRole('region', { name: 'Passage' })).toBeVisible();
   await shot(page, 'unit-read', { full: true });
