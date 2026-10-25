@@ -38,6 +38,7 @@ export const answerQuestion = lazyTask('answerQuestion');
 export const followUp = lazyTask('followUp');
 export const correctSentence = lazyTask('correctSentence');
 export const extractFromImage = lazyTask('extractFromImage');
+export const analysePage = lazyTask('analysePage');
 export const transcribeReading = lazyTask('transcribeReading');
 export const weeklyNotes = lazyTask('weeklyNotes');
 export const generateSentences = lazyTask('generateSentences');

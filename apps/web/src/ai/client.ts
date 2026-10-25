@@ -15,6 +15,7 @@ export function createAiClient(getContext: () => Promise<AiContext>): AiClient {
     followUp: bind('followUp'),
     correctSentence: bind('correctSentence'),
     extractFromImage: bind('extractFromImage'),
+    analysePage: bind('analysePage'),
     transcribeReading: bind('transcribeReading'),
     weeklyNotes: bind('weeklyNotes'),
     generateSentences: bind('generateSentences'),

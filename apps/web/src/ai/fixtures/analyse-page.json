@@ -1,0 +1,245 @@
+{
+  "fixtures": [
+    {
+      "match": "Page 1 of",
+      "inputTokens": 1480,
+      "outputTokens": 410,
+      "response": {
+        "kind": "kanji-list",
+        "title": "Weather and plans",
+        "lines": [
+          { "text": "雨　あめ　ウ", "unsure": false },
+          { "text": "晴　は（れる）　セイ", "unsure": false },
+          { "text": "雪　ゆき　セツ", "unsure": false },
+          { "text": "曇　くも（る）　ドン", "unsure": true },
+          { "text": "風　かぜ　フウ", "unsure": false },
+          { "text": "明日の天気予報は晴れです。", "unsure": false },
+          { "text": "雪見日和の週末になりそうです。", "unsure": false }
+        ],
+        "kanji": [
+          { "char": "雨", "meaning": "rain" },
+          { "char": "晴", "meaning": "clear up" },
+          { "char": "雪", "meaning": "snow" },
+          { "char": "曇", "meaning": "cloudy" },
+          { "char": "風", "meaning": "wind" }
+        ],
+        "words": [
+          { "written": "天気予報", "reading": "てんきよほう", "meaning": "weather forecast" },
+          { "written": "晴れ", "reading": "はれ", "meaning": "clear weather" },
+          { "written": "曇り", "reading": "くもり", "meaning": "cloudy weather" },
+          { "written": "台風", "reading": "たいふう", "meaning": "typhoon" },
+          {
+            "written": "雪見日和",
+            "reading": "ゆきみびより",
+            "meaning": "a fine day for viewing snow"
+          }
+        ],
+        "grammar": [],
+        "questions": [],
+        "readings": [
+          { "surface": "雨", "reading": "あめ" },
+          { "surface": "雪", "reading": "ゆき" },
+          { "surface": "風", "reading": "かぜ" }
+        ]
+      }
+    },
+    {
+      "match": "Page 2 of",
+      "inputTokens": 1460,
+      "outputTokens": 260,
+      "response": {
+        "kind": "grammar",
+        "title": "Looks like rain: 〜そうだ",
+        "lines": [
+          { "text": "〜そうだ（様子）", "unsure": false },
+          { "text": "雨が降りそうです。", "unsure": false },
+          { "text": "このケーキはおいしそうです。", "unsure": false },
+          { "text": "空が暗くて、雪が降りそうだ。", "unsure": false },
+          { "text": "明日は晴れるでしょう。", "unsure": false }
+        ],
+        "kanji": [],
+        "words": [],
+        "grammar": [
+          { "pattern": "〜そうだ", "meaning": "looks like, seems about to" },
+          { "pattern": "〜でしょう", "meaning": "probably, I think" }
+        ],
+        "questions": [],
+        "readings": [{ "surface": "降り", "reading": "ふり" }]
+      }
+    },
+    {
+      "match": "Page 3 of",
+      "inputTokens": 1510,
+      "outputTokens": 640,
+      "response": {
+        "kind": "handout",
+        "title": "Weather exercises",
+        "lines": [
+          { "text": "正しいものを選びなさい。", "unsure": false },
+          { "text": "１．空が暗いですね。雨が降り＿＿です。", "unsure": false },
+          { "text": "２．このりんごはおいし＿＿ですね。", "unsure": false },
+          { "text": "３．駅＿＿友達を待ちます。", "unsure": false },
+          { "text": "４．雪＿＿降っています。", "unsure": false },
+          { "text": "５．明日の天気予報を見ましたか。", "unsure": false },
+          { "text": "６．あしたは＿＿でしょう。（はれ）", "unsure": false },
+          { "text": "７．［降り／雨が／そうです］", "unsure": false },
+          { "text": "８．週末の天気について、一文を書きなさい。", "unsure": false }
+        ],
+        "kanji": [],
+        "words": [],
+        "grammar": [],
+        "questions": [
+          {
+            "number": "1",
+            "type": "choose-form",
+            "instruction": "正しいものを選びなさい。",
+            "stem": "空が暗いですね。雨が降り＿＿です。",
+            "choices": ["そう", "よう", "らしい"],
+            "answer": "そう",
+            "explanation": "The sky looks dark, so it looks about to rain: そう joins the verb's ます stem."
+          },
+          {
+            "number": "2",
+            "type": "choose-form",
+            "instruction": "正しいものを選びなさい。",
+            "stem": "このりんごはおいし＿＿ですね。",
+            "choices": ["そう", "そうな", "らしい"],
+            "answer": "そう",
+            "explanation": "An い-adjective drops its い before そう to say how something looks."
+          },
+          {
+            "number": "3",
+            "type": "particle",
+            "stem": "駅＿＿友達を待ちます。",
+            "choices": [],
+            "answer": "で",
+            "explanation": "で marks the place where an action happens."
+          },
+          {
+            "number": "4",
+            "type": "particle",
+            "stem": "雪＿＿降っています。",
+            "choices": [],
+            "answer": "が",
+            "explanation": "が marks what is falling, the subject of 降る."
+          },
+          {
+            "number": "5",
+            "type": "reading",
+            "stem": "明日の天気予報を見ましたか。",
+            "target": "天気予報",
+            "choices": [],
+            "answer": "てんきよほう",
+            "explanation": "天気 is てんき and 予報 is よほう."
+          },
+          {
+            "number": "6",
+            "type": "write-kanji",
+            "stem": "あしたは＿＿でしょう。",
+            "target": "はれ",
+            "choices": [],
+            "answer": "晴れ",
+            "explanation": "はれ, clear weather, is written 晴れ."
+          },
+          {
+            "number": "7",
+            "type": "reorder",
+            "stem": "［降り／雨が／そうです］",
+            "choices": ["降り", "雨が", "そうです"],
+            "answer": "雨が降りそうです",
+            "explanation": "The subject comes first, then the verb stem with そうです."
+          },
+          {
+            "number": "8",
+            "type": "free",
+            "stem": "週末の天気について、一文を書きなさい。",
+            "choices": [],
+            "answer": "週末は晴れるでしょう。",
+            "explanation": "でしょう after the plain form says what you expect."
+          }
+        ],
+        "readings": [
+          { "surface": "天気", "reading": "てんき" },
+          { "surface": "予報", "reading": "よほう" },
+          { "surface": "降る", "reading": "ふる" }
+        ]
+      }
+    },
+    {
+      "match": "Page 4 of",
+      "inputTokens": 1450,
+      "outputTokens": 300,
+      "response": {
+        "kind": "word-list",
+        "title": "At the station",
+        "lines": [
+          { "text": "切符　きっぷ", "unsure": false },
+          { "text": "改札　かいさつ", "unsure": false },
+          { "text": "乗り換え　のりかえ", "unsure": false },
+          { "text": "片道　かたみち", "unsure": false },
+          { "text": "往復　おうふく", "unsure": false }
+        ],
+        "kanji": [],
+        "words": [
+          { "written": "切符", "reading": "きっぷ", "meaning": "ticket" },
+          { "written": "改札", "reading": "かいさつ", "meaning": "ticket gate" },
+          { "written": "乗り換え", "reading": "のりかえ", "meaning": "transfer" },
+          { "written": "片道", "reading": "かたみち", "meaning": "one way" },
+          { "written": "往復", "reading": "おうふく", "meaning": "round trip" }
+        ],
+        "grammar": [],
+        "questions": [],
+        "readings": []
+      }
+    },
+    {
+      "inputTokens": 1430,
+      "outputTokens": 220,
+      "response": {
+        "kind": "reading",
+        "title": "My way to school",
+        "lines": [
+          { "text": "毎朝、駅まで歩いて行きます。", "unsure": false },
+          { "text": "電車の中で本を読むのが好きです。", "unsure": false },
+          { "text": "雨の日は、バスに乗ることにしています。", "unsure": true }
+        ],
+        "kanji": [],
+        "words": [
+          { "written": "毎朝", "reading": "まいあさ", "meaning": "every morning" },
+          { "written": "電車", "reading": "でんしゃ", "meaning": "train" }
+        ],
+        "grammar": [{ "pattern": "〜ことにしている", "meaning": "make a habit of" }],
+        "questions": [],
+        "readings": []
+      }
+    },
+    {
+      "match": "Page 6 of",
+      "inputTokens": 1490,
+      "outputTokens": 330,
+      "response": {
+        "kind": "mixed",
+        "title": "Asking for permission",
+        "lines": [
+          { "text": "駅　えき", "unsure": false },
+          { "text": "写真を撮ってもいいですか。", "unsure": false },
+          { "text": "ここで＿＿もいいですか。（すわる）", "unsure": false }
+        ],
+        "kanji": [{ "char": "駅", "meaning": "station" }],
+        "words": [{ "written": "写真", "reading": "しゃしん", "meaning": "photo" }],
+        "grammar": [{ "pattern": "〜てもいい", "meaning": "it is all right to" }],
+        "questions": [
+          {
+            "number": "1",
+            "type": "choose-form",
+            "stem": "ここで＿＿もいいですか。",
+            "choices": [],
+            "answer": "すわって",
+            "explanation": "もいい follows the て-form: すわる becomes すわって."
+          }
+        ],
+        "readings": [{ "surface": "写真", "reading": "しゃしん" }]
+      }
+    }
+  ]
+}

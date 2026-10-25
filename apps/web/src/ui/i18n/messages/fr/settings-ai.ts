@@ -51,6 +51,7 @@ export const settingsAi = {
   taskFollowUp: 'Suites',
   taskCorrectSentence: 'Corrections',
   taskExtractFromImage: 'Photo en texte',
+  taskAnalysePage: 'Lecture d’une page scannée',
   taskTranscribeReading: 'Réponses orales',
   taskWeeklyNotes: 'Lettre de la semaine',
   taskGenerateSentences: 'Nouvelles phrases',

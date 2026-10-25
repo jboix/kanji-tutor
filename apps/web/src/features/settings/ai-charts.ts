@@ -72,6 +72,7 @@ const TASK_LABELS: Readonly<Record<string, PlainKey>> = {
   followUp: 'settingsAi.taskFollowUp',
   correctSentence: 'settingsAi.taskCorrectSentence',
   extractFromImage: 'settingsAi.taskExtractFromImage',
+  analysePage: 'settingsAi.taskAnalysePage',
   transcribeReading: 'settingsAi.taskTranscribeReading',
   weeklyNotes: 'settingsAi.taskWeeklyNotes',
   generateSentences: 'settingsAi.taskGenerateSentences',

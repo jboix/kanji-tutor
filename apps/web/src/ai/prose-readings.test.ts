@@ -89,6 +89,8 @@ describe('proseClaims', () => {
       'explainMistake:一生=いっしょう',
       // R10: the tutor wrote the less common reading; it is verified and marked as such.
       'explainWord:日本人=にっぽんじん',
+      'analysePage:天気=てんき',
+      'analysePage:予報=よほう',
       // The no-spoil fixture leaks on purpose; its filter runs before the prose readings (L3).
       'explainSentence:紹介=しょうかい',
       'explainSentence:紹介=しょうかい',

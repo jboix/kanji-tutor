@@ -6,8 +6,11 @@ import type { LearnerOverview, LearnerView } from '../domain/learner-view.ts';
 import type { AiCacheRepo, AiLogRepo } from '../domain/repos.ts';
 import type { ImmersionMode } from '../domain/types.ts';
 import type { Lang } from '../lang/types.ts';
-import type { LearnerProfile, Media, TaskInput, TaskName, TaskOutput } from './task-types.ts';
+import type { LearnerProfile, Media } from './task-shared-types.ts';
+import type { TaskInput, TaskName, TaskOutput } from './task-types.ts';
 
+export type * from './scan-task-types.ts';
+export type * from './task-shared-types.ts';
 export type * from './task-types.ts';
 
 // ── Results, providers, context ───────────────────────────────────────────────

@@ -1,5 +1,13 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`prompts > analysePage is versioned, calm and asks for JSON 1`] = `
+"Page 2 of 3 of one handout.
+Read this page.
+Words the learner reads well: 一緒、駅、友達
+Recent error types: long-vowel, wrong-kanji
+Current lesson: Tobira 第4課"
+`;
+
 exports[`prompts > answerQuestion is versioned, calm and asks for JSON 1`] = `
 "Target: 間に
 Question (about the word): Why に?

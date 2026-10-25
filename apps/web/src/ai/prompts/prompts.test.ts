@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { Prompt } from '../task-def.ts';
 import type { LearnerProfile } from '../types.ts';
+import { analysePagePrompt } from './analyse-page.ts';
 import { answerQuestionPrompt } from './answer-question.ts';
 import { breakdownSentencePrompt } from './breakdown-sentence.ts';
 import { correctSentencePrompt } from './correct-sentence.ts';
@@ -66,6 +67,7 @@ const BUILT: [string, Prompt<never>, unknown][] = [
     },
   ],
   ['extractFromImage', extractFromImagePrompt, { image: MEDIA }],
+  ['analysePage', analysePagePrompt, { image: MEDIA, page: 2, pages: 3 }],
   ['transcribeReading', transcribeReadingPrompt, { audio: MEDIA }],
   [
     'weeklyNotes',

@@ -3,6 +3,7 @@ import type { z } from 'zod';
 import { FIXTURES } from './fixtures/index.ts';
 import { createMockProvider } from './providers/mock.ts';
 import { parseReply } from './run.ts';
+import { pageAnalysisSchema } from './schemas/analyse-page.ts';
 import { answerSchema } from './schemas/answer-question.ts';
 import { assessLevelSchema } from './schemas/assess-level.ts';
 import { breakdownSchema } from './schemas/breakdown-sentence.ts';
@@ -31,6 +32,7 @@ const SCHEMAS: Record<TaskName, z.ZodType> = {
   followUp: followUpSchema,
   correctSentence: correctionSchema,
   extractFromImage: extractionSchema,
+  analysePage: pageAnalysisSchema,
   transcribeReading: transcriptionSchema,
   weeklyNotes: weeklyNotesSchema,
   generateSentences: generatedSentencesSchema,

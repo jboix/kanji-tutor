@@ -3,6 +3,7 @@
  * tasks run on the teacher model with the learner tools (A10, A12); the rest on the fast model.
  */
 import type { z } from 'zod';
+import { analysePagePrompt } from './prompts/analyse-page.ts';
 import { answerQuestionPrompt } from './prompts/answer-question.ts';
 import { assessLevelPrompt } from './prompts/assess-level.ts';
 import { breakdownSentencePrompt } from './prompts/breakdown-sentence.ts';
@@ -20,6 +21,7 @@ import { recognizeHandwritingPrompt } from './prompts/recognize-handwriting.ts';
 import { transcribeReadingPrompt } from './prompts/transcribe-reading.ts';
 import { weeklyNotesPrompt } from './prompts/weekly-notes.ts';
 import { peekTask, runTask } from './run.ts';
+import { finalizePageAnalysis, pageAnalysisSchema } from './schemas/analyse-page.ts';
 import { answerSchema, finalizeAnswer } from './schemas/answer-question.ts';
 import { assessLevelSchema, finalizeAssessment } from './schemas/assess-level.ts';
 import { breakdownSchema, finalizeBreakdown } from './schemas/breakdown-sentence.ts';
@@ -151,6 +153,21 @@ export const extractFromImage = task({
   schema: extractionSchema,
   media: (input) => [input.image],
   finalize: finalizeExtraction,
+});
+
+/** Scanned lessons: one photographed page, what it is and what it teaches; readings verified. */
+export const analysePage = task({
+  name: 'analysePage',
+  tier: 'fast',
+  prose: (raw) => [
+    raw.title,
+    ...raw.words.map((word) => word.meaning),
+    ...raw.questions.map((question) => question.explanation),
+  ],
+  prompt: analysePagePrompt,
+  schema: pageAnalysisSchema,
+  media: (input) => [input.image],
+  finalize: finalizePageAnalysis,
 });
 
 /** I2: spoken reading as hiragana, exactly as pronounced. */

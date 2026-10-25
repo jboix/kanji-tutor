@@ -1,5 +1,6 @@
 /** Recorded responses for every task, replayed by the mock provider (tests and e2e only). */
 import type { TaskName, ToolCall } from '../types.ts';
+import analysePage from './analyse-page.json' with { type: 'json' };
 import answerQuestion from './answer-question.json' with { type: 'json' };
 import assessLevel from './assess-level.json' with { type: 'json' };
 import breakdownSentence from './breakdown-sentence.json' with { type: 'json' };
@@ -40,6 +41,7 @@ export const FIXTURES: Readonly<Record<TaskName, { fixtures: readonly Fixture[] 
   followUp,
   correctSentence,
   extractFromImage,
+  analysePage,
   transcribeReading,
   weeklyNotes,
   generateSentences,
