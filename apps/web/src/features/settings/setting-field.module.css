@@ -1,0 +1,63 @@
+/* One setting: name and control on a row, wrapping under the name when the control is wide. */
+.setting {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.setting + .setting {
+  padding-top: 12px;
+  border-top: 1px solid var(--rule);
+}
+
+.settingRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  min-height: var(--tap);
+}
+
+.settingName {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1 1 auto;
+  font-size: var(--text-md);
+  font-weight: 500;
+}
+
+.settingControl {
+  display: flex;
+  margin-left: auto;
+  min-width: 0;
+}
+
+/* Beside a name the choices are a little tighter, so three fit on a phone. */
+.settingControl label {
+  padding-inline: 13px;
+}
+
+.stacked .settingControl {
+  flex-basis: 100%;
+  margin-left: 0;
+}
+
+.hint {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+
+.hint[hidden] {
+  display: none;
+}
+
+.hint p {
+  margin: 0;
+}
+
+.hint p + p {
+  margin-top: 6px;
+}

@@ -3,6 +3,7 @@ import { useI18n } from '../../ui/i18n/i18n.tsx';
 import { LanguagePackOffer } from '../../ui/language-pack-offer.tsx';
 import { languageOf, UI_LANGUAGES, type UiLanguage } from '../../ui/languages.ts';
 import { SegmentedControl } from '../../ui/segmented-control.tsx';
+import { SettingField } from './setting-field.tsx';
 import styles from './settings.module.css';
 import type { PatchSettings } from './use-settings.ts';
 
@@ -24,17 +25,18 @@ export function LanguageSection({ settings, onPatch }: Props) {
   };
   return (
     <section className={styles.section} aria-label={t('settings.language')}>
-      <span className={styles.label} aria-hidden="true">
-        {t('settings.language')}
-      </span>
-      <SegmentedControl
+      <SettingField
         label={t('settings.language')}
-        options={UI_LANGUAGES}
-        value={language}
-        onChange={(value) => void choose(value)}
-      />
-      <p className={styles.hint}>{t('settings.languageHint')}</p>
-      <LanguagePackOffer language={language} />
+        hint={t('settings.languageHint')}
+        status={<LanguagePackOffer language={language} />}
+      >
+        <SegmentedControl
+          label={t('settings.language')}
+          options={UI_LANGUAGES}
+          value={language}
+          onChange={(value) => void choose(value)}
+        />
+      </SettingField>
     </section>
   );
 }

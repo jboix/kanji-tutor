@@ -53,6 +53,24 @@ describe('Reading settings', () => {
     expect((await repos.settings.get()).writeKanji).toBe('type');
   });
 
+  it('turns listening exercises off, on by default', async () => {
+    const repos = setup();
+    const group = await screen.findByRole('group', { name: 'Listening exercises' });
+    expect(within(group).getByLabelText('On')).toHaveProperty('checked', true);
+    await userEvent.click(within(group).getByLabelText('Off'));
+    expect((await repos.settings.get()).listening).toBe(false);
+  });
+
+  it('keeps each explanation behind its ? until asked for', async () => {
+    setup();
+    const help = await screen.findByRole('button', { name: 'About Write the kanji' });
+    const hint = screen.getByText(/Draw each kanji with your finger/);
+    expect(hint.closest('[hidden]')).toBeTruthy();
+    await userEvent.click(help);
+    expect(help.getAttribute('aria-expanded')).toBe('true');
+    expect(hint.closest('[hidden]')).toBeNull();
+  });
+
   it('saves the current lesson and shows its Japanese in Japanese type (K5, issue 57)', async () => {
     const repos = setup();
     const field = await screen.findByLabelText('Current lesson');

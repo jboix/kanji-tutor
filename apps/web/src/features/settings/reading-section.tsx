@@ -5,6 +5,8 @@ import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
 import type { PlainKey } from '../../ui/i18n/types.ts';
 import { JaRuns } from '../../ui/ja-runs.tsx';
 import { SegmentedControl } from '../../ui/segmented-control.tsx';
+import field from './setting-field.module.css';
+import { SettingField } from './setting-field.tsx';
 import styles from './settings.module.css';
 import type { PatchSettings } from './use-settings.ts';
 
@@ -18,27 +20,42 @@ const FURIGANA = [
   { value: 'all', key: 'settings.furiganaAll' },
 ] as const satisfies readonly { value: FuriganaMode; key: PlainKey }[];
 
-function SectionLabelText({ children }: { children: string }) {
-  return (
-    <span className={styles.label} aria-hidden="true">
-      {children}
-    </span>
-  );
+const ON_OFF = [
+  { value: 'on', key: 'settings.explainFirstOn' },
+  { value: 'off', key: 'settings.explainFirstOff' },
+] as const satisfies readonly { value: string; key: PlainKey }[];
+
+const LISTENING = [
+  { value: 'on', key: 'settings.listeningOn' },
+  { value: 'off', key: 'settings.listeningOff' },
+] as const satisfies readonly { value: string; key: PlainKey }[];
+
+const WRITE = [
+  { value: 'draw', key: 'settings.writeKanjiDraw' },
+  { value: 'type', key: 'settings.writeKanjiType' },
+] as const satisfies readonly { value: 'draw' | 'type'; key: PlainKey }[];
+
+interface ChoiceProps<T extends string> {
+  name: PlainKey;
+  hintKey?: PlainKey;
+  options: readonly { value: T; key: PlainKey }[];
+  value: T;
+  onChange: (value: T) => void;
 }
 
-/** Default furigana in sessions (R4); the reading screen has its own toggle. */
-function FuriganaField({ settings, onPatch }: Props) {
+/** A setting of two or three choices, its explanation behind its ?. */
+function ChoiceField<T extends string>(props: ChoiceProps<T>) {
+  const { name, hintKey, options, value, onChange } = props;
   const t = useT();
   return (
-    <div className={styles.field}>
-      <SectionLabelText>{t('settings.furigana')}</SectionLabelText>
+    <SettingField label={t(name)} hint={hintKey && t(hintKey)}>
       <SegmentedControl
-        label={t('settings.furigana')}
-        options={FURIGANA.map((o) => ({ value: o.value, label: t(o.key) }))}
-        value={settings.furigana}
-        onChange={(furigana) => onPatch({ furigana })}
+        label={t(name)}
+        options={options.map((o) => ({ value: o.value, label: t(o.key) }))}
+        value={value}
+        onChange={onChange}
       />
-    </div>
+    </SettingField>
   );
 }
 
@@ -47,65 +64,61 @@ const LENGTHS: readonly SessionMinutes[] = [5, 10, 15];
 /** About how long a session takes (L6); 5 minutes unless changed. */
 function LengthField({ settings, onPatch }: Props) {
   const t = useT();
-  const value = String(settings.sessionMinutes ?? DEFAULT_SESSION_MINUTES);
   return (
-    <div className={styles.field}>
-      <SectionLabelText>{t('settings.sessionLength')}</SectionLabelText>
+    <SettingField label={t('settings.sessionLength')} hint={t('settings.sessionLengthHint')}>
       <SegmentedControl
         label={t('settings.sessionLength')}
         options={LENGTHS.map((n) => ({
           value: String(n),
           label: t('settings.sessionMinutes', { n }),
         }))}
-        value={value}
+        value={String(settings.sessionMinutes ?? DEFAULT_SESSION_MINUTES)}
         onChange={(n) => onPatch({ sessionMinutes: Number(n) as SessionMinutes })}
       />
-      <p className={styles.hint}>{t('settings.sessionLengthHint')}</p>
-    </div>
+    </SettingField>
   );
 }
 
-const EXPLAIN = [
-  { value: 'on', key: 'settings.explainFirstOn' },
-  { value: 'off', key: 'settings.explainFirstOff' },
-] as const satisfies readonly { value: string; key: PlainKey }[];
-
-/** Intro cards before new words and grammar, or a "New" chip on the exercise (L7). */
-function ExplainField({ settings, onPatch }: Props) {
-  const t = useT();
+/** Intro cards before new words and grammar (L7), and the default furigana (R4). */
+function TeachingChoices({ settings, onPatch }: Props) {
   return (
-    <div className={styles.field}>
-      <SectionLabelText>{t('settings.explainFirst')}</SectionLabelText>
-      <SegmentedControl
-        label={t('settings.explainFirst')}
-        options={EXPLAIN.map((o) => ({ value: o.value, label: t(o.key) }))}
+    <>
+      <ChoiceField
+        name="settings.explainFirst"
+        hintKey="settings.explainFirstHint"
+        options={ON_OFF}
         value={settings.explainFirst === false ? 'off' : 'on'}
         onChange={(value) => onPatch({ explainFirst: value === 'on' })}
       />
-      <p className={styles.hint}>{t('settings.explainFirstHint')}</p>
-    </div>
+      <ChoiceField
+        name="settings.furigana"
+        options={FURIGANA}
+        value={settings.furigana}
+        onChange={(furigana) => onPatch({ furigana })}
+      />
+    </>
   );
 }
 
-const WRITE = [
-  { value: 'draw', key: 'settings.writeKanjiDraw' },
-  { value: 'type', key: 'settings.writeKanjiType' },
-] as const satisfies readonly { value: string; key: PlainKey }[];
-
-/** "Write the kanji" drawn on a pad, or its reading typed, for a learner who cannot draw. */
-function WriteField({ settings, onPatch }: Props) {
-  const t = useT();
+/** Listening exercises on or off (S4), and "Write the kanji" drawn or typed. */
+function ExerciseChoices({ settings, onPatch }: Props) {
   return (
-    <div className={styles.field}>
-      <SectionLabelText>{t('settings.writeKanji')}</SectionLabelText>
-      <SegmentedControl
-        label={t('settings.writeKanji')}
-        options={WRITE.map((o) => ({ value: o.value, label: t(o.key) }))}
+    <>
+      <ChoiceField
+        name="settings.listening"
+        hintKey="settings.listeningHint"
+        options={LISTENING}
+        value={settings.listening === false ? 'off' : 'on'}
+        onChange={(value) => onPatch({ listening: value === 'on' })}
+      />
+      <ChoiceField
+        name="settings.writeKanji"
+        hintKey="settings.writeKanjiHint"
+        options={WRITE}
         value={settings.writeKanji ?? 'draw'}
         onChange={(writeKanji) => onPatch({ writeKanji })}
       />
-      <p className={styles.hint}>{t('settings.writeKanjiHint')}</p>
-    </div>
+    </>
   );
 }
 
@@ -122,8 +135,8 @@ function LessonField({ settings, onPatch }: Props) {
   const changed = draft.trim() !== (settings.currentLesson ?? '');
   const t = useT();
   return (
-    <div className={styles.field}>
-      <label htmlFor={id} className={styles.label}>
+    <div className={field.setting}>
+      <label htmlFor={id} className={field.settingName}>
         {t('settings.lesson')}
       </label>
       <div className={styles.row}>
@@ -152,17 +165,16 @@ function LessonField({ settings, onPatch }: Props) {
 }
 
 /**
- * How sessions read: length, intro cards, drawing or typing kanji, furigana default and the
- * lesson. Sound is in Appearance.
+ * How sessions read: length, intro cards, listening, drawing or typing kanji, furigana default
+ * and the lesson. Sound is in Appearance.
  */
 export function ReadingSection(props: Props) {
   const t = useT();
   return (
     <section className={styles.section} aria-label={t('settings.reading')}>
       <LengthField {...props} />
-      <ExplainField {...props} />
-      <WriteField {...props} />
-      <FuriganaField {...props} />
+      <TeachingChoices {...props} />
+      <ExerciseChoices {...props} />
       <LessonField {...props} />
     </section>
   );

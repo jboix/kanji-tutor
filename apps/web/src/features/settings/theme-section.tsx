@@ -3,6 +3,7 @@ import { useT } from '../../ui/i18n/i18n.tsx';
 import type { PlainKey } from '../../ui/i18n/types.ts';
 import { SegmentedControl } from '../../ui/segmented-control.tsx';
 import { applyTheme } from '../../ui/theme.ts';
+import { SettingField } from './setting-field.tsx';
 import styles from './settings.module.css';
 import type { PatchSettings } from './use-settings.ts';
 
@@ -27,15 +28,14 @@ export function ThemeSection({ settings, onPatch }: Props) {
   };
   return (
     <section className={styles.section} aria-label={t('settings.theme')}>
-      <span className={styles.label} aria-hidden="true">
-        {t('settings.theme')}
-      </span>
-      <SegmentedControl
-        label={t('settings.theme')}
-        options={options}
-        value={settings.theme}
-        onChange={choose}
-      />
+      <SettingField label={t('settings.theme')}>
+        <SegmentedControl
+          label={t('settings.theme')}
+          options={options}
+          value={settings.theme}
+          onChange={choose}
+        />
+      </SettingField>
     </section>
   );
 }

@@ -7,6 +7,7 @@ import { useT } from '../../ui/i18n/i18n.tsx';
 import type { PlainKey } from '../../ui/i18n/types.ts';
 import { languageOf, type UiLanguage } from '../../ui/languages.ts';
 import { useServices } from '../../ui/services.tsx';
+import { SettingField } from './setting-field.tsx';
 import styles from './settings.module.css';
 import type { PatchSettings } from './use-settings.ts';
 
@@ -68,26 +69,30 @@ export function ImmersionSection({ settings, onPatch }: Props) {
   const t = useT();
   return (
     <section className={styles.section} aria-label={t('settings.explanationsIn')}>
-      <span className={styles.label} aria-hidden="true">
-        {t('settings.explanationsIn')}
-      </span>
-      <fieldset className={styles.choices}>
-        <legend className="visually-hidden">{t('settings.explanationsIn')}</legend>
-        {MODES.map((mode) => (
-          <label key={mode.value} className={styles.choice}>
-            <input
-              type="radio"
-              name="immersion"
-              value={mode.value}
-              checked={current === mode.value}
-              onChange={() => void onPatch({ immersion: mode.value })}
-            />
-            {t(mode.label)}
-          </label>
-        ))}
-      </fieldset>
-      <AutoLine {...(learner ? { learner } : {})} language={languageOf(settings.uiLanguage)} />
-      <p className={styles.hint}>{t('settings.immersionHint')}</p>
+      <SettingField
+        label={t('settings.explanationsIn')}
+        stacked
+        hint={t('settings.immersionHint')}
+        status={
+          <AutoLine {...(learner ? { learner } : {})} language={languageOf(settings.uiLanguage)} />
+        }
+      >
+        <fieldset className={styles.choices}>
+          <legend className="visually-hidden">{t('settings.explanationsIn')}</legend>
+          {MODES.map((mode) => (
+            <label key={mode.value} className={styles.choice}>
+              <input
+                type="radio"
+                name="immersion"
+                value={mode.value}
+                checked={current === mode.value}
+                onChange={() => void onPatch({ immersion: mode.value })}
+              />
+              {t(mode.label)}
+            </label>
+          ))}
+        </fieldset>
+      </SettingField>
     </section>
   );
 }

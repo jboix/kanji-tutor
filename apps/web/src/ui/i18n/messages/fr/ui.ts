@@ -149,6 +149,7 @@ export const ui = {
   externalOffline: '{label}, nécessite une connexion',
   externalNeedsNet: 'nécessite une connexion',
   sourceFrom: 'Phrase tirée de {site}',
+  aboutSetting: 'À propos de {name}',
   volumeMute: 'Couper le son',
   volumeUp: 'Plus fort',
   volumeOff: 'Coupé',

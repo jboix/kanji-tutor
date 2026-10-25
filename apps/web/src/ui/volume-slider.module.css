@@ -13,6 +13,12 @@
   gap: 12px;
 }
 
+.name {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .label {
   font-size: var(--text-md);
   font-weight: 500;

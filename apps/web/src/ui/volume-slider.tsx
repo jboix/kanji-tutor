@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import { type ReactNode, useId } from 'react';
 import type { Settings } from '../domain/types.ts';
 import { useT } from './i18n/i18n.tsx';
 import { SpeakerIcon, SpeakerOffIcon } from './icons.tsx';
@@ -26,6 +26,8 @@ interface Props {
   /** Where the speaker button brings sound back to after it was off. */
   resume: number;
   onChange: (value: number) => void;
+  /** Beside the name: a ? that shows what the slider does. */
+  aside?: ReactNode;
 }
 
 const STEP = 10;
@@ -69,16 +71,19 @@ function Louder({ value, onChange }: TapProps) {
  * Sound as one knob (U2): all the way left is off, so no separate switch. The speaker on
  * the left turns it off and back on, the one on the right turns it up, so it never needs a drag.
  */
-export function VolumeSlider({ label, value, resume, onChange }: Props) {
+export function VolumeSlider({ label, value, resume, onChange, aside }: Props) {
   const t = useT();
   const id = useId();
   const text = value === 0 ? t('ui.volumeOff') : t('ui.percent', { n: value });
   return (
     <div className={styles.slider}>
       <div className={styles.top}>
-        <label htmlFor={id} className={styles.label}>
-          {label}
-        </label>
+        <span className={styles.name}>
+          <label htmlFor={id} className={styles.label}>
+            {label}
+          </label>
+          {aside}
+        </span>
         <span className={styles.value} aria-hidden="true">
           {text}
         </span>
