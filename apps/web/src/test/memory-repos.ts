@@ -4,6 +4,7 @@
  */
 import { DEFAULT_SETTINGS } from '../domain/defaults.ts';
 import type { DictionaryRepo, Repos, SentenceQuery, Store } from '../domain/repos.ts';
+import type { ScannedLesson } from '../domain/scan-types.ts';
 import type {
   AiCacheEntry,
   AiLogEntry,
@@ -133,6 +134,7 @@ export function createMemoryRepos(
   const sentences = memoryStore<Sentence, string>((row) => row.id);
   const readings = memoryStore<KanjiReading, string>((row) => row.id);
   const captures = memoryStore<Capture, string>((row) => row.id);
+  const scans = memoryStore<ScannedLesson, string>((row) => row.id);
   const cache = new Map<string, AiCacheEntry>();
   const log: AiLogEntry[] = [];
   return {
@@ -148,6 +150,11 @@ export function createMemoryRepos(
       ...captures,
       recent: async (limit) =>
         (await captures.all()).sort((a, b) => b.createdAt - a.createdAt).slice(0, limit),
+    },
+    scans: {
+      ...scans,
+      recent: async (limit) =>
+        (await scans.all()).sort((a, b) => b.createdAt - a.createdAt).slice(0, limit),
     },
     notes: memoryStore((row) => row.id),
     plans: memoryStore((row) => row.id),

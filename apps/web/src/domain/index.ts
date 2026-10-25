@@ -10,6 +10,7 @@ export * from './knowledge.ts';
 export type * from './learner-view.ts';
 export * from './questions/index.ts';
 export type * from './repos.ts';
+export * from './scan-types.ts';
 export * from './scheduler.ts';
 export * from './selector.ts';
 export * from './services/index.ts';

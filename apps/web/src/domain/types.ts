@@ -36,7 +36,14 @@ export type ItemKind = 'word' | 'kanji' | 'kanjiReading' | 'grammar';
 export type ItemId = `${ItemKind}:${string}`;
 
 /** Where an item came from (K5). */
-export type SourceKind = 'textbook' | 'capture' | 'manual' | 'import' | 'compose' | 'session';
+export type SourceKind =
+  | 'textbook'
+  | 'capture'
+  | 'manual'
+  | 'import'
+  | 'compose'
+  | 'session'
+  | 'scan';
 
 export interface Source {
   kind: SourceKind;
@@ -44,6 +51,8 @@ export interface Source {
   lesson?: string;
   /** Capture this item was added from, when `kind === 'capture'`. */
   captureId?: string;
+  /** Scanned lesson this item was first practised in, when `kind === 'scan'`. */
+  scanId?: string;
   /** ISO week the item belongs to, e.g. "2026-W42" (school week). */
   week: string;
   /** Epoch milliseconds. */

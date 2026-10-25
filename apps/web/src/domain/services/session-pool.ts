@@ -96,8 +96,11 @@ async function focusQueue(repos: Repos, focus: SessionFocus): Promise<Item[]> {
   return (await repos.items.getMany(ids)).flatMap((item) => (item ? [item] : []));
 }
 
-/** Words met in a session or imported come back through FSRS, not as this week's new words. */
-const NOT_FRESH: ReadonlySet<SourceKind> = new Set(['session', 'import']);
+/**
+ * Words met in a session, imported, or practised in a scanned lesson come back through FSRS, not
+ * as this week's new words: a scan introduces nothing in the daily sessions.
+ */
+const NOT_FRESH: ReadonlySet<SourceKind> = new Set(['session', 'import', 'scan']);
 
 /** The class lesson's new items, else this week's, then the lesson plan's new words. */
 async function freshQueue(repos: Repos, plan: LessonPlan, now: number): Promise<Item[]> {

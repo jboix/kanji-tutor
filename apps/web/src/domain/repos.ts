@@ -4,6 +4,7 @@
  */
 
 import type { JlptLevel } from './learner-view.ts';
+import type { ScannedLesson } from './scan-types.ts';
 import type {
   AiCacheEntry,
   AiLogEntry,
@@ -99,6 +100,11 @@ export interface CaptureRepo extends Store<Capture> {
   recent(limit: number): Promise<Capture[]>;
 }
 
+/** Scanned lessons, newest first when listed. */
+export interface ScanRepo extends Store<ScannedLesson> {
+  recent(limit: number): Promise<ScannedLesson[]>;
+}
+
 export interface SettingsRepo {
   get(): Promise<Settings>;
   patch(patch: Partial<Settings>): Promise<Settings>;
@@ -150,6 +156,7 @@ export interface Repos {
   sentences: SentenceRepo;
   grammar: Store<GrammarPoint>;
   captures: CaptureRepo;
+  scans: ScanRepo;
   notes: Store<Note>;
   plans: Store<WeeklyPlan>;
   settings: SettingsRepo;

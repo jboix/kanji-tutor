@@ -133,6 +133,51 @@ export { type MetFirst, type MetFirstInput, metFirst } from './met-first.ts';
 export { POINT_DRILLS, type PointOptions, pointPractice } from './point-practice.ts';
 export { sharedReads } from './read-cache.ts';
 export { answerSpan } from './reading-check.ts';
+export {
+  gradeHandout,
+  markScanPractised,
+  recordScanDrill,
+  recordScanIntro,
+  recordScanQuestion,
+  recordScanReading,
+  type ScanAnswerBase,
+} from './scan-answer.ts';
+export {
+  buildScan,
+  type LineDraft,
+  type PageDraft,
+  type QuestionDraft,
+  rematchScan,
+  type ScanBuildInput,
+} from './scan-build.ts';
+export {
+  type ListedItem,
+  type ListedItems,
+  matchPattern,
+  matchScanItems,
+  NOTHING_LISTED,
+} from './scan-match.ts';
+export {
+  buildScanPractice,
+  SCAN_PRACTICE_CARDS,
+  type ScanCard,
+  type ScanPracticeOptions,
+} from './scan-practice.ts';
+export { type ScanPart, type ScanProgress, scanProgress, withPractised } from './scan-progress.ts';
+export { describeScanItems, kanjiReadings, type ScanItemView } from './scan-view.ts';
+export {
+  type BuiltScan,
+  emptyScan,
+  type NewScan,
+  questionKey,
+  renameScan,
+  saveScan,
+  scanFromCapture,
+  scanItemKey,
+  scanSentenceId,
+  titleFromLines,
+  withPageKind,
+} from './scans.ts';
 export { type BuildSessionOptions, buildSession, type SessionFocus } from './session.ts';
 export { DEFAULT_SESSION_MINUTES } from './session-length.ts';
 export { cardType } from './session-mix.ts';

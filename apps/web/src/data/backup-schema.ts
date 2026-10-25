@@ -14,9 +14,10 @@ const errorType = z.enum([
 const verdict = z.enum(['correct', 'near-miss', 'wrong']);
 
 const source = z.object({
-  kind: z.enum(['textbook', 'capture', 'manual', 'import', 'compose', 'session']),
+  kind: z.enum(['textbook', 'capture', 'manual', 'import', 'compose', 'session', 'scan']),
   lesson: z.string().exactOptional(),
   captureId: z.string().exactOptional(),
+  scanId: z.string().exactOptional(),
   week: z.string(),
   addedAt: z.number(),
 });

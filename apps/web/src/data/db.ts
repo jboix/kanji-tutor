@@ -1,4 +1,6 @@
-import { Dexie, type EntityTable, type Table } from 'dexie';
+import { Dexie, type EntityTable, type Table, type Transaction } from 'dexie';
+import type { LegacyCapture, ScannedLesson } from '../domain/scan-types.ts';
+import { scanFromCapture } from '../domain/services/scans.ts';
 import type {
   AiCacheEntry,
   AiLogEntry,
@@ -29,8 +31,14 @@ export interface SettingsRow extends Settings {
   key: 'app';
 }
 
+/** The v5 upgrade: each capture becomes a scanned lesson of one page. */
+async function capturesToScans(tx: Transaction): Promise<void> {
+  const captures: LegacyCapture[] = await tx.table('captures').toArray();
+  await tx.table('scans').bulkPut(captures.map(scanFromCapture));
+}
+
 /**
- * Kanji Tutor's IndexedDB database, schema v4. It keeps its first name, `kanji-reader`, as do the
+ * Kanji Tutor's IndexedDB database, schema v5. It keeps its first name, `kanji-reader`, as do the
  * localStorage keys: renaming them would empty every install.
  */
 export class KanjiTutorDb extends Dexie {
@@ -42,6 +50,7 @@ export class KanjiTutorDb extends Dexie {
   kanjiReadings!: Table<KanjiReading, string>;
   reviews!: EntityTable<Review, 'id'>;
   captures!: Table<Capture, string>;
+  scans!: Table<ScannedLesson, string>;
   notes!: Table<Note, string>;
   plans!: Table<WeeklyPlan, string>;
   aiCache!: Table<AiCacheEntry, string>;
@@ -78,6 +87,9 @@ export class KanjiTutorDb extends Dexie {
       clusters: 'id, level, order, *wordIds',
       units: 'id, order',
     });
+    // v5: scanned lessons (several pages, matched items, handout questions). Every capture
+    // becomes a scanned lesson of one page, keeping its id, photo, lines and added items.
+    this.version(5).stores({ scans: 'id, createdAt' }).upgrade(capturesToScans);
     this.use(sentenceKeysMiddleware);
   }
 }
@@ -89,6 +101,7 @@ export const USER_STORES = [
   'reviews',
   'grammar',
   'captures',
+  'scans',
   'notes',
   'plans',
   'aiLog',

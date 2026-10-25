@@ -130,6 +130,13 @@ function captureRepo(db: KanjiTutorDb): Repos['captures'] {
   };
 }
 
+function scanRepo(db: KanjiTutorDb): Repos['scans'] {
+  return {
+    ...tableStore(db.scans),
+    recent: (limit) => db.scans.orderBy('createdAt').reverse().limit(limit).toArray(),
+  };
+}
+
 function aiRepos(db: KanjiTutorDb): Pick<Repos, 'aiCache' | 'aiLog'> {
   return {
     aiCache: {
@@ -157,6 +164,7 @@ export function createDexieRepos(db: KanjiTutorDb): Repos {
     sentences: sentenceRepo(db),
     grammar: tableStore(db.grammar),
     captures: captureRepo(db),
+    scans: scanRepo(db),
     notes: tableStore(db.notes),
     plans: tableStore(db.plans),
     settings: settingsRepo(db),
