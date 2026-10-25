@@ -274,14 +274,11 @@ test('Ask box: the あ switch types kana and the popup offers kanji', async ({ p
   await onboard(page);
   await importKnown(page);
   await page.goto(`/read?kanji=${encodeURIComponent('待')}&reading=${encodeURIComponent('ま.つ')}`);
-  const ask = page.getByLabel(/^Ask about /);
-  for (let step = 0; step < 4 && !(await ask.isVisible()); step++) {
-    const input = await answerField(page);
-    await input.pressSequentially('nu');
-    await input.press('Enter');
-    await expect(ask.or(page.getByRole('button', { name: 'Next word' }))).toBeVisible();
-    if (!(await ask.isVisible())) await page.getByRole('button', { name: 'Next word' }).click();
-  }
+  const input = await answerField(page);
+  await input.pressSequentially('nu');
+  await input.press('Enter');
+  await page.getByRole('button', { name: /^Ask the tutor about / }).click();
+  const ask = page.getByRole('textbox', { name: 'Ask the tutor' });
   await expect(ask).toBeVisible();
   await page.getByRole('button', { name: 'Type romaji as kana' }).click();
   await ask.click();
