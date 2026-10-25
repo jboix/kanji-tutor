@@ -114,6 +114,8 @@ export const ui = {
   kanaModeKatakana: 'Romaji turns into katakana',
   kanaModeOff: 'Romaji stays as typed',
   kanjiFor: 'Kanji for {kana}',
+  kanjiFirstWord: 'First word only: {word}, then {next}',
+  kanjiFirstWordHint: 'first word',
   dictate: 'Dictate',
   listening: 'Listening',
   dictationBlocked: 'Microphone access is blocked. Allow it in the browser settings to dictate.',

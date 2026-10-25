@@ -123,6 +123,8 @@ export const ui = {
   kanaModeKatakana: 'Le rōmaji devient katakana',
   kanaModeOff: 'Le rōmaji reste tel quel',
   kanjiFor: 'Kanji pour {kana}',
+  kanjiFirstWord: 'Premier mot seul : {word}, puis {next}',
+  kanjiFirstWordHint: 'premier mot',
   dictate: 'Dicter',
   listening: 'Écoute en cours',
   dictationBlocked:

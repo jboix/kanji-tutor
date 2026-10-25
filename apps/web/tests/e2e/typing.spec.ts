@@ -64,31 +64,68 @@ async function openCompose(page: Page) {
   }
 }
 
-test('Use it: romaji becomes kana and kanji come from a popup by the kana', async ({ page }) => {
+test('Use it: romaji becomes kana and the phrase comes back in kanji from a popup', async ({
+  page,
+}) => {
   await openCompose(page);
   const sentence = page.getByLabel('Your sentence', { exact: true });
   await sentence.click();
   await sentence.pressSequentially('watashihagakusei');
   await expect(sentence).toHaveValue('わたしはがくせい');
-  const popup = page.getByRole('listbox', { name: 'Kanji for がくせい' });
-  const student = popup.getByRole('option', { name: '学生' });
-  await expect(student).toBeVisible();
-  await expect(student).toHaveAttribute('lang', 'ja');
-  await expect(student).toHaveCSS('font-family', /Klee One/);
-  await expect(student).toHaveCSS('border-radius', '0px');
-  await expectByKana(page, sentence, popup, 4);
-  await student.tap();
-  await expect(sentence).toHaveValue('わたしは学生');
-  await expect(sentence).toBeFocused();
+  const popup = page.getByRole('listbox', { name: 'Kanji for わたしはがくせい' });
+  const phrase = popup.getByRole('option', { name: '私は学生', exact: true });
+  await expect(phrase).toBeVisible();
+  await expect(phrase).toHaveAttribute('lang', 'ja');
+  await expect(phrase).toHaveCSS('font-family', /Klee One/);
+  await expect(phrase).toHaveCSS('border-radius', '0px');
+  await expectByKana(page, sentence, popup, 0);
 
+  // A selection is looked up as it is.
   await select(sentence, 0, 3);
   const me = page.getByRole('listbox', { name: 'Kanji for わたし' });
   await expectByKana(page, sentence, me, 0);
-  await me.getByRole('option', { name: '私' }).click();
-  await expect(sentence).toHaveValue('私は学生');
+  await me.getByRole('option', { name: '私', exact: true }).click();
+  await expect(sentence).toHaveValue('私はがくせい');
   await sentence.press('End');
+  const rest = page.getByRole('listbox', { name: 'Kanji for はがくせい' });
+  await expectByKana(page, sentence, rest, 1);
+  await rest.getByRole('option', { name: 'は学生', exact: true }).tap();
+  await expect(sentence).toHaveValue('私は学生');
+  await expect(sentence).toBeFocused();
   await sentence.pressSequentially('desu');
   await expect(sentence).toHaveValue('私は学生です');
+});
+
+test('Use it: the first line converts the first word only, and the next word follows', async ({
+  page,
+}) => {
+  await openCompose(page);
+  const sentence = page.getByLabel('Your sentence', { exact: true });
+  await sentence.click();
+  await sentence.pressSequentially('watashihagakusei');
+  const popup = page.getByRole('listbox', { name: 'Kanji for わたしはがくせい' });
+  const first = popup.getByRole('option').first();
+  await expect(first).toHaveAccessibleName('First word only: 私, then は学生');
+  await expect(first).toHaveAttribute('aria-selected', 'true');
+  // The first word in ink, what would follow greyed, on a line of its own above the phrases.
+  const [word, next] = [first.locator('span').nth(0), first.locator('span').nth(1)];
+  await expect(word).toHaveText('私');
+  await expect(next).toHaveText('は学生');
+  const ink = await word.evaluate((node) => getComputedStyle(node).color);
+  await expect(next).not.toHaveCSS('color', ink);
+  await expect(next).toHaveCSS('font-family', /Klee One/);
+  await first.tap();
+  await expect(sentence).toHaveValue('私はがくせい');
+  await expect(sentence).toBeFocused();
+  const after = page.getByRole('listbox', { name: 'Kanji for はがくせい' });
+  await expect(after.getByRole('option').first()).toHaveAccessibleName(
+    'First word only: は, then 学生',
+  );
+  await sentence.press('Enter');
+  await expect(page.getByRole('listbox', { name: 'Kanji for がくせい' })).toBeVisible();
+  await sentence.press('Enter');
+  await expect(sentence).toHaveValue('私は学生');
+  await expect(page.getByRole('listbox')).toBeHidden();
 });
 
 test('Use it: the first kanji is highlighted, Enter converts, ↑ never jumps to the last', async ({
@@ -179,9 +216,11 @@ test('Use it: the kana a pick would replace is underlined over the text, as an I
   const sentence = page.getByLabel('Your sentence', { exact: true });
   await sentence.click();
   await sentence.pressSequentially('watashihagakusei');
-  await expect(page.getByRole('option', { name: '学生' })).toBeVisible();
+  await expect(page.getByRole('option', { name: '私は学生', exact: true })).toBeVisible();
+  // The first word is the highlighted part; the rest of the phrase is pending.
   const selected = page.locator('[data-segment="selected"]');
-  await expect(selected).toHaveText('がくせい');
+  await expect(selected).toHaveText('わたし');
+  await expect(page.locator('[data-segment="pending"]')).toHaveText('はがくせい');
   // The mirror lies exactly over the field, in the field's type.
   const [field, mirror] = await Promise.all([
     sentence.boundingBox(),
@@ -195,12 +234,15 @@ test('Use it: the kana a pick would replace is underlined over the text, as an I
   expect(Math.abs((mirror?.width ?? 0) - (field?.width ?? 0))).toBeLessThan(1);
   await expect(selected).toHaveCSS('font-family', /Klee One/);
   await expect(selected).toHaveCSS('color', 'rgba(0, 0, 0, 0)');
-  // The underlined kana starts where the field draws its 5th character.
+  // Once the first word is in, the next one is marked: it starts where the field draws its 2nd
+  // character.
+  await sentence.press('Enter');
+  await expect(sentence).toHaveValue('私はがくせい');
+  await expect(selected).toHaveText('は');
   const left = await selected.evaluate((node) => node.getBoundingClientRect().left);
   const font = Number.parseFloat(await sentence.evaluate((n) => getComputedStyle(n).fontSize));
-  expect(Math.abs(left - ((field?.x ?? 0) + 4 * font))).toBeLessThan(3);
-  await sentence.press('Enter');
-  await expect(sentence).toHaveValue('わたしは学生');
+  expect(Math.abs(left - ((field?.x ?? 0) + font))).toBeLessThan(3);
+  await sentence.press('Escape');
   await expect(page.locator('[data-segment]')).toHaveCount(0);
 });
 

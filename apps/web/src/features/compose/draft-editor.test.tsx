@@ -1,4 +1,4 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { beforeEach, describe, expect, it } from 'vitest';
@@ -55,17 +55,25 @@ describe('DraftEditor (C6)', () => {
     expect(field.value).toBe('学生');
   });
 
-  it('marks the kana a pick would replace, the highlighted part more strongly', async () => {
+  it('marks the phrase a pick would convert, the highlighted first word more strongly', async () => {
     const field = await renderDraft();
     await userEvent.type(field, 'korehagakusei');
-    await screen.findByRole('option', { name: '学生' });
-    expect(segment('selected')).toEqual(['がくせい']);
+    await screen.findByRole('listbox', { name: 'Kanji for これはがくせい' });
+    expect(segment('selected')).toEqual(['これ']);
+    expect(segment('pending')).toEqual(['はがくせい']);
     const mark = document.querySelector('[data-segment="selected"]')?.parentElement;
     expect(mark?.textContent).toBe('これはがくせい');
     expect(mark?.closest('[aria-hidden="true"]')).toBeTruthy();
+    // Enter takes the first word; the next one is marked and offered at once.
+    await userEvent.keyboard('{Enter}');
+    await screen.findByRole('listbox', { name: 'Kanji for はがくせい' });
+    expect(segment('selected')).toEqual(['は']);
+    await userEvent.keyboard('{Enter}');
+    await screen.findByRole('listbox', { name: 'Kanji for がくせい' });
+    expect(segment('selected')).toEqual(['がくせい']);
     await userEvent.keyboard('{Enter}');
     expect(field.value).toBe('これは学生');
-    expect(document.querySelector('[data-segment]')).toBeNull();
+    await waitFor(() => expect(document.querySelector('[data-segment]')).toBeNull());
   });
 
   it('clears the mark on Escape and keeps the kana', async () => {

@@ -1,4 +1,4 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import type { Repos } from '../domain/repos.ts';
@@ -98,20 +98,48 @@ describe('AskInput (A4, C6)', () => {
     expect(screen.getByRole('button', { name: 'Type romaji as kana' })).toBeTruthy();
   });
 
-  it('offers kanji for the kana before the caret and a tap replaces it', async () => {
+  it('offers the phrase before the caret, cut into words, and a tap converts it', async () => {
     const { field } = await renderAsk();
     await kanaOn();
     await userEvent.type(field, 'korehagakusei');
     expect(field.value).toBe('これはがくせい');
-    const popup = await screen.findByRole('listbox', { name: 'Kanji for がくせい' });
-    const student = await screen.findByRole('option', { name: '学生' });
-    expect(popup.contains(student)).toBe(true);
-    expect(student.getAttribute('lang')).toBe('ja');
-    expect(fireEvent.mouseDown(student)).toBe(false);
-    await userEvent.click(student);
+    const popup = await screen.findByRole('listbox', { name: 'Kanji for これはがくせい' });
+    const phrase = await screen.findByRole('option', { name: 'これは学生' });
+    expect(popup.contains(phrase)).toBe(true);
+    expect(phrase.getAttribute('lang')).toBe('ja');
+    expect(fireEvent.mouseDown(phrase)).toBe(false);
+    await userEvent.click(phrase);
     expect(field.value).toBe('これは学生');
     expect(field.selectionStart).toBe(5);
     expect(document.activeElement).toBe(field);
+  });
+
+  it('shows the first word in ink and the rest greyed; it converts that word alone', async () => {
+    const { field } = await renderAsk();
+    await kanaOn();
+    await userEvent.type(field, 'honwoyomu');
+    await screen.findByRole('listbox', { name: 'Kanji for ほんをよむ' });
+    const first = screen.getByRole('option', { name: 'First word only: 本, then を読む' });
+    expect(first.getAttribute('aria-selected')).toBe('true');
+    expect([...first.children].map((part) => part.textContent)).toEqual([
+      '本',
+      'を読む',
+      'first word',
+    ]);
+    expect(screen.getByRole('option', { name: '本を読む' })).toBeTruthy();
+    await userEvent.keyboard('{Enter}');
+    expect(field.value).toBe('本をよむ');
+    expect(field.selectionStart).toBe(4);
+    // The rest is looked up at once: を stays kana, then 読む.
+    await screen.findByRole('listbox', { name: 'Kanji for をよむ' });
+    expect(screen.getAllByRole('option')[0]?.getAttribute('aria-label')).toBe(
+      'First word only: を, then 読む',
+    );
+    await userEvent.keyboard('{Enter}');
+    await screen.findByRole('listbox', { name: 'Kanji for よむ' });
+    await userEvent.keyboard('{Enter}');
+    expect(field.value).toBe('本を読む');
+    await waitFor(() => expect(screen.queryByRole('listbox')).toBeNull());
   });
 
   it('offers kanji for selected kana typed with an IME', async () => {

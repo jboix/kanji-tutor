@@ -63,19 +63,30 @@ function usePlacement(field: RefObject<Field | null>, anchor: number, deps: read
   return { popup, style };
 }
 
+/** The kana the options cover: the whole phrase being converted. */
+function phraseKana(typing: JapaneseTyping): string {
+  const { candidates, value } = typing;
+  const start = Math.min(...candidates.map((candidate) => candidate.start));
+  const end = Math.max(...candidates.map((candidate) => candidate.end));
+  return candidates.length > 0 ? value.slice(start, end) : '';
+}
+
 /**
- * The kanji popup (C6): spellings for the kana being typed, from the local dictionary, the
- * learner's own words first, as a line of characters right above that kana (below it when there
- * is no room). The focus stays in the field, which points at the highlighted option. Its parent
- * must be positioned: the popup is laid out against it.
+ * The kanji popup (C6), like an input method's: the phrase being typed as it would be converted,
+ * its first word in ink and the rest greyed (taking that line converts the first word only), and
+ * below it a row of whole-phrase spellings, from the local dictionary, the learner's own words
+ * first. It sits right above that kana (below it when there is no room). The focus stays in the
+ * field, which points at the highlighted option. Its parent must be positioned: the popup is
+ * laid out against it.
  */
 export function KanjiCandidatePopup({ typing }: { typing: JapaneseTyping }) {
   const { candidates, popup } = typing;
   const anchor = Math.min(...candidates.map((candidate) => candidate.start));
   const placed = usePlacement(typing.ref, anchor, [typing.value, candidates, popup.open]);
   const t = useT();
-  const kana = candidates[0]?.kana;
+  const kana = phraseKana(typing);
   if (!popup.open || !kana) return null;
+  const lead = candidates[0]?.next === undefined ? 0 : 1;
   return (
     <div className={styles.layer}>
       <div
@@ -87,34 +98,55 @@ export function KanjiCandidatePopup({ typing }: { typing: JapaneseTyping }) {
         style={placed.style}
         onMouseDown={keepFocus}
       >
-        {candidates.map((candidate, index) => (
-          <CandidateOption
-            key={`${candidate.start}:${candidate.form}`}
-            typing={typing}
-            index={index}
-          />
-        ))}
+        {lead > 0 && <CandidateOption typing={typing} index={0} />}
+        <div className={styles.row}>
+          {candidates.slice(lead).map((candidate, i) => (
+            <CandidateOption
+              key={`${candidate.end}:${candidate.form}`}
+              typing={typing}
+              index={i + lead}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
+/** The first word alone: its spelling in ink, what would follow greyed, and a quiet hint. */
+function FirstWord({ form, next }: { form: string; next: string }) {
+  const t = useT();
+  return (
+    <>
+      <span>{form}</span>
+      <span className={styles.next}>{next}</span>
+      <span className={styles.hint} aria-hidden="true">
+        {t('ui.kanjiFirstWordHint')}
+      </span>
+    </>
+  );
+}
+
 function CandidateOption({ typing, index }: { typing: JapaneseTyping; index: number }) {
+  const t = useT();
   const candidate = typing.candidates[index];
   if (!candidate) return null;
+  const { form, next } = candidate;
   return (
     <div
       role="option"
       id={typing.popup.optionId(index)}
       aria-selected={index === typing.popup.index}
+      aria-label={next === undefined ? undefined : t('ui.kanjiFirstWord', { word: form, next })}
       lang="ja"
       tabIndex={-1}
-      className={cx(styles.option, candidate.known && styles.known)}
+      className={cx(styles.option, candidate.known && styles.known, next && styles.first)}
       data-kana={candidate.kana}
+      data-first={next === undefined ? undefined : true}
       onClick={() => typing.pick(candidate)}
       onKeyDown={typing.handlers.onKeyDown}
     >
-      {candidate.form}
+      {next === undefined ? form : <FirstWord form={form} next={next} />}
     </div>
   );
 }

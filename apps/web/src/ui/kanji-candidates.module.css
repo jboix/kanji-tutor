@@ -15,18 +15,25 @@
   position: absolute;
   z-index: 5;
   display: flex;
+  flex-direction: column;
   max-width: 100%;
   border-radius: 8px;
   background: var(--paper-raised);
   box-shadow:
     0 0 0 1px var(--rule),
     0 6px 18px rgb(0 0 0 / 0.14);
+  overflow: hidden;
+}
+
+/* The whole-phrase spellings: one line, which scrolls inside the card when it is too long. */
+.row {
+  display: flex;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scrollbar-width: none;
 }
 
-.popup::-webkit-scrollbar {
+.row::-webkit-scrollbar {
   display: none;
 }
 
@@ -57,6 +64,26 @@
   left: 0;
   width: 1px;
   background: var(--rule);
+}
+
+/* The phrase as it would be converted, on its own line above the row: the first word in ink, what
+   would follow it greyed. Taking it converts the first word only. */
+.first {
+  justify-content: flex-start;
+  gap: 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.next {
+  color: var(--ink-faint);
+}
+
+.hint {
+  margin-left: auto;
+  padding-left: 16px;
+  color: var(--ink-faint);
+  font-family: var(--font-ui);
+  font-size: 12px;
 }
 
 /* The highlight that Enter picks, on the first candidate from the start: a soft fill with an ink

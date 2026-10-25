@@ -7,6 +7,7 @@ const at = (form: string, kana: string, start: number): KanjiCandidate => ({
   kana,
   start,
   end: start + kana.length,
+  runEnd: start + kana.length,
   wordId: form,
   known: false,
 });

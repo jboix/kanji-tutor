@@ -1,19 +1,24 @@
 /**
- * Kanji spellings for kana being typed (C6), like an IME's candidate row: the kana just before
- * the caret, or the selected kana (hiragana only), looked up by reading in the local dictionary only. No
- * network, no AI. Tapping a candidate replaces that kana.
+ * Kanji spellings for kana being typed (C6), like a small input method: the hiragana run just
+ * before the caret, or the selected hiragana, is cut into words with the local dictionary only
+ * (no network, no AI), particles and endings kept in kana. The options are whole phrases (私は,
+ * わたしは, ワタシは, 渡しは…), led by the first word alone with what would follow it greyed:
+ * taking it converts that word only, and the rest is looked up next.
  */
-import { hasKanji, toKanaFold } from '../kana.ts';
+import { toKatakana } from 'wanakana';
+import { hasKanji } from '../kana.ts';
 import type { Repos } from '../repos.ts';
 import type { Word } from '../types.ts';
+import { bestPath, MAX_WORD, type Segment, type Spelling } from './kana-lattice.ts';
+import { lookupKeys, readsAs, spellerOf } from './kana-spellings.ts';
 
 /**
  * Hiragana: the characters a kana run is made of. Katakana stays katakana: it is how a
  * loanword or a name is written, not a reading waiting for its kanji.
  */
 const KANA = /^[ぁ-ゖ]$/u;
-/** The longest kana run looked up: longer runs are rarely one word. */
-const MAX_RUN = 8;
+/** The longest kana run looked up: a short phrase. */
+const MAX_RUN = 12;
 /** Candidates shown at most. */
 export const CANDIDATE_LIMIT = 8;
 
@@ -23,9 +28,13 @@ export interface KanjiCandidate {
   kana: string;
   start: number;
   end: number;
-  wordId: string;
+  /** Where the looked-up kana ends: after a first-word pick, the caret stays there. */
+  runEnd: number;
   /** The learner tracks the word (level 1 or more). */
   known: boolean;
+  wordId?: string;
+  /** The first word only: what the rest of the phrase would become next, shown greyed. */
+  next?: string;
 }
 
 /** A span of the text to look up. */
@@ -35,87 +44,151 @@ interface Run {
   end: number;
 }
 
+/** Where the caret or the selection is, and where settled text ends (nothing before it). */
+export interface LookupAt {
+  start: number;
+  end: number;
+  /** Kana before this was settled by a pick: the run never reaches back past it. */
+  from?: number;
+}
+
 const isKana = (text: string) => text !== '' && [...text].every((char) => KANA.test(char));
 
-/** Where the kana run that ends at `end` starts (at most {@link MAX_RUN} characters back). */
-function runStart(text: string, end: number): number {
+/** Where the kana run that ends at `end` starts: at most {@link MAX_RUN} back, never before `from`. */
+function runStart(text: string, end: number, from: number): number {
   let start = end;
-  while (start > 0 && end - start < MAX_RUN && KANA.test(text[start - 1] ?? '')) start--;
+  while (start > from && end - start < MAX_RUN && KANA.test(text[start - 1] ?? '')) start--;
   return start;
 }
 
-/**
- * The spans to look up, longest first: a kana selection as it is, else every ending of the
- * kana run just before the caret (がくせい, くせい, せい, い), so the last word typed is found.
- */
-export function kanaRuns(text: string, start: number, end = start): Run[] {
-  if (end > start) {
-    const kana = text.slice(start, end);
-    return isKana(kana) ? [{ kana, start, end }] : [];
-  }
-  const runs: Run[] = [];
-  for (let from = runStart(text, start); from < start; from++) {
-    runs.push({ kana: text.slice(from, start), start: from, end: start });
-  }
-  return runs;
+/** The span to look up: a kana selection as it is, else the kana run just before the caret. */
+export function kanaRun(text: string, { start, end, from = 0 }: LookupAt): Run | undefined {
+  const at = end > start ? start : runStart(text, start, from <= start ? from : 0);
+  const to = end > start ? end : start;
+  const kana = text.slice(at, to);
+  return isKana(kana) ? { kana, start: at, end: to } : undefined;
 }
 
-const JLPT_RANK = (word: Word) => word.jlpt ?? 0;
+/** `repos.dictionary.wordsByText`, kept per dictionary: typing repeats the same spans. */
+const cache = new WeakMap<object, Map<string, Promise<Word[]>>>();
+const CACHE_SIZE = 4000;
 
-/** Known words first (most known first), then common ones, then the easier JLPT level. */
-function rank(words: readonly Word[], levels: ReadonlyMap<string, number>): Word[] {
-  const level = (word: Word) => levels.get(word.id) ?? 0;
-  return [...words].sort(
-    (a, b) =>
-      level(b) - level(a) ||
-      Number(b.common) - Number(a.common) ||
-      JLPT_RANK(b) - JLPT_RANK(a) ||
-      (a.forms[0]?.length ?? 0) - (b.forms[0]?.length ?? 0),
-  );
+function cacheOf(repos: Repos): Map<string, Promise<Word[]>> {
+  const kept = cache.get(repos.dictionary) ?? new Map<string, Promise<Word[]>>();
+  cache.set(repos.dictionary, kept);
+  return kept;
 }
 
-/** Words read exactly as `kana`, with a kanji form. */
-async function wordsReading(repos: Repos, kana: string): Promise<Word[]> {
-  const words = await repos.dictionary.wordsByText(kana);
-  const folded = toKanaFold(kana);
-  const reads = (w: Word) => w.readings.some((r) => toKanaFold(r) === folded);
-  return words.filter((w) => reads(w) && w.forms.some(hasKanji));
+function cachedWords(kept: Map<string, Promise<Word[]>>, repos: Repos, kana: string) {
+  const found = kept.get(kana);
+  if (found) return found;
+  if (kept.size >= CACHE_SIZE) kept.clear();
+  const words = repos.dictionary.wordsByText(kana);
+  kept.set(kana, words);
+  return words;
+}
+
+/** Words for each key; nothing at all may mean the dictionary is still loading: ask again later. */
+async function lookUp(repos: Repos, keys: readonly string[]): Promise<Word[][]> {
+  const kept = cacheOf(repos);
+  const found = await Promise.all(keys.map((key) => cachedWords(kept, repos, key)));
+  if (found.every((words) => words.length === 0)) for (const key of keys) kept.delete(key);
+  return found;
 }
 
 async function trackedLevels(repos: Repos, words: readonly Word[]) {
-  const items = await repos.items.getMany(words.map((w) => `word:${w.id}` as const));
+  const ids = [...new Set(words.map((w) => `word:${w.id}` as const))];
+  const items = await repos.items.getMany(ids);
   return new Map(items.flatMap((item) => (item ? [[item.ref, item.level] as const] : [])));
 }
 
+/** The run cut into its likeliest words, each with its spellings. */
+async function segmentRun(repos: Repos, kana: string): Promise<Segment[]> {
+  const keys = lookupKeys(kana, MAX_WORD);
+  const found = await lookUp(repos, keys);
+  const words = new Map(
+    keys.map((key, i) => [key, (found[i] ?? []).filter((w) => readsAs(w, key))]),
+  );
+  const levels = await trackedLevels(repos, [...words.values()].flat());
+  return bestPath(kana, spellerOf({ words, levels }));
+}
+
+const formOf = (segment: Segment | undefined) => segment?.spellings[0]?.form ?? segment?.kana ?? '';
+
+/** The options for a whole phrase: same span, different spellings. */
+function phraseOptions(run: Run, segments: readonly Segment[]): KanjiCandidate[] {
+  const [first, ...others] = segments;
+  const rest = others.map(formOf).join('');
+  const whole = (form: string, spelling?: Spelling): KanjiCandidate => ({
+    form,
+    ...run,
+    runEnd: run.end,
+    known: others.length === 0 && (spelling?.known ?? false),
+    ...(spelling?.wordId && others.length === 0 ? { wordId: spelling.wordId } : {}),
+  });
+  const spellings = first?.spellings ?? [];
+  return [
+    whole(formOf(first) + rest, spellings[0]),
+    whole(run.kana),
+    whole(toKatakana(first?.kana ?? '') + rest),
+    ...spellings.slice(1).map((s) => whole(s.form + rest, s)),
+  ];
+}
+
+/** The first word alone, with the rest greyed: only when the phrase has more than one word. */
+function firstWordOption(run: Run, segments: readonly Segment[]): KanjiCandidate[] {
+  const [first, ...others] = segments;
+  const spelling = first?.spellings[0];
+  if (!first || others.length === 0) return [];
+  return [
+    {
+      form: formOf(first),
+      kana: first.kana,
+      start: run.start,
+      end: run.start + first.kana.length,
+      runEnd: run.end,
+      known: spelling?.known ?? false,
+      ...(spelling?.wordId ? { wordId: spelling.wordId } : {}),
+      next: others.map(formOf).join(''),
+    },
+  ];
+}
+
+/** One option per phrase spelling, the first word's option kept apart from its whole phrase. */
+function distinct(options: readonly KanjiCandidate[]): KanjiCandidate[] {
+  const seen = new Set<string>();
+  return options.filter((option) => {
+    const key = `${option.end}:${option.form}`;
+    return !seen.has(key) && seen.add(key);
+  });
+}
+
 /**
- * Kanji spellings for the kana at the caret or in the selection (C6): longer runs first, and
- * within a run the learner's own words first, then common words and easier levels. One entry
- * per spelling, at most `limit`.
+ * Kanji spellings for the kana at the caret or in the selection (C6): the first word alone (with
+ * the rest greyed), then the whole phrase as cut, in kana as typed, in katakana, and with the
+ * first word's other spellings. Nothing when no option has a kanji. At most `limit`.
  */
 export async function kanjiCandidates(
   repos: Repos,
   text: string,
-  selection: { start: number; end: number },
+  at: LookupAt,
   limit = CANDIDATE_LIMIT,
 ): Promise<KanjiCandidate[]> {
-  const runs = kanaRuns(text, selection.start, selection.end);
-  const found = await Promise.all(runs.map((run) => wordsReading(repos, run.kana)));
-  const levels = await trackedLevels(repos, found.flat());
-  const seen = new Set<string>();
-  const out: KanjiCandidate[] = [];
-  runs.forEach((run, i) => {
-    for (const word of rank(found[i] ?? [], levels)) {
-      const form = word.forms.find(hasKanji) ?? '';
-      if (seen.has(form)) continue;
-      seen.add(form);
-      out.push({ form, ...run, wordId: word.id, known: (levels.get(word.id) ?? 0) > 0 });
-    }
-  });
-  return out.slice(0, limit);
+  const run = kanaRun(text, at);
+  if (!run) return [];
+  const segments = await segmentRun(repos, run.kana);
+  const options = distinct([...firstWordOption(run, segments), ...phraseOptions(run, segments)]);
+  return options.some((option) => hasKanji(option.form)) ? options.slice(0, limit) : [];
 }
 
-/** The text with the candidate's kana replaced by its spelling, and the caret just after it. */
+/**
+ * The text with the candidate's kana replaced by its spelling. The caret goes after the
+ * spelling, or, for the first word only, stays at the end of the phrase; `settled` is where the
+ * converted part ends, so the next lookup starts there.
+ */
 export function applyCandidate(text: string, candidate: KanjiCandidate) {
-  const { start, end, form } = candidate;
-  return { text: text.slice(0, start) + form + text.slice(end), caret: start + form.length };
+  const { start, end, form, runEnd } = candidate;
+  const settled = start + form.length;
+  const caret = Math.max(runEnd, end) + form.length - (end - start);
+  return { text: text.slice(0, start) + form + text.slice(end), caret, settled };
 }

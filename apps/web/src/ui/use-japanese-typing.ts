@@ -126,7 +126,7 @@ const lookupKey = (text: string, { start, end }: Selection) => `${start}:${end}:
  * screen meanwhile (no flicker), but are not `fresh`: a key pressed in the pause (Enter) never
  * picks a candidate for kana that has moved on.
  */
-function useCandidates(text: string, { start, end }: Selection): Found {
+function useCandidates(text: string, { start, end }: Selection, from: number): Found {
   const { repos } = useServices();
   const [found, setFound] = useState({ list: NONE.list, typed: false, key: '' });
   const looked = useRef(text);
@@ -136,7 +136,7 @@ function useCandidates(text: string, { start, end }: Selection): Found {
       const typed = looked.current !== text;
       looked.current = text;
       const key = lookupKey(text, { start, end });
-      void kanjiCandidates(repos, text, { start, end }).then((list) => {
+      void kanjiCandidates(repos, text, { start, end, from }).then((list) => {
         if (live) setFound({ list, typed, key });
       });
     }, LOOKUP_DELAY_MS);
@@ -144,7 +144,7 @@ function useCandidates(text: string, { start, end }: Selection): Found {
       live = false;
       clearTimeout(timer);
     };
-  }, [repos, text, start, end]);
+  }, [repos, text, start, end, from]);
   if (text === '') return NONE;
   return {
     list: found.list,
@@ -177,18 +177,39 @@ function useSelection(ref: RefObject<Field | null>, initial: number) {
   return { selection, setSelection, follow };
 }
 
-/** A pick replaces its kana, if the kana is still there, and keeps the focus in the field. */
+/**
+ * A pick replaces its kana, if the kana is still there, and keeps the focus in the field. What
+ * it converted is settled: the next lookup starts after it, so the next word is offered at once.
+ */
 function picker(
   value: string,
   place: (text: string, at: number) => void,
+  settle: (prefix: string) => void,
   ref: RefObject<Field | null>,
 ) {
   return (candidate: KanjiCandidate) => {
     if (value.slice(candidate.start, candidate.end) !== candidate.kana) return;
     const next = applyCandidate(value, candidate);
+    settle(next.text.slice(0, next.settled));
     place(next.text, next.caret);
     ref.current?.focus();
   };
+}
+
+/**
+ * Where settled text ends: the text up to the last pick, while the text still starts with it.
+ * An edit before that point (a deletion, a paste) unsettles it.
+ */
+function useSettled(value: string) {
+  const [prefix, settle] = useState<string | undefined>(undefined);
+  const from = prefix !== undefined && value.startsWith(prefix) ? prefix.length : 0;
+  return { from, settle };
+}
+
+/** The candidates for the text and selection, and how a pick settles what it converted. */
+function useLookup(value: string, selection: Selection) {
+  const { from, settle } = useSettled(value);
+  return { found: useCandidates(value, selection, from), settle };
 }
 
 export interface TypingOptions {
@@ -226,12 +247,12 @@ export function useJapaneseTyping<E extends Field>(
     },
     [mode, place, busy],
   );
-  const found = useCandidates(value, selection);
+  const { found, settle } = useLookup(value, selection);
   // A Japanese keyboard, or its composition in progress, has its own candidates: none of ours.
   // Only the sentence field watches for one; the Ask box keeps its popup as it was.
   const quiet = mode === 'native' || (options.onNative !== undefined && composing.now);
   const candidates = useStanding(found.list, value, quiet);
-  const pick = picker(value, place, ref);
+  const pick = picker(value, place, settle, ref);
   const popup = useCandidatePopup(candidates, pick, found);
   const handlers = { ...useHandlers(composing, update, follow, options.onNative), ...popup.field };
   return { ref, value, handlers, candidates, popup, pick };
