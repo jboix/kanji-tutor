@@ -127,3 +127,12 @@ export function withPageKind(lesson: ScannedLesson, page: number, kind: ScanPage
   const pages = lesson.pages.map((p, i) => (i === page ? { ...p, kind } : p));
   return { ...lesson, pages };
 }
+
+/** Deletes a lesson and its lines' sentences; what was learned from it stays in the items. */
+export async function deleteScan(repos: Repos, id: string): Promise<void> {
+  const lesson = await repos.scans.get(id);
+  if (!lesson) return;
+  const ids = lesson.pages.flatMap((page) => page.lines.map((line) => line.sentenceId));
+  for (const sentenceId of ids) await repos.sentences.delete(sentenceId);
+  await repos.scans.delete(id);
+}

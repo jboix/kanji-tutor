@@ -4,6 +4,7 @@
  * page for the questions. Items not in our lists cannot be practised, so they do not count.
  */
 import type { ScannedLesson } from '../scan-types.ts';
+import { SCAN_PRACTICE_CARDS } from './scan-practice.ts';
 import { questionKey, scanItemKey } from './scans.ts';
 
 export interface ScanPart {
@@ -65,4 +66,13 @@ export function withPractised(
   const practised = { ...lesson.practised };
   for (const key of keys) practised[key] = now;
   return { ...lesson, practised, updatedAt: now };
+}
+
+/** About how long a card of a scanned lesson's practice takes, in seconds. */
+const CARD_SECONDS = 30;
+
+/** About how many minutes one practice of the lesson takes: its cards, at most 12. */
+export function scanPracticeMinutes(lesson: ScannedLesson, cards = SCAN_PRACTICE_CARDS): number {
+  const total = scanProgress(lesson).total;
+  return Math.max(1, Math.round((Math.min(cards, total) * CARD_SECONDS) / 60));
 }

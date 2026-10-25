@@ -112,6 +112,18 @@ export function gradeHandout(question: HandoutQuestion, answer: string, skipped 
   return { verdict: right ? 'correct' : 'wrong', expected: question.answer, given: answer.trim() };
 }
 
+/** The learner's own mark, for a free answer; else the grade against the tutor's answer. */
+function gradedOrMarked(
+  question: HandoutQuestion,
+  input: { answer: string; skipped?: boolean | undefined; selfMarked?: boolean | undefined },
+): Grade {
+  if (input.selfMarked === undefined || input.skipped) {
+    return gradeHandout(question, input.answer, input.skipped === true);
+  }
+  const verdict = input.selfMarked ? 'correct' : 'wrong';
+  return { verdict, expected: question.answer, given: input.answer.trim() };
+}
+
 function reviewOf(id: Item['id'], grade: Grade, input: ScanAnswerBase): Review {
   const review: Review = {
     at: input.now,
@@ -164,11 +176,16 @@ async function applyToItems(repos: Repos, q: HandoutQuestion, grade: Grade, inpu
  */
 export async function recordScanQuestion(
   repos: Repos,
-  input: Omit<ScanAnswerBase, 'key'> & { question: HandoutQuestion; answer: string },
+  input: Omit<ScanAnswerBase, 'key'> & {
+    question: HandoutQuestion;
+    answer: string;
+    /** A free answer the learner marked against the tutor's: right or not. */
+    selfMarked?: boolean | undefined;
+  },
 ): Promise<Grade> {
   const { question } = input;
   const base = { ...input, key: questionKey(question) };
-  const grade = gradeHandout(question, input.answer, input.skipped === true);
+  const grade = gradedOrMarked(question, input);
   await applyToItems(repos, question, grade, base);
   if (grade.verdict === 'correct') {
     await markScanPractised(repos, input.lessonId, [base.key, ...question.practises], input.now);

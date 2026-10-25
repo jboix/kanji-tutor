@@ -140,10 +140,18 @@ export {
   type ScanCard,
   type ScanPracticeOptions,
 } from './scan-practice.ts';
-export { type ScanPart, type ScanProgress, scanProgress, withPractised } from './scan-progress.ts';
+export {
+  type ScanPart,
+  type ScanProgress,
+  scanPracticeMinutes,
+  scanProgress,
+  withPractised,
+} from './scan-progress.ts';
+export { countScanCard, prepareScanCard, scanSessionCards } from './scan-session.ts';
 export { describeScanItems, kanjiReadings, type ScanItemView } from './scan-view.ts';
 export {
   type BuiltScan,
+  deleteScan,
   emptyScan,
   type NewScan,
   questionKey,

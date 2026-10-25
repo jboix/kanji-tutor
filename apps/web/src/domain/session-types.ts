@@ -1,5 +1,6 @@
 import type { Drill } from './drills/types.ts';
 import type { ComprehensionSet, Question } from './questions/types.ts';
+import type { HandoutQuestion } from './scan-types.ts';
 import type { ItemId, KnowledgeLevel, Sentence } from './types.ts';
 
 /** One underlined target inside a session sentence. */
@@ -44,6 +45,13 @@ export interface SessionCard {
    * shows a "New grammar" chip for each, opening its intro in a sheet.
    */
   newGrammar?: string[];
+  /**
+   * Set on the cards of a scanned lesson's practice: the lesson, and the key of its progress the
+   * card counts for (`scanItemKey`, `questionKey`).
+   */
+  scan?: { lessonId: string; key: string };
+  /** Set on a handout question card of a scanned lesson (reason 'drill', with `scan`). */
+  handout?: HandoutQuestion;
 }
 
 /** Knowledge levels the selector reads, keyed by JMdict word id. */

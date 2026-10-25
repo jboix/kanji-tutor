@@ -20,9 +20,10 @@ import {
 } from './scan-answer.ts';
 import { buildScan } from './scan-build.ts';
 import { buildScanPractice } from './scan-practice.ts';
-import { scanProgress } from './scan-progress.ts';
+import { scanPracticeMinutes, scanProgress } from './scan-progress.ts';
+import { countScanCard, prepareScanCard, scanSessionCards } from './scan-session.ts';
 import { describeScanItems, kanjiReadings } from './scan-view.ts';
-import { emptyScan, saveScan } from './scans.ts';
+import { deleteScan, emptyScan, saveScan } from './scans.ts';
 import { buildSession } from './session.ts';
 
 const NOW = Date.parse('2026-10-25T10:00:00Z');
@@ -207,5 +208,62 @@ describe('scan answers', () => {
     expect(Object.keys(saved?.practised ?? {}).sort()).toEqual(
       ['grammar:sou-look', 'kanji:雨', 'question:2-1', 'question:2-2', 'word:s1'].sort(),
     );
+  });
+});
+
+describe('a scanned lesson as a reading session', () => {
+  it('marks every card with its lesson and key, handout questions with the question', async () => {
+    const { r } = await setup();
+    const cards = await buildSession(r, { now: NOW, scan: 'scan1', listening: false });
+    expect(cards.length).toBeGreaterThan(0);
+    expect(cards.every((card) => card.scan?.lessonId === 'scan1')).toBe(true);
+    const handout = cards.find((card) => card.handout);
+    expect(handout).toMatchObject({ reason: 'drill', targets: [], scan: { key: 'question:2-1' } });
+    expect(await buildSession(r, { now: NOW, scan: 'gone' })).toEqual([]);
+  });
+
+  it('tracks what a card practises before the answer, and counts it once right', async () => {
+    const { r } = await setup();
+    const cards = await scanSessionCards(r, 'scan1', { now: NOW, listening: false });
+    const reading = cards.find((card) => card.scan?.key === 'kanji:雨');
+    if (!reading) throw new Error('no card');
+    await prepareScanCard(r, reading, NOW);
+    expect((await r.items.get(`word:${W.ame.id}`))?.source).toMatchObject({ kind: 'scan' });
+    await countScanCard(r, reading, false, NOW);
+    expect((await r.scans.get('scan1'))?.practised).toEqual({});
+    await countScanCard(r, reading, true, NOW);
+    expect((await r.scans.get('scan1'))?.practised).toEqual({ 'kanji:雨': NOW });
+  });
+
+  it('takes the learner’s own mark for a free answer', async () => {
+    const { r, lesson } = await setup();
+    const [question] = lesson.questions;
+    if (!question) throw new Error('no question');
+    const free = { ...question, type: 'free' as const };
+    const base = { lessonId: 'scan1', durationMs: 1000, now: NOW };
+    const kept = await recordScanQuestion(r, {
+      ...base,
+      question: free,
+      answer: 'x',
+      selfMarked: true,
+    });
+    expect(kept.verdict).toBe('correct');
+    const not = await recordScanQuestion(r, {
+      ...base,
+      question: free,
+      answer: 'そう',
+      selfMarked: false,
+    });
+    expect(not.verdict).toBe('wrong');
+  });
+
+  it('estimates the practice in minutes and deletes a lesson with its lines', async () => {
+    const { r, lesson } = await setup();
+    expect(scanPracticeMinutes(lesson)).toBe(4);
+    const line = lesson.pages[0]?.lines[0]?.sentenceId ?? '';
+    expect(await r.sentences.get(line)).toBeDefined();
+    await deleteScan(r, 'scan1');
+    expect(await r.scans.get('scan1')).toBeUndefined();
+    expect(await r.sentences.get(line)).toBeUndefined();
   });
 });

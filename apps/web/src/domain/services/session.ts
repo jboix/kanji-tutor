@@ -25,6 +25,7 @@ import { DAY_MS } from './items.ts';
 import { kanjiCardSession } from './kanji-cards.ts';
 import { buildLessonPart } from './lesson-session.ts';
 import { spanReadings, spanVariants } from './reading-check.ts';
+import { scanSessionCards } from './scan-session.ts';
 import { trustedSentences } from './sentence-trust.ts';
 import { SESSION_EXERCISES, sessionExercises } from './session-exercises.ts';
 import {
@@ -78,6 +79,8 @@ export interface BuildSessionOptions {
   grammar?: string;
   /** A round of kanji cards (`/read?cards=kanji`, Start → Kanji): see `kanjiCardSession`. */
   kanjiCards?: boolean;
+  /** Practise a scanned lesson (`/read?scan=…`), apart from the daily mix: see `scanSessionCards`. */
+  scan?: string;
   /** With `unit`: the lesson's 練習 section (S3), the unit's practice without its passage. */
   practice?: boolean;
   /** The device has a Japanese voice, so listening exercises can be made (S4). */
@@ -282,6 +285,19 @@ async function tailFor(repos: Repos, options: BuildSessionOptions) {
   return localPassageCard(repos, options.unit);
 }
 
+/** The sessions that are not a reading mix: kanji cards, a grammar point, a scanned lesson. */
+function specialSession(repos: Repos, options: BuildSessionOptions) {
+  const { now } = options;
+  if (options.kanjiCards) return kanjiCardSession(repos, now);
+  if (options.scan) {
+    return scanSessionCards(repos, options.scan, { now, listening: options.listening === true });
+  }
+  if (options.grammar) {
+    return buildGrammarSession(repos, options.grammar, now, (c) => finish(c, false));
+  }
+  return undefined;
+}
+
 /**
  * Builds today's session (R2): the learner's own new sentences first (an accepted Use it
  * sentence, a verified AI sentence; see `ownPriority`),
@@ -297,10 +313,8 @@ export async function buildSession(
   repos: Repos,
   options: BuildSessionOptions,
 ): Promise<SessionCard[]> {
-  if (options.kanjiCards) return kanjiCardSession(repos, options.now);
-  if (options.grammar) {
-    return buildGrammarSession(repos, options.grammar, options.now, (c) => finish(c, false));
-  }
+  const own = specialSession(repos, options);
+  if (own) return own;
   const { unit } = options;
   const passage = async () => {
     const card = unit ? await localPassageCard(repos, unit) : undefined;
