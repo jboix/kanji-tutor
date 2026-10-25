@@ -108,6 +108,11 @@ export const ui = {
   aiActionName: '{label}, 1 solicitud, usa IA',
   aiActionNameSaved: '{label}, guardado, usa IA: ninguna solicitud',
   aiActionCost: '1 solicitud',
+  aiActionNameMany: {
+    one: '{label}, 1 solicitud, usa IA',
+    other: '{label}, {n} solicitudes, usa IA',
+  },
+  aiActionCostMany: { one: '1 solicitud', other: '{n} solicitudes' },
   aiActionSaved: 'Guardado',
   aiAskHint: 'Usa IA · 1 solicitud por pregunta',
   aiAskSend: 'Preguntar',

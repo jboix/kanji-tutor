@@ -99,6 +99,8 @@ export const ui = {
   aiActionName: '{label}, 1 request, uses AI',
   aiActionNameSaved: '{label}, saved, uses AI: no request',
   aiActionCost: '1 request',
+  aiActionNameMany: { one: '{label}, 1 request, uses AI', other: '{label}, {n} requests, uses AI' },
+  aiActionCostMany: { one: '1 request', other: '{n} requests' },
   aiActionSaved: 'Saved',
   aiAskHint: 'Uses AI · 1 request per question',
   aiAskSend: 'Ask',

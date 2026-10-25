@@ -49,6 +49,11 @@ export interface AiActionProps {
   content?: ReactNode;
   /** The icon of the `icon` look; its label is then the accessible name only. */
   icon?: ReactNode;
+  /**
+   * Requests the press sends when it is more than one, e.g. one per photographed page: the
+   * hint and the accessible name say "3 requests".
+   */
+  requests?: number | undefined;
 }
 
 /** True once `peek` found a cached answer for the current input. */
@@ -80,15 +85,26 @@ function useAuto(auto: boolean, press: () => void) {
   }, [auto]);
 }
 
-/** The seal, the label and the hint: what every AI press shows, the same everywhere. */
-export function AiActionContent(props: { label: ReactNode; saved: boolean }) {
+/** "1 request", "3 requests" or "Saved". */
+function useCostHint(saved: boolean, requests: number | undefined = 1): string {
   const t = useT();
+  if (saved) return t('ui.aiActionSaved');
+  return requests === 1 ? t('ui.aiActionCost') : t('ui.aiActionCostMany', { n: requests });
+}
+
+/** The seal, the label and the hint: what every AI press shows, the same everywhere. */
+export function AiActionContent(props: {
+  label: ReactNode;
+  saved: boolean;
+  requests?: number | undefined;
+}) {
+  const hint = useCostHint(props.saved, props.requests);
   return (
     <>
       <AiSeal size={16} />
       <span className={styles.label}>{props.label}</span>{' '}
       <span className={cx(styles.hint, props.saved && styles.saved)} aria-hidden="true">
-        {props.saved ? t('ui.aiActionSaved') : t('ui.aiActionCost')}
+        {hint}
       </span>
     </>
   );
@@ -98,8 +114,13 @@ export function AiActionContent(props: { label: ReactNode; saved: boolean }) {
  * "Ask the tutor why, 1 request, uses AI" or "…, saved, uses AI: no request": the visible label
  * and hint first, in order, so a voice command naming them works (WCAG 2.5.3).
  */
-export function useAiActionName(label: string, saved = false): string {
+export function useAiActionName(
+  label: string,
+  saved = false,
+  requests: number | undefined = 1,
+): string {
   const t = useT();
+  if (!saved && requests !== 1) return t('ui.aiActionNameMany', { label, n: requests });
   return t(saved ? 'ui.aiActionNameSaved' : 'ui.aiActionName', { label });
 }
 
@@ -133,8 +154,8 @@ export function AiAction(props: AiActionProps) {
   const { ai } = useServices();
   const { label, run, look = 'chip', disabled } = props;
   const saved = useSaved(props.peek, ai);
-  const name = useAiActionName(label, saved);
-  const t = useT();
+  const name = useAiActionName(label, saved, props.requests);
+  const hint = useCostHint(saved, props.requests);
   const press = () => run(ai);
   useAuto(props.auto === true && !disabled, press);
   const icon = look === 'icon';
@@ -143,7 +164,7 @@ export function AiAction(props: AiActionProps) {
       look={look}
       block={props.block ?? false}
       aria-label={name}
-      title={icon ? t(saved ? 'ui.aiActionSaved' : 'ui.aiActionCost') : undefined}
+      title={icon ? hint : undefined}
       data-ai-action={saved ? 'saved' : 'request'}
       disabled={disabled}
       onClick={press}
@@ -151,7 +172,7 @@ export function AiAction(props: AiActionProps) {
       {icon ? (
         <IconContent icon={props.icon} />
       ) : (
-        <AiActionContent label={props.content ?? label} saved={saved} />
+        <AiActionContent label={props.content ?? label} saved={saved} requests={props.requests} />
       )}
     </ActionButton>
   );

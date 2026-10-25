@@ -108,6 +108,11 @@ export const ui = {
   aiActionName: '{label}, 1 requête, utilise l’IA',
   aiActionNameSaved: '{label}, enregistré, utilise l’IA : aucune requête',
   aiActionCost: '1 requête',
+  aiActionNameMany: {
+    one: '{label}, 1 requête, utilise l’IA',
+    other: '{label}, {n} requêtes, utilise l’IA',
+  },
+  aiActionCostMany: { one: '1 requête', other: '{n} requêtes' },
   aiActionSaved: 'Enregistré',
   aiAskHint: 'Utilise l’IA · 1 requête par question',
   aiAskSend: 'Demander',
