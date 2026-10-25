@@ -145,4 +145,7 @@ export const ui = {
   volumeUp: 'Louder',
   volumeOff: 'Off',
   percent: '{n}%',
+  practisedOf: '{done} of {total} practised',
+  notStarted: 'Not started',
+  progressOf: 'Progress: {line}',
 } as const;

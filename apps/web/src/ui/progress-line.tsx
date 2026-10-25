@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { cx } from './cx.ts';
 import styles from './progress-line.module.css';
 
 const clamp = (value: number) => Math.min(1, Math.max(0, value));
@@ -9,15 +10,17 @@ export interface ProgressLineProps {
   label: string;
   /** Spans instead of divs, for a line inside phrasing content such as a link (T7). */
   inline?: boolean;
+  /** The 4px line of a lesson's progress (lesson cards and pages). */
+  thin?: boolean;
 }
 
-/** A 6px accent bar on the rule colour (W-today; capture, units, learned). */
-export function ProgressLine({ value, label, inline = false }: ProgressLineProps) {
+/** A 6px accent bar on the rule colour (W-today; capture, units, learned), or a thin 4px one. */
+export function ProgressLine({ value, label, inline = false, thin = false }: ProgressLineProps) {
   const percent = Math.round(clamp(value) * 100);
   const Tag = inline ? 'span' : 'div';
   return (
     <Tag
-      className={styles.track}
+      className={cx(styles.track, thin && styles.thin)}
       role="progressbar"
       aria-label={label}
       aria-valuemin={0}

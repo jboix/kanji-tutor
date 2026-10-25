@@ -49,3 +49,22 @@ export function levelLine(t: Translate, { done, started, total }: LevelUnits): s
   const line = t('units.levelDone', { done, total });
   return started > 0 ? t('units.levelStarted', { line, n: started }) : line;
 }
+
+/**
+ * The quiet word beside a unit's title on the path: where it is ("Current · Words"), "Review" or
+ * "Skipped". None for a unit not started or done: its progress line says so.
+ */
+export function cardAside(t: Translate, view: UnitView): string | undefined {
+  if (view.skipped) return t('units.skipped');
+  if (view.state === 'done') return undefined;
+  if (view.state === 'not-started') return view.review ? t('units.reviewUnit') : undefined;
+  return stateLine(t, view);
+}
+
+/** "13 words · 3 grammar points": what the unit holds, counted as its progress counts them. */
+export function holdsLine(t: Translate, view: UnitView): string {
+  const n = view.words.total > 0 ? view.words.total : view.unit.words.length;
+  const words = t('units.wordCount', { n });
+  const grammar = t('units.grammarCount', { n: view.grammar.total });
+  return t('units.counts', { words, grammar });
+}

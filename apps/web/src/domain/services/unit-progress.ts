@@ -36,6 +36,29 @@ export function sectionsDone({ progress }: Pick<UnitView, 'progress'>): number {
   return LESSON_SECTIONS.filter((section) => sectionDone(progress.sections?.[section])).length;
 }
 
+/** A unit's items practised, out of all of them: plain counts for its progress line. */
+export interface Practised {
+  done: number;
+  total: number;
+  /** Opened or practised at all: before that the line says "Not started". */
+  started: boolean;
+}
+
+type PractisedInput = Pick<UnitView, 'words' | 'grammar' | 'state' | 'skipped' | 'progress'>;
+
+/**
+ * The unit's words met in a session and grammar points reviewed right, out of its words and
+ * points. A done unit (by the done rule or marked done) counts every item; a skipped one keeps
+ * its own counts.
+ */
+export function unitPractised(view: PractisedInput): Practised {
+  const { words, grammar, progress } = view;
+  const total = words.total + grammar.total;
+  const done = view.state === 'done' && !view.skipped ? total : words.met + grammar.reviewed;
+  const opened = progress.introducedAt !== undefined || progress.readAt !== undefined;
+  return { done, total, started: done > 0 || opened || view.state === 'done' };
+}
+
 /** A level's units: how many are done, started (introduced, not done), and in all (T4, T7). */
 export interface LevelUnits {
   done: number;

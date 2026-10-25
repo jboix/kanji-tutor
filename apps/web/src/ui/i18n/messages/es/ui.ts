@@ -154,5 +154,8 @@ export const ui = {
   volumeMute: 'Sin sonido',
   volumeUp: 'Más alto',
   volumeOff: 'Apagado',
+  practisedOf: '{done} de {total} practicados',
+  notStarted: 'Sin empezar',
+  progressOf: 'Progreso: {line}',
   percent: '{n} %',
 } satisfies Messages['ui'];

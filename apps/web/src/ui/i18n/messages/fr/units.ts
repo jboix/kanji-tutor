@@ -58,4 +58,7 @@ export const units = {
   showEnglish: 'Afficher la traduction',
   hideEnglish: 'Masquer la traduction',
   answer: 'Répondre aux questions',
+  wordCount: { one: '{n} mot', other: '{n} mots' },
+  grammarCount: { one: '{n} point de grammaire', other: '{n} points de grammaire' },
+  reviewUnit: 'Révision',
 } satisfies Messages['units'];

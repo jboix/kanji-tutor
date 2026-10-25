@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import type { UnitView } from './unit-path.ts';
-import { levelUnits, sectionShare, sectionsDone, unitShare } from './unit-progress.ts';
+import {
+  levelUnits,
+  sectionShare,
+  sectionsDone,
+  unitPractised,
+  unitShare,
+} from './unit-progress.ts';
 
 const counts = (known: number, total: number, reviewed: number, points: number) => ({
   words: { known, met: known, total },
@@ -51,5 +57,36 @@ describe('levelUnits (T4, T7)', () => {
       view(5, 'current'),
     ];
     expect(levelUnits([...views, view(4, 'done')], 5)).toEqual({ done: 1, started: 2, total: 4 });
+  });
+});
+
+describe('unitPractised', () => {
+  const none = {} as UnitView['progress'];
+
+  it('counts words met and grammar reviewed right, not started before any', () => {
+    const words = { known: 2, met: 5, total: 13 };
+    const grammar = { reviewed: 1, total: 3 };
+    expect(
+      unitPractised({ words, grammar, state: 'open', skipped: false, progress: none }),
+    ).toEqual({ done: 6, total: 16, started: true });
+    const fresh = {
+      ...counts(0, 13, 0, 3),
+      state: 'current' as const,
+      skipped: false,
+      progress: none,
+    };
+    expect(unitPractised(fresh)).toEqual({ done: 0, total: 16, started: false });
+    const opened = { ...fresh, progress: { introducedAt: 1 } };
+    expect(unitPractised(opened).started).toBe(true);
+  });
+
+  it('counts every item of a done unit, and only its own of a skipped one', () => {
+    const done = { ...counts(2, 13, 0, 3), state: 'done' as const, skipped: false, progress: none };
+    expect(unitPractised(done)).toEqual({ done: 16, total: 16, started: true });
+    expect(unitPractised({ ...done, skipped: true })).toEqual({
+      done: 2,
+      total: 16,
+      started: true,
+    });
   });
 });

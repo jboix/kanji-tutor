@@ -4,7 +4,7 @@ import {
   levelUnits,
   type UnitPath,
   type UnitView,
-  unitShare,
+  unitPractised,
 } from '../../domain/services/index.ts';
 import type { LearnerLevel } from '../../domain/types.ts';
 import { BackButton } from '../../ui/back-button.tsx';
@@ -12,7 +12,7 @@ import { EnMark } from '../../ui/en-mark.tsx';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { ChevronIcon } from '../../ui/icons.tsx';
 import { Ja } from '../../ui/ja.tsx';
-import { ListRow } from '../../ui/list-row.tsx';
+import { LessonCard } from '../../ui/lesson-card.tsx';
 import { paths } from '../../ui/paths.ts';
 import { ProgressLine } from '../../ui/progress-line.tsx';
 import { Screen } from '../../ui/screen.tsx';
@@ -20,28 +20,30 @@ import { SectionHeader } from '../../ui/section-label.tsx';
 import { TopBar } from '../../ui/top-bar.tsx';
 import { useContentLanguage } from '../../ui/use-content-language.ts';
 import styles from './units.module.css';
-import { levelLine, progressLine, stateLine } from './units-copy.ts';
+import { cardAside, holdsLine, levelLine } from './units-copy.ts';
 import { useCoverage, useUnitPath } from './use-units.ts';
 
 const LEVELS: readonly LearnerLevel[] = [5, 4, 3];
 
-/** One unit on the path, with its own progress under it (T7). */
-function UnitRow({ view, lookup }: { view: UnitView; lookup: ContentLookup }) {
+/** One unit on the path as a lesson card: its title, where it is, what it holds, its progress. */
+function UnitCard({ view, lookup }: { view: UnitView; lookup: ContentLookup }) {
   const t = useT();
   const { value: unit, english } = localUnit(lookup, view.unit);
-  const line = `${stateLine(t, view)} · ${progressLine(t, view)}`;
-  const detail = (
-    <span className={styles.rowDetail}>
-      <span>{line}</span>
-      <ProgressLine inline value={unitShare(view)} label={t('units.unitProgress', { line })} />
-    </span>
+  const meta = (
+    <>
+      <span className={styles.theme}>{unit.theme}</span>
+      <EnMark english={english} /> · {holdsLine(t, view)}
+    </>
   );
   return (
     <div data-unit={unit.id} data-state={view.state}>
-      <ListRow to={paths.unit(unit.id)} detail={detail}>
-        <Ja variant="emph">{unit.titleJa}</Ja> <span className={styles.theme}>{unit.theme}</span>
-        <EnMark english={english} />
-      </ListRow>
+      <LessonCard
+        to={paths.unit(unit.id)}
+        title={<Ja>{unit.titleJa}</Ja>}
+        aside={cardAside(t, view)}
+        meta={meta}
+        progress={unitPractised(view)}
+      />
     </div>
   );
 }
@@ -56,7 +58,7 @@ function KnownCell({ label, row }: { label: string; row: LevelCoverage | undefin
         <span>{label}</span>
         <span className={styles.knownCount}>{count}</span>
       </span>
-      <ProgressLine value={row.known / row.total} label={`${label}: ${count}`} />
+      <ProgressLine thin value={row.known / row.total} label={`${label}: ${count}`} />
     </div>
   );
 }
@@ -97,10 +99,10 @@ function LevelUnits({ level, path, coverage }: LevelProps) {
             <ChevronIcon />
           </span>
         </summary>
-        {coverage && <LevelKnown coverage={coverage} level={level} />}
-        <div>
+        <div className={styles.cards}>
+          {coverage && <LevelKnown coverage={coverage} level={level} />}
           {views.map((view) => (
-            <UnitRow key={view.unit.id} view={view} lookup={lookup} />
+            <UnitCard key={view.unit.id} view={view} lookup={lookup} />
           ))}
         </div>
       </details>

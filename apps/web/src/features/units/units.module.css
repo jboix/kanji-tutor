@@ -79,13 +79,20 @@
   }
 }
 
-/* The level's words, kanji and grammar known, compact, above its units. */
+/* A level's known counts, then its unit cards, 12px apart. */
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 14px;
+}
+
+/* The level's words, kanji and grammar known: three plain counts with their thin lines. */
 .known {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
-  padding: 12px 0 10px;
-  border-bottom: 1px solid var(--rule);
+  padding: 2px 2px 6px;
 }
 
 .knownCell {

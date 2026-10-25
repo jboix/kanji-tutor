@@ -1,0 +1,54 @@
+/* A lesson in a list (Scanned lessons, units): raised paper, a thin border, 20px corners. */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  min-height: var(--tap);
+  padding: 14px 16px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-card);
+  background: var(--paper-raised);
+  color: var(--ink);
+  font-family: inherit;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.title {
+  min-width: 0;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.aside {
+  flex: none;
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+.meta {
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ink-muted);
+}

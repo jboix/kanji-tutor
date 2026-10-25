@@ -56,4 +56,7 @@ export const units = {
   showEnglish: 'Show the English',
   hideEnglish: 'Hide the English',
   answer: 'Answer the questions',
+  wordCount: { one: '{n} word', other: '{n} words' },
+  grammarCount: { one: '{n} grammar point', other: '{n} grammar points' },
+  reviewUnit: 'Review',
 } as const;

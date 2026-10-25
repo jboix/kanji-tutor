@@ -87,7 +87,7 @@ test('from zero: the first unit, practised and read, then in progress', async ({
   await expect(row).toHaveAttribute('data-state', 'current');
   await expect(row).toContainText('Current · Words');
   await expect(page.getByRole('region', { name: 'N5 known' })).toBeVisible();
-  await expect(row).toContainText(/\d+ of \d+ words known · \d of \d grammar/);
+  await expect(row).toContainText(/\d+ of \d+ practised/);
 });
 
 test('an N4 learner never sees a sentence above N4', async ({ page }) => {

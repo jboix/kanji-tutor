@@ -28,7 +28,7 @@ function renderUnit(repos: Repos, id: string) {
 }
 
 describe('UnitsScreen (T4)', { timeout: 20_000 }, () => {
-  it('shows the path by level, each unit with its own progress and each level with its counts', async () => {
+  it('shows the path by level, each unit as a card with its progress and each level with its counts', async () => {
     const repos = await curriculumRepos();
     renderWithServices(<UnitsScreen />, { services: fakeServices({ repos }) });
     const n5 = await screen.findByRole('region', { name: 'N5 units' });
@@ -37,8 +37,10 @@ describe('UnitsScreen (T4)', { timeout: 20_000 }, () => {
     const first = within(n5).getByRole('link', { name: /わたしは学生です/ });
     expect(first.getAttribute('href')).toBe('/units/i-am-a-student');
     expect(first.textContent).toContain('Current · Words');
-    expect(first.textContent).toMatch(/0 of \d+ words known · 0 of 3 grammar/);
-    expect(within(first).getByRole('progressbar').getAttribute('aria-valuenow')).toBe('0');
+    expect(first.textContent).toMatch(/\d+ words · 3 grammar points/);
+    expect(first.textContent).toContain('Not started');
+    const bar = within(first).getByRole('progressbar', { name: 'Progress: Not started' });
+    expect(bar.getAttribute('aria-valuenow')).toBe('0');
     const known = await within(n5).findByRole('region', { name: 'N5 known' });
     expect(known.textContent).toMatch(/Words\s*0 of \d+/);
     expect(n5.querySelector('details')?.open).toBe(true);

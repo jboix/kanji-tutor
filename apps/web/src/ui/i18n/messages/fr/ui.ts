@@ -154,5 +154,8 @@ export const ui = {
   volumeMute: 'Couper le son',
   volumeUp: 'Plus fort',
   volumeOff: 'Coupé',
+  practisedOf: '{done} sur {total} travaillés',
+  notStarted: 'Pas commencé',
+  progressOf: 'Progression : {line}',
   percent: '{n} %',
 } satisfies Messages['ui'];

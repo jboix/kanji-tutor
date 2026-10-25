@@ -165,8 +165,10 @@ export {
 export {
   type LevelUnits,
   levelUnits,
+  type Practised,
   sectionShare,
   sectionsDone,
+  unitPractised,
   unitShare,
 } from './unit-progress.ts';
 export {
