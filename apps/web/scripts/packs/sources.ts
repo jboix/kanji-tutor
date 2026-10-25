@@ -4,7 +4,7 @@
  *
  * Tatoeba exports are rebuilt weekly and not versioned: their URLs always serve the latest dump.
  * The hashes below are those of the dump downloaded on `TATOEBA_DATE`. To move to a newer dump,
- * delete the three Tatoeba files from `data/raw/`, run `bun run packs --refresh-tatoeba`, and
+ * delete the Tatoeba files from `data/raw/`, run `bun run packs --refresh-tatoeba`, and
  * copy the printed hashes and date here.
  */
 
@@ -22,7 +22,7 @@ export interface Source {
 }
 
 export const JMDICT_SIMPLIFIED_TAG = '3.6.2+20261012204142';
-export const TATOEBA_DATE = '2026-10-17';
+export const TATOEBA_DATE = '2026-10-24';
 /** Commit of github.com/stephenmk/yomitan-jlpt-vocab (Waller JLPT lists with JMdict ids). */
 export const JLPT_COMMIT = 'b062d4e38c4bdd0950ae1d4ec55f04b176182e03';
 
@@ -87,7 +87,7 @@ export const SOURCES = {
     id: 'tatoeba-jpn',
     file: 'jpn_sentences.tsv.bz2',
     url: `${TATOEBA_BASE}/jpn/jpn_sentences.tsv.bz2`,
-    sha256: '9b2f0c18f58a5633a0dfba22b6a5f7a2bbbd55f649aeafcc31107d1be5cc5c2b',
+    sha256: '25d727283d297f812b2c9ec36f3a6812a8a60ed9d6d5427978c4e020a83782c3',
     licence: TATOEBA,
     moving: true,
   },
@@ -95,15 +95,28 @@ export const SOURCES = {
     id: 'tatoeba-eng',
     file: 'eng_sentences.tsv.bz2',
     url: `${TATOEBA_BASE}/eng/eng_sentences.tsv.bz2`,
-    sha256: 'bb3dcc28a8984a26dc466ee14eb53c4210b0dd9bb111b9d686d1efc83ecf091c',
+    sha256: 'f634eaaf26623c2a2e170be2dae54b18388479311ae8619d04889df4e5d021f3',
     licence: TATOEBA,
     moving: true,
   },
+  /** Owners of the Japanese sentences, with members' languages and audio: native-first ranking. */
+  jpnDetailed: tatoeba(
+    'jpn/jpn_sentences_detailed',
+    'e305ecf638ab24cd57b0b5f9fcdc342267ef4a3fdb19c71621f1a49baaf6d84f',
+  ),
+  jpnUserLanguages: tatoeba(
+    'jpn/jpn_user_languages',
+    '87a6a84aea229c457b2e6f8c784c6935136b838263e3e820c04bb4b4120d03a9',
+  ),
+  jpnAudio: tatoeba(
+    'jpn/jpn_sentences_with_audio',
+    '6596b818312e85cba483f7764c9caf30676156afabd22e3ee82c6de45ef456d5',
+  ),
   links: {
     id: 'tatoeba-jpn-eng-links',
     file: 'jpn-eng_links.tsv.bz2',
     url: `${TATOEBA_BASE}/jpn/jpn-eng_links.tsv.bz2`,
-    sha256: '0ba61c4a04647d246f388a71b630c009f85bd45ff5b93052e186a22e7e14299b',
+    sha256: 'ec6f09d686111dae93274600e8ee202c9d4cbba02bab91f73ae1a578aaca492a',
     licence: TATOEBA,
     moving: true,
   },
@@ -117,15 +130,15 @@ export const SOURCES = {
   ),
   fraSentences: tatoeba(
     'fra/fra_sentences',
-    'b49a8777f4be14ba765eb591b7f4136b684e9d5a88a3b028a0ebcf172e1f6326',
+    '3cbc43eab20185907b3ff4eae8aa60d20b9caf5133076c1c1c013d169cd87a99',
   ),
   spaSentences: tatoeba(
     'spa/spa_sentences',
-    'a11b96f9e2d20d24cd8bc72e54656e0ef5597fe0d5c59b9e91a5a0b14f4c1e14',
+    '29efd66854f11ad3480720ceda6e7b42563d40df4e660d9b0721c56a61753e9a',
   ),
   fraLinks: tatoeba(
     'jpn/jpn-fra_links',
-    '19a8cf8123a3ceccd7a7139aa0990536a8ed2be022297999e69bd7d598cb4501',
+    '691f0840c3b4c60e3462d6d132a27633c3c0bae8fd06ae0ba9bd8d30b87e9c99',
   ),
   spaLinks: tatoeba(
     'jpn/jpn-spa_links',

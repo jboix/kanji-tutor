@@ -1,154 +1,142 @@
 {
-  "version": "20261017-e92e70a4",
+  "version": "20261024-6cf63852",
   "files": [
     {
       "store": "words",
-      "url": "20261017-e92e70a4/words-00.json.gz",
-      "bytes": 285096,
+      "url": "20261024-6cf63852/words-00.json.gz",
+      "bytes": 284548,
       "count": 8000
     },
     {
       "store": "words",
-      "url": "20261017-e92e70a4/words-01.json.gz",
-      "bytes": 344755,
+      "url": "20261024-6cf63852/words-01.json.gz",
+      "bytes": 344584,
       "count": 8000
     },
     {
       "store": "words",
-      "url": "20261017-e92e70a4/words-02.json.gz",
-      "bytes": 374309,
+      "url": "20261024-6cf63852/words-02.json.gz",
+      "bytes": 374099,
       "count": 8000
     },
     {
       "store": "words",
-      "url": "20261017-e92e70a4/words-03.json.gz",
-      "bytes": 1638,
-      "count": 33
+      "url": "20261024-6cf63852/words-03.json.gz",
+      "bytes": 8347,
+      "count": 175
     },
     {
       "store": "kanji",
-      "url": "20261017-e92e70a4/kanji-00.json.gz",
-      "bytes": 134266,
-      "count": 3062
+      "url": "20261024-6cf63852/kanji-00.json.gz",
+      "bytes": 134584,
+      "count": 3073
     },
     {
       "store": "sentences",
-      "url": "20261017-e92e70a4/sentences-00.json.gz",
-      "bytes": 432936,
+      "url": "20261024-6cf63852/sentences-00.json.gz",
+      "bytes": 472178,
       "count": 3000
     },
     {
       "store": "sentences",
-      "url": "20261017-e92e70a4/sentences-01.json.gz",
-      "bytes": 388205,
+      "url": "20261024-6cf63852/sentences-01.json.gz",
+      "bytes": 425682,
       "count": 3000
     },
     {
       "store": "sentences",
-      "url": "20261017-e92e70a4/sentences-02.json.gz",
-      "bytes": 397638,
+      "url": "20261024-6cf63852/sentences-02.json.gz",
+      "bytes": 474136,
       "count": 3000
     },
     {
       "store": "sentences",
-      "url": "20261017-e92e70a4/sentences-03.json.gz",
-      "bytes": 434419,
+      "url": "20261024-6cf63852/sentences-03.json.gz",
+      "bytes": 455381,
       "count": 3000
     },
     {
       "store": "sentences",
-      "url": "20261017-e92e70a4/sentences-04.json.gz",
-      "bytes": 410987,
+      "url": "20261024-6cf63852/sentences-04.json.gz",
+      "bytes": 459521,
       "count": 3000
     },
     {
       "store": "sentences",
-      "url": "20261017-e92e70a4/sentences-05.json.gz",
-      "bytes": 425818,
+      "url": "20261024-6cf63852/sentences-05.json.gz",
+      "bytes": 482627,
       "count": 3000
     },
     {
       "store": "sentences",
-      "url": "20261017-e92e70a4/sentences-06.json.gz",
-      "bytes": 439701,
+      "url": "20261024-6cf63852/sentences-06.json.gz",
+      "bytes": 456107,
       "count": 3000
     },
     {
       "store": "sentences",
-      "url": "20261017-e92e70a4/sentences-07.json.gz",
-      "bytes": 427071,
+      "url": "20261024-6cf63852/sentences-07.json.gz",
+      "bytes": 457289,
       "count": 3000
     },
     {
       "store": "sentences",
-      "url": "20261017-e92e70a4/sentences-08.json.gz",
-      "bytes": 431041,
+      "url": "20261024-6cf63852/sentences-08.json.gz",
+      "bytes": 510661,
       "count": 3000
     },
     {
       "store": "sentences",
-      "url": "20261017-e92e70a4/sentences-09.json.gz",
-      "bytes": 461285,
+      "url": "20261024-6cf63852/sentences-09.json.gz",
+      "bytes": 506936,
       "count": 3000
     },
     {
       "store": "sentences",
-      "url": "20261017-e92e70a4/sentences-10.json.gz",
-      "bytes": 456928,
+      "url": "20261024-6cf63852/sentences-10.json.gz",
+      "bytes": 447913,
       "count": 3000
     },
     {
       "store": "sentences",
-      "url": "20261017-e92e70a4/sentences-11.json.gz",
-      "bytes": 410411,
+      "url": "20261024-6cf63852/sentences-11.json.gz",
+      "bytes": 471499,
       "count": 3000
     },
     {
       "store": "sentences",
-      "url": "20261017-e92e70a4/sentences-12.json.gz",
-      "bytes": 407215,
+      "url": "20261024-6cf63852/sentences-12.json.gz",
+      "bytes": 479141,
       "count": 3000
     },
     {
       "store": "sentences",
-      "url": "20261017-e92e70a4/sentences-13.json.gz",
-      "bytes": 433521,
+      "url": "20261024-6cf63852/sentences-13.json.gz",
+      "bytes": 486777,
       "count": 3000
     },
     {
       "store": "sentences",
-      "url": "20261017-e92e70a4/sentences-14.json.gz",
-      "bytes": 440947,
-      "count": 3000
-    },
-    {
-      "store": "sentences",
-      "url": "20261017-e92e70a4/sentences-15.json.gz",
-      "bytes": 417105,
-      "count": 3000
-    },
-    {
-      "store": "sentences",
-      "url": "20261017-e92e70a4/sentences-16.json.gz",
-      "bytes": 86086,
-      "count": 296
+      "url": "20261024-6cf63852/sentences-14.json.gz",
+      "bytes": 395969,
+      "count": 2296
     },
     {
       "store": "grammar",
-      "url": "20261017-e92e70a4/grammar-00.json.gz",
-      "bytes": 16262,
+      "url": "20261024-6cf63852/grammar-00.json.gz",
+      "bytes": 16228,
       "count": 265
     },
     {
       "store": "clusters",
-      "url": "20261017-e92e70a4/clusters-00.json.gz",
-      "bytes": 13227,
-      "count": 316
+      "url": "20261024-6cf63852/clusters-00.json.gz",
+      "bytes": 13256,
+      "count": 315
     },
     {
       "store": "units",
-      "url": "20261017-e92e70a4/units-00.json.gz",
-      "bytes": 9409,
+      "url": "20261024-6cf63852/units-00.json.gz",
+      "bytes": 9486,
       "count": 41
     }
   ],
@@ -156,41 +144,41 @@
     "fr": [
       {
         "store": "glosses",
-        "url": "20261017-e92e70a4/fr-glosses-00.json.gz",
-        "bytes": 159533,
+        "url": "20261024-6cf63852/fr-glosses-00.json.gz",
+        "bytes": 159576,
         "count": 10000
       },
       {
         "store": "glosses",
-        "url": "20261017-e92e70a4/fr-glosses-01.json.gz",
-        "bytes": 57991,
-        "count": 3181
+        "url": "20261024-6cf63852/fr-glosses-01.json.gz",
+        "bytes": 58146,
+        "count": 3187
       },
       {
         "store": "translations",
-        "url": "20261017-e92e70a4/fr-translations-00.json.gz",
-        "bytes": 169174,
-        "count": 9393
+        "url": "20261024-6cf63852/fr-translations-00.json.gz",
+        "bytes": 155297,
+        "count": 8065
       }
     ],
     "es": [
       {
         "store": "glosses",
-        "url": "20261017-e92e70a4/es-glosses-00.json.gz",
-        "bytes": 160745,
+        "url": "20261024-6cf63852/es-glosses-00.json.gz",
+        "bytes": 160858,
         "count": 10000
       },
       {
         "store": "glosses",
-        "url": "20261017-e92e70a4/es-glosses-01.json.gz",
-        "bytes": 109700,
-        "count": 6516
+        "url": "20261024-6cf63852/es-glosses-01.json.gz",
+        "bytes": 110306,
+        "count": 6553
       },
       {
         "store": "translations",
-        "url": "20261017-e92e70a4/es-translations-00.json.gz",
-        "bytes": 146431,
-        "count": 8447
+        "url": "20261024-6cf63852/es-translations-00.json.gz",
+        "bytes": 134442,
+        "count": 7273
       }
     ]
   }

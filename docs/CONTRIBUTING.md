@@ -67,7 +67,13 @@ its scripts directly.
 ```sh
 bun run packs                    # downloads into apps/web/data/raw/ (git-ignored), prunes, emits packs
 bun run packs --refresh-tatoeba  # accept a newer weekly Tatoeba export
+bun run packs --keep-previous    # set the current pack aside in public/packs/previous/ first
+bun run packs:measure [previous] # sentence quality figures of the current (or previous) pack
 ```
+
+A pack set aside with `--keep-previous` stays loadable until the new one has been checked:
+`VITE_PACKS=previous bun run dev` (or `bun run build`) loads it instead of the current one.
+Delete `public/packs/previous/` once the new pack is accepted.
 
 Never commit `apps/web/data/raw/` or any textbook content.
 

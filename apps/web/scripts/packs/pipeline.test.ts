@@ -16,8 +16,8 @@ import {
   unvoice,
   vocabularyKanjiLevels,
 } from './kanji.ts';
-import { dedupe, fitsLevelLength, keepText, toSentence } from './select.ts';
-import { pairSentences } from './tatoeba.ts';
+import { bodyLength, dedupe, fitsLevelLength, keepText, toSentence } from './select.ts';
+import { nativeSpeakers, pairSentences, preferredIds } from './tatoeba.ts';
 import { baseReading, coarsePos, mapTokens, type RawToken, verbClass } from './tokens.ts';
 
 function jm(id: string, kanji: string[], kana: string[], pos: string[], misc: string[] = []) {
@@ -282,6 +282,37 @@ describe('tatoeba and selection', () => {
     const a = { id: '1', text: '駅で待つ。', translation: 'a' };
     const b = { id: '2', text: '駅で待つ！', translation: 'b' };
     expect(dedupe([a, b])).toEqual([a]);
+  });
+
+  it('keeps N4 sentences of 8 characters or more and N3 ones of 10, but any N5 one', () => {
+    expect(bodyLength('花ですか。')).toBe(4);
+    expect(bodyLength('「大丈夫？」「うん」')).toBe(5);
+    expect(bodyLength('コーヒーを飲む。')).toBe(7);
+    expect(fitsLevelLength({ text: '花ですか。', level: 5 })).toBe(true);
+    expect(fitsLevelLength({ text: '怒らないで。', level: 4 })).toBe(false);
+    expect(fitsLevelLength({ text: 'エンジンが故障した。', level: 4 })).toBe(true);
+    expect(fitsLevelLength({ text: '彼の成功を切望した。', level: 3 })).toBe(false);
+    expect(fitsLevelLength({ text: '彼は大統領に選ばれた。', level: 3 })).toBe(true);
+    expect(fitsLevelLength({ text: '彼の成功を切望した。', level: 1 })).toBe(false);
+  });
+
+  it('prefers sentences owned by native speakers, or with audio', () => {
+    const userLanguages = [
+      'jpn\t5\tnative\t',
+      'jpn\t3\tlearner\t',
+      'eng\t5\tlearner\t',
+      'jpn\t5\t\\N\t',
+      'details on a second line',
+    ].join('\n');
+    expect([...nativeSpeakers(userLanguages)]).toEqual(['native']);
+    const detailed = [
+      '1\tjpn\t駅で待つ。\tnative\t\\N\t\\N',
+      '2\tjpn\t本を読む。\tlearner\t\\N\t\\N',
+      '3\tjpn\t雨が降る。\t\\N\t\\N\t\\N',
+      '4\tjpn\t空が青い。\tlearner\t\\N\t\\N',
+    ].join('\n');
+    const audio = '4\t900\tspeaker\tCC BY-NC 4.0\t\n';
+    expect([...preferredIds(detailed, userLanguages, audio)].sort()).toEqual(['1', '4']);
   });
 
   it('tags a sentence with its grammar and level', () => {

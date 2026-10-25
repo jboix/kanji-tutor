@@ -27,6 +27,15 @@ import { applySound } from '../ui/sound.ts';
 import { syncServer } from '../ui/sync-server.ts';
 import { learnerProfile } from './profile.ts';
 
+/**
+ * The pack set a build loads: the current one, or with `VITE_PACKS` the e2e `fixture`, or the
+ * `previous` version that `bun run packs --keep-previous` set aside for comparison.
+ */
+function packVariant(): string {
+  const variant = import.meta.env.VITE_PACKS;
+  return variant === 'fixture' || variant === 'previous' ? `${variant}/` : '';
+}
+
 /** The mock's request counter and failure switch, on `window` for e2e (`VITE_AI_PROVIDER=mock`). */
 function mockProbe(): MockProbe {
   const holder = window as unknown as { __kanjiMockAi?: MockProbe };
@@ -110,10 +119,7 @@ export function createServices(db = new KanjiTutorDb()): Services {
     lang,
     ai: createAiClient(aiContext(repos, lang, createLearnerView(repos))),
     backup: createBackupPort(db),
-    packs: createPackLoader(
-      db,
-      `${base}packs/${import.meta.env.VITE_PACKS === 'fixture' ? 'fixture/' : ''}`,
-    ),
+    packs: createPackLoader(db, `${base}packs/${packVariant()}`),
     ...cloud,
   };
 }

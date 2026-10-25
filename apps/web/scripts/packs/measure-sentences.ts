@@ -1,11 +1,18 @@
 /**
- * `bun run packs:measure [fixture]`: installs a pack into fake IndexedDB and
- * times the two ways to fetch "sentences with this word at or below N4":
- * the `wordIds` multiEntry index filtered by level in JS, against one range of the `levelKeys`
+ * `bun run packs:measure [fixture | previous | <directory>] [--stats]`: prints the quality of a
+ * pack's sentences (the current pack by default; `sentence-stats.ts`: length per level, short
+ * ones, focus words, casual forms). Then, unless `--stats`, it installs the pack into fake
+ * IndexedDB and times the two ways to fetch "sentences with this word at or below N4": the
+ * `wordIds` multiEntry index filtered by level in JS, against one range of the `levelKeys`
  * index. Fake IndexedDB is slower than a browser's, so only the ratio matters.
  */
 import { readFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { isAbsolute, join, resolve } from 'node:path';
+import { gunzipSync } from 'node:zlib';
+import type { JlptLevel } from '../../src/domain/learner-view.ts';
+import type { PackManifest } from '../../src/domain/repos.ts';
+import type { Sentence, Word } from '../../src/domain/types.ts';
+import { sentenceStats } from './sentence-stats.ts';
 
 // Dexie looks for IndexedDB when it loads, so the fake goes in first.
 const fake = await import('fake-indexeddb');
@@ -15,7 +22,9 @@ const { createPackLoader } = await import('../../src/data/packs.ts');
 const { createDexieRepos } = await import('../../src/data/repos.ts');
 
 const ROOT = resolve(import.meta.dir, '..', '..');
-const DIR = join(ROOT, 'public', 'packs', process.argv[2] === 'fixture' ? 'fixture' : '');
+const PACKS = join(ROOT, 'public', 'packs');
+const ARG = process.argv.slice(2).find((arg) => !arg.startsWith('--')) ?? '';
+const DIR = isAbsolute(ARG) ? ARG : join(PACKS, ARG);
 const LIMIT = 20;
 
 globalThis.fetch = (async (url: string) =>
@@ -29,7 +38,25 @@ async function time(label: string, run: () => Promise<number>): Promise<void> {
   console.log(`  ${label}: ${(performance.now() - start).toFixed(0)} ms, ${rows} rows`);
 }
 
+/** Every record of one store, read straight from the pack files. */
+function records<T>(manifest: PackManifest, store: string): T[] {
+  return manifest.files
+    .filter((file) => file.store === store)
+    .flatMap((file) => JSON.parse(gunzipSync(readFileSync(join(DIR, file.url))).toString()) as T[]);
+}
+
+function printStats(): void {
+  const manifest = JSON.parse(readFileSync(join(DIR, 'manifest.json'), 'utf8')) as PackManifest;
+  const levels = new Map<string, JlptLevel>();
+  for (const w of records<Word>(manifest, 'words')) if (w.jlpt) levels.set(w.id, w.jlpt);
+  console.log(`pack ${manifest.version}`);
+  const lines = sentenceStats(records<Sentence>(manifest, 'sentences'), (id) => levels.get(id));
+  for (const line of lines) console.log(line);
+}
+
 async function main(): Promise<void> {
+  printStats();
+  if (process.argv.includes('--stats')) return;
   const db = new KanjiTutorDb(`measure-${Date.now()}`);
   const started = performance.now();
   await createPackLoader(db, '/packs/').install(() => undefined);

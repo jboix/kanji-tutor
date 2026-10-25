@@ -6,6 +6,8 @@
  * The sources and their licences are in sources.ts.
  *
  * Flags: --refresh-tatoeba accepts a newer weekly Tatoeba dump than the pinned hashes.
+ * --keep-previous moves the current pack version to public/packs/previous/ before writing the
+ * new one, so a `VITE_PACKS=previous` build can still load it until the new one is checked.
  */
 import { join, resolve } from 'node:path';
 import { UNITS } from '../../src/domain/themes/units.ts';
@@ -18,6 +20,7 @@ import {
   levelContext,
   levelled,
   loadJlpt,
+  loadPreferred,
   loadResolved,
   type SourcePath,
   untaggedLevels,
@@ -29,7 +32,7 @@ import { buildGrammarPack } from './grammar-pack.ts';
 import { buildLookup, isCommon, type JmDict, type JmWord, type Lookup } from './jmdict.ts';
 import type { KanjiDic, KradFile } from './kanji.ts';
 import { buildLanguagePack } from './languages.ts';
-import { reportPack, writeFixture, writeFull } from './output.ts';
+import { keepPrevious, reportPack, writeFixture, writeFull } from './output.ts';
 import { preferReadings } from './readings.ts';
 import { SOURCES } from './sources.ts';
 import { checkThemes } from './themes/check.ts';
@@ -42,19 +45,23 @@ const ROOT = resolve(import.meta.dir, '..', '..');
 const PACKS = join(ROOT, 'public', 'packs');
 
 /**
- * Coverage targets (U3); `max` keeps all packs under 9 MB gzipped.
+ * Coverage targets (U3); `max` keeps all packs under 9 MB gzipped, with the longer sentences
+ * that the minimum lengths leave.
  * The quotas give beginners plenty of sentences at their level before N3 takes the rest.
+ * `focusAtLevel` lets a word short of sentences where it is the only word of its level take
+ * ones it shares with one other.
  */
 const COVERAGE = {
   focusPerWord: 3,
+  focusAtLevel: 2,
   perGrammar: 10,
   perWord: 30,
-  max: 48_000,
+  max: 44_000,
   perPinned: 3,
   quota: [
     [5, 10_000],
     [4, 13_000],
-    [3, 24_000],
+    [3, 20_000],
   ] as const,
 };
 
@@ -136,9 +143,15 @@ async function selectSentences(d: Dictionaries) {
     d.jmdict.words.filter((w) => isCommon(w) || d.jlpt.has(w.id)).map((w) => w.id),
   );
   const reach = reachOf(d, lookup, candidates);
-  const coverage = { ...COVERAGE, core, wordLevel: levels.wordLevel, pinned: reach };
+  const preferred = await loadPreferred(path);
+  const native = candidates.filter((s) => preferred.has(s.id)).length;
+  console.log(`  ${native} candidates by native speakers or with audio, ranked first`);
+  const coverage = { ...COVERAGE, core, wordLevel: levels.wordLevel, pinned: reach, preferred };
   const kept = selectWithCoverage(candidates, coverage);
   console.log(`  kept ${kept.length} by level ${JSON.stringify(countByLevel(kept))}`);
+  console.log(
+    `  ${kept.filter((s) => preferred.has(s.id)).length} kept by native speakers or with audio`,
+  );
   console.log(`  ${coverageReport(kept, candidates, coverage)}`);
   const units = buildUnits(UNITS, kept, { lookup, tokenize, levels, reach, compounds, prefer });
   for (const g of units.unknownGrammar) console.log(`  unit grammar not in the catalogue: ${g}`);
@@ -186,6 +199,7 @@ async function main(): Promise<void> {
   const selected = await selectSentences(dictionaries);
   const pack = await assemble(dictionaries, selected);
   const done = step('Emit');
+  if (process.argv.includes('--keep-previous')) keepPrevious(PACKS);
   reportPack('full', pack);
   writeFull(PACKS, pack);
   writeFixture(PACKS, buildFixture(pack, selected.candidates));

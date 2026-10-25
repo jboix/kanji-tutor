@@ -1,10 +1,14 @@
 /** Splits a pack into chunks, writes the full and fixture packs, and logs their counts. */
-import { existsSync, readdirSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import type { PackManifest } from '../../src/domain/repos.ts';
 import { type Chunk, chunk, contentHash, emit, writeManifest } from './emit.ts';
 import type { Pack } from './fixture.ts';
 import { TATOEBA_DATE } from './sources.ts';
+
+/** Directories of public/packs/ that are not pack versions: never deleted by `writeFull`. */
+const FIXTURE = 'fixture';
+const PREVIOUS = 'previous';
 
 const CHUNK = { words: 8_000, kanji: 5_000, sentences: 3_000, grammar: 1_000, lang: 10_000 };
 
@@ -40,12 +44,32 @@ function logSizes(label: string, manifest: PackManifest, rawBytes: number): void
   );
 }
 
-/** Writes public/packs/<version>/ and the manifest, and deletes older version directories. */
+/**
+ * Moves the current version of public/packs/ and its manifest to public/packs/previous/,
+ * replacing what was there, so a `VITE_PACKS=previous` build can load it next to the new one.
+ */
+export function keepPrevious(packs: string): void {
+  const path = join(packs, 'manifest.json');
+  if (!existsSync(path)) return;
+  const manifest = JSON.parse(readFileSync(path, 'utf8')) as PackManifest;
+  const dir = join(packs, PREVIOUS);
+  rmSync(dir, { recursive: true, force: true });
+  mkdirSync(dir, { recursive: true });
+  renameSync(join(packs, manifest.version), join(dir, manifest.version));
+  writeManifest(join(dir, 'manifest.json'), manifest);
+  console.log(`  kept ${manifest.version} in ${PREVIOUS}/`);
+}
+
+/**
+ * Writes public/packs/<version>/ and the manifest, and deletes older version directories
+ * (not fixture/ or previous/).
+ */
 export function writeFull(packs: string, pack: Pack): void {
   const all = chunks(pack);
   const version = `${TATOEBA_DATE.replaceAll('-', '')}-${contentHash(all)}`;
+  const keep = new Set([FIXTURE, PREVIOUS, version]);
   for (const entry of existsSync(packs) ? readdirSync(packs, { withFileTypes: true }) : []) {
-    if (entry.isDirectory() && entry.name !== 'fixture' && entry.name !== version) {
+    if (entry.isDirectory() && !keep.has(entry.name)) {
       rmSync(join(packs, entry.name), { recursive: true });
     }
   }
@@ -57,7 +81,7 @@ export function writeFull(packs: string, pack: Pack): void {
 /** Writes public/packs/fixture/ with urls relative to it. */
 export function writeFixture(packs: string, pack: Pack): void {
   const all = chunks(pack);
-  const dir = join(packs, 'fixture');
+  const dir = join(packs, FIXTURE);
   rmSync(dir, { recursive: true, force: true });
   const { manifest, rawBytes } = emit(dir, '', `fixture-${contentHash(all)}`, all);
   writeManifest(join(dir, 'manifest.json'), manifest);

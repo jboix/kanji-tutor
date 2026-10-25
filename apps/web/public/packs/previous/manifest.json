@@ -1,0 +1,197 @@
+{
+  "version": "20261017-e92e70a4",
+  "files": [
+    {
+      "store": "words",
+      "url": "20261017-e92e70a4/words-00.json.gz",
+      "bytes": 285096,
+      "count": 8000
+    },
+    {
+      "store": "words",
+      "url": "20261017-e92e70a4/words-01.json.gz",
+      "bytes": 344755,
+      "count": 8000
+    },
+    {
+      "store": "words",
+      "url": "20261017-e92e70a4/words-02.json.gz",
+      "bytes": 374309,
+      "count": 8000
+    },
+    {
+      "store": "words",
+      "url": "20261017-e92e70a4/words-03.json.gz",
+      "bytes": 1638,
+      "count": 33
+    },
+    {
+      "store": "kanji",
+      "url": "20261017-e92e70a4/kanji-00.json.gz",
+      "bytes": 134266,
+      "count": 3062
+    },
+    {
+      "store": "sentences",
+      "url": "20261017-e92e70a4/sentences-00.json.gz",
+      "bytes": 432936,
+      "count": 3000
+    },
+    {
+      "store": "sentences",
+      "url": "20261017-e92e70a4/sentences-01.json.gz",
+      "bytes": 388205,
+      "count": 3000
+    },
+    {
+      "store": "sentences",
+      "url": "20261017-e92e70a4/sentences-02.json.gz",
+      "bytes": 397638,
+      "count": 3000
+    },
+    {
+      "store": "sentences",
+      "url": "20261017-e92e70a4/sentences-03.json.gz",
+      "bytes": 434419,
+      "count": 3000
+    },
+    {
+      "store": "sentences",
+      "url": "20261017-e92e70a4/sentences-04.json.gz",
+      "bytes": 410987,
+      "count": 3000
+    },
+    {
+      "store": "sentences",
+      "url": "20261017-e92e70a4/sentences-05.json.gz",
+      "bytes": 425818,
+      "count": 3000
+    },
+    {
+      "store": "sentences",
+      "url": "20261017-e92e70a4/sentences-06.json.gz",
+      "bytes": 439701,
+      "count": 3000
+    },
+    {
+      "store": "sentences",
+      "url": "20261017-e92e70a4/sentences-07.json.gz",
+      "bytes": 427071,
+      "count": 3000
+    },
+    {
+      "store": "sentences",
+      "url": "20261017-e92e70a4/sentences-08.json.gz",
+      "bytes": 431041,
+      "count": 3000
+    },
+    {
+      "store": "sentences",
+      "url": "20261017-e92e70a4/sentences-09.json.gz",
+      "bytes": 461285,
+      "count": 3000
+    },
+    {
+      "store": "sentences",
+      "url": "20261017-e92e70a4/sentences-10.json.gz",
+      "bytes": 456928,
+      "count": 3000
+    },
+    {
+      "store": "sentences",
+      "url": "20261017-e92e70a4/sentences-11.json.gz",
+      "bytes": 410411,
+      "count": 3000
+    },
+    {
+      "store": "sentences",
+      "url": "20261017-e92e70a4/sentences-12.json.gz",
+      "bytes": 407215,
+      "count": 3000
+    },
+    {
+      "store": "sentences",
+      "url": "20261017-e92e70a4/sentences-13.json.gz",
+      "bytes": 433521,
+      "count": 3000
+    },
+    {
+      "store": "sentences",
+      "url": "20261017-e92e70a4/sentences-14.json.gz",
+      "bytes": 440947,
+      "count": 3000
+    },
+    {
+      "store": "sentences",
+      "url": "20261017-e92e70a4/sentences-15.json.gz",
+      "bytes": 417105,
+      "count": 3000
+    },
+    {
+      "store": "sentences",
+      "url": "20261017-e92e70a4/sentences-16.json.gz",
+      "bytes": 86086,
+      "count": 296
+    },
+    {
+      "store": "grammar",
+      "url": "20261017-e92e70a4/grammar-00.json.gz",
+      "bytes": 16262,
+      "count": 265
+    },
+    {
+      "store": "clusters",
+      "url": "20261017-e92e70a4/clusters-00.json.gz",
+      "bytes": 13227,
+      "count": 316
+    },
+    {
+      "store": "units",
+      "url": "20261017-e92e70a4/units-00.json.gz",
+      "bytes": 9409,
+      "count": 41
+    }
+  ],
+  "languages": {
+    "fr": [
+      {
+        "store": "glosses",
+        "url": "20261017-e92e70a4/fr-glosses-00.json.gz",
+        "bytes": 159533,
+        "count": 10000
+      },
+      {
+        "store": "glosses",
+        "url": "20261017-e92e70a4/fr-glosses-01.json.gz",
+        "bytes": 57991,
+        "count": 3181
+      },
+      {
+        "store": "translations",
+        "url": "20261017-e92e70a4/fr-translations-00.json.gz",
+        "bytes": 169174,
+        "count": 9393
+      }
+    ],
+    "es": [
+      {
+        "store": "glosses",
+        "url": "20261017-e92e70a4/es-glosses-00.json.gz",
+        "bytes": 160745,
+        "count": 10000
+      },
+      {
+        "store": "glosses",
+        "url": "20261017-e92e70a4/es-glosses-01.json.gz",
+        "bytes": 109700,
+        "count": 6516
+      },
+      {
+        "store": "translations",
+        "url": "20261017-e92e70a4/es-translations-00.json.gz",
+        "bytes": 146431,
+        "count": 8447
+      }
+    ]
+  }
+}

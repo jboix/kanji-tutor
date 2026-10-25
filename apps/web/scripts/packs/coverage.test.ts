@@ -91,6 +91,46 @@ describe('coverage selection', () => {
     expect(kept.map((s) => s.sourceRef)).toEqual(['1', '3', '4', '5']);
     expect(selectWithCoverage([...candidates].reverse(), options)).toEqual(kept);
   });
+
+  it('lets a starving word share its level with another, after the sentences where it stands alone', () => {
+    expect(focusWords(sentence('3', ['c', 'd'], 4), wordLevel, 2)).toEqual(['c', 'd']);
+    const options = {
+      core: new Set(['c', 'd']),
+      wordLevel,
+      focusPerWord: 1,
+      perGrammar: 0,
+      perWord: 0,
+      max: 9,
+      focusAtLevel: 2,
+    };
+    const long = { text: '漢'.repeat(9) };
+    const shared = sentence('1', ['c', 'd'], 4);
+    const aloneC = sentence('2', ['c'], 4, long);
+    const aloneD = sentence('3', ['d'], 4, long);
+    const refs = (kept: Sentence[]) => kept.map((s) => s.sourceRef);
+    expect(refs(selectWithCoverage([shared, aloneC, aloneD], options))).toEqual(['2', '3']);
+    expect(refs(selectWithCoverage([shared, aloneC], options))).toEqual(['1', '2']);
+    expect(refs(selectWithCoverage([shared, aloneC], { ...options, focusAtLevel: 1 }))).toEqual([
+      '2',
+    ]);
+  });
+
+  it('ranks sentences by native speakers or with audio first among equals', () => {
+    const options = {
+      core: new Set(['a']),
+      wordLevel,
+      focusPerWord: 1,
+      perGrammar: 0,
+      perWord: 0,
+      max: 9,
+    };
+    const short = sentence('3', ['a'], 5);
+    const native = sentence('2', ['a'], 5, { text: '漢'.repeat(9) });
+    expect(selectWithCoverage([short, native], options).map((s) => s.sourceRef)).toEqual(['3']);
+    const preferred = new Set([native.id]);
+    const kept = selectWithCoverage([short, native], { ...options, preferred });
+    expect(kept.map((s) => s.sourceRef)).toEqual(['2']);
+  });
 });
 
 describe('coverage quotas and pinned sentences', () => {

@@ -7,9 +7,18 @@ import type { Pair } from './tatoeba.ts';
 export const MAX_SENTENCE_LENGTH = 30;
 /** Longest sentence kept at N3 and above: harder grammar needs a few more characters. */
 export const MAX_SENTENCE_LENGTH_N3 = 40;
+/**
+ * Shortest sentence kept at N4, and at N3 and above, counted without punctuation or spaces
+ * (`bodyLength`). Below these a sentence is a fragment (花ですか) that shows a word without the
+ * context its grammar needs. N5 has no minimum: beginners need the short ones.
+ */
+export const MIN_BODY_LENGTH_N4 = 8;
+export const MIN_BODY_LENGTH_N3 = 10;
 
 const HAS_KANJI = /\p{Script=Han}/u;
 const LATIN_OR_DIGIT = /[A-Za-z0-9Ａ-Ｚａ-ｚ０-９]/;
+
+const PUNCTUATION = /[\s。．.!！?？、,，「」『』…・（）()〜～―]/gu;
 
 /** Normalised text used to drop duplicate sentences. */
 export function dedupeKey(text: string): string {
@@ -19,6 +28,17 @@ export function dedupeKey(text: string): string {
     .trim();
 }
 
+/** Characters of a sentence without punctuation or spaces: 花ですか。 has 4. */
+export function bodyLength(text: string): number {
+  return text.replace(PUNCTUATION, '').length;
+}
+
+function minBodyLength(level: JlptLevel | undefined): number {
+  const value = level ?? 1;
+  if (value >= 5) return 0;
+  return value === 4 ? MIN_BODY_LENGTH_N4 : MIN_BODY_LENGTH_N3;
+}
+
 /** Short Japanese sentences with at least one kanji and no Latin letters or digits. */
 export function keepText(text: string): boolean {
   return (
@@ -26,10 +46,13 @@ export function keepText(text: string): boolean {
   );
 }
 
-/** N5 and N4 sentences stay within 30 characters; N3 and harder ones may take 40. */
+/**
+ * N5 and N4 sentences stay within 30 characters; N3 and harder ones may take 40. N4 and harder
+ * ones also have at least their level's body length.
+ */
 export function fitsLevelLength(sentence: Pick<Sentence, 'text' | 'level'>): boolean {
   const max = (sentence.level ?? 1) >= 4 ? MAX_SENTENCE_LENGTH : MAX_SENTENCE_LENGTH_N3;
-  return sentence.text.length <= max;
+  return sentence.text.length <= max && bodyLength(sentence.text) >= minBodyLength(sentence.level);
 }
 
 /** Drops duplicates (same text after normalisation), keeping the lowest Tatoeba id. */

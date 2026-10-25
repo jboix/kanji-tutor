@@ -6,6 +6,7 @@ import { GRAMMAR_CATALOGUE } from '../../src/domain/grammar/catalogue.ts';
 import type { JlptLevel } from '../../src/domain/learner-view.ts';
 import type { Kanji, Sentence, Token } from '../../src/domain/types.ts';
 import { EXTRA_WORDS } from './assemble.ts';
+import { casualRule } from './casual.ts';
 import { readBz2Text, readText } from './fetch.ts';
 import { grammarIdsInParallel } from './grammar-pool.ts';
 import { applyOverrides, inheritPolitePrefix } from './jlpt-overrides.ts';
@@ -13,7 +14,7 @@ import { isCommon, type JmWord, type Lookup } from './jmdict.ts';
 import { type LevelContext, sentenceLevel } from './level.ts';
 import { dedupe, fitsLevelLength, keepText, toSentence } from './select.ts';
 import { SOURCES, type Source } from './sources.ts';
-import { type Pair, pairSentences } from './tatoeba.ts';
+import { type Pair, pairSentences, preferredIds } from './tatoeba.ts';
 import type { Tokenize } from './tokenizer.ts';
 import { mapTokens } from './tokens.ts';
 
@@ -103,6 +104,29 @@ export interface Resolved {
   grammarIds: string[];
 }
 
+/** Pairs without slang or casual-wrong forms, logging how many each rule drops. */
+function withoutCasual(pairs: readonly Pair[]): Pair[] {
+  const dropped = new Map<string, number>();
+  const kept = pairs.filter((pair) => {
+    const rule = casualRule(pair.text);
+    if (rule) dropped.set(rule, (dropped.get(rule) ?? 0) + 1);
+    return !rule;
+  });
+  const list = [...dropped].map(([rule, n]) => `${rule} ${n}`).join(', ');
+  console.log(`  casual forms dropped: ${list || 'none'}`);
+  return kept;
+}
+
+/** Tatoeba sentence ids (`tatoeba:<id>`) by native speakers or with audio, ranked first. */
+export async function loadPreferred(path: SourcePath): Promise<Set<string>> {
+  const ids = preferredIds(
+    readBz2Text(await path(SOURCES.jpnDetailed)),
+    readBz2Text(await path(SOURCES.jpnUserLanguages)),
+    readBz2Text(await path(SOURCES.jpnAudio)),
+  );
+  return new Set([...ids].map((id) => `tatoeba:${id}`));
+}
+
 /** Every Tatoeba jpn–eng pair that passes the text filters and fully resolves, with grammar. */
 export async function loadResolved(input: CorpusInput): Promise<Resolved[]> {
   const pairs = pairSentences(
@@ -110,7 +134,7 @@ export async function loadResolved(input: CorpusInput): Promise<Resolved[]> {
     readBz2Text(await input.path(SOURCES.engSentences)),
     readBz2Text(await input.path(SOURCES.links)),
   );
-  const short = dedupe(pairs.filter((p) => keepText(p.text)));
+  const short = dedupe(withoutCasual(pairs.filter((p) => keepText(p.text))));
   const resolved = short.flatMap((pair) => {
     const mapped = mapTokens(pair.text, input.tokenize(pair.text), input.lookup);
     return mapped.resolved ? [{ pair, tokens: mapped.tokens }] : [];
@@ -122,7 +146,10 @@ export async function loadResolved(input: CorpusInput): Promise<Resolved[]> {
   return resolved.map((r, i) => ({ ...r, grammarIds: grammar[i] ?? [] }));
 }
 
-/** The candidates: each resolved pair levelled (G2), kept when within its level's length. */
+/**
+ * The candidates: each resolved pair levelled (G2), kept when within its level's length range
+ * (`fitsLevelLength`: the minimum applies from N4 up).
+ */
 export function levelled(resolved: readonly Resolved[], levels: LevelContext): Sentence[] {
   const out = resolved.flatMap(({ pair, tokens, grammarIds }) => {
     const level = sentenceLevel(pair.text, tokens, grammarIds, levels);

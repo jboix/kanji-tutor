@@ -1,4 +1,7 @@
-/** Tatoeba per-language exports: `id \t lang \t text` sentences and `jpn_id \t other_id` links. */
+/**
+ * Tatoeba per-language exports: `id \t lang \t text` sentences and `jpn_id \t other_id` links,
+ * plus the owners, members' languages and audio that tell which sentences to prefer.
+ */
 
 export interface Pair {
   id: string;
@@ -57,6 +60,45 @@ export function translationsFor(
   for (const [jpnId, otherId] of wanted) {
     const text = texts.get(otherId);
     if (text) out.set(jpnId, text);
+  }
+  return out;
+}
+
+/** Skill level a Tatoeba member gives for a native language (`user_languages`, 0–5). */
+const NATIVE_SKILL = '5';
+const NO_VALUE = '\\N';
+
+/** Usernames who rate their Japanese at the native level: `lang \t skill \t username \t …`. */
+export function nativeSpeakers(userLanguagesTsv: string): Set<string> {
+  const out = new Set<string>();
+  for (const line of userLanguagesTsv.split('\n')) {
+    const [lang, skill, username] = line.split('\t');
+    if (lang === 'jpn' && skill === NATIVE_SKILL && username && username !== NO_VALUE) {
+      out.add(username);
+    }
+  }
+  return out;
+}
+
+/**
+ * Japanese sentence ids that a native speaker owns (`jpn_sentences_detailed`:
+ * `id \t lang \t text \t username \t …`) or that have audio (`jpn_sentences_with_audio`:
+ * `id \t audio id \t …`). Unowned sentences count as neither.
+ */
+export function preferredIds(
+  detailedTsv: string,
+  userLanguagesTsv: string,
+  audioTsv: string,
+): Set<string> {
+  const natives = nativeSpeakers(userLanguagesTsv);
+  const out = new Set<string>();
+  for (const line of audioTsv.split('\n')) {
+    const id = line.split('\t')[0]?.trim();
+    if (id) out.add(id);
+  }
+  for (const line of detailedTsv.split('\n')) {
+    const [id, , , username] = line.split('\t');
+    if (id && username && natives.has(username)) out.add(id);
   }
   return out;
 }
