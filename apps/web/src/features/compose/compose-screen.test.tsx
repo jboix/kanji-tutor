@@ -113,7 +113,13 @@ async function typeAndCheck(text = SENTENCE) {
 afterEach(() => localStorage.clear());
 
 /** A stand-in tutor sheet, so the tutor's buttons show. */
-const SHEET: Slots = { tutorSheet: () => null };
+const SHEET: Slots = { tutorSheet: ({ starters }) => <p>starters: {starters.join(' | ')}</p> };
+
+/** Opens the tutor from beside the actions: its suggested questions wait inside the sheet. */
+const sheetStarters = () => {
+  fireEvent.click(screen.getByRole('button', { name: /^Ask the tutor about / }));
+  return screen.getByText(/^starters: /).textContent;
+};
 
 describe('compose copy', () => {
   it('names the grammar position and splits Japanese runs', () => {
@@ -160,7 +166,8 @@ describe('ComposeScreen', () => {
     expect(screen.getByText('One thing to try')).toBeTruthy();
     expect(screen.getByText('It joins your review deck')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Rewrite' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Why add な?, 1 request, uses AI' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: /^Why add な\?, / })).toBeNull();
+    expect(sheetStarters()).toContain('Why add な?');
   });
 
   it('calls a right sentence natural, in green, with Save and go on and no Rewrite', async () => {
@@ -172,9 +179,7 @@ describe('ComposeScreen', () => {
     expect(card.textContent).toContain('Nothing to correct');
     expect(screen.getByRole('button', { name: 'Save and go on' })).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Rewrite' })).toBeNull();
-    expect(
-      screen.getByRole('button', { name: 'Another way to say it, 1 request, uses AI' }),
-    ).toBeTruthy();
+    expect(sheetStarters()).toContain('Another way to say it');
   });
 
   it('says what the tutor looks at while it reads the sentence', async () => {

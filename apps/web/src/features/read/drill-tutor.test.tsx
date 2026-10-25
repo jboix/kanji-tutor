@@ -21,6 +21,7 @@ function FakeSheet(props: TutorSheetSlotProps) {
       <p>{props.topic.about}</p>
       <p>{props.topic.sentence.text}</p>
       <p>first: {props.first?.question ?? 'none'}</p>
+      <p>starters: {props.starters.join(' | ')}</p>
       <button type="button" onClick={props.onClose}>
         close
       </button>
@@ -55,10 +56,13 @@ describe('the tutor after a drill', () => {
     expect(screen.queryByRole('dialog', { name: 'tutor' })).toBeNull();
   });
 
-  it('opens asking a suggested question', async () => {
+  it('keeps the suggested questions inside the sheet, never beside Next', async () => {
     const drill = await answered();
     const why = `Why ${drill.answer} here?`;
-    await userEvent.click(screen.getByRole('button', { name: `${why}, 1 request, uses AI` }));
-    expect(screen.getByRole('dialog', { name: 'tutor' }).textContent).toContain(`first: ${why}`);
+    expect(screen.queryByRole('button', { name: `${why}, 1 request, uses AI` })).toBeNull();
+    await userEvent.click(
+      screen.getByRole('button', { name: `Ask the tutor about ${drill.answer}` }),
+    );
+    expect(screen.getByRole('dialog', { name: 'tutor' }).textContent).toContain(why);
   });
 });

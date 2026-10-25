@@ -6,7 +6,7 @@ import { SectionLabel } from '../../ui/section-label.tsx';
 import { useServices } from '../../ui/services.tsx';
 import type { IntroSlotProps, TeachingSlotProps } from '../../ui/slots.tsx';
 import { StickyActions } from '../../ui/sticky-actions.tsx';
-import { TutorIntroActions, useTutor } from '../../ui/tutor.tsx';
+import { TutorNext, useTutor } from '../../ui/tutor.tsx';
 import { TapSentence } from '../../ui/word-tap.tsx';
 import { introDue, markIntroduced } from './intro-once.ts';
 import { MemoryHookView, PartsHooks } from './memory-hook.tsx';
@@ -88,11 +88,11 @@ function IntroCard({ card, target, onDone }: IntroSlotProps) {
         hook={<MemoryHookView teaching={teaching} sentence={card.sentence.text} />}
       />
       <StickyActions>
-        <TutorIntroActions tutor={tutor}>
+        <TutorNext tutor={tutor}>
           <PillButton block onClick={gotIt}>
             {t('teach.gotIt')}
           </PillButton>
-        </TutorIntroActions>
+        </TutorNext>
       </StickyActions>
     </section>
   );

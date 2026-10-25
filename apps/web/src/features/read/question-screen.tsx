@@ -26,7 +26,7 @@ export type SessionQuestion = ChoiceQuestion | OrderQuestion;
 const surfaceOf = (question: SessionQuestion) =>
   question.kind === 'sentence-order' ? '' : question.stem.target;
 
-/** Once answered: the tutor's suggested questions and 解 button beside Next (Tutor-drill). */
+/** Once answered: the tutor's 解 button beside Next (Tutor-drill). */
 function NextFooter({ question, onNext }: { question: SessionQuestion; onNext: () => void }) {
   const box = useFocus('[data-next]', 'answered');
   const tutor = useQuestionTutor(question);

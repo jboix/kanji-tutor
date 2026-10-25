@@ -13,8 +13,6 @@ export const ui = {
   tutorTitle: 'Votre tuteur',
   tutorAbout: 'À propos de {about}',
   tutorOpen: 'Demander au tuteur à propos de {about}',
-  tutorAsk: 'Demander au tuteur',
-  tutorAnything: 'sur {about}, tout ce que vous voulez',
   tutorTalk: 'En parler avec le tuteur',
   tutorTalkLine: 'Posez vos questions sur {about}, ou essayez votre phrase',
   tutorFloat: 'Demander',

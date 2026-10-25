@@ -158,7 +158,7 @@ interface NextFooterProps {
   nextLabel?: string | undefined;
 }
 
-/** Once answered: the tutor's suggested questions and 解 button beside Next (Tutor-drill). */
+/** Once answered: the tutor's 解 button beside Next (Tutor-drill). */
 function NextFooter({ drill, controls, nextLabel }: NextFooterProps) {
   const box = useFocus('[data-next]', `step${controls.step}`);
   const tutor = useDrillTutor(drill);

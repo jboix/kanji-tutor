@@ -94,13 +94,11 @@ describe('grammar page (G4)', () => {
   });
 
   it('offers the tutor beside Got it on the intro card', async () => {
-    const tutorSheet: Slots['tutorSheet'] = ({ first }) => <p>asked {first?.question}</p>;
+    const tutorSheet: Slots['tutorSheet'] = ({ starters }) => <p>offers {starters.join(' | ')}</p>;
     await open('/grammar/te-mo-ii?intro=1', { slots: { tutorSheet } });
-    expect(screen.getByRole('button', { name: /^Ask the tutor/ })).toBeTruthy();
-    fireEvent.click(
-      screen.getByRole('button', { name: 'When do I use 〜てもいい?, 1 request, uses AI' }),
-    );
-    expect(screen.getByText('asked When do I use 〜てもいい?')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: /^When do I use 〜てもいい\?, / })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Ask the tutor about 〜てもいい' }));
+    expect(screen.getByText(/^offers When do I use 〜てもいい\?/)).toBeTruthy();
   });
 
   it('falls back to harder sentences for a point above the level, and says so', async () => {

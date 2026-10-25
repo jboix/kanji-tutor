@@ -1,10 +1,9 @@
 /**
  * The tutor, one tap away on every exercise, introduction and explanation (CLAUDE.md, A4): a 解
- * button that opens the conversation sheet, and suggested questions that open it asking. The
- * buttons that only open the sheet send nothing; each suggested question is one request.
+ * button that opens the conversation sheet. Opening it sends nothing; the suggested questions
+ * about what is on screen wait inside the sheet, each one request.
  */
 import { type ReactNode, useState } from 'react';
-import { AiAction } from './ai-action.tsx';
 import { AiSeal } from './ai-seal.tsx';
 import { useT } from './i18n/i18n.tsx';
 import { JaRuns } from './ja-runs.tsx';
@@ -56,7 +55,7 @@ export function TutorHeading({ about }: { about: string }) {
   );
 }
 
-/** The round 解 button beside an exercise's Next (Tutor-drill). */
+/** The round 解 button beside an exercise's Next or an introduction's Got it (Tutor-drill). */
 export function TutorButton({ tutor }: { tutor: Tutor }) {
   const t = useT();
   return (
@@ -68,22 +67,6 @@ export function TutorButton({ tutor }: { tutor: Tutor }) {
       onClick={() => tutor.open()}
     >
       <AiSeal size={28} />
-    </button>
-  );
-}
-
-/** "Ask the tutor · about 〜か, anything", beside an introduction's Got it (Tutor-grammar-intro). */
-export function TutorWideButton({ tutor }: { tutor: Tutor }) {
-  const t = useT();
-  return (
-    <button type="button" className={styles.wide} data-tutor="" onClick={() => tutor.open()}>
-      <AiSeal size={28} />
-      <span className={styles.lines}>
-        <span className={styles.strong}>{t('ui.tutorAsk')}</span>
-        <span className={styles.sub}>
-          <JaRuns text={t('ui.tutorAnything', { about: tutor.topic.about })} />
-        </span>
-      </span>
     </button>
   );
 }
@@ -120,56 +103,20 @@ export function TutorFloat({ tutor }: { tutor: Tutor }) {
   );
 }
 
-/** The suggested questions: each opens the sheet asking it (one request). */
-export function TutorStarters({ tutor }: { tutor: Tutor }) {
-  if (tutor.starters.length === 0) return null;
-  return (
-    <div className={styles.starters}>
-      {tutor.starters.map((question) => (
-        <AiAction
-          key={question}
-          label={question}
-          content={<JaRuns text={question} />}
-          run={(client) => tutor.open({ question, client })}
-        />
-      ))}
-    </div>
-  );
-}
-
 /**
- * An exercise's footer once answered (Tutor-drill): the suggested questions, then the 解 button
- * beside Next. Without the tutor wired, Next alone.
+ * An exercise's or introduction's footer (Tutor-drill): the 解 button beside Next or Got it.
+ * The suggested questions wait inside the sheet, so the footer stays two buttons. Without the
+ * tutor wired, the action alone.
  */
 export function TutorNext({ tutor, children }: { tutor: Tutor | undefined; children: ReactNode }) {
   if (!tutor) return <>{children}</>;
   return (
     <>
-      <TutorStarters tutor={tutor} />
       <div className={styles.next}>
         <TutorButton tutor={tutor} />
         <div className={styles.grow}>{children}</div>
       </div>
       {tutor.sheet}
     </>
-  );
-}
-
-/**
- * An introduction's actions (Tutor-grammar-intro): the suggested questions, then Ask the tutor
- * beside its "Got it", passed as `children`. Without the tutor wired, "Got it" alone.
- */
-export function TutorIntroActions(props: { tutor: Tutor | undefined; children: ReactNode }) {
-  const { tutor, children } = props;
-  if (!tutor) return <>{children}</>;
-  return (
-    <div className={styles.intro}>
-      <TutorStarters tutor={tutor} />
-      <div className={styles.next}>
-        <TutorWideButton tutor={tutor} />
-        <div className={styles.fixed}>{children}</div>
-      </div>
-      {tutor.sheet}
-    </div>
   );
 }

@@ -9,7 +9,7 @@ import { PillButton } from '../../ui/pill-button.tsx';
 import { SectionLabel } from '../../ui/section-label.tsx';
 import type { GrammarIntroSlotProps } from '../../ui/slots.tsx';
 import { StickyActions } from '../../ui/sticky-actions.tsx';
-import { TutorIntroActions } from '../../ui/tutor.tsx';
+import { TutorNext } from '../../ui/tutor.tsx';
 import { useContentLanguage } from '../../ui/use-content-language.ts';
 import { Formation } from './formation.tsx';
 import styles from './grammar.module.css';
@@ -69,11 +69,11 @@ function IntroCard({ entry: source, onDone }: { entry: Point; onDone: () => void
       {isFunctionWord(entry) ? <WordBody word={entry} /> : <PointBody entry={entry} />}
       <StickyActions>
         <div className={styles.actions}>
-          <TutorIntroActions tutor={tutor}>
+          <TutorNext tutor={tutor}>
             <PillButton block onClick={onDone}>
               {t('grammar.gotIt')}
             </PillButton>
-          </TutorIntroActions>
+          </TutorNext>
           <Link to={paths.grammar(entry.id)} className={styles.link}>
             {t('grammar.moreAbout')}
           </Link>

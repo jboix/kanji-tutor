@@ -2,7 +2,6 @@
    tint, so it reads as the tutor at a glance and never as a plain action. */
 
 .round,
-.wide,
 .card,
 .float {
   display: flex;
@@ -22,14 +21,6 @@
   height: 56px;
   padding: 0;
   border-radius: 50%;
-}
-
-.wide {
-  flex: 1;
-  gap: 10px;
-  min-height: 56px;
-  padding: 0 16px 0 10px;
-  border-radius: var(--radius-pill);
 }
 
 .card {
@@ -52,7 +43,6 @@
 }
 
 .round:focus-visible,
-.wide:focus-visible,
 .card:focus-visible,
 .float:focus-visible {
   outline: 2px solid var(--accent);
@@ -76,16 +66,11 @@
   color: var(--ink-muted);
 }
 
-.starters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
 .next {
   display: flex;
   align-items: center;
   gap: 10px;
+  width: 100%;
 }
 
 .grow {
@@ -97,15 +82,4 @@
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.intro {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-}
-
-.fixed {
-  flex: none;
 }

@@ -11,8 +11,6 @@ export const ui = {
   tutorTitle: 'Your tutor',
   tutorAbout: 'About {about}',
   tutorOpen: 'Ask the tutor about {about}',
-  tutorAsk: 'Ask the tutor',
-  tutorAnything: 'about {about}, anything',
   tutorTalk: 'Talk it through with the tutor',
   tutorTalkLine: 'Ask anything about {about}, or try your own sentence',
   tutorFloat: 'Ask',
