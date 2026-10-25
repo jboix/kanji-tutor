@@ -2,6 +2,8 @@
 export const questions = {
   blank: 'blank',
   passage: 'Passage',
+  showPassage: 'Show',
+  hidePassage: 'Hide',
   lineProof: 'Line {line}: {text}',
   nextQuestion: 'Next question',
   options: 'Options',

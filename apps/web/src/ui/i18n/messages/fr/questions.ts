@@ -4,6 +4,8 @@ import type { Messages } from '../../types.ts';
 export const questions = {
   blank: 'blanc',
   passage: 'Texte',
+  showPassage: 'Afficher',
+  hidePassage: 'Masquer',
   lineProof: 'Ligne {line} : {text}',
   nextQuestion: 'Question suivante',
   options: 'Choix',

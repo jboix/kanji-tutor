@@ -213,6 +213,24 @@ describe('a 読解 passage', () => {
     expect(onDone).toHaveBeenCalledWith({ kind: 'comprehension', right: false });
   });
 
+  it('folds the passage after the first question, keeping the proving line in view', async () => {
+    if (!passage) throw new Error('fixture passage');
+    renderWithServices(<ComprehensionView set={passage} onDone={vi.fn()} />);
+    const toggle = () => screen.getByRole('button', { name: /^Passage/ });
+    expect(toggle().getAttribute('aria-expanded')).toBe('true');
+    await userEvent.click(option(/健康のため$/));
+    await userEvent.click(await screen.findByRole('button', { name: 'Next question' }));
+    expect(toggle().getAttribute('aria-expanded')).toBe('false');
+    expect(screen.getByRole('region', { name: 'Passage' }).textContent).not.toContain('健康');
+    await userEvent.click(option(/駅$/));
+    await waitFor(() =>
+      expect(document.querySelector('[data-evidence]')?.textContent).toContain('駅まで'),
+    );
+    await userEvent.click(toggle());
+    expect(toggle().getAttribute('aria-expanded')).toBe('true');
+    expect(screen.getByRole('region', { name: 'Passage' }).textContent).toContain('健康');
+  });
+
   it('renders a passage card in the session', async () => {
     if (!passage) throw new Error('fixture passage');
     renderWithServices(

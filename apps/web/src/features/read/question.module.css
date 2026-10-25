@@ -258,19 +258,68 @@
   background-position: 0 1.8em;
 }
 
+.passage[hidden] {
+  display: none;
+}
+
 .passageLine {
   margin: 0;
 }
 
-/* A highlighter stroke across the lower half of the text, wrapping with it line by line. */
+/* A highlighter over the whole height of the kanji, wrapping with the text line by line. */
 .evidence {
-  background: linear-gradient(
-    transparent 52%,
-    color-mix(in srgb, var(--accent) 36%, transparent) 52%,
-    color-mix(in srgb, var(--accent) 36%, transparent) 92%,
-    transparent 92%
-  );
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: 4px;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
-  padding: 0 2px;
+  padding: 0.12em 3px;
+}
+
+.passageBox {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* The passage's fold: its name, Show or Hide, and a chevron that turns when open. */
+.passageToggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: var(--tap);
+  padding: 0 4px 0 14px;
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: var(--paper-raised);
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--text-md);
+  font-weight: 700;
+  text-align: start;
+  cursor: pointer;
+}
+
+.passageHint {
+  margin-left: auto;
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--ink-muted);
+}
+
+.passageChevron {
+  display: inline-flex;
+  padding: 0 8px;
+  color: var(--ink-muted);
+  transform: rotate(90deg);
+  transition: transform 160ms ease;
+}
+
+.passageOpen {
+  transform: rotate(-90deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .passageChevron {
+    transition: none;
+  }
 }

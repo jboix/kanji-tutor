@@ -2,11 +2,12 @@
  * 読解 (T6): the passage on ruled lines and its questions one at a time. After each answer the
  * line that proves it is highlighted, with its English, and every option is explained.
  */
-import { type ReactNode, useState } from 'react';
+import { type ReactNode, useId, useState } from 'react';
 import type { ComprehensionQuestion, ComprehensionSet } from '../../domain/questions/index.ts';
 import { ActionBar } from '../../ui/action-bar.tsx';
 import { cx } from '../../ui/cx.ts';
 import { useT } from '../../ui/i18n/i18n.tsx';
+import { ChevronIcon } from '../../ui/icons.tsx';
 import { PillButton } from '../../ui/pill-button.tsx';
 import { Screen } from '../../ui/screen.tsx';
 import { TutorNext } from '../../ui/tutor.tsx';
@@ -30,25 +31,69 @@ interface PassageProps {
   answered: boolean;
 }
 
-function Passage({ set, evidence, question, answered }: PassageProps) {
-  const t = useT();
+function PassageLines({ set, evidence, question, answered }: PassageProps) {
   const lines = usePassageLines(set);
   // A phrase-meaning question asks what a phrase means: its words stay shut until answered.
   const open = answered || question.type !== 'phrase-meaning';
+  return set.sentences.map((line, i) => (
+    <p
+      key={line.ja}
+      lang="ja"
+      className={styles.passageLine}
+      data-evidence={i === evidence ? '' : undefined}
+    >
+      <span className={cx(i === evidence && styles.evidence)}>
+        <PassageText text={line.ja} line={lines[i]} open={open} beforeAnswer={!answered} />
+      </span>
+    </p>
+  ));
+}
+
+interface FoldProps extends PassageProps {
+  /** Folded to its toggle, and once answered the line that proves it. */
+  folded: boolean;
+  onToggle: () => void;
+}
+
+/** The proving line alone, under a folded passage once the question is answered. */
+function ProofLine({ set, evidence }: Pick<PassageProps, 'set' | 'evidence'>) {
+  const line = evidence === undefined ? undefined : set.sentences[evidence];
+  if (!line) return null;
   return (
-    <section className={styles.passage} aria-label={t('questions.passage')}>
-      {set.sentences.map((line, i) => (
-        <p
-          key={line.ja}
-          lang="ja"
-          className={styles.passageLine}
-          data-evidence={i === evidence ? '' : undefined}
-        >
-          <span className={cx(i === evidence && styles.evidence)}>
-            <PassageText text={line.ja} line={lines[i]} open={open} beforeAnswer={!answered} />
-          </span>
-        </p>
-      ))}
+    <p lang="ja" className={cx(styles.passage, styles.passageLine)} data-evidence="">
+      <span className={styles.evidence}>{line.ja}</span>
+    </p>
+  );
+}
+
+/**
+ * The passage on ruled lines, foldable so later questions do not sit under all of it: open for
+ * the first question, folded for the next ones unless the learner opens it.
+ */
+function Passage({ folded, onToggle, ...lines }: FoldProps) {
+  const t = useT();
+  const id = useId();
+  return (
+    <section className={styles.passageBox} aria-label={t('questions.passage')}>
+      <button
+        type="button"
+        className={styles.passageToggle}
+        aria-expanded={!folded}
+        aria-controls={id}
+        onClick={onToggle}
+      >
+        <span>{t('questions.passage')}</span>
+        <span className={styles.passageHint}>
+          {t(folded ? 'questions.showPassage' : 'questions.hidePassage')}
+        </span>
+        <span className={cx(styles.passageChevron, !folded && styles.passageOpen)}>
+          <ChevronIcon />
+        </span>
+      </button>
+      <div id={id} className={styles.passage} hidden={folded}>
+        {!folded && <PassageLines {...lines} />}
+      </div>
+      {folded && <ProofLine set={lines.set} evidence={lines.evidence} />}
     </section>
   );
 }
@@ -67,6 +112,8 @@ interface StepProps {
   set: ComprehensionSet;
   question: ComprehensionQuestion;
   last: boolean;
+  folded: boolean;
+  onToggle: () => void;
   onNext: (right: boolean) => void;
   layout: PassageLayout;
 }
@@ -112,12 +159,28 @@ function Asked({ question, answered }: { question: ComprehensionQuestion; answer
   );
 }
 
-function Step({ set, question, last, onNext, layout }: StepProps) {
+/** "Line 2: …": the proving line's English, once answered. */
+function ProofTranslation({
+  set,
+  question,
+}: {
+  set: ComprehensionSet;
+  question: ComprehensionQuestion;
+}) {
+  const t = useT();
+  const proof = set.sentences[question.evidence];
+  if (!proof) return null;
+  return (
+    <p className={styles.translation}>
+      {t('questions.lineProof', { line: question.evidence + 1, text: proof.en })}
+    </p>
+  );
+}
+
+function Step({ set, question, last, folded, onToggle, onNext, layout }: StepProps) {
   const controls = useQuestion(question);
   const { answer } = controls;
   useGradeSound(answer?.grade);
-  const proof = set.sentences[question.evidence];
-  const t = useT();
   const footer = answer && (
     <NextQuestion
       set={set}
@@ -134,15 +197,13 @@ function Step({ set, question, last, onNext, layout }: StepProps) {
         evidence={answer ? question.evidence : undefined}
         question={question}
         answered={answer !== undefined}
+        folded={folded}
+        onToggle={onToggle}
       />
       <Asked question={question} answered={answer !== undefined} />
       <OptionList question={question} answer={answer} onChoose={controls.choose} words />
       {!answer && <SkipButton onSkip={controls.skip} />}
-      {answer && proof && (
-        <p className={styles.translation}>
-          {t('questions.lineProof', { line: question.evidence + 1, text: proof.en })}
-        </p>
-      )}
+      {answer && <ProofTranslation set={set} question={question} />}
       {answer && <AnswerLine question={question} answer={answer} />}
       {answer && <OptionNotes question={question} />}
     </>
@@ -162,8 +223,11 @@ export interface ComprehensionViewProps {
 export function ComprehensionView({ set, onDone, layout = stacked }: ComprehensionViewProps) {
   const [step, setStep] = useState(0);
   const [right, setRight] = useState(true);
+  // Open on the first question, folded after it, unless the learner chose otherwise.
+  const [open, setOpen] = useState<boolean>();
   const question = set.questions[step];
   if (!question) return null;
+  const folded = !(open ?? step === 0);
   const last = step + 1 >= set.questions.length;
   const next = (ok: boolean) => {
     if (last) onDone({ kind: 'comprehension', right: right && ok });
@@ -178,6 +242,8 @@ export function ComprehensionView({ set, onDone, layout = stacked }: Comprehensi
       set={set}
       question={question}
       last={last}
+      folded={folded}
+      onToggle={() => setOpen(folded)}
       onNext={next}
       layout={layout}
     />
