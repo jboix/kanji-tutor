@@ -157,7 +157,10 @@ export const settings = {
   versionLine: '{version}, build {id}, {when}',
   updateCheck: 'Chercher une mise à jour',
   updateChecking: 'Recherche…',
-  updateFound: 'Une nouvelle version s’installe. L’app se recharge d’elle-même dans un instant.',
+  updateFound:
+    'Nouvelle version trouvée. Elle se télécharge en arrière-plan et apparaît ici une fois prête.',
+  versionNewest: 'La plus récente',
+  updateTrouble: 'Un souci de mise à jour ?',
   updateLatest: 'C’est la dernière version.',
   updateUnavailable: 'Pas de mises à jour ici (pas de service hors ligne).',
   updateFailed: 'Serveur injoignable. « Recharger à neuf » fonctionne quand même.',

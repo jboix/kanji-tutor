@@ -8,6 +8,7 @@ import { ListRow } from '../../ui/list-row.tsx';
 import { paths } from '../../ui/paths.ts';
 import { PillLink } from '../../ui/pill-button.tsx';
 import { Screen } from '../../ui/screen.tsx';
+import { UpdateCard } from '../../ui/update-card.tsx';
 import { PlacementRows } from './placement-row.tsx';
 import styles from './today.module.css';
 import { ClassSection } from './today-class.tsx';
@@ -32,6 +33,7 @@ export function TodayScreen() {
   return (
     <Screen footer={<BottomNav />} gap={28}>
       <TodayHeader now={now} />
+      <UpdateCard place="home" />
       <BackupReminder />
       <Notice />
       <TodayContent data={data} now={now} onChange={reload} />

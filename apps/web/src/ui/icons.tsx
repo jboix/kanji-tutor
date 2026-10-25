@@ -201,6 +201,12 @@ export const TrayIcon = () => (
     <path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4" />
   </Svg>
 );
+/** A new version: an arrow down onto a line. */
+export const DownloadIcon = () => (
+  <Svg size={20} width={1.8}>
+    <path d="M12 4v11M7 10l5 5 5-5M5 20h14" />
+  </Svg>
+);
 /** Install: a phone with an arrow onto its screen. */
 export const PhoneIcon = () => (
   <Svg size={20} width={1.8}>

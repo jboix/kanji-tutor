@@ -1,5 +1,6 @@
 import { type CSSProperties, type ReactNode, useLayoutEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router';
+import { useAppUpdate, useUpdateDismissed } from './app-update.ts';
 import styles from './bottom-nav.module.css';
 import { cx } from './cx.ts';
 import { useT } from './i18n/i18n.tsx';
@@ -70,14 +71,24 @@ export function activeColumn(pathname: string): number | undefined {
   return [...TABS_START, ...TABS_END].find((tab) => owns(tab, pathname))?.column;
 }
 
+/** True when a new version waits that Home no longer offers: Settings → About still does. */
+function useUpdateWaiting(): boolean {
+  const update = useAppUpdate();
+  const next = update.status === 'ready' ? update.next : undefined;
+  return useUpdateDismissed(next);
+}
+
 function TabLink({ tab, active }: { tab: Tab; active: boolean }) {
   const t = useT();
+  const waiting = useUpdateWaiting() && tab.to === paths.settings;
   return (
     <Link
       to={tab.to}
       className={cx(styles.link, active && styles.active)}
       aria-current={active ? 'page' : undefined}
+      aria-label={waiting ? t('ui.navSettingsUpdate') : undefined}
     >
+      {waiting && <span className={styles.dot} aria-hidden="true" />}
       <span className={styles.icon}>{tab.icon}</span>
       <span className={styles.label}>{t(tab.label)}</span>
     </Link>

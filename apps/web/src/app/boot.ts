@@ -1,5 +1,10 @@
 import { registerSW } from 'virtual:pwa-register';
-import { setRegistration } from '../ui/app-update.ts';
+import {
+  offerUpdate,
+  reloadWhenActive,
+  setRegistration,
+  watchForUpdates,
+} from '../ui/app-update.ts';
 import { captureInstallPrompt } from '../ui/install-prompt.ts';
 import type { Services } from '../ui/services.tsx';
 import { applyTheme } from '../ui/theme.ts';
@@ -33,10 +38,16 @@ export async function boot(services: Services): Promise<void> {
   applyTheme(settings.theme);
   await requestPersistence().catch(() => undefined);
   if (import.meta.env.PROD) {
-    registerSW({
+    const updateSW = registerSW({
       immediate: true,
       onRegisteredSW: (_url, registration) => setRegistration(registration),
+      onNeedRefresh: () =>
+        void offerUpdate(() => {
+          reloadWhenActive();
+          return updateSW(true);
+        }),
     });
+    watchForUpdates();
   }
   await updatePacks(services).catch(() => undefined);
 }

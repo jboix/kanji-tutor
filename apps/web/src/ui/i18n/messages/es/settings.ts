@@ -156,7 +156,10 @@ export const settings = {
   versionLine: '{version}, compilación {id}, {when}',
   updateCheck: 'Buscar actualizaciones',
   updateChecking: 'Buscando…',
-  updateFound: 'Se está instalando una versión nueva. La app se recargará sola en un momento.',
+  updateFound:
+    'Hay una versión nueva. Se descarga en segundo plano y aparece aquí cuando esté lista.',
+  versionNewest: 'La más reciente',
+  updateTrouble: '¿Problemas al actualizar?',
   updateLatest: 'Es la versión más reciente.',
   updateUnavailable: 'Aquí no hay actualizaciones (sin servicio sin conexión).',
   updateFailed: 'No se pudo contactar con el servidor. «Recargar de cero» sigue funcionando.',

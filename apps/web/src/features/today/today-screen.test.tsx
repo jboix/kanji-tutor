@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { HON, withJlptIndex } from '../../test/jlpt-index.ts';
 import { knowBasics, NOW, readingRepos, track, W } from '../../test/reading-fixtures.ts';
 import { fakeServices, renderWithServices } from '../../test/render.tsx';
+import { offerUpdate, resetAppUpdate } from '../../ui/app-update.ts';
 import { ENGLISH } from '../../ui/i18n/load.ts';
 import { createTranslator } from '../../ui/i18n/translate.ts';
 import { dateLine, missLead, whenLine } from './today-copy.ts';
@@ -27,6 +28,20 @@ describe('today copy', () => {
 });
 
 describe('TodayScreen', () => {
+  it('offers a new version at the top, under the date (N1e)', async () => {
+    await offerUpdate(
+      async () => undefined,
+      async () => ({ version: '9.9.9', notes: [] }),
+    );
+    renderWithServices(<TodayScreen />, {
+      services: fakeServices({ repos: await readingRepos() }),
+    });
+    const card = screen.getByRole('region', { name: 'A new version' });
+    expect(card.previousElementSibling?.tagName).toBe('HEADER');
+    expect(card.textContent).toContain('9.9.9');
+    resetAppUpdate();
+  });
+
   it('shows where you are, last time, what Start plays and the class (IA2)', async () => {
     const repos = await readingRepos({ currentLesson: 'Tobira 第4課' });
     await knowBasics(repos);

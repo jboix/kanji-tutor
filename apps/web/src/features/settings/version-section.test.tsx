@@ -2,11 +2,14 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { inLanguage } from '../../test/render.tsx';
-import { BUILD, setRegistration } from '../../ui/app-update.ts';
+import { BUILD, offerUpdate, resetAppUpdate, setRegistration } from '../../ui/app-update.ts';
 import { VersionSection } from './version-section.tsx';
 
 describe('VersionSection (N1e)', () => {
-  afterEach(() => setRegistration(undefined));
+  afterEach(() => {
+    setRegistration(undefined);
+    resetAppUpdate();
+  });
 
   it('shows the build and checks for an update on press', async () => {
     const update = vi.fn(async () => undefined);
@@ -30,5 +33,20 @@ describe('VersionSection (N1e)', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Chercher une mise à jour' }));
     expect((await screen.findByRole('status')).textContent).toContain('Pas de mises à jour ici');
     expect(screen.getByRole('button', { name: 'Recharger à neuf' })).toBeTruthy();
+  });
+
+  it('offers a waiting version with the newest number, and keeps Reload fresh apart', async () => {
+    await offerUpdate(
+      async () => undefined,
+      async () => ({ version: '1.5.0', notes: [] }),
+    );
+    render(<VersionSection />);
+    expect(screen.getByRole('region', { name: 'A new version' }).textContent).toContain(
+      '1.5.0 is ready',
+    );
+    expect(screen.getByText('Newest').nextSibling?.textContent).toBe('1.5.0');
+    expect(screen.queryByRole('button', { name: 'Check for updates' })).toBeNull();
+    expect(screen.getByRole('heading', { name: 'Trouble updating?' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Reload fresh' })).toBeTruthy();
   });
 });
