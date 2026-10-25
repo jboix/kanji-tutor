@@ -8,7 +8,7 @@ describe('AddScreen (IA3)', () => {
     renderWithServices(<AddScreen />, { services: fakeServices(), path: '/add' });
     expect(screen.getByRole('heading', { name: 'Add' })).toBeTruthy();
     const href = (name: RegExp) => screen.getByRole('link', { name }).getAttribute('href');
-    expect(href(/^Photograph a page/)).toBe('/capture');
+    expect(href(/^Scanned lessons/)).toBe('/capture');
     expect(href(/^Write a sentence/)).toBe('/compose');
     expect(href(/^Words from class/)).toBe('/import');
     const nav = screen.getByRole('navigation', { name: 'Main' });

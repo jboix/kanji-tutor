@@ -3,7 +3,7 @@ import type { Messages } from '../../types.ts';
 
 export const add = {
   title: 'Añadir',
-  capture: 'Fotografiar una página',
+  capture: 'Lecciones escaneadas',
   captureDetail:
     'Una o más páginas de una hoja forman una lección escaneada, que se practica aparte',
   compose: 'Escribir una frase',

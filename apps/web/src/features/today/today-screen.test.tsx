@@ -92,7 +92,7 @@ describe('TodayScreen', () => {
       within(practise).getByRole('link', { name }).getAttribute('href');
     expect(href(/^Just read/)).toBe('/read?only=reading');
     expect(href(/^Write a sentence/)).toBe('/compose');
-    expect(href(/^Read a photo/)).toBe('/capture');
+    expect(href(/^Scanned lessons/)).toBe('/capture');
     await waitFor(() => expect(href(/^Kanji readings/)).toMatch(/^\/read\?/));
     expect(href(/^Grammar drills/)).toMatch(/^\/read\?/);
     const known = await screen.findByRole('region', { name: 'What you know' });

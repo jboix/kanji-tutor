@@ -118,11 +118,11 @@ test('Settings opens each category as its own screen, and Back returns to the li
   }
 });
 
-test('Add chooses Capture or Use it, each going back to Add', async ({ page }) => {
+test('Add chooses Scanned lessons or Use it, each going back to Add', async ({ page }) => {
   await onboard(page);
   await nav(page).getByRole('link', { name: 'Add' }).click();
   await expect(page.getByRole('heading', { name: 'Add', level: 1 })).toBeVisible();
-  await page.getByRole('link', { name: /^Photograph a page/ }).click();
+  await page.getByRole('link', { name: /^Scanned lessons/ }).click();
   await expect(page).toHaveURL(/\/capture$/);
   await back(page).click();
   await expect(page).toHaveURL(/\/add$/);
