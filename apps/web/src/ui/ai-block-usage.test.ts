@@ -27,6 +27,8 @@ const AI_VIEWS = [
   'src/features/compose/draft-editor.tsx',
   'src/features/capture/scan-import.tsx',
   'src/features/capture/review-items.tsx',
+  'src/features/capture/lesson-lines.tsx',
+  'src/features/read/handout-screen.tsx',
   'src/features/notes/letter-view.tsx',
   'src/features/placement/tutor-assessment.tsx',
   'src/features/handwrite/candidate-picker.tsx',

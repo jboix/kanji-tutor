@@ -32,12 +32,19 @@ async function shot(page: Page, name: string) {
   await page.setViewportSize(size);
 }
 
-test('three handout pages become one scanned lesson', async ({ page }) => {
+/** From the empty list, through the new scan screen, to the review of three read pages. */
+async function readThreePages(page: Page) {
   await onboard(page);
   await page.goto('/capture');
+  await expect(page.getByRole('heading', { name: 'Scanned lessons' })).toBeVisible();
+  await page.getByRole('link', { name: 'New scan' }).click();
   await expect(page.getByRole('heading', { name: 'New scan' })).toBeVisible();
   await photograph(page, [HANDOUT, HANDOUT, HANDOUT]);
   await expect(page.getByRole('img', { name: 'Photo of page 3' })).toBeVisible();
+}
+
+test('three handout pages become one scanned lesson', async ({ page }) => {
+  await readThreePages(page);
   const read = page.getByRole('button', { name: 'Read 3 pages, 3 requests, uses AI' });
   await expect(read).toBeVisible();
   // The tutor is one tap away before anything is read.
@@ -74,11 +81,60 @@ test('three handout pages become one scanned lesson', async ({ page }) => {
   await expect(page.getByRole('button', { name: /may be misread/ })).toHaveCount(0);
   await title.fill('Weather week');
   await page.getByRole('button', { name: 'Save the lesson' }).click();
-  await expect(page.getByText(/^Scanned /)).toBeVisible();
-  await expect(page.getByLabel('Title', { exact: true })).toHaveValue('Weather week');
-  await expect(page.getByText(/^0 of \d+ practised$/)).toBeVisible();
+
+  await expect(page.getByRole('heading', { name: 'Weather week' })).toBeVisible();
+  await expect(page.getByText(/^Scanned .* · 3 pages$/)).toBeVisible();
+  await expect(page.getByRole('region', { name: 'What the lesson holds' })).toContainText('Kanji');
+  await expect(page.getByRole('link', { name: /^Practise this lesson/ })).toBeInViewport();
+  await page.getByRole('button', { name: 'See the photo of page 1' }).click();
+  await expect(page.getByRole('dialog', { name: 'Page 1' }).getByRole('img')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await shot(page, 'lesson');
 
   await page.goto('/capture');
-  const recent = page.getByRole('region', { name: 'Your scanned lessons' });
-  await expect(recent.getByRole('link', { name: /Weather week/ })).toContainText('3 pages');
+  const card = page.getByRole('link', { name: /Weather week/ });
+  await expect(card).toContainText('3 pages');
+  await expect(card).toContainText('Not started');
+  await shot(page, 'list');
+});
+
+/** Past the cards before the first handout question: intros, readings and drills skipped. */
+async function toHandoutQuestion(page: Page) {
+  const handout = page.getByText(/^From your handout · page 3/);
+  const gotIt = page.getByRole('button', { name: 'Got it' });
+  const dontKnow = page.getByRole('button', { name: "I don't know" });
+  const onward = page.getByRole('button', {
+    name: /^(Next( sentence| word| question| card)?|Done)$/,
+  });
+  for (let step = 0; step < 20; step++) {
+    await expect(handout.or(gotIt).or(dontKnow).first()).toBeVisible({ timeout: 15_000 });
+    if (await handout.isVisible()) return;
+    if (await gotIt.isVisible()) await gotIt.click();
+    else {
+      await dontKnow.click();
+      await onward.first().click();
+    }
+  }
+  await expect(handout).toBeVisible();
+}
+
+test('a handout question is answered, then the tutor’s answer shows as the tutor’s', async ({
+  page,
+}) => {
+  await readThreePages(page);
+  await page.getByRole('button', { name: /^Read 3 pages/ }).click();
+  await page.getByRole('button', { name: 'Save the lesson' }).click({ timeout: 30_000 });
+  await page.getByRole('link', { name: /^Practise this lesson/ }).click();
+  await expect(page).toHaveURL(/\/read\?scan=/);
+  await toHandoutQuestion(page);
+  await expect(page.getByText('雨が降り＿＿です。')).toBeVisible();
+  await expect(page.getByText(/so it looks about to rain/)).toHaveCount(0);
+  await page.getByRole('button', { name: 'そう' }).click();
+  await expect(page.getByText('Right', { exact: true })).toBeVisible();
+  const tutor = page.getByLabel('Answer from the tutor');
+  await expect(tutor).toContainText('Your handout prints none.');
+  await expect(tutor).toContainText('looks about to rain');
+  await shot(page, 'practice');
+  await page.getByRole('button', { name: 'See the page' }).click();
+  await expect(page.getByRole('dialog', { name: 'Page 3 of your handout' })).toBeVisible();
 });

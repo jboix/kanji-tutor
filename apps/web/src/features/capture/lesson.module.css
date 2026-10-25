@@ -1,0 +1,157 @@
+/* One scanned lesson (scans/Lesson): its title, photos, parts and the pages' text. */
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.rename {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input {
+  width: 100%;
+  min-height: 48px;
+  box-sizing: border-box;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--paper-raised);
+  color: var(--ink);
+  font-family: var(--font-ui), var(--font-ja);
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.muted {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.text {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.5;
+}
+
+.photos {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+}
+
+.photo {
+  flex-shrink: 0;
+  width: 64px;
+  height: 84px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--paper-raised);
+  cursor: pointer;
+}
+
+.photo > * {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  font-size: 7px;
+}
+
+.pillText {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 700;
+}
+
+.pillText [data-sub] {
+  font-size: var(--text-sm);
+  font-weight: 400;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lines > li {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.line {
+  width: 100%;
+  min-height: var(--tap);
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-ja);
+  font-size: var(--text-lg);
+  line-height: 1.7;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lineOn {
+  background: var(--paper-soft);
+}
+
+@media (hover: hover) {
+  .line:hover {
+    background: var(--paper-soft);
+  }
+}
+
+.line:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.readings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+}
+
+.sheetBody {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 var(--gutter) 24px;
+}

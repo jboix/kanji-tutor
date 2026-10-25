@@ -23,7 +23,6 @@ import { useCloud } from '../../ui/use-cloud.ts';
 import styles from './capture.module.css';
 import { PageGrid, PickButtons, textPage, usePickers } from './page-grid.tsx';
 import type { ImportPage } from './read-pages.ts';
-import { RecentScans } from './recent-scans.tsx';
 import { problemMessage } from './scan-copy.ts';
 import { useImportTutor } from './scan-tutor.ts';
 import type { ReadState, useScanImport } from './use-scan-import.ts';
@@ -207,7 +206,7 @@ function Footer({ scan }: { scan: Import }) {
 export function ScanImport({ scan, adding }: { scan: Import; adding: boolean }) {
   const t = useT();
   const pickers = usePickers(scan.add);
-  const back = <BackButton parent={paths.add} label={t('common.back')} />;
+  const back = <BackButton parent={paths.capture} label={t('common.back')} />;
   const title = adding ? t('capture.addTitle') : t('capture.newTitle');
   return (
     <Screen topBar={<TopBar start={back} title={title} />} footer={<Footer scan={scan} />} gap={20}>
@@ -218,7 +217,6 @@ export function ScanImport({ scan, adding }: { scan: Import; adding: boolean }) 
       <PasteForm onText={(text) => scan.add([textPage(text)])} />
       <Destination scan={scan} />
       <ReadStatus state={scan.state} />
-      {!adding && <RecentScans />}
     </Screen>
   );
 }

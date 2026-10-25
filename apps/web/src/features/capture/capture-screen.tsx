@@ -1,7 +1,8 @@
 /**
- * Scanned lessons: photograph (or paste) every page of a handout, let the tutor read what each
- * page is and what it teaches, review it against your lists, and save it as one lesson. A saved
- * lesson opens at `?id=`, from storage only, so it works offline; `?to=` adds pages to one.
+ * Scanned lessons: the list of them; `?new=1` photographs (or pastes) every page of a handout,
+ * lets the tutor read what each page is and what it teaches, reviews it against your lists and
+ * saves it as one lesson. A saved lesson opens at `?id=`, from storage only, so it works
+ * offline; `?to=` adds pages to one.
  */
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
@@ -10,12 +11,13 @@ import { useT } from '../../ui/i18n/i18n.tsx';
 import { IconButton } from '../../ui/icon-button.tsx';
 import { BackIcon } from '../../ui/icons.tsx';
 import { paths } from '../../ui/paths.ts';
-import { PillButton, PillLink } from '../../ui/pill-button.tsx';
+import { PillButton } from '../../ui/pill-button.tsx';
 import { Screen } from '../../ui/screen.tsx';
 import { TopBar } from '../../ui/top-bar.tsx';
 import styles from './capture.module.css';
-import { scanHref } from './recent-scans.tsx';
+import { LessonPage } from './lesson-page.tsx';
 import { ScanImport } from './scan-import.tsx';
+import { ScanList, scanHref } from './scan-list.tsx';
 import { ScanReview } from './scan-review.tsx';
 import { useDraftReview } from './use-draft-review.ts';
 import { useSavedScan } from './use-saved-scan.ts';
@@ -67,19 +69,14 @@ function ScanFlow({ into }: { into: string | undefined }) {
   return <ScanImport scan={scan} adding={into !== undefined} />;
 }
 
-/** A saved scanned lesson, reviewed in place: title, page kinds and misread lines. */
+/** A saved scanned lesson's page, from storage only. */
 function SavedScan({ id }: { id: string }) {
   const { state, model, commitTitle } = useSavedScan(id);
   const t = useT();
-  if (!model)
+  if (!model) {
     return <Waiting text={state.status === 'missing' ? t('capture.gone') : t('capture.opening')} />;
-  const back = <BackButton parent={paths.capture} label={t('common.back')} />;
-  const action = (
-    <PillLink to={`${paths.capture}?to=${encodeURIComponent(id)}`} variant="secondary" block>
-      {t('capture.addTitle')}
-    </PillLink>
-  );
-  return <ScanReview model={model} back={back} action={action} saved={{ commitTitle }} />;
+  }
+  return <LessonPage model={model} commitTitle={commitTitle} />;
 }
 
 export function CaptureScreen() {
@@ -87,5 +84,6 @@ export function CaptureScreen() {
   const id = params.get('id');
   const into = params.get('to') ?? undefined;
   if (id) return <SavedScan key={id} id={id} />;
+  if (into === undefined && !params.has('new')) return <ScanList />;
   return <ScanFlow key={into ?? 'new'} into={into} />;
 }

@@ -246,3 +246,36 @@
   margin: 0;
   accent-color: var(--accent);
 }
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* "New scan" in the list's top bar: a small outlined pill that fits beside the title. */
+.newScan {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  color: var(--ink);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.listHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.listTitle {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}

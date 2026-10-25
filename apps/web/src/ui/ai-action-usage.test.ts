@@ -90,6 +90,7 @@ const PRESSES: Readonly<Record<string, string>> = {
   'Explain this sentence: ask the tutor': 'src/features/teach/sentence-help.tsx',
   'Compose Check': 'src/features/compose/compose-screen.tsx',
   'Read the scanned pages': 'src/features/capture/scan-import.tsx',
+  'Ask about a scanned line': 'src/features/capture/lesson-lines.tsx',
   'Voice record': 'src/features/voice/voice-answer.tsx',
   'Handwriting AI fallback': 'src/features/handwrite/draw-panel.tsx',
   'Describe a kanji': 'src/features/handwrite/describe-panel.tsx',

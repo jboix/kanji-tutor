@@ -171,7 +171,7 @@ describe('AI only on demand (A13)', () => {
     await settle();
     notes.unmount();
     renderWithServices(<CaptureScreen />, { services, slots: SLOTS, path: '/capture?id=saved' });
-    await screen.findByRole('region', { name: 'The pages' });
+    await screen.findByRole('region', { name: 'The pages’ text' });
     await userEvent.click(screen.getByRole('button', { name: /^Ask the tutor about / }));
     await settle();
     expect(provider.tasks).toEqual([]);

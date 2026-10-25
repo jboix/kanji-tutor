@@ -92,7 +92,7 @@ async function setup(analyse?: (input: AnalysePageInput) => Promise<Result<PageA
     lang: fakeLang({ tokenize }),
     ai: fakeAi({ analysePage, answerQuestion: vi.fn() }),
   });
-  renderWithServices(<CaptureScreen />, { services, path: '/capture' });
+  renderWithServices(<CaptureScreen />, { services, path: '/capture?new=1' });
   return { repos, analysePage };
 }
 
@@ -196,6 +196,7 @@ describe('new scan', () => {
     pick(photo('a.jpg'));
     fireEvent.click(screen.getByRole('button', { name: /^Read 1 page/ }));
     fireEvent.click(await screen.findByRole('button', { name: 'Save the lesson' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'More: add pages, rename, delete' }));
     fireEvent.click(await screen.findByRole('link', { name: 'Add pages' }));
     pick(photo('b.jpg'));
     fireEvent.click(await screen.findByRole('radio', { name: /^Add to Weather and plans/ }));

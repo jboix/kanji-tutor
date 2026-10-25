@@ -93,7 +93,13 @@ const COUNT_KEYS = {
   grammar: 'capture.grammarCount',
 } as const;
 
-function Group({ kind, views }: { kind: ScanItemView['kind']; views: readonly ScanItemView[] }) {
+export function ItemGroup({
+  kind,
+  views,
+}: {
+  kind: ScanItemView['kind'];
+  views: readonly ScanItemView[];
+}) {
   const t = useT();
   const own = views.filter((view) => view.kind === kind);
   if (own.length === 0) return null;
@@ -116,9 +122,9 @@ export function ReviewItems({ views }: { views: readonly ScanItemView[] }) {
   if (views.length === 0) return <p className={styles.muted}>{t('capture.nothingFound')}</p>;
   return (
     <>
-      <Group kind="kanji" views={views} />
-      <Group kind="word" views={views} />
-      <Group kind="grammar" views={views} />
+      <ItemGroup kind="kanji" views={views} />
+      <ItemGroup kind="word" views={views} />
+      <ItemGroup kind="grammar" views={views} />
     </>
   );
 }
@@ -129,7 +135,7 @@ function typeCounts(questions: readonly HandoutQuestion[]): [QuestionType, numbe
   return [...counts];
 }
 
-function PageExercises({ page, questions }: { page: number; questions: HandoutQuestion[] }) {
+export function PageExercises({ page, questions }: { page: number; questions: HandoutQuestion[] }) {
   const t = useT();
   const title = t('capture.exercisesFrom', { page: page + 1, n: questions.length });
   return (

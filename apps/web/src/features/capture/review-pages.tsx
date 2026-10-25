@@ -126,7 +126,7 @@ function LineFix({ at, model }: { at: CheckLine; model: ReviewModel }) {
 }
 
 /** "1 line may be misread · Check it", and the sheet to check them. */
-function CheckLines({ model }: { model: ReviewModel }) {
+export function CheckLines({ model }: { model: ReviewModel }) {
   const t = useT();
   const [open, setOpen] = useState(false);
   if (model.check.length === 0) return null;
