@@ -483,6 +483,12 @@ Example sentences
   Licence: CC BY 2.0 FR
   Licence text: https://creativecommons.org/licenses/by/2.0/fr/legalcode
 
+KanjiVG (stroke paths of the loading kanji)
+  By:      Ulrich Apel
+  Source:  https://kanjivg.tagaini.net/
+  Licence: CC BY-SA 3.0
+  Licence text: https://creativecommons.org/licenses/by-sa/3.0/legalcode
+
 KanjiCanvas (handwriting recognition)
   By:      Dominik Klein and Seth Clydesdale
   Source:  https://github.com/asdfjkl/kanjicanvas

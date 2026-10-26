@@ -25,7 +25,6 @@ export const units = {
   title: 'Leçons',
   intro:
     'Des unités thématiques dans l’ordre du JLPT. Une unité est terminée quand vous connaissez la plupart de ses mots et avez utilisé sa grammaire. Vous pouvez ouvrir n’importe quelle unité en avance.',
-  loadingPath: 'Chargement du parcours…',
   levelUnits: 'Unités N{level}',
   yourLevel: 'N{level} · votre niveau',
   levelTitle: 'N{level}',
@@ -45,7 +44,6 @@ export const units = {
   markDone: 'Marquer comme terminée',
   skipIt: 'La passer',
   unitOrder: 'N{level} · unité {order}',
-  loadingUnit: 'Chargement de l’unité…',
   noUnit: 'Cette unité n’existe pas.',
   tapWord: 'Touchez un mot pour le chercher.',
   readPassage: 'Lisez le texte.',

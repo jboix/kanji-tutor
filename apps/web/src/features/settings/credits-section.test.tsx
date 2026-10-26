@@ -7,7 +7,9 @@ describe('CreditsSection', () => {
   it('lists each work with its licence and offers the full texts', () => {
     renderWithServices(<CreditsSection />);
     expect(screen.getByRole('heading', { name: 'Credits' })).toBeTruthy();
-    expect(screen.getAllByRole('listitem')).toHaveLength(7);
+    expect(screen.getAllByRole('listitem')).toHaveLength(8);
+    expect(screen.getByRole('link', { name: 'KanjiVG' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'CC BY-SA 3.0' })).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Tatoeba' })).toBeTruthy();
     expect(screen.getByRole('link', { name: 'CC BY 2.0 FR' })).toBeTruthy();
     const download = screen.getByRole('link', { name: 'Download the full licence texts' });

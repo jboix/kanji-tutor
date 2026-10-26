@@ -75,6 +75,10 @@ A pack set aside with `--keep-previous` stays loadable until the new one has bee
 `VITE_PACKS=previous bun run dev` (or `bun run build`) loads it instead of the current one.
 Delete `public/packs/previous/` once the new pack is accepted.
 
+The loader's kanji (`apps/web/src/ui/loader-kanji.ts`) carry stroke paths taken unchanged from
+[KanjiVG](https://kanjivg.tagaini.net) (CC BY-SA 3.0), for a small curated set; any download goes
+under `apps/web/data/raw/`.
+
 Never commit `apps/web/data/raw/` or any textbook content.
 
 `bun run credits` writes `apps/web/public/third-party-licenses.txt`, the licence texts that Settings →

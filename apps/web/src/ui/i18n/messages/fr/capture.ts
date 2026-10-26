@@ -133,6 +133,5 @@ export const capture = {
   nothingFound: 'Rien sur ces pages ne correspond à nos listes.',
   save: 'Enregistrer la leçon',
   saving: 'Enregistrement…',
-  opening: 'Ouverture de la leçon…',
   gone: 'Cette leçon scannée n’est plus enregistrée.',
 } satisfies Messages['capture'];

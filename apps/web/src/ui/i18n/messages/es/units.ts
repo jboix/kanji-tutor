@@ -25,7 +25,6 @@ export const units = {
   title: 'Lecciones',
   intro:
     'Unidades temáticas en el orden del JLPT. Una unidad está hecha cuando conoces la mayoría de sus palabras y has usado su gramática. Puedes abrir cualquier unidad antes.',
-  loadingPath: 'Cargando el recorrido…',
   levelUnits: 'Unidades N{level}',
   yourLevel: 'N{level} · tu nivel',
   levelTitle: 'N{level}',
@@ -45,7 +44,6 @@ export const units = {
   markDone: 'Marcar como hecha',
   skipIt: 'Saltarla',
   unitOrder: 'N{level} · unidad {order}',
-  loadingUnit: 'Cargando la unidad…',
   noUnit: 'Esa unidad no existe.',
   tapWord: 'Toca una palabra para buscarla.',
   readPassage: 'Lee el texto.',

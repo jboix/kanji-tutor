@@ -48,6 +48,7 @@ The code is under the [MIT licence](./LICENSE). The data keeps its own licences:
 - JMdict, KANJIDIC2 and KRADFILE: [EDRDG](https://www.edrdg.org/edrdg/licence.html), CC BY-SA 4.0.
 - Example sentences: [Tatoeba](https://tatoeba.org), CC BY 2.0 FR.
 - JLPT lists: Jonathan Waller (CC BY), via yomitan-jlpt-vocab (CC BY-SA 4.0).
+- Stroke paths of the loading kanji: [KanjiVG](https://kanjivg.tagaini.net) by Ulrich Apel, CC BY-SA 3.0.
 - Handwriting recognition: adapted from [KanjiCanvas](https://github.com/asdfjkl/kanjicanvas) (MIT).
 - Fonts: Klee One and Zen Kaku Gothic New (SIL OFL).
 

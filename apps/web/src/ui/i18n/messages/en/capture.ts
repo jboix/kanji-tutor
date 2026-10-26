@@ -129,6 +129,5 @@ export const capture = {
   nothingFound: 'Nothing on these pages matched our lists.',
   save: 'Save the lesson',
   saving: 'Saving…',
-  opening: 'Opening the lesson…',
   gone: 'This scanned lesson is no longer saved.',
 } as const;

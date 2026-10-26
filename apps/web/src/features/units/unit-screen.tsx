@@ -12,6 +12,7 @@ import { BackButton } from '../../ui/back-button.tsx';
 import { EnMark } from '../../ui/en-mark.tsx';
 import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
 import { Ja } from '../../ui/ja.tsx';
+import { Loader } from '../../ui/loader.tsx';
 import { paths } from '../../ui/paths.ts';
 import { PillButton } from '../../ui/pill-button.tsx';
 import { PractisedProgress } from '../../ui/practised-progress.tsx';
@@ -168,7 +169,7 @@ export function UnitScreen() {
   const reload = () => setNow(Date.now());
   return (
     <Screen topBar={<TopBar start={back} />} gap={22}>
-      {view === undefined && <p className={styles.muted}>{t('units.loadingUnit')}</p>}
+      {view === undefined && <Loader />}
       {view === null && <p className={styles.text}>{t('units.noUnit')}</p>}
       {view && <Body view={view} mode={mode} setMode={setMode} reload={reload} />}
     </Screen>

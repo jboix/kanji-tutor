@@ -178,6 +178,8 @@ export const settings = {
   creditsJlpt: 'Niveles JLPT',
   creditsJlptBy: 'Listas JLPT de Jonathan Waller (CC BY), asociadas a JMdict por {link}',
   creditsSentences: 'Frases de ejemplo',
+  creditsStrokes: 'Orden de trazos de los kanji de espera',
+  creditsStrokesBy: '{link}, de Ulrich Apel',
   creditsHandwriting: 'Reconocimiento de escritura',
   creditsHandwritingBy: 'Adaptado de {link}, de Dominik Klein y Seth Clydesdale',
   creditsFonts: 'Fuentes',

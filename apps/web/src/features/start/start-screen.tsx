@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { type StartPlan, startPlan } from '../../domain/services/index.ts';
-import { useT } from '../../ui/i18n/i18n.tsx';
+import { Loader } from '../../ui/loader.tsx';
 import { Screen } from '../../ui/screen.tsx';
 import { useServices } from '../../ui/services.tsx';
 import { offeredState } from '../../ui/session-handoff.ts';
 import { startPath } from '../../ui/start-path.ts';
-import styles from './start.module.css';
 
 /**
  * `/start`, the centre button (IA3): works out the next round from the choice saved on Today
@@ -16,7 +15,6 @@ import styles from './start.module.css';
 export function StartScreen() {
   const { repos } = useServices();
   const navigate = useNavigate();
-  const t = useT();
   useEffect(() => {
     let live = true;
     // Whatever goes wrong working it out, Start still starts: the daily mix.
@@ -34,9 +32,7 @@ export function StartScreen() {
   }, [repos, navigate]);
   return (
     <Screen>
-      <p className={styles.status} role="status">
-        {t('ui.startChoosing')}
-      </p>
+      <Loader />
     </Screen>
   );
 }

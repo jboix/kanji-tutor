@@ -131,6 +131,5 @@ export const capture = {
   nothingFound: 'Nada en estas páginas coincide con nuestras listas.',
   save: 'Guardar la lección',
   saving: 'Guardando…',
-  opening: 'Abriendo la lección…',
   gone: 'Esta lección escaneada ya no está guardada.',
 } satisfies Messages['capture'];

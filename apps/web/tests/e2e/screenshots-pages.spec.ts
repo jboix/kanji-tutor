@@ -126,7 +126,7 @@ test('today: the install banner on an iPhone (N1d)', async ({ page }) => {
   );
   await onboard(page);
   await expect(page.getByRole('complementary', { name: 'Install the app' })).toBeVisible();
-  await expect(page.getByText('Getting today ready…')).toBeHidden({ timeout: 15_000 });
+  await expect(page.locator('[data-loader]')).toHaveCount(0, { timeout: 15_000 });
   await expect(page.getByText("Choosing today's sentences…")).toBeHidden({ timeout: 15_000 });
   await shot(page, 'install-banner');
 });

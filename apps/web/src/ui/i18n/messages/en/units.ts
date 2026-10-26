@@ -23,7 +23,6 @@ export const units = {
   title: 'Lessons',
   intro:
     'Themed units in JLPT order. A unit is done when you know most of its words and have used its grammar. You can open any unit early.',
-  loadingPath: 'Loading the path…',
   levelUnits: 'N{level} units',
   yourLevel: 'N{level} · your level',
   levelTitle: 'N{level}',
@@ -43,7 +42,6 @@ export const units = {
   markDone: 'Mark as done',
   skipIt: 'Skip it',
   unitOrder: 'N{level} · unit {order}',
-  loadingUnit: 'Loading the unit…',
   noUnit: 'There is no such unit.',
   tapWord: 'Tap any word to look it up.',
   readPassage: 'Read the passage.',

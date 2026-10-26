@@ -13,6 +13,7 @@ import { useT } from '../../ui/i18n/i18n.tsx';
 import { ChevronIcon } from '../../ui/icons.tsx';
 import { Ja } from '../../ui/ja.tsx';
 import { LessonCard } from '../../ui/lesson-card.tsx';
+import { Loader } from '../../ui/loader.tsx';
 import { paths } from '../../ui/paths.ts';
 import { ProgressLine } from '../../ui/progress-line.tsx';
 import { Screen } from '../../ui/screen.tsx';
@@ -124,7 +125,7 @@ export function UnitsScreen() {
           <LevelUnits key={level} level={level} path={path} coverage={coverage} />
         ))
       ) : (
-        <p className={styles.muted}>{t('units.loadingPath')}</p>
+        <Loader />
       )}
     </Screen>
   );

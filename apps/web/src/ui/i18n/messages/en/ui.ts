@@ -8,6 +8,7 @@ export const ui = {
   navTutor: 'Tutor',
   navTutorUnset: 'Tutor, not set up yet',
   navSettings: 'Settings',
+  loaderStrokes: { one: '{n} stroke', other: '{n} strokes' },
   startChoosing: 'Choosing the next round…',
   tutorTitle: 'Your tutor',
   tutorAbout: 'About {about}',

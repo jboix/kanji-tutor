@@ -12,6 +12,7 @@ const NAMES = {
   edrdg: 'EDRDG',
   jlpt: 'yomitan-jlpt-vocab',
   canvas: 'KanjiCanvas',
+  kanjivg: 'KanjiVG',
   github: 'GitHub',
 };
 
@@ -49,6 +50,14 @@ const CREDITS: readonly Credit[] = [
     what: 'settings.creditsSentences',
     by: () => <a href="https://tatoeba.org/">Tatoeba</a>,
     licence: { name: 'CC BY 2.0 FR', href: 'https://creativecommons.org/licenses/by/2.0/fr/' },
+  },
+  {
+    what: 'settings.creditsStrokes',
+    by: (rich) =>
+      rich('settings.creditsStrokesBy', {
+        link: <a href="https://kanjivg.tagaini.net/">{NAMES.kanjivg}</a>,
+      }),
+    licence: { name: 'CC BY-SA 3.0', href: 'https://creativecommons.org/licenses/by-sa/3.0/' },
   },
   {
     what: 'settings.creditsHandwriting',

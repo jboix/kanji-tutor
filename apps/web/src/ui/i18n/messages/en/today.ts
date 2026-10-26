@@ -1,6 +1,5 @@
 /** English messages: the Today screen (R1): counts, never praise or pressure. */
 export const today = {
-  loading: 'Getting today ready…',
   choosing: "Choosing today's sentences…",
   mark: 'Mark what you already know',
   markDetail: 'If you can already read some words',

@@ -189,6 +189,8 @@ export const settings = {
   creditsJlpt: 'JLPT levels',
   creditsJlptBy: "Jonathan Waller's JLPT lists (CC BY), mapped to JMdict by {link}",
   creditsSentences: 'Example sentences',
+  creditsStrokes: 'Stroke order of the loading kanji',
+  creditsStrokesBy: '{link}, by Ulrich Apel',
   creditsHandwriting: 'Handwriting recognition',
   creditsHandwritingBy: 'Adapted from {link}, by Dominik Klein and Seth Clydesdale',
   creditsFonts: 'Fonts',

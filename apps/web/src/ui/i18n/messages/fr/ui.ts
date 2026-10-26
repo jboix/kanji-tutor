@@ -10,6 +10,7 @@ export const ui = {
   navTutor: 'Tuteur',
   navTutorUnset: 'Tuteur, pas encore prêt',
   navSettings: 'Réglages',
+  loaderStrokes: { one: '{n} trait', other: '{n} traits' },
   startChoosing: 'Choix de la prochaine série…',
   tutorTitle: 'Votre tuteur',
   tutorAbout: 'À propos de {about}',

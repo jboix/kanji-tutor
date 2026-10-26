@@ -10,6 +10,7 @@ import { BackButton } from '../../ui/back-button.tsx';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { IconButton } from '../../ui/icon-button.tsx';
 import { BackIcon } from '../../ui/icons.tsx';
+import { Loader } from '../../ui/loader.tsx';
 import { paths } from '../../ui/paths.ts';
 import { PillButton } from '../../ui/pill-button.tsx';
 import { Screen } from '../../ui/screen.tsx';
@@ -23,14 +24,19 @@ import { useDraftReview } from './use-draft-review.ts';
 import { useSavedScan } from './use-saved-scan.ts';
 import { type ReadPages, useScanImport } from './use-scan-import.ts';
 
-function Waiting({ text }: { text: string }) {
+/** A wait on this screen: `text` for one the learner should read, the loader otherwise. */
+function Waiting({ text }: { text?: string }) {
   const t = useT();
   const back = <BackButton parent={paths.capture} label={t('common.back')} />;
   return (
     <Screen topBar={<TopBar start={back} />}>
-      <p role="status" className={styles.muted}>
-        {text}
-      </p>
+      {text === undefined ? (
+        <Loader />
+      ) : (
+        <p role="status" className={styles.muted}>
+          {text}
+        </p>
+      )}
     </Screen>
   );
 }
@@ -74,7 +80,7 @@ function SavedScan({ id }: { id: string }) {
   const { state, model, commitTitle } = useSavedScan(id);
   const t = useT();
   if (!model) {
-    return <Waiting text={state.status === 'missing' ? t('capture.gone') : t('capture.opening')} />;
+    return <Waiting {...(state.status === 'missing' ? { text: t('capture.gone') } : {})} />;
   }
   return <LessonPage model={model} commitTitle={commitTitle} />;
 }

@@ -5,6 +5,7 @@ import { BackupReminder } from '../../ui/backup-reminder.tsx';
 import { BottomNav } from '../../ui/bottom-nav.tsx';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { ListRow } from '../../ui/list-row.tsx';
+import { Loader } from '../../ui/loader.tsx';
 import { paths } from '../../ui/paths.ts';
 import { PillLink } from '../../ui/pill-button.tsx';
 import { Screen } from '../../ui/screen.tsx';
@@ -67,15 +68,6 @@ function TodayHeader({ now }: { now: number }) {
   );
 }
 
-function Loading({ text }: { text: 'today.loading' | 'today.choosing' }) {
-  const t = useT();
-  return (
-    <p className={styles.muted} role="status">
-      {t(text)}
-    </p>
-  );
-}
-
 interface TodayContentProps {
   data: TodayData;
   now: number;
@@ -89,7 +81,7 @@ interface TodayContentProps {
 function TodayContent({ data, now, onChange }: TodayContentProps) {
   const { overview, session } = data;
   const fromZero = overview?.trackedWords === 0;
-  if (!overview || (fromZero && !session)) return <Loading text="today.loading" />;
+  if (!overview || (fromZero && !session)) return <Loader />;
   if (fromZero && session?.cards.length === 0) return <FirstRun overview={overview} now={now} />;
   return <TodayBody overview={overview} session={session} now={now} onChange={onChange} />;
 }

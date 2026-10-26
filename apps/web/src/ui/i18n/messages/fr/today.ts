@@ -2,7 +2,6 @@
 import type { Messages } from '../../types.ts';
 
 export const today = {
-  loading: 'Préparation de la journée…',
   choosing: 'Choix des phrases du jour…',
   mark: 'Marquer ce que vous savez déjà',
   markDetail: 'Si vous savez déjà lire quelques mots',

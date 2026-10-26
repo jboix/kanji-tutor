@@ -54,6 +54,13 @@ const WORKS: readonly Work[] = [
     licenceUrl: 'https://creativecommons.org/licenses/by/2.0/fr/legalcode',
   },
   {
+    name: 'KanjiVG (stroke paths of the loading kanji)',
+    by: 'Ulrich Apel',
+    source: 'https://kanjivg.tagaini.net/',
+    licence: 'CC BY-SA 3.0',
+    licenceUrl: 'https://creativecommons.org/licenses/by-sa/3.0/legalcode',
+  },
+  {
     name: 'KanjiCanvas (handwriting recognition)',
     by: 'Dominik Klein and Seth Clydesdale',
     source: 'https://github.com/asdfjkl/kanjicanvas',
