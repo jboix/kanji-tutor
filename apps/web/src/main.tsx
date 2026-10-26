@@ -1,8 +1,9 @@
 import '@fontsource/klee-one/400.css';
 import '@fontsource/klee-one/600.css';
-import '@fontsource/zen-kaku-gothic-new/latin-400.css';
-import '@fontsource/zen-kaku-gothic-new/latin-500.css';
-import '@fontsource/zen-kaku-gothic-new/latin-700.css';
+import '@fontsource/figtree/latin-400.css';
+import '@fontsource/figtree/latin-500.css';
+import '@fontsource/figtree/latin-600.css';
+import '@fontsource/figtree/latin-700.css';
 import './ui/global.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';

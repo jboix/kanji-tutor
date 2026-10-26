@@ -65,18 +65,22 @@ export function TutorHeading({ about }: { about: string }) {
   );
 }
 
-/** The round 解 button beside an exercise's Next or an introduction's Got it (Tutor-drill). */
+/**
+ * 解 Ask, left of an exercise's Next or an introduction's Got it (Tutor-drill): the tilted seal
+ * and "Ask" on the Ask ground. Where the row is tight, the seal alone in a 52px square.
+ */
 export function TutorButton({ tutor }: { tutor: Tutor }) {
   const t = useT();
   return (
     <button
       type="button"
-      className={styles.round}
+      className={styles.ask}
       aria-label={t('ui.tutorOpen', { about: tutor.topic.about })}
       data-tutor=""
       onClick={() => tutor.open()}
     >
       <AiSeal size={28} />
+      <span className={styles.askLabel}>{t('ui.tutorFloat')}</span>
     </button>
   );
 }

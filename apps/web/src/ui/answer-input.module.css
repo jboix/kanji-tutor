@@ -1,19 +1,17 @@
-/* W-read: the answer field is a filled pill, 54px; the ask field (.outlined) a bordered 48px one. */
+/* W-read: the answer field is a filled 52px field; the ask field (.outlined) adds an edge. */
 .pill {
   position: relative;
   display: flex;
   align-items: center;
   gap: 4px;
-  height: 54px;
-  padding: 0 4px 0 18px;
-  border-radius: var(--radius-pill);
+  height: var(--control);
+  padding: 0 4px 0 16px;
+  border-radius: var(--radius-button);
   background: var(--paper-soft);
 }
 
 .outlined {
-  height: 48px;
   border: 1px solid var(--border);
-  background: transparent;
 }
 
 .pill:focus-within {

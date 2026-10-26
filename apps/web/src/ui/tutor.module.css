@@ -1,48 +1,62 @@
-/* The ways to the tutor (the Tutor row on the design canvas): the 解 seal on a crimson-ringed
-   tint, so it reads as the tutor at a glance and never as a plain action. */
+/* The ways to the tutor: the tilted 解 seal on the Ask ground, edged in its rose border, so it
+   reads as the tutor at a glance and never as a plain action. Only the seal is crimson. */
 
-.round,
+.ask,
 .card,
 .float {
   display: flex;
   align-items: center;
-  border: 1.5px solid var(--ai);
-  background: color-mix(in srgb, var(--ai) 12%, var(--paper));
-  color: var(--ink);
+  border: 1px solid var(--ask-border);
+  background: var(--ask);
+  color: var(--ask-ink);
   font-family: inherit;
   text-align: start;
   cursor: pointer;
 }
 
-.round {
+/* 解 Ask: 52px, the seal then the label, in the left slot of the bottom row. */
+.ask {
   flex: none;
+  gap: 10px;
+  height: var(--control);
+  padding: 0 18px 0 11px;
+  border-radius: 16px;
+  font-size: var(--text-md);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Tight space (two actions beside it): the seal alone in a 52px square. */
+.next:has([data-action-row] > :nth-child(2)) .ask {
   justify-content: center;
-  width: 56px;
-  height: 56px;
+  width: var(--control);
   padding: 0;
-  border-radius: 50%;
+}
+
+.next:has([data-action-row] > :nth-child(2)) .askLabel {
+  display: none;
 }
 
 .card {
   gap: 12px;
   width: 100%;
-  padding: 14px 16px;
+  padding: 14px var(--gutter);
   border-radius: var(--radius-card);
 }
 
 .float {
   position: fixed;
-  right: max(20px, calc(50% - 220px));
+  right: max(var(--gutter), calc(50% - 224px));
   bottom: max(28px, calc(env(safe-area-inset-bottom) + 16px));
   z-index: 5;
   gap: 10px;
-  min-height: 56px;
-  padding: 0 20px 0 10px;
-  border-radius: var(--radius-pill);
-  box-shadow: 0 10px 30px rgb(0 0 0 / 0.25);
+  height: var(--control);
+  padding: 0 18px 0 11px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
 }
 
-.round:focus-visible,
+.ask:focus-visible,
 .card:focus-visible,
 .float:focus-visible {
   outline: 2px solid var(--accent);
@@ -58,6 +72,11 @@
 
 .strong {
   font-size: var(--text-md);
+  font-weight: 600;
+}
+
+.card .strong,
+.heading .strong {
   font-weight: 700;
 }
 

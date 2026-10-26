@@ -153,6 +153,6 @@
 .toggle[data-mode="hiragana"],
 .toggle[data-mode="katakana"] {
   box-shadow: none;
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--tonal);
+  color: var(--on-tonal);
 }

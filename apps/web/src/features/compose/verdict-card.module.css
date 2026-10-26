@@ -1,24 +1,25 @@
-/* The verdict card: green for natural, indigo for needs work, the miss red for not yet. */
+/* The verdict card: green for natural, a raised card with an indigo mark for needs work, the
+   miss red for not yet. */
 
 .card {
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 18px;
-  border-radius: var(--radius-panel);
-  background: var(--paper-soft);
-  border: 1.5px solid var(--accent);
+  border-radius: var(--radius-card);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
 }
 
 .card[data-verdict="natural"] {
   background: var(--ok-surface);
-  border-color: transparent;
+  box-shadow: none;
   color: var(--ok-ink);
 }
 
 .card[data-verdict="not-yet"] {
   background: var(--miss-surface);
-  border-color: transparent;
+  box-shadow: none;
   color: var(--miss-ink);
 }
 
@@ -36,8 +37,8 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: var(--accent);
-  color: var(--paper);
+  background: var(--tonal);
+  color: var(--on-tonal);
   font-family: var(--font-ja);
   font-size: 18px;
   font-weight: 600;

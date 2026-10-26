@@ -4,6 +4,7 @@ import type { TodayOverview } from '../../domain/services/index.ts';
 import { BackupReminder } from '../../ui/backup-reminder.tsx';
 import { BottomNav } from '../../ui/bottom-nav.tsx';
 import { useT } from '../../ui/i18n/i18n.tsx';
+import { InstallBanner } from '../../ui/install-banner.tsx';
 import { ListRow } from '../../ui/list-row.tsx';
 import { Loader } from '../../ui/loader.tsx';
 import { paths } from '../../ui/paths.ts';
@@ -24,18 +25,22 @@ import { useHome } from './use-home.ts';
 import { type TodayData, type TodaySessionView, useToday } from './use-today.ts';
 
 /**
- * Today (IA2, R1), the one rich screen: where you are, what is next in the unit, what Start
+ * Today (IA2, R1), the one rich screen: what is next in the unit, where you are, what Start
  * plays, this week's plan, and the level rows. Start in the bottom bar begins the round (IA3).
+ * The install offer sits in the page here, with the other notices, rather than over Practise.
  */
 export function TodayScreen() {
   const [now, setNow] = useState(() => Date.now());
   const data = useToday(now);
   const reload = () => setNow(Date.now());
   return (
-    <Screen footer={<BottomNav />} gap={28}>
+    <Screen footer={<BottomNav install={false} />} gap={14}>
       <TodayHeader now={now} />
       <UpdateCard place="home" />
       <BackupReminder />
+      <div className={styles.install}>
+        <InstallBanner />
+      </div>
       <Notice />
       <TodayContent data={data} now={now} onChange={reload} />
     </Screen>
@@ -93,13 +98,13 @@ interface TodayBodyProps {
   onChange: () => void;
 }
 
-/** Home 1: the lesson to go on with, a tile per round, what you know, lessons, then the rest. */
+/** Home 1: the lesson to go on with, where you are, a tile per round, lessons, then the rest. */
 function TodayBody({ overview, session, now, onChange }: TodayBodyProps) {
   const home = useHome(now);
   return (
     <>
-      <WhereYouAre key={now} last={overview.lastTime} />
       {overview.unit && <NextUp unit={overview.unit} />}
+      <WhereYouAre key={now} last={overview.lastTime} />
       <Practice session={session} />
       {home && <KnownSection known={home.known} />}
       {home && <UnitsSection units={home.units} currentId={home.currentId} />}
@@ -135,7 +140,7 @@ function FirstRun({ overview, now }: { overview: TodayOverview; now: number }) {
           {t('today.mark')}
         </h2>
         <p className={styles.text}>{t('today.firstRun')}</p>
-        <PillLink to={paths.knownImport} arrow>
+        <PillLink to={paths.knownImport} arrow variant={overview.unit ? 'secondary' : 'primary'}>
           {t('today.mark')}
         </PillLink>
         <p className={styles.muted}>{t('today.firstRunStart')}</p>

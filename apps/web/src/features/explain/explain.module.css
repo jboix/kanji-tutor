@@ -71,10 +71,6 @@
   margin-top: 8px;
 }
 
-.quiz [aria-pressed="true"] {
-  border-color: var(--ink);
-}
-
 .added {
   display: flex;
   flex-direction: column;
@@ -227,8 +223,8 @@
   justify-content: center;
   min-width: var(--tap);
   height: var(--tap);
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-chip);
+  background: var(--paper-soft);
   color: var(--ink);
   font-family: var(--font-ja);
   font-size: 24px;
@@ -238,8 +234,8 @@
 /* U4: links and buttons in the sheet answer a pointer and the keyboard. */
 @media (hover: hover) {
   .kanjiLink:hover {
-    border-color: var(--ink-muted);
-    background: var(--paper-soft);
+    background: color-mix(in srgb, var(--ink) 8%, var(--paper-soft));
+    color: var(--ink);
   }
 }
 

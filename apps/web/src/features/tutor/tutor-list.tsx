@@ -81,16 +81,17 @@ function RowInner({ icon, title, detail, off = false, quiet = false, bare = fals
 
 function Row(props: RowProps) {
   const inner = <RowInner {...props} />;
-  if (props.off) return <div className={cx(styles.row, styles.off)}>{inner}</div>;
+  const row = cx(styles.row, props.quiet && styles.quiet);
+  if (props.off) return <div className={cx(row, styles.off)}>{inner}</div>;
   if (props.to === undefined) {
     return (
-      <button type="button" className={cx(styles.row, styles.rowButton)} onClick={props.onClick}>
+      <button type="button" className={cx(row, styles.rowButton)} onClick={props.onClick}>
         {inner}
       </button>
     );
   }
   return (
-    <Link to={props.to} className={styles.row}>
+    <Link to={props.to} className={row}>
       {inner}
     </Link>
   );

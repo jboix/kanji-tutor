@@ -1,14 +1,15 @@
-/* A lesson in a list (Scanned lessons, units): raised paper, a thin border, 20px corners. */
+/* A lesson in a list (Scanned lessons, units): a raised card, no border. */
 .card {
   display: flex;
   flex-direction: column;
   gap: 8px;
   width: 100%;
   min-height: var(--tap);
-  padding: 14px 16px;
-  border: 1px solid var(--rule);
+  padding: 14px var(--gutter);
+  border: 0;
   border-radius: var(--radius-card);
   background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
   color: var(--ink);
   font-family: inherit;
   text-align: start;
@@ -17,7 +18,6 @@
 }
 
 .card:hover {
-  border-color: var(--border);
   color: var(--ink);
 }
 

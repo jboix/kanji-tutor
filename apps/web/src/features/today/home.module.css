@@ -3,7 +3,7 @@
 .block {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .blockHead {
@@ -15,10 +15,11 @@
 
 .blockTitle {
   margin: 0;
-  font-size: var(--text-lg);
+  font-size: var(--text-md);
   font-weight: 700;
 }
 
+/* "See all", "All units": accent text on a 44px target, never underlined. */
 .more {
   display: inline-flex;
   align-items: center;
@@ -26,37 +27,52 @@
   min-width: var(--tap);
   min-height: var(--tap);
   font-size: var(--text-sm);
+  font-weight: 600;
   color: var(--accent);
   text-decoration: none;
 }
 
 .more:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  color: var(--link-hover);
 }
 
+.more:focus-visible {
+  border-radius: var(--radius-chip);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Practise: a row of raised tiles that scrolls sideways inside itself, never the page. */
 .tiles {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  display: flex;
+  gap: 10px;
+  margin: 0 calc(-1 * var(--gutter));
+  padding: 2px var(--gutter) 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tiles::-webkit-scrollbar {
+  display: none;
 }
 
 .tile {
   display: flex;
+  flex: none;
   flex-direction: column;
-  gap: 6px;
-  min-height: 116px;
-  padding: 16px;
-  border: 1px solid var(--rule);
+  gap: 10px;
+  width: 140px;
+  box-sizing: border-box;
+  padding: 12px;
   border-radius: var(--radius-card);
-  background: var(--paper-soft);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
   color: var(--ink);
   text-decoration: none;
 }
 
 .tile:hover {
   color: var(--ink);
-  border-color: var(--border);
 }
 
 .tile:focus-visible,
@@ -67,17 +83,34 @@
   outline-offset: 2px;
 }
 
+/* The tile's icon in a small tonal well. */
 .tileIcon {
   display: flex;
-  height: 26px;
   align-items: center;
-  color: var(--accent);
-  font-size: 22px;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: var(--tonal);
+  color: var(--on-tonal);
+}
+
+.tileIcon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.tileText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .tileTitle {
-  font-size: var(--text-md);
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .tileLine {
@@ -97,8 +130,9 @@
   flex-direction: column;
   gap: 2px;
   padding: 14px 12px;
-  border-radius: 16px;
-  background: var(--paper-soft);
+  border-radius: var(--radius-card);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
   color: var(--ink);
   text-decoration: none;
 }
@@ -108,7 +142,7 @@
 }
 
 .countValue {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -123,7 +157,7 @@
   display: flex;
   gap: 10px;
   margin: 0 calc(-1 * var(--gutter));
-  padding: 2px var(--gutter);
+  padding: 2px var(--gutter) 6px;
   overflow-x: auto;
   list-style: none;
   scrollbar-width: none;
@@ -146,8 +180,9 @@
   min-height: 84px;
   box-sizing: border-box;
   padding: 14px;
-  border: 1px solid var(--rule);
-  border-radius: 18px;
+  border-radius: var(--radius-card);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
   color: var(--ink);
   font-size: 17px;
   text-decoration: none;
@@ -157,8 +192,11 @@
   color: var(--ink);
 }
 
+/* The current unit: a tonal card, the same as the current section on its page. */
 .unit[aria-current="step"] {
-  border: 1.5px solid var(--accent);
+  background: var(--tonal);
+  box-shadow: none;
+  color: var(--on-tonal);
 }
 
 .unitOrder {
@@ -166,13 +204,21 @@
   color: var(--ink-muted);
 }
 
+.unit[aria-current="step"] .unitOrder {
+  color: var(--on-tonal);
+}
+
+/* "Find my level": a raised row with a chevron, like the other rows on Home. */
 .level {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 18px;
-  border-radius: var(--radius-card);
-  background: var(--paper-soft);
+  gap: 12px;
+  min-height: 58px;
+  box-sizing: border-box;
+  padding: 10px 12px 10px 16px;
+  border-radius: 20px;
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
   color: var(--ink);
   text-decoration: none;
 }
@@ -184,14 +230,14 @@
 .levelText {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
   flex: 1;
   min-width: 0;
 }
 
 .levelTitle {
   font-size: var(--text-md);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .levelLine {

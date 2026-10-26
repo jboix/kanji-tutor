@@ -10,11 +10,11 @@ export interface ProgressLineProps {
   label: string;
   /** Spans instead of divs, for a line inside phrasing content such as a link (T7). */
   inline?: boolean;
-  /** The 4px line of a lesson's progress (lesson cards and pages). */
+  /** The line of a lesson's progress (lesson cards and pages); the same 4px as any other. */
   thin?: boolean;
 }
 
-/** A 6px accent bar on the rule colour (W-today; capture, units, learned), or a thin 4px one. */
+/** A straight 4px accent line on the track (W-today; capture, units, learned). */
 export function ProgressLine({ value, label, inline = false, thin = false }: ProgressLineProps) {
   const percent = Math.round(clamp(value) * 100);
   const Tag = inline ? 'span' : 'div';

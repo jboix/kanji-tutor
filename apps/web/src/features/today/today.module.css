@@ -3,23 +3,31 @@
   display: flex;
   flex-direction: column-reverse;
   align-items: flex-start;
-  gap: 2px;
-  margin-top: 4px;
   padding: 0 4px;
 }
 
 .title {
   margin: 0;
   font-family: var(--font-ja);
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.3;
 }
 
 .date {
   font-family: var(--font-ja);
-  font-size: var(--text-md);
+  font-size: 14px;
   color: var(--ink-muted);
+}
+
+/* The install offer, in the page's flow on Home so it never covers Practise; the banner keeps
+   its own side margins, which the gutter already gives here. */
+.install {
+  margin: 0 calc(-1 * var(--gutter)) -8px;
+}
+
+.install:empty {
+  display: none;
 }
 
 .lead {
@@ -50,18 +58,25 @@
   font-weight: 700;
 }
 
+/* "This week in class": a raised card holding its header, counts and rows. */
 .class {
   display: flex;
   flex-direction: column;
+  padding: 6px 16px 4px;
+  border-radius: var(--radius-card);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
 }
 
-/* The level-up suggestion (P4): a quiet ruled block, no colour of its own. */
+/* The level-up suggestion (P4): a quiet raised card, no colour of its own. */
 .levelUp {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding-block: 14px;
-  border-block: 1px solid var(--rule);
+  padding: 16px;
+  border-radius: var(--radius-card);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
 }
 
 .levelUpActions {
@@ -70,26 +85,27 @@
   gap: 10px;
 }
 
-/* "Where you are" (IA2): a soft panel with the level bars and the last-time line. */
+/* "Where you are" (IA2): a raised card, three counts over their straight bars, and last time. */
 .panel {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 16px 18px;
-  border-radius: var(--radius-panel);
-  background: var(--paper-soft);
+  padding: 12px 16px 16px;
+  border-radius: 24px;
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
 }
 
 .panelHead {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   gap: 12px;
 }
 
 .panelTitle {
   margin: 0;
-  font-size: 15px;
+  font-size: var(--text-md);
   font-weight: 700;
 }
 
@@ -98,22 +114,29 @@
   color: var(--ink-muted);
 }
 
+/* Details: accent text on a 44px target that does not push the layout (N6), never underlined. */
 a.small {
   display: inline-flex;
   align-items: center;
   justify-content: flex-end;
   min-width: var(--tap);
+  min-height: var(--tap);
+  margin: -10px -4px -10px 0;
+  padding: 0 4px;
+  border-radius: var(--radius-chip);
   color: var(--accent);
-  text-underline-offset: 3px;
-  /* 13px text with a 44px hit area that does not push the layout (N6). */
-  padding: 13px 0;
-  margin: -13px 0;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+a.small:hover {
+  color: var(--link-hover);
 }
 
 .bars {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
 }
 
 .barsWaiting {
@@ -122,44 +145,55 @@ a.small {
 }
 
 .bar {
-  display: grid;
-  grid-template-columns: 64px minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 10px;
-  font-size: var(--text-sm);
-}
-
-.barValue {
-  min-width: 56px;
-  text-align: end;
-  color: var(--ink-muted);
-  font-variant-numeric: tabular-nums;
-}
-
-/* "Next up" (IA2, W-today): the inverted card, with the unit, its five sections as bars and
-   where the learner is. */
-.outlined {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 18px;
-  border-radius: var(--radius-panel);
+  gap: 4px;
+  min-width: 0;
+}
+
+.barLabel {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+/* "142 / 291": the count large, the total quiet beside it. */
+.barValue {
+  margin-bottom: 2px;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.barKnown {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* "Next up" (IA2, W-today): the soft indigo card, with the unit, its five sections as straight
+   segments, and Continue, the screen's one filled button. */
+.next {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px 16px 16px 18px;
+  border-radius: 28px;
   background: var(--hero);
   color: var(--on-hero);
+  box-shadow: var(--shadow-card);
 }
 
-.outlined .muted {
+.next .muted {
   color: var(--hero-muted);
-}
-
-.outlined :focus-visible {
-  outline-color: var(--hero-fill);
 }
 
 .kicker {
-  margin: 0;
-  font-size: 12px;
-  color: var(--hero-muted);
+  margin: 0 0 -10px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--hero-fill);
 }
 
 .unitTitle {
@@ -168,7 +202,8 @@ a.small {
   align-self: flex-start;
   min-height: var(--tap);
   color: var(--on-hero);
-  font-size: 22px;
+  font-size: 26px;
+  font-weight: 600;
   text-decoration: none;
 }
 
@@ -176,9 +211,8 @@ a.small {
   color: var(--on-hero);
 }
 
-.unitTitle:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
+.unitTitle:focus-visible {
+  border-radius: 8px;
 }
 
 .sections {
@@ -190,7 +224,6 @@ a.small {
   gap: 6px;
   text-align: center;
   font-family: var(--font-ja);
-  font-size: 14px;
 }
 
 .section {
@@ -198,46 +231,62 @@ a.small {
   flex-direction: column;
   gap: 6px;
   font-size: 13px;
-  color: var(--hero-muted);
+  color: var(--on-hero);
 }
 
 .sectionBar {
+  display: flex;
   height: 4px;
-  border-radius: 2px;
+  border-radius: var(--radius-pill);
   background: var(--hero-track);
+  overflow: hidden;
 }
 
-.done .sectionBar {
+.sectionFill {
+  width: 0;
+  border-radius: var(--radius-pill);
   background: var(--hero-fill);
 }
 
-/* The section in progress: half a bar, its name in full ink (W-today). */
+.done .sectionFill {
+  width: 100%;
+}
+
+/* The section in progress: part of its segment, its name at 600 (W-today). */
 .now {
-  color: var(--on-hero);
   font-weight: 600;
 }
 
-.now .sectionBar {
-  background: linear-gradient(90deg, var(--hero-fill) 50%, var(--hero-track) 50%);
+.now .sectionFill {
+  width: 40%;
 }
 
-/* Continue, inside the hero: the next part, one tap into it. */
+/* Continue, inside the card: the next part, one tap into it. */
 .continue {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   min-height: 56px;
-  padding: 6px 8px 6px 20px;
-  border-radius: var(--radius-pill);
-  background: var(--on-hero);
-  color: var(--hero);
+  box-sizing: border-box;
+  padding: 6px 10px 6px 18px;
+  border-radius: var(--radius-button);
+  background: var(--accent-fill);
+  box-shadow: var(--shadow-fill);
+  color: var(--on-accent);
   text-decoration: none;
+  transition:
+    border-radius 120ms ease-out,
+    background-color 120ms ease-out;
 }
 
 .continue:hover {
-  color: var(--hero);
-  filter: brightness(1.04);
+  color: var(--on-accent);
+}
+
+.continue:active {
+  border-radius: 12px;
+  background: var(--accent-pressed);
 }
 
 .continueText {
@@ -248,12 +297,14 @@ a.small {
 }
 
 .continueTitle {
-  font-size: var(--text-md);
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .continueLine {
-  font-size: 12px;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  opacity: 0.88;
 }
 
 .continueDisc {
@@ -261,63 +312,59 @@ a.small {
   flex: none;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: var(--hero);
-  color: var(--on-hero);
+  background: color-mix(in srgb, var(--on-accent) 14%, transparent);
 }
 
-/* This week's plan (IA6): one line and Change. */
+.continueDisc svg {
+  margin-left: 1px;
+}
+
+/* This week's plan (IA6): one line and Change, in a raised row. */
 .planRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  padding: 14px 18px;
-  border-radius: var(--radius-panel);
-  background: var(--paper-soft);
+  min-height: 58px;
+  box-sizing: border-box;
+  padding: 10px 8px 10px 16px;
+  border-radius: 20px;
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
 }
 
 .planText {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
   min-width: 0;
 }
 
 .planTitle {
   margin: 0;
-  font-size: 14px;
-  font-weight: 700;
+  font-size: var(--text-md);
+  font-weight: 600;
 }
 
+/* Change: accent text on a 44px target, never underlined. */
 .change {
   display: flex;
+  flex: none;
   align-items: center;
   justify-content: center;
   min-width: var(--tap);
   min-height: var(--tap);
+  padding: 0 8px;
+  border-radius: var(--radius-chip);
   font-size: var(--text-sm);
+  font-weight: 600;
   color: var(--accent);
-  text-underline-offset: 3px;
+  text-decoration: none;
 }
 
-/* Details and Change: small text on a 44px target. Keyboard focus rings the words, not the whole
-   target, which would look like a halo around them. */
-.change:focus-visible,
-a.small:focus-visible {
-  outline: none;
-}
-
-.change:focus-visible > span {
-  border-radius: 4px;
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-}
-
-a.small:focus-visible > span {
-  border-radius: 4px;
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
+.change:hover {
+  color: var(--link-hover);
 }

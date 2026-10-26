@@ -4,40 +4,50 @@
   gap: 8px;
 }
 
+/* A chip: the soft fill and no edge at rest, tonal with a check when selected. */
 .chip {
   position: relative;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: 38px;
+  height: var(--tap);
   padding: 0 14px;
-  border-radius: 19px;
-  border: 1px solid var(--border);
-  background: transparent;
+  border: 0;
+  border-radius: var(--radius-chip);
+  background: var(--paper-soft);
   color: var(--ink);
   font-family: inherit;
   font-size: var(--text-sm);
+  font-weight: 600;
   text-decoration: none;
   cursor: pointer;
 }
 
-/* The pill is 38px as drawn; the touch target extends to 44px (N6) without moving the layout.
-   The inset counts from inside the 1px border (36px), so 4px each way reaches 44. */
-.chip::before {
-  content: "";
-  position: absolute;
-  inset: -4px 0;
-}
-
 .chip:hover {
-  border-color: var(--ink-faint);
+  color: var(--ink);
 }
 
-.chip:active {
-  background: var(--paper-soft);
+.chip:active:not(:disabled) {
+  background: color-mix(in srgb, var(--ink) 8%, var(--paper-soft));
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--tonal);
+  color: var(--on-tonal);
+}
+
+/* Graded: green only for a right answer; a correction in the miss colours. */
+.chip[data-state="right"] {
+  background: var(--ok-surface);
+  color: var(--ok);
+}
+
+.chip[data-state="miss"] {
+  background: var(--miss-surface);
+  color: var(--miss-ink);
 }
 
 .chip:disabled {
-  color: var(--ink-faint);
+  color: var(--ink-muted);
   cursor: default;
 }

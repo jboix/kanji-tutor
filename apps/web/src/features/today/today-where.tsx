@@ -62,7 +62,7 @@ function Bars({ progress }: { progress: LevelProgress | undefined }) {
 }
 
 function BarRows({ progress }: { progress: LevelProgress }) {
-  const t = useT();
+  const { t, rich } = useI18n();
   return (
     <>
       {BARS.map(([kind, label]) => {
@@ -70,12 +70,17 @@ function BarRows({ progress }: { progress: LevelProgress }) {
         const what = t(label);
         return (
           <div key={kind} className={styles.bar}>
-            <span>{what}</span>
+            <span className={styles.barLabel}>{what}</span>
+            <span className={styles.barValue}>
+              {rich('today.knownOf', {
+                known: <span className={styles.barKnown}>{known}</span>,
+                total,
+              })}
+            </span>
             <ProgressLine
               value={total > 0 ? known / total : 0}
               label={t('today.knownOfLabel', { what, known, total })}
             />
-            <span className={styles.barValue}>{t('today.knownOf', { known, total })}</span>
           </div>
         );
       })}

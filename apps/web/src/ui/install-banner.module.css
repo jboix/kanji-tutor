@@ -1,12 +1,13 @@
-/* The backup reminder's quiet panel (N5), sitting just above the bottom nav. */
+/* The install offer's quiet card (N1d), sitting just above the bottom nav. */
 .banner {
   display: flex;
   align-items: flex-start;
   gap: 4px;
   margin: 0 var(--gutter) 8px;
-  padding: 10px 4px 10px 16px;
-  border-radius: var(--radius-panel);
-  background: var(--paper-soft);
+  padding: 12px 4px 12px var(--gutter);
+  border-radius: var(--radius-card);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
 }
 
 .body {

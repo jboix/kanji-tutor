@@ -6,13 +6,14 @@
   width: 24px;
   height: 24px;
   border-radius: var(--seal-radius);
-  background: var(--ai);
-  color: var(--on-ai);
+  background: var(--seal);
+  color: var(--on-seal);
   font-family: var(--font-ja);
   font-size: 15px;
   font-weight: 600;
   line-height: 1;
   transform: rotate(-4deg);
+  box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.18);
 }
 
 .seal::before {
@@ -39,7 +40,7 @@
 .s28 {
   width: 28px;
   height: 28px;
-  border-radius: 7px;
+  border-radius: 8px;
   font-size: 17px;
 }
 
@@ -51,6 +52,7 @@
   color: var(--ai);
   font-size: 13px;
   transform: none;
+  box-shadow: none;
 }
 
 /* The tutor-tab set-up card: a large seal. */
@@ -67,9 +69,11 @@
   border: 2px dashed var(--ai);
   background: transparent;
   color: var(--ai);
+  box-shadow: none;
 }
 
-/* The Tutor tab in the bottom bar: an outline in the bar's muted ink, solid when active. */
+/* The Tutor tab in the bottom bar: a rose outline, so the tutor stands out even when the tab is
+   not active, and a solid crimson seal when it is. */
 .tab {
   box-sizing: border-box;
   display: inline-flex;
@@ -77,14 +81,14 @@
   justify-content: center;
   width: 22px;
   height: 22px;
-  border: 1.5px solid var(--ink-muted);
-  border-radius: 5px;
-  color: var(--ink-muted);
+  border: 1.6px solid var(--tutor-tint);
+  border-radius: 6px;
+  color: var(--tutor-tint);
   font-family: var(--font-ja);
   font-size: 13px;
   font-weight: 600;
   line-height: 1;
-  transform: rotate(-4deg);
+  transform: rotate(-5deg);
 }
 
 .tab::before {
@@ -96,9 +100,9 @@
 }
 
 .tabActive {
-  border-color: var(--ai);
-  background: var(--ai);
-  color: var(--on-ai);
+  border-color: var(--seal);
+  background: var(--seal);
+  color: var(--on-seal);
 }
 
 .tabActive.tabUnset {

@@ -2,7 +2,7 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
-import { BookIcon, CameraIcon, MixIcon, PenIcon } from '../../ui/icons.tsx';
+import { CameraIcon, GrammarIcon, KanjiIcon, MixIcon, PenIcon, ReadIcon } from '../../ui/icons.tsx';
 import { Ja } from '../../ui/ja.tsx';
 import { paths } from '../../ui/paths.ts';
 import { startPath } from '../../ui/start-path.ts';
@@ -24,8 +24,10 @@ function Tile({ to, icon, title, line, state }: TileProps) {
       <span className={styles.tileIcon} aria-hidden="true">
         {icon}
       </span>
-      <span className={styles.tileTitle}>{title}</span>
-      <span className={styles.tileLine}>{line}</span>
+      <span className={styles.tileText}>
+        <span className={styles.tileTitle}>{title}</span>
+        <span className={styles.tileLine}>{line}</span>
+      </span>
     </Link>
   );
 }
@@ -65,13 +67,13 @@ function FocusTiles({ options }: { options: StartOptions | undefined }) {
     <>
       <Tile
         to={startPath(options?.kanji ?? { kind: 'kanji' })}
-        icon={<Ja>漢</Ja>}
+        icon={<KanjiIcon />}
         title={t('today.tileKanji')}
         line={kanjiLine}
       />
       <Tile
         to={startPath(options?.grammar ?? { kind: 'grammar' })}
-        icon={<Ja>文</Ja>}
+        icon={<GrammarIcon />}
         title={t('today.tileGrammar')}
         line={grammarLine}
       />
@@ -79,7 +81,10 @@ function FocusTiles({ options }: { options: StartOptions | undefined }) {
   );
 }
 
-/** Six tiles (IA2): the mix, reading, kanji, grammar, writing a sentence and reading a photo. */
+/**
+ * Six tiles (IA2) in a row that scrolls sideways: the mix, reading, kanji, grammar, writing a
+ * sentence and reading a photo.
+ */
 export function Practice({ session }: { session: TodaySessionView | undefined }) {
   const t = useT();
   const options = useStartOptions(true);
@@ -92,7 +97,7 @@ export function Practice({ session }: { session: TodaySessionView | undefined })
         <MixTile session={session} />
         <Tile
           to={startPath({ kind: 'reading' })}
-          icon={<BookIcon />}
+          icon={<ReadIcon />}
           title={t('today.tileRead')}
           line={t('today.tileReadLine')}
         />

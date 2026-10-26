@@ -6,7 +6,10 @@ import { PillButton } from '../../ui/pill-button.tsx';
 import { useServices } from '../../ui/services.tsx';
 import styles from './today.module.css';
 
-/** "You know 82% of N5. Move to N4?" with Not now (P4). Moves only when chosen. */
+/**
+ * "You know 82% of N5. Move to N4?" with Not now (P4). Moves only when chosen; both stay quiet,
+ * so Continue stays the screen's one filled button.
+ */
 export function LevelUpRow({ levelUp, onChange }: { levelUp: LevelUp; onChange: () => void }) {
   const { repos } = useServices();
   const t = useT();
@@ -25,11 +28,15 @@ export function LevelUpRow({ levelUp, onChange }: { levelUp: LevelUp; onChange: 
         })}
       </p>
       <div className={styles.levelUpActions}>
-        <PillButton disabled={busy} onClick={() => act(() => moveUpLevel(repos, levelUp.next))}>
+        <PillButton
+          variant="secondary"
+          disabled={busy}
+          onClick={() => act(() => moveUpLevel(repos, levelUp.next))}
+        >
           {t('today.moveTo', { level: levelUp.next })}
         </PillButton>
         <PillButton
-          variant="secondary"
+          variant="text"
           disabled={busy}
           onClick={() => act(() => snoozeLevelUp(repos, Date.now()))}
         >

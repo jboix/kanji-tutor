@@ -39,7 +39,7 @@
   scrollbar-width: none;
   padding: 10px var(--gutter) max(32px, calc(env(safe-area-inset-bottom) + 12px));
   border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
-  background: var(--paper);
+  background: var(--paper-raised);
   outline: none;
   /* A pull past the top drags the sheet (U10), it does not bounce or scroll the page. */
   overscroll-behavior: contain;

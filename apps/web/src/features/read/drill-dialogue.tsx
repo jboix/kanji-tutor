@@ -108,7 +108,13 @@ export function DialogueView({ drill, answer }: DialogueViewProps) {
           </Chip>
         )}
       </ChipRow>
-      <DialogueLines dialogue={drill.dialogue} lookOf={lookOf(drill, answer)} translated={shows} />
+      <div className={styles.bubbles}>
+        <DialogueLines
+          dialogue={drill.dialogue}
+          lookOf={lookOf(drill, answer)}
+          translated={shows}
+        />
+      </div>
       {answer && <DialogueFeedback drill={drill} answer={answer} />}
     </>
   );

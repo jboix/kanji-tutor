@@ -1,12 +1,12 @@
-/* A new version: the accent ring of a card that asks for a choice, never the AI red. */
+/* A new version: a raised card with a tonal mark, never the AI red. */
 .card {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  padding: 18px;
-  border-radius: var(--radius-panel);
-  border: 1.5px solid var(--accent);
-  background: var(--paper-soft);
+  padding: var(--gutter);
+  border-radius: var(--radius-card);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
 }
 
 .top {
@@ -23,8 +23,8 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--paper);
-  color: var(--accent);
+  background: var(--tonal);
+  color: var(--on-tonal);
 }
 
 .lines {
@@ -86,8 +86,8 @@
 /* No percentage to show: the new version has already downloaded and only has to take over. */
 .working {
   height: 4px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--rule) 0 30%, var(--accent) 30% 60%, var(--rule) 60%);
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--track) 0 30%, var(--accent) 30% 60%, var(--track) 60%);
   background-size: 200% 100%;
   animation: working 1.2s linear infinite;
 }

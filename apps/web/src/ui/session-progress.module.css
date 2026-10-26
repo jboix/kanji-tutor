@@ -25,8 +25,8 @@
   outline-offset: 2px;
 }
 
-/* One 4px segment per card (W-read): done in ink, the current one in the accent, the rest
-   in the rule colour. */
+/* One 4px segment per card (W-read): done in the accent, the current one half way to it, the
+   rest on the track. */
 .dashes {
   display: flex;
   flex: 1;
@@ -36,17 +36,17 @@
 .dash {
   flex: 1;
   height: 4px;
-  border-radius: 2px;
-  background: var(--rule);
+  border-radius: var(--radius-pill);
+  background: var(--track);
 }
 
 .done {
-  background: var(--ink);
+  background: var(--accent);
 }
 
-/* The current card: the accent, not the AI red (which is only for AI, the seal and corrections). */
+/* The current card: the accent, softened; never the AI red (only AI, the seal and corrections). */
 .current {
-  background: var(--accent);
+  background: color-mix(in srgb, var(--accent) 50%, var(--track));
 }
 
 .root {
@@ -61,16 +61,14 @@
   display: block;
   flex: 1;
   height: 4px;
-  border-radius: 2px;
-  background: var(--rule);
+  border-radius: var(--radius-pill);
+  background: var(--track);
   overflow: hidden;
 }
 
 .large {
   flex: none;
   width: 100%;
-  height: 6px;
-  border-radius: 3px;
 }
 
 .fill {
@@ -96,11 +94,11 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 14px 16px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
+  padding: var(--gutter);
+  border: 0;
+  border-radius: var(--radius-card);
   background: var(--paper-raised);
-  box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
+  box-shadow: var(--shadow-card);
   color: var(--ink);
   text-align: left;
 }

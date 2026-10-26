@@ -44,7 +44,7 @@ function useLoaderKanji(delay: number): LoaderKanji | undefined {
 function Square({ kanji }: { kanji: LoaderKanji }) {
   return (
     <svg className={styles.square} viewBox="0 0 109 109" aria-hidden="true">
-      <path className={styles.guide} d="M54.5 0V109M0 54.5H109" />
+      <path className={styles.guide} d="M54.5 10V99M10 54.5H99" />
       <g className={styles.kanji}>
         {kanji.strokes.map((d, i) => (
           <path

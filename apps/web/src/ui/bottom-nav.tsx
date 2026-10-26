@@ -22,6 +22,9 @@ interface Tab {
   column: number;
 }
 
+/** The Tutor tab's column: its pill takes the Ask button's ground. */
+const TUTOR_COLUMN = 3;
+
 const LEARN_PATHS = [
   paths.learn,
   paths.units,
@@ -36,12 +39,18 @@ const TABS_START: Tab[] = [
   {
     to: paths.today,
     label: 'ui.navToday',
-    icon: <HomeIcon />,
+    icon: <HomeIcon size={24} />,
     owns: [paths.today, paths.plan],
     column: 0,
   },
   // A real icon rather than 学, which a beginner may not read yet.
-  { to: paths.learn, label: 'ui.navLearn', icon: <BookIcon />, owns: LEARN_PATHS, column: 1 },
+  {
+    to: paths.learn,
+    label: 'ui.navLearn',
+    icon: <BookIcon size={24} />,
+    owns: LEARN_PATHS,
+    column: 1,
+  },
 ];
 
 const TABS_END: Tab[] = [
@@ -51,12 +60,12 @@ const TABS_END: Tab[] = [
     // Drawn by TabLink: the seal shows whether the tab is active and the tutor set up.
     icon: null,
     owns: [paths.tutor, paths.capture, paths.compose, paths.knownImport],
-    column: 3,
+    column: TUTOR_COLUMN,
   },
   {
     to: paths.settings,
     label: 'ui.navSettings',
-    icon: <SettingsIcon />,
+    icon: <SettingsIcon size={24} />,
     owns: [paths.settings],
     column: 4,
   },
@@ -101,6 +110,7 @@ function TabLink({ tab, active }: { tab: Tab; active: boolean }) {
       className={cx(styles.link, active && styles.active)}
       aria-current={active ? 'page' : undefined}
       aria-label={notice}
+      data-tutor-tab={tab.to === paths.tutor ? '' : undefined}
     >
       {notice && <span className={styles.dot} aria-hidden="true" />}
       <span className={styles.icon}>{icon}</span>
@@ -109,7 +119,7 @@ function TabLink({ tab, active }: { tab: Tab; active: boolean }) {
   );
 }
 
-/** The raised centre button (IA3): it opens the sheet of rounds to start. */
+/** The raised Start disc (IA3): it opens the sheet of rounds to start. */
 function StartButton() {
   const t = useT();
   const [open, setOpen] = useState(false);
@@ -151,7 +161,10 @@ function useIndicator(column: number | undefined) {
   return { ref, shown };
 }
 
-/** The soft pill behind the active tab's icon; it slides between tabs and hides on Start. */
+/**
+ * The tonal pill behind the active tab's icon; it slides between tabs and hides on Start. Under
+ * the Tutor tab it turns to the Ask ground.
+ */
 function Indicator({ column }: { column: number | undefined }) {
   const { ref, shown } = useIndicator(column);
   return (
@@ -160,6 +173,7 @@ function Indicator({ column }: { column: number | undefined }) {
       className={styles.indicator}
       data-nav-indicator=""
       data-hidden={shown === undefined ? '' : undefined}
+      data-ask={shown === TUTOR_COLUMN ? '' : undefined}
       style={{ '--column': shown ?? 0 } as CSSProperties}
       aria-hidden="true"
     />
@@ -176,7 +190,11 @@ export function BottomNav({ install = true }: { install?: boolean }) {
   const link = (tab: Tab) => <TabLink key={tab.to} tab={tab} active={tab.column === column} />;
   return (
     <>
-      {install && <InstallBanner />}
+      {install && (
+        <div className={styles.bannerSlot}>
+          <InstallBanner />
+        </div>
+      )}
       <nav className={styles.nav} aria-label={t('ui.navMain')} data-bottom-nav="">
         <Indicator column={column} />
         {TABS_START.map(link)}

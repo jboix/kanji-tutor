@@ -1,5 +1,5 @@
-/* The tutor's conversation (Tutor-sheet on the design canvas): questions on the right, the
-   tutor's answers in the AI box. */
+/* The tutor's conversation (Tutor-sheet on the design canvas): questions tonal on the right,
+   the tutor's answers in the AI box. */
 
 .empty {
   margin: 0;
@@ -32,8 +32,9 @@
   max-width: 82%;
   margin: 0;
   padding: 10px 14px;
-  border-radius: 18px 18px 4px 18px;
-  background: var(--paper-soft);
+  border-radius: 22px 6px 22px 22px;
+  background: var(--tonal);
+  color: var(--on-tonal);
   font-size: var(--text-md);
   line-height: 1.5;
 }
@@ -42,4 +43,15 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+/* The suggested questions are tonal chips (Tutor-dark), their cost hint in the chip's ink. */
+.suggestions > button {
+  background: var(--tonal);
+  color: var(--on-tonal);
+}
+
+.suggestions > button [aria-hidden="true"]:last-child {
+  color: inherit;
+  opacity: 0.8;
 }

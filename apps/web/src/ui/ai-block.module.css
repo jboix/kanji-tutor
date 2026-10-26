@@ -1,12 +1,14 @@
-/* The AI box: a AI red rule, the seal, a "Tutor · model" line. Only AI text uses it. */
+/* The AI box: a raised card with a 3px crimson left edge, the seal and a "Tutor · model" line in
+   the AI red; nothing else on it is crimson. Only AI text uses it. */
 .block {
   display: flex;
   gap: 12px;
   align-items: flex-start;
-  border-inline-start: 3px solid var(--ai);
-  border-radius: 4px 12px 12px 4px;
-  background: color-mix(in srgb, var(--ai) 5%, var(--paper));
-  padding: 10px 12px;
+  border-inline-start: 3px solid var(--seal);
+  border-radius: 6px var(--radius-card) var(--radius-card) 6px;
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
+  padding: 14px 14px 14px 13px;
 }
 
 .body {
@@ -22,10 +24,12 @@
   font-size: var(--text-xs, 12px);
   line-height: 1.4;
   letter-spacing: 0.02em;
+  font-weight: 700;
   color: var(--ai);
 }
 
 .mark {
+  font-weight: 400;
   color: var(--ink-muted);
 }
 

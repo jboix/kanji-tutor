@@ -10,9 +10,9 @@ import {
 import { answerSpan, readingLabel } from '../../domain/services/index.ts';
 import { ActionBar } from '../../ui/action-bar.tsx';
 import { AnswerState, answerLook } from '../../ui/answer-state.tsx';
+import { Chip } from '../../ui/chip.tsx';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { StruckAnswer } from '../../ui/ja.tsx';
-import { PillButton } from '../../ui/pill-button.tsx';
 import { TapSentence } from '../../ui/word-tap.tsx';
 import { type MaskedSentence, maskSentence } from '../../ui/word-tap-data.ts';
 import styles from './drill.module.css';
@@ -148,7 +148,7 @@ export interface Choice {
 }
 
 /**
- * The choices as pill buttons (52 px): side by side for kanji, stacked for patterns. Choices in
+ * The choices as answer chips (52 px, the soft fill): side by side for kanji, stacked for patterns. Choices in
  * the learner's language (meanings) are not Japanese, so they keep the interface font.
  */
 export function ChoiceActions(props: {
@@ -164,9 +164,9 @@ export function ChoiceActions(props: {
       <fieldset className={props.stacked ? styles.stack : styles.choices}>
         <legend className="visually-hidden">{t('drills.choices')}</legend>
         {props.choices.map((choice) => (
-          <PillButton
+          <Chip
             key={choice.value}
-            variant="secondary"
+            className={styles.answerChip}
             onClick={() => props.onChoose(choice.value)}
           >
             {ja ? (
@@ -176,7 +176,7 @@ export function ChoiceActions(props: {
             ) : (
               <span className={styles.meaningChoice}>{choice.label}</span>
             )}
-          </PillButton>
+          </Chip>
         ))}
       </fieldset>
     </ActionBar>

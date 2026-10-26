@@ -33,12 +33,14 @@
   border-bottom: 0;
 }
 
+/* The lesson part: the current item, so tonal. */
 .first {
   min-height: 76px;
   margin-bottom: 6px;
-  border: 1.5px solid var(--accent);
+  border: 0;
   border-radius: var(--radius-card);
-  background: var(--paper-raised);
+  background: var(--tonal);
+  color: var(--on-tonal);
 }
 
 .option:focus-visible,
@@ -61,8 +63,9 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: var(--accent);
-  color: var(--paper);
+  background: var(--accent-fill);
+  color: var(--on-accent);
+  box-shadow: var(--shadow-fill);
 }
 
 .text {
@@ -83,6 +86,10 @@
 .line {
   font-size: var(--text-sm);
   color: var(--ink-muted);
+}
+
+.first .line {
+  color: inherit;
 }
 
 .status {

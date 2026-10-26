@@ -16,8 +16,9 @@ import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
 import type { PlainKey, Translate } from '../../ui/i18n/types.ts';
 import { Ja } from '../../ui/ja.tsx';
 import { SECTION_NAME } from '../../ui/lesson-sections.ts';
-import { PartList, PartRow } from '../../ui/part-row.tsx';
 import { paths } from '../../ui/paths.ts';
+import { SectionRow, type SectionState } from './section-row.tsx';
+import styles from './units.module.css';
 
 export type Mode = 'overview' | 'read';
 
@@ -59,6 +60,11 @@ function countOf(t: Translate, view: UnitView, section: LessonSection) {
     : {};
 }
 
+function stateOf(view: UnitView, section: LessonSection): SectionState {
+  if (view.step === section) return 'now';
+  return isDone(view, section) ? 'done' : 'later';
+}
+
 /** The first part to do of a section: its session, or for 読み物 the passage first. */
 export function useOpenSection(view: UnitView, onMode: (mode: Mode) => void) {
   const navigate = useNavigate();
@@ -74,10 +80,11 @@ export function useOpenSection(view: UnitView, onMode: (mode: Mode) => void) {
 interface PartProps {
   view: UnitView;
   section: LessonSection;
+  order: number;
   open: (section: LessonSection) => void;
 }
 
-function UnitPart({ view, section, open }: PartProps) {
+function UnitPart({ view, section, order, open }: PartProps) {
   const { t, rich } = useI18n();
   const name = rich('units.partName', {
     title: <Ja>{SECTION_TITLES[section]}</Ja>,
@@ -85,16 +92,17 @@ function UnitPart({ view, section, open }: PartProps) {
   });
   const current = view.step === section;
   return (
-    <div data-section={section} aria-current={current ? 'step' : undefined}>
-      <PartRow
+    <li data-section={section} aria-current={current ? 'step' : undefined}>
+      <SectionRow
+        order={order}
+        state={stateOf(view, section)}
         name={name}
         sample={SAMPLE[section]?.(view)}
         detail={t(DETAIL[section])}
-        current={current}
         onClick={() => open(section)}
         {...countOf(t, view, section)}
       />
-    </div>
+    </li>
   );
 }
 
@@ -104,10 +112,18 @@ export function UnitParts({ view, onMode }: { view: UnitView; onMode: (mode: Mod
   const open = useOpenSection(view, onMode);
   const shown = view.pack ? LESSON_SECTIONS : (['reading'] as const);
   return (
-    <PartList label={t('units.steps')}>
-      {shown.map((section) => (
-        <UnitPart key={section} view={view} section={section} open={open} />
-      ))}
-    </PartList>
+    <section aria-label={t('units.steps')}>
+      <ol className={styles.parts}>
+        {shown.map((section) => (
+          <UnitPart
+            key={section}
+            view={view}
+            section={section}
+            order={LESSON_SECTIONS.indexOf(section) + 1}
+            open={open}
+          />
+        ))}
+      </ol>
+    </section>
   );
 }

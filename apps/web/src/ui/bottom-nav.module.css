@@ -1,3 +1,5 @@
+/* The bottom bar: five equal columns on one label baseline, the bar colour with rounded top
+   corners and a hairline, no shadow. Each tab is a 56x32 pill holding its icon, then its label. */
 .nav {
   /* Above the page so the raised Start disc is never under scrolled content; sheets (10) stay above. */
   position: relative;
@@ -5,10 +7,11 @@
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   align-items: end;
-  background: var(--paper);
-  border-top: 1px solid var(--rule);
+  background: var(--bar);
+  border-radius: var(--radius-bar) var(--radius-bar) 0 0;
+  box-shadow: 0 -1px 0 var(--rule);
   /* The labels may sit over the top of the home-indicator area; only its lower part stays clear (U11). */
-  padding: 4px 8px max(6px, calc(env(safe-area-inset-bottom) - 14px));
+  padding: 6px 8px max(12px, calc(env(safe-area-inset-bottom) - 8px));
 }
 
 .link,
@@ -16,40 +19,42 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 3px;
-  min-height: 50px;
+  justify-content: flex-end;
+  gap: 4px;
+  min-height: 56px;
   min-width: 0;
+  padding: 0;
   text-decoration: none;
   color: var(--ink-muted);
-  font-size: var(--text-xs);
+  font-size: 12px;
+  font-weight: 500;
 }
 
-/* A tab: a 26px icon box right over a 16px label, its label on Start's line, so the sliding
-   highlight sits centred behind both at one height. Painted above the highlight. */
+/* A tab: the pill, then the label on the shared baseline. Painted above the sliding pill. */
 .link {
   position: relative;
-  justify-content: flex-end;
-  gap: 0;
-  padding-bottom: 10px;
   transition: color 300ms ease-out;
 }
 
 .dot {
   position: absolute;
-  top: 6px;
-  left: calc(50% + 10px);
+  top: 2px;
+  left: calc(50% + 14px);
+  z-index: 1;
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: var(--accent);
+  box-shadow: 0 0 0 2px var(--bar);
 }
 
 .icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 26px;
+  width: 56px;
+  height: 32px;
+  border-radius: 16px;
 }
 
 .label {
@@ -64,46 +69,38 @@
   color: var(--ink);
 }
 
-/* Keyboard focus: the ring takes the highlight's rounded square, not the tall tap target. */
+/* Keyboard focus: the ring takes the pill, not the tall tap target. */
 .link:focus-visible {
   outline: none;
 }
 
-.link:focus-visible::after {
-  content: "";
-  position: absolute;
-  bottom: 4px;
-  left: 50%;
-  width: 64px;
-  max-width: calc(100% - 6px);
-  height: 54px;
-  border-radius: 14px;
+.link:focus-visible .icon {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
-  transform: translateX(-50%);
-  pointer-events: none;
 }
 
-/* The active tab: its icon in the accent on the soft square, its label in ink and bold. */
-.active {
-  color: var(--ink);
+/* The active tab: icon and label in the accent, the label bold, on the tonal pill. */
+.active,
+.active:hover {
+  color: var(--accent);
   font-weight: 700;
 }
 
-.active .icon {
-  color: var(--accent);
+/* The Tutor tab, active: its own ground, the Ask button's, under the solid seal. */
+.active[data-tutor-tab],
+.active[data-tutor-tab]:hover {
+  color: var(--ask-ink);
 }
 
-/* One highlight for the bar, placed in the grid row and moved a column at a time: a rounded
-   square behind the whole tab, icon and label. */
+/* One pill for the bar, placed in the grid row and moved a column at a time, behind the icon. */
 .indicator {
   position: absolute;
   grid-row: 1 / 2;
   grid-column: 1 / -1;
   left: 0;
-  bottom: 4px;
+  bottom: 20px;
   width: 20%;
-  height: 54px;
+  height: 32px;
   transform: translateX(calc(var(--column) * 100%));
   transition:
     transform 420ms cubic-bezier(0.3, 0.7, 0.2, 1),
@@ -115,56 +112,69 @@
   content: "";
   position: absolute;
   inset: 0;
-  width: 64px;
-  max-width: calc(100% - 6px);
+  width: 56px;
+  max-width: 100%;
   margin: 0 auto;
-  border-radius: 14px;
-  background: color-mix(in srgb, var(--accent) 16%, var(--paper));
+  border-radius: 16px;
+  background: var(--tonal);
+  transition: background-color 250ms ease-out;
 }
 
-/* No tab owns the screen (Start, a session's end): no highlight. */
+.indicator[data-ask]::before {
+  background: var(--ask);
+}
+
+/* No tab owns the screen (Start, a session's end): no pill. */
 .indicator[data-hidden] {
   opacity: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .link,
-  .indicator {
+  .indicator,
+  .indicator::before,
+  .disc {
     transition: none;
   }
 }
 
-/* Start (IA3): a 60px disc raised over the bar's top rule, ringed with the paper colour. Above
-   the sliding highlight, which passes behind it between Learn and Add. */
+/* Start: a 60px disc in the accent fill, ringed with the bar colour and lifted half out of the
+   bar, its label in ink on the tabs' baseline. Above the sliding pill, which passes behind it. */
 .start {
   position: relative;
   z-index: 1;
-  padding-top: 0;
   border: 0;
   background: transparent;
+  color: var(--ink);
   font-family: inherit;
-  cursor: pointer;
-  gap: 4px;
-  color: var(--accent);
   font-weight: 700;
-  padding-bottom: 10px;
+  cursor: pointer;
+}
+
+.start > span:last-child {
+  line-height: 16px;
 }
 
 .disc {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 60px;
-  height: 60px;
-  margin-top: -26px;
+  width: 68px;
+  height: 68px;
+  margin-top: -34px;
+  padding-left: 1.5px;
+  border: 4px solid var(--bar);
   border-radius: var(--radius-pill);
-  background: var(--accent);
-  color: var(--on-ink);
-  box-shadow: 0 0 0 6px var(--paper);
+  background-color: var(--accent-fill);
+  background-image: radial-gradient(circle at 50% 0%, var(--start-glow), transparent 60%);
+  color: var(--on-accent);
+  box-shadow: var(--start-shadow);
+  transition: transform 120ms ease-out;
 }
 
-.start:hover .disc {
-  filter: brightness(1.08);
+.start:active .disc {
+  transform: scale(0.96);
+  background-color: var(--accent-pressed);
 }
 
 .start:focus-visible {
@@ -172,11 +182,20 @@
 }
 
 .start:focus-visible .disc {
-  outline: 2px solid var(--ink);
-  outline-offset: 8px;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* Keyboard open (U1): the nav would sit on the keyboard and push the content up. */
 :global(:root[data-keyboard="open"]) .nav {
+  display: none;
+}
+
+/* The install banner above the bar clears the Start disc, which rises 34px over the bar's top. */
+.bannerSlot {
+  padding-bottom: 32px;
+}
+
+.bannerSlot:empty {
   display: none;
 }

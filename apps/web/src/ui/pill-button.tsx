@@ -4,12 +4,12 @@ import { cx } from './cx.ts';
 import { ArrowIcon } from './icons.tsx';
 import styles from './pill-button.module.css';
 
-export type PillVariant = 'primary' | 'secondary';
+export type PillVariant = 'primary' | 'secondary' | 'text';
 
 interface PillLook {
-  /** primary: ink fill · secondary: bordered. */
+  /** primary: the filled next step · secondary: tonal · text: accent text, no fill. */
   variant?: PillVariant | undefined;
-  /** The "Begin reading" style: label left, arrow circle right (today.html). */
+  /** The "Begin reading" style: label left, an arrow right (today.html). */
   arrow?: boolean | undefined;
   /** Full width of the container. */
   block?: boolean | undefined;

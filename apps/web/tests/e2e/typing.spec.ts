@@ -33,9 +33,11 @@ async function expectByKana(page: Page, field: Locator, popup: Locator, index: n
   expect(pop.x + pop.width).toBeLessThanOrEqual(width);
   const scroll = await page.evaluate(() => document.documentElement.scrollWidth);
   expect(scroll).toBeLessThanOrEqual(width);
-  for (const option of await popup.getByRole('option').all()) {
-    expect((await option.boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(44);
-  }
+  // Measured in one read: the list can still be swapping its options as it settles.
+  const shortest = await popup
+    .getByRole('option')
+    .evaluateAll((options) => Math.min(...options.map((o) => o.getBoundingClientRect().height)));
+  expect(shortest).toBeGreaterThanOrEqual(44);
 }
 
 /** Selects part of a field the way a long press would, so the row follows the selection. */

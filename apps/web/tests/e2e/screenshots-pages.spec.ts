@@ -187,8 +187,10 @@ test('navigation: Learn, Tutor, Settings and a category, the plan (IA3–IA6)', 
   await expect(page.getByRole('list', { name: 'Words' })).toBeVisible();
   await shot(page, 'learn-look-up');
   await page.goto('/tutor');
-  await expect(page.getByRole('heading', { name: 'Ask the tutor' })).toBeVisible();
-  await shot(page, 'tutor');
+  await expect(page.getByRole('heading', { name: 'Tutor', level: 1 })).toBeVisible();
+  await expect(page.getByRole('button', { name: /^Ask the tutor/ })).toBeVisible();
+  await shotBothThemes(page, 'tutor');
+  await page.emulateMedia({ colorScheme: 'light' });
   await page.goto('/settings');
   await expect(page.getByRole('link', { name: /^Sessions/ })).toBeVisible();
   await shot(page, 'settings', { full: true });

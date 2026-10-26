@@ -132,10 +132,11 @@
   display: inline-flex;
   align-items: center;
   min-height: var(--tap);
-  padding: 0 4px;
+  padding: 0 8px;
+  border-radius: var(--radius-chip);
   color: var(--accent);
-  font-weight: 500;
-  text-underline-offset: 3px;
+  font-weight: 600;
+  text-decoration: none;
 }
 
 .logInLink:focus-visible {

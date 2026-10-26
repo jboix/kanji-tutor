@@ -1,13 +1,14 @@
-/* A quiet line, not an alert: soft panel, muted text, two small chips. */
+/* A quiet line, not an alert: a raised card, muted text, two small chips. */
 .reminder {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 8px 12px;
-  padding: 10px 12px 10px 18px;
-  border-radius: var(--radius-panel);
-  background: var(--paper-soft);
+  padding: 12px 12px 12px var(--gutter);
+  border-radius: var(--radius-card);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
 }
 
 .text {

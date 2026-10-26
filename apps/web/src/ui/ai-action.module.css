@@ -25,28 +25,26 @@
   font-weight: 600;
 }
 
-/* On the ink pill the hint stays readable. */
+/* On the filled button the hint stays readable. */
 [data-look="primary"] > .hint {
   color: inherit;
   opacity: 0.8;
 }
 
+/* The text look: accent text at 600, never underlined, 44px to the touch. */
 .text {
   display: inline-flex;
   align-items: center;
   min-height: var(--tap);
   padding: 0;
   border: 0;
+  border-radius: var(--radius-chip);
   background: none;
   color: var(--accent);
   font: inherit;
   font-size: var(--text-sm);
+  font-weight: 600;
   cursor: pointer;
-}
-
-.text .label {
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
 .text:disabled {
@@ -71,7 +69,7 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--ink-muted);
+  color: var(--accent);
   cursor: pointer;
 }
 
@@ -90,25 +88,26 @@
   color: var(--ink-muted);
 }
 
-/* The icon look (capture "Take another photo"): 52px outlined circle, the seal on its corner. */
+/* The icon look (capture "Take another photo"): a 52px tonal square, the seal on its corner. */
 .icon {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 52px;
-  height: 52px;
+  width: var(--control);
+  height: var(--control);
   padding: 0;
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  background: transparent;
-  color: var(--ink);
+  border: 0;
+  border-radius: var(--radius-button);
+  background: var(--tonal);
+  color: var(--on-tonal);
   cursor: pointer;
 }
 
 .icon:disabled {
-  color: var(--ink-faint);
+  background: var(--paper-soft);
+  color: var(--ink-muted);
   cursor: default;
 }
 

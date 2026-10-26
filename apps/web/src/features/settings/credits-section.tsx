@@ -69,7 +69,7 @@ const CREDITS: readonly Credit[] = [
   },
   {
     what: 'settings.creditsFonts',
-    by: () => 'Klee One, Zen Kaku Gothic New',
+    by: () => 'Klee One, Figtree',
     licence: { name: 'SIL OFL 1.1', href: 'https://openfontlicense.org/' },
   },
   {

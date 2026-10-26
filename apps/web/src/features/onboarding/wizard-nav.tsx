@@ -60,7 +60,7 @@ export function WizardNav(props: Props) {
       <div className={styles.navRow}>
         <IconButton
           size={52}
-          look="outline"
+          look="soft"
           className={styles.back}
           aria-label={t('common.back')}
           onClick={() => run(wizard.back)}

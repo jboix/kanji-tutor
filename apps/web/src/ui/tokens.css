@@ -1,112 +1,188 @@
-/* Design tokens (B2; the Paper redesign). The colours are the Kanji Tutor palette:
-   cool washi paper, sumi ink, 藍 indigo, a hanko crimson for --ai, and the answer greens and
-   crimsons. Dark is the "Ink" mockup's night palette. `tokens.test.ts` checks every text pair for
-   WCAG AA in both themes. `data-theme` also works on any element, so a subtree (the dev gallery)
-   can force a theme. */
+/* Design tokens: the "Soft Tonal" palette. Light is warm paper with tonal indigo; dark is a
+   neutral grey ladder (paper, bar, raised, soft), GNOME-like, with no warm tint and no shadows:
+   depth comes from the steps. Indigo is progress and state, the hanko crimson is the tutor, AI
+   text and corrections, green is a right answer and nothing else. `tokens.test.ts` checks every
+   text pair for WCAG AA in both themes. `data-theme` also works on any element, so a subtree
+   (the dev gallery) can force a theme. */
 
 :root,
 [data-theme="light"] {
-  /* Surfaces */
-  --paper: #f7f8f6; /* app background, cool washi */
-  --paper-soft: #ecefee; /* soft fill: callouts, input pills, segmented control */
-  --paper-raised: #ffffff; /* drawing canvas */
-  --scrim: #d5dbdd; /* behind bottom sheets */
+  /* Surfaces, from the page up */
+  --paper: #f7f5f0; /* app background */
+  --paper-low: #efede7; /* recessed wells */
+  --paper-soft: #e9e6df; /* chips, input pills, segmented control, callouts */
+  --paper-raised: #ffffff; /* cards, sheets, the drawing canvas */
+  --bar: #ffffff; /* the bottom bar and fixed action rows */
+  --scrim: #d6d3cc; /* behind bottom sheets */
 
   /* Ink */
-  --ink: #14202b; /* sumi: primary text, primary buttons */
-  --ink-muted: #4f5b66; /* secondary text, inactive nav */
-  --ink-faint: #616b75; /* not-yet-known items; also small text, so it keeps 4.5:1 */
+  --ink: #1c1d1f; /* primary text */
+  --ink-muted: #565a5f; /* secondary text, inactive nav */
+  --ink-faint: #63676c; /* not-yet-known items; also small text, so it keeps 4.5:1 */
 
   /* Lines */
-  --rule: #d5dbde; /* dividers, ruled lines under sentences */
-  --border: #c9d0d4; /* chip and secondary button borders */
-  --dot-empty: #c3cbd0; /* empty knowledge dots */
+  --rule: #dcd8cf; /* dividers, ruled lines under sentences */
+  --border: #a9a59c; /* edges that identify a control */
+  --dot-empty: #cdc9c0; /* empty knowledge dots */
 
-  /* Accents */
-  --accent: #1e4d7a; /* 藍 indigo: progress, links, known-level dots */
-  --ai: #b3243a; /* 紅 hanko crimson: ONLY for AI explanations, the 解 seal, corrections */
-  --on-ink: #f7f8f6; /* text on primary buttons */
+  /* Indigo: progress, links, state. The fill is the one filled button per screen. */
+  --accent: #2d5b88; /* accent text, progress, the active tab */
+  --accent-fill: #2d5b88; /* filled primary buttons, the Start disc */
+  --accent-pressed: #244b72;
+  --on-accent: #ffffff;
+  --tonal: #dce8f5; /* current and selected: tonal buttons, chips, the active tab's pill */
+  --on-tonal: #133a5e;
+  --segment: #2d5b88; /* the selected option of a segmented control */
+  --on-segment: #ffffff;
+  --track: #d3dbe4; /* the unfilled part of a progress line */
 
-  /* Answer states (U2): green ONLY for a right answer; the miss crimson is a
-     correction, so it shares the AI red's hue and keeps to the answer state. */
-  --ok: #1f7a4a; /* a right reading: the target, its furigana, the check circle */
-  --ok-surface: #e2f3e8; /* the "Right" card */
+  /* The tutor. --ai is AI text and corrections; --seal fills the 解 seal. */
+  --ai: #b3243a;
+  --seal: #b3243a;
+  --on-seal: #ffffff;
+  --tutor-tint: #c9707e; /* the Tutor tab's seal outline when the tab is not active */
+  --ask: #fbe7ea; /* the Ask button's ground */
+  --ask-border: #f3cdd3;
+  --ask-ink: #7a1626;
+
+  /* Answer states: green ONLY for a right answer; the miss crimson is a correction, so it
+     shares the AI red's hue and keeps to the answer state. */
+  --ok: #1a6b40; /* a right reading: the target, its furigana, the check circle */
+  --ok-surface: #dff1e5; /* the "Right" card */
   --ok-ink: #14532d; /* text on the "Right" card */
   --on-ok: #ffffff; /* the check on its circle */
-  --ok-shadow: rgb(31 122 74 / 0.22);
+  --ok-shadow: rgb(26 107 64 / 0.22);
   --miss: #b3243a; /* a miss: the target, its furigana, the cross circle */
   --miss-surface: #f8e5e8; /* the miss card */
   --miss-ink: #7a1626; /* text on the miss card */
   --on-miss: #ffffff; /* the cross on its circle */
   --miss-shadow: rgb(179 36 58 / 0.18);
 
-  /* The inverted "Next up" card on Today (W-today) */
-  --hero: #1e4d7a; /* the indigo of Start: Home's lesson card */
-  --on-hero: #f7f8f6;
-  --hero-muted: #c7d3df;
-  --hero-track: #3d6890;
-  --hero-fill: #e3edf7;
+  /* Home's "Next up" card: a soft indigo tint, its Continue the screen's filled button */
+  --hero: #e6eef7;
+  --on-hero: #1c1d1f;
+  --hero-muted: #565a5f;
+  --hero-track: #d3dbe4;
+  --hero-fill: #2d5b88;
 
-  /* Chart series (A16), checked for colour-blind separation; never --ai or --ok */
+  /* Kept for the few dark-on-light marks (knowledge dots, drawing strokes) */
+  --on-ink: #f7f5f0;
+  --on-ai: #ffffff;
+  --link-hover: #1d4166;
+
+  /* Persimmon: what is new to you or still being learned; text and outlines, never a fill */
+  --new: #a4501c;
+
+  /* The cast: name colours, portrait discs, the line ink of their portraits */
+  --cast-yuki: #a4501c;
+  --cast-ken: #2a6464;
+  --cast-mori: #5e4f8a;
+  --disc-yuki: #f3d6c2;
+  --disc-ken: #cfe3df;
+  --disc-mori: #e6e0f0;
+  --mori-hair: #8a8a8a;
+  --yuki-clip: #a85a3a;
+  --portrait-ink: #222222;
+
+  /* Depth: shadows in light, an inset top highlight in dark */
+  --shadow-card: 0 1px 2px rgb(40 36 28 / 0.05), 0 8px 24px -12px rgb(40 36 28 / 0.16);
+  --shadow-fill:
+    0 1px 2px rgb(29 65 102 / 0.18), 0 8px 16px -10px rgb(45 91 136 / 0.6),
+    inset 0 1px 0 rgb(255 255 255 / 0.14);
+  --start-glow: rgb(255 255 255 / 0.14);
+  --start-shadow: 0 8px 18px -6px rgb(45 91 136 / 0.5);
+
+  /* Chart series, checked for colour-blind separation; never --ai or --ok */
   --series-1: #2a78d6;
   --series-2: #eda100;
   --series-3: #6250d6;
 
   /* Type */
   --font-ja: "Klee One", serif; /* every piece of Japanese text */
-  --font-ui: "Zen Kaku Gothic New", sans-serif; /* interface text */
+  --font-ui: "Figtree", system-ui, sans-serif; /* interface text */
   --text-xs: 11px;
   --text-sm: 13px;
   --text-md: 15px;
   --text-lg: 18px;
   --ja-sentence: 28px; /* sentence being read, line-height 2.1 */
-  --ja-hero: 104px; /* kanji page hero character */
 
   /* Shape */
-  --radius-pill: 999px; /* buttons and chips are pills */
+  --radius-pill: 999px; /* round things: avatars, the Start disc, badges, the nav pill */
+  --radius-button: 18px; /* buttons; 12px while pressed */
+  --radius-chip: 14px; /* answer chips and filter chips */
   --radius-panel: 22px; /* callout panels */
-  --radius-card: 20px; /* result cards, tiles */
-  --radius-sheet: 26px; /* bottom sheet top corners */
+  --radius-card: 22px; /* cards, tiles */
+  --radius-sheet: 28px; /* bottom sheet and answer sheet top corners */
+  --radius-bar: 24px; /* the bottom bar's top corners */
   --seal-radius: 6px; /* 解 seal, rotated -4deg */
   --tap: 44px; /* minimum touch target */
-  --gutter: 24px; /* screen side padding */
-  --on-ai: #ffffff; /* text on the 解 seal */
-  --link-hover: #143756;
+  --control: 52px; /* buttons and chips in exercises */
+  --gutter: 16px; /* screen side padding */
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --paper: #0f1418;
-    --paper-soft: #161f27;
-    --paper-raised: #1a242d;
-    --scrim: #070a0c;
-    --ink: #e8edf2;
-    --ink-muted: #9aa7b2;
-    --ink-faint: #87939e;
-    --rule: #2c3a47;
-    --border: #3b4b59;
-    --dot-empty: #3b4a57;
-    --accent: #9cc3ec;
+    --paper: #1e1e1e;
+    --paper-low: #242424;
+    --paper-soft: #383838;
+    --paper-raised: #303030;
+    --bar: #282828;
+    --scrim: #0a0a0a;
+    --ink: #e2e2e2;
+    --ink-muted: #ababab;
+    --ink-faint: #a3a3a3;
+    --rule: #3d3d3d;
+    --border: #858585;
+    --dot-empty: #4a4a4a;
+    --accent: #a8c7ea;
+    --accent-fill: #36597f;
+    --accent-pressed: #2e4d6e;
+    --on-accent: #f2f2f2;
+    --tonal: #2f3a46;
+    --on-tonal: #d6e5f6;
+    --segment: #a8c7ea;
+    --on-segment: #10263d;
+    --track: #404a55;
     --ai: #f08a9a;
-    --ok: #74d69f;
-    --ok-surface: #14291e;
+    --seal: #c03449;
+    --on-seal: #ffffff;
+    --tutor-tint: #e0a0aa;
+    --ask: #383838;
+    --ask-border: rgb(240 138 154 / 0.35);
+    --ask-ink: #e2e2e2;
+    --ok: #7dd3a0;
+    --ok-surface: #1b3324;
     --ok-ink: #c4ecd3;
-    --on-ok: #0f1418;
+    --on-ok: #1e1e1e;
     --ok-shadow: rgb(0 0 0 / 0.35);
     --miss: #f08a9a;
-    --miss-surface: #2a1a1f;
+    --miss-surface: #36272a;
     --miss-ink: #f6c6ce;
-    --on-miss: #0f1418;
+    --on-miss: #1e1e1e;
     --miss-shadow: rgb(0 0 0 / 0.35);
-    --hero: #1b2733;
-    --on-hero: #e8edf2;
-    --hero-muted: #9aa7b2;
-    --hero-track: #34475a;
-    --hero-fill: #9cc3ec;
-    --on-ink: #0f1418;
-    --on-ai: #0f1418;
-    --link-hover: #c4dcf4;
+    --hero: #283039;
+    --on-hero: #e2e2e2;
+    --hero-muted: #ababab;
+    --hero-track: #404a55;
+    --hero-fill: #a8c7ea;
+    --on-ink: #1e1e1e;
+    --on-ai: #1e1e1e;
+    --link-hover: #c9ddf3;
+    --new: #e9a678;
+    --cast-yuki: #e9a678;
+    --cast-ken: #86c6bf;
+    --cast-mori: #b9addb;
+    --disc-yuki: #cfae98;
+    --disc-ken: #a3bfba;
+    --disc-mori: #bdb4d1;
+    --mori-hair: #6e6e6e;
+    --yuki-clip: #e09a72;
+    --portrait-ink: #222222;
+    --shadow-card: inset 0 1px 0 rgb(255 255 255 / 0.06);
+    --shadow-fill: inset 0 1px 0 rgb(255 255 255 / 0.06);
+    --start-glow: rgb(255 255 255 / 0.08);
+    --start-shadow: none;
     --series-1: #3987e5;
     --series-2: #c98500;
     --series-3: #9085e9;
@@ -116,36 +192,66 @@
 
 :root[data-theme="dark"],
 [data-theme="dark"] {
-  --paper: #0f1418;
-  --paper-soft: #161f27;
-  --paper-raised: #1a242d;
-  --scrim: #070a0c;
-  --ink: #e8edf2;
-  --ink-muted: #9aa7b2;
-  --ink-faint: #87939e;
-  --rule: #2c3a47;
-  --border: #3b4b59;
-  --dot-empty: #3b4a57;
-  --accent: #9cc3ec;
+  --paper: #1e1e1e;
+  --paper-low: #242424;
+  --paper-soft: #383838;
+  --paper-raised: #303030;
+  --bar: #282828;
+  --scrim: #0a0a0a;
+  --ink: #e2e2e2;
+  --ink-muted: #ababab;
+  --ink-faint: #a3a3a3;
+  --rule: #3d3d3d;
+  --border: #858585;
+  --dot-empty: #4a4a4a;
+  --accent: #a8c7ea;
+  --accent-fill: #36597f;
+  --accent-pressed: #2e4d6e;
+  --on-accent: #f2f2f2;
+  --tonal: #2f3a46;
+  --on-tonal: #d6e5f6;
+  --segment: #a8c7ea;
+  --on-segment: #10263d;
+  --track: #404a55;
   --ai: #f08a9a;
-  --ok: #74d69f;
-  --ok-surface: #14291e;
+  --seal: #c03449;
+  --on-seal: #ffffff;
+  --tutor-tint: #e0a0aa;
+  --ask: #383838;
+  --ask-border: rgb(240 138 154 / 0.35);
+  --ask-ink: #e2e2e2;
+  --ok: #7dd3a0;
+  --ok-surface: #1b3324;
   --ok-ink: #c4ecd3;
-  --on-ok: #0f1418;
+  --on-ok: #1e1e1e;
   --ok-shadow: rgb(0 0 0 / 0.35);
   --miss: #f08a9a;
-  --miss-surface: #2a1a1f;
+  --miss-surface: #36272a;
   --miss-ink: #f6c6ce;
-  --on-miss: #0f1418;
+  --on-miss: #1e1e1e;
   --miss-shadow: rgb(0 0 0 / 0.35);
-  --hero: #1b2733;
-  --on-hero: #e8edf2;
-  --hero-muted: #9aa7b2;
-  --hero-track: #34475a;
-  --hero-fill: #9cc3ec;
-  --on-ink: #0f1418;
-  --on-ai: #0f1418;
-  --link-hover: #c4dcf4;
+  --hero: #283039;
+  --on-hero: #e2e2e2;
+  --hero-muted: #ababab;
+  --hero-track: #404a55;
+  --hero-fill: #a8c7ea;
+  --on-ink: #1e1e1e;
+  --on-ai: #1e1e1e;
+  --link-hover: #c9ddf3;
+  --new: #e9a678;
+  --cast-yuki: #e9a678;
+  --cast-ken: #86c6bf;
+  --cast-mori: #b9addb;
+  --disc-yuki: #cfae98;
+  --disc-ken: #a3bfba;
+  --disc-mori: #bdb4d1;
+  --mori-hair: #6e6e6e;
+  --yuki-clip: #e09a72;
+  --portrait-ink: #222222;
+  --shadow-card: inset 0 1px 0 rgb(255 255 255 / 0.06);
+  --shadow-fill: inset 0 1px 0 rgb(255 255 255 / 0.06);
+  --start-glow: rgb(255 255 255 / 0.08);
+  --start-shadow: none;
   --series-1: #3987e5;
   --series-2: #c98500;
   --series-3: #9085e9;

@@ -81,8 +81,9 @@ h2.lead {
   display: grid;
   gap: 4px;
   padding: 14px 16px;
-  border-radius: var(--radius-panel);
-  background: var(--paper-soft);
+  border-radius: var(--radius-card);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
   font-size: 17px;
   line-height: 1.8;
 }
@@ -97,13 +98,14 @@ h2.lead {
   gap: 8px;
 }
 
+/* The answers as chips: a soft fill, no edge, 52px to the touch. */
 .option {
   width: 100%;
-  min-height: 52px;
+  min-height: var(--control);
   padding: 6px 18px;
-  border: 1px solid var(--border);
-  border-radius: 26px;
-  background: transparent;
+  border: 0;
+  border-radius: var(--radius-chip);
+  background: var(--paper-soft);
   color: var(--ink);
   font-family: var(--font-ja);
   font-size: 19px;
@@ -119,23 +121,24 @@ h2.lead {
 
 @media (hover: hover) {
   .option:hover:not(:disabled) {
-    border-color: var(--ink-faint);
+    background: var(--tonal);
+    color: var(--on-tonal);
   }
 }
 
+/* "I don't know": a text button, as in the session, never underlined. */
 .quiet {
   align-self: flex-start;
   min-height: var(--tap);
-  padding: 0;
+  margin-inline-start: -8px;
+  padding: 0 8px;
   border: 0;
+  border-radius: var(--radius-chip);
   background: none;
-  color: var(--ink-muted);
+  color: var(--accent);
   font: inherit;
-  font-size: var(--text-sm);
-  /* Underlined like the session's "I don't know", so the same action looks the same. */
-  text-decoration: underline;
-  text-decoration-color: var(--border);
-  text-underline-offset: 4px;
+  font-size: var(--text-md);
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -163,7 +166,7 @@ h2.lead {
   min-height: 112px;
   padding: 12px 14px;
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius-chip);
   background: var(--paper-raised);
   color: var(--ink);
   font-family: var(--font-ja);

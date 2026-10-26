@@ -42,11 +42,6 @@
   margin-top: 24px;
 }
 
-.actions > button {
-  height: 50px;
-  border-radius: 25px;
-}
-
 .actions > button:last-child:not(:first-child) {
   padding: 0 18px;
   font-size: 14px;
@@ -79,7 +74,7 @@
   min-height: var(--tap);
   padding: 0 12px;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-chip);
   background: transparent;
   color: var(--ink);
   font-family: inherit;
@@ -114,10 +109,10 @@
 .step {
   width: var(--tap);
   height: var(--tap);
-  border: 1px solid var(--border);
+  border: 0;
   border-radius: 50%;
-  background: transparent;
-  color: var(--ink);
+  background: var(--tonal);
+  color: var(--on-tonal);
   font-family: inherit;
   font-size: var(--text-lg);
   cursor: pointer;
@@ -159,7 +154,7 @@
 .toggle input {
   width: 20px;
   height: 20px;
-  accent-color: var(--ink);
+  accent-color: var(--accent);
 }
 
 /* Kept notes */

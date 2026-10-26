@@ -156,15 +156,18 @@ test('old links still open: notes, kanji, units, grammar and settings', async ({
   }
 });
 
-/** The highlight's centre and the centre of the named tab's icon and label together, in CSS px. */
+/** The highlight's centre and the centre of the named tab's icon pill, in CSS px. */
 async function highlightAndIcon(page: Page, tab: string) {
   const pill = await nav(page).locator('[data-nav-indicator]').boundingBox();
-  const parts = nav(page).getByRole('link', { name: tab }).locator('span');
-  const [icon, label] = [await parts.first().boundingBox(), await parts.last().boundingBox()];
-  if (!pill || !icon || !label) throw new Error('not laid out');
+  const icon = await nav(page)
+    .getByRole('link', { name: tab })
+    .locator('> span:not([aria-hidden])')
+    .first()
+    .boundingBox();
+  if (!pill || !icon) throw new Error('not laid out');
   return {
     pill: { x: pill.x + pill.width / 2, y: pill.y + pill.height / 2 },
-    icon: { x: icon.x + icon.width / 2, y: (icon.y + label.y + label.height) / 2 },
+    icon: { x: icon.x + icon.width / 2, y: icon.y + icon.height / 2 },
   };
 }
 

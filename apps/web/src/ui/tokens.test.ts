@@ -54,7 +54,7 @@ function faintIsText(): boolean {
   );
 }
 
-const TEXT = ['ink', 'ink-muted', 'accent', 'ai', 'ok', 'miss'];
+const TEXT = ['ink', 'ink-muted', 'accent', 'ai', 'ok', 'miss', 'new'];
 const SURFACES = ['paper', 'paper-soft'];
 
 /** The answer cards: their text, the muted lines on them, the marks on their circles. */
@@ -68,6 +68,23 @@ const CARDS = [
   ['on-miss', 'miss'],
   ['on-hero', 'hero'],
   ['hero-muted', 'hero'],
+  ['hero-fill', 'hero'],
+  ['on-accent', 'accent-fill'],
+  ['on-tonal', 'tonal'],
+  ['accent', 'tonal'],
+  ['on-segment', 'segment'],
+  ['accent', 'paper-raised'],
+  ['accent', 'bar'],
+  ['ink-muted', 'paper-raised'],
+  ['ink-muted', 'bar'],
+  ['on-seal', 'seal'],
+  ['ask-ink', 'ask'],
+  ['cast-yuki', 'paper'],
+  ['cast-ken', 'paper'],
+  ['cast-mori', 'paper'],
+  ['portrait-ink', 'disc-yuki'],
+  ['portrait-ink', 'disc-ken'],
+  ['portrait-ink', 'disc-mori'],
 ] as const;
 
 describe.each(['light', 'dark', 'systemDark'] as const)('%s tokens', (theme) => {
@@ -91,7 +108,16 @@ describe.each(['light', 'dark', 'systemDark'] as const)('%s tokens', (theme) => 
     expect(ratio('on-ai', 'ai')).toBeGreaterThanOrEqual(4.5);
   });
 
-  it.each(CARDS)('%s on %s ≥ 4.5:1 (answer cards, Next up)', (fg, bg) => {
+  it('keeps the Tutor tab and control edges visible on the bar (3:1)', () => {
+    expect(ratio('tutor-tint', 'bar')).toBeGreaterThanOrEqual(3);
+    expect(ratio('border', 'paper-raised')).toBeGreaterThanOrEqual(2);
+  });
+
+  it('sets the selected segment apart from its pill (3:1)', () => {
+    expect(ratio('segment', 'paper-soft')).toBeGreaterThanOrEqual(3);
+  });
+
+  it.each(CARDS)('%s on %s ≥ 4.5:1 (answer cards, Next up, fills, the cast)', (fg, bg) => {
     expect(ratio(fg, bg)).toBeGreaterThanOrEqual(4.5);
   });
 });

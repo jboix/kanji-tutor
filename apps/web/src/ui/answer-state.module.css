@@ -4,7 +4,7 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 14px 16px;
+  padding: 14px var(--gutter);
   border-radius: var(--radius-card);
 }
 
@@ -37,7 +37,7 @@
 .correct {
   background: var(--ok-surface);
   color: var(--ok-ink);
-  box-shadow: 0 8px 22px var(--ok-shadow);
+  box-shadow: var(--shadow-card);
 }
 
 .correct .badge {
@@ -48,7 +48,7 @@
 .wrong {
   background: var(--miss-surface);
   color: var(--miss-ink);
-  box-shadow: 0 8px 22px var(--miss-shadow);
+  box-shadow: var(--shadow-card);
   animation: shake 250ms ease-in-out;
 }
 

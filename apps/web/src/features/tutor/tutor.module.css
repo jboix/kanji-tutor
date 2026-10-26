@@ -1,4 +1,4 @@
-/* The Tutor tab (tutor-tab Main and NotSetUp mockups). */
+/* The Tutor tab (Tutor-dark mockup): the seal by the title, raised rows, the history button. */
 
 .header {
   display: flex;
@@ -7,6 +7,9 @@
 }
 
 .title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin: 4px 0 0;
   font-size: 28px;
   font-weight: 700;
@@ -34,17 +37,16 @@
   justify-content: center;
   width: var(--tap);
   height: var(--tap);
-  margin-inline-end: -10px;
   padding: 0;
   border: 0;
-  border-radius: 50%;
-  background: transparent;
-  color: var(--ink-muted);
+  border-radius: var(--radius-chip);
+  background: var(--paper-soft);
+  color: var(--ink);
   cursor: pointer;
 }
 
-.history:hover {
-  color: var(--ink);
+.history:active {
+  background: color-mix(in srgb, var(--ink) 8%, var(--paper-soft));
 }
 
 .history:focus-visible {
@@ -57,14 +59,10 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  padding: 16px;
-  border: 1px solid var(--rule);
-  border-radius: var(--radius-panel);
-  background: var(--paper-raised);
-}
-
-.setUp {
   padding: 20px 18px;
+  border-radius: var(--radius-card);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
 }
 
 .chevron {
@@ -81,16 +79,21 @@
 
 .whereKey {
   align-self: center;
-  min-height: 36px;
-  padding: 0 8px;
+  min-height: var(--tap);
+  padding: 0 12px;
   border: 0;
+  border-radius: var(--radius-chip);
   background: transparent;
   color: var(--accent);
   font: inherit;
   font-size: var(--text-sm);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  font-weight: 600;
   cursor: pointer;
+}
+
+.whereKey:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .sheetTitle {
@@ -99,18 +102,23 @@
   font-weight: 700;
 }
 
-/* The tab's list: rows of an icon tile, two lines and a chevron. */
+/* The tab's list: raised rows of an icon well, two lines and a chevron. */
 .list {
   display: flex;
   flex-direction: column;
+  gap: 8px;
 }
 
 .row {
   display: grid;
   grid-template-columns: 40px minmax(0, 1fr) auto;
-  gap: 12px;
+  gap: 14px;
   align-items: center;
-  min-height: 64px;
+  min-height: 72px;
+  padding: 12px 12px 12px 14px;
+  border-radius: 20px;
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
   color: var(--ink);
   text-decoration: none;
 }
@@ -118,16 +126,10 @@
 .rowButton {
   width: 100%;
   margin: 0;
-  padding: 0;
   border: 0;
-  background: transparent;
   font: inherit;
   text-align: start;
   cursor: pointer;
-}
-
-.row + .row {
-  border-top: 1px solid var(--rule);
 }
 
 .row:focus-visible {
@@ -142,13 +144,18 @@
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background: color-mix(in srgb, var(--accent) 12%, var(--paper));
-  color: var(--accent);
+  background: var(--tonal);
+  color: var(--on-tonal);
 }
 
 .quietTile {
   background: transparent;
   color: var(--ink-muted);
+}
+
+/* Words from class keeps a soft well; the seal of Ask the tutor stands alone. */
+.quiet .quietTile {
+  background: var(--paper-soft);
 }
 
 .text {
@@ -159,11 +166,11 @@
 
 .name {
   font-size: var(--text-md);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .quietName {
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .detail {
@@ -171,8 +178,10 @@
   color: var(--ink-muted);
 }
 
-/* A row that needs the tutor while it is not set up: muted, not a link. */
+/* A row that needs the tutor while it is not set up: muted on the page, not a raised link. */
 .off {
+  background: var(--paper-low);
+  box-shadow: none;
   color: var(--ink-muted);
 }
 
@@ -182,10 +191,11 @@
 }
 
 .needs {
-  padding: 3px 9px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
+  padding: 4px 9px;
+  border-radius: 10px;
+  background: var(--paper-soft);
   font-size: 12px;
+  font-weight: 600;
   color: var(--ink-muted);
   white-space: nowrap;
 }
@@ -195,7 +205,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  min-height: 44px;
+  min-height: var(--tap);
+  padding: 0 4px;
   font-size: var(--text-sm);
   color: var(--ink-muted);
   text-decoration: none;
@@ -216,6 +227,11 @@
 
 .modelLink {
   color: var(--accent);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  font-weight: 600;
+}
+
+.model:focus-visible {
+  border-radius: var(--radius-chip);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }

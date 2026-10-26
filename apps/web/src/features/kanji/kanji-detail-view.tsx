@@ -35,9 +35,14 @@ function Hero({ detail }: { detail: KanjiDetail }) {
   const { kanji, since } = detail;
   return (
     <header className={styles.hero}>
-      <h1 lang="ja" className={styles.heroChar}>
-        {kanji.char}
-      </h1>
+      <div className={styles.heroTile}>
+        <svg className={styles.heroGrid} viewBox="0 0 112 112" aria-hidden="true">
+          <path d="M56 10v92M10 56h92" />
+        </svg>
+        <h1 lang="ja" className={styles.heroChar}>
+          {kanji.char}
+        </h1>
+      </div>
       <div className={styles.heroText}>
         <p className={styles.meanings}>{kanji.meanings.slice(0, 3).join(', ')}</p>
         <p className={styles.meta}>{countLine(i18n.t, detail)}</p>

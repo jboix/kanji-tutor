@@ -1,16 +1,16 @@
-/* W-today: 6px bars, the accent on the rule colour. */
+/* Progress is always a straight 4px line with round ends: the accent on the track. */
 .track {
   display: block;
-  height: 6px;
-  border-radius: 3px;
-  background: var(--rule);
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--track);
   overflow: hidden;
 }
 
 .fill {
   display: block;
-  height: 6px;
-  border-radius: 3px;
+  height: 4px;
+  border-radius: var(--radius-pill);
   background: var(--accent);
 }
 

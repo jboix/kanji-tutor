@@ -50,7 +50,7 @@ function Contents({ view }: { view: UnitView }) {
   const t = useT();
   const lookup = useContentLanguage();
   return (
-    <section className={styles.section} aria-label={t('units.contents')}>
+    <section className={styles.contents} aria-label={t('units.contents')}>
       <SectionHeader title={t('units.contents')} meta={progressLine(t, view)} />
       <ul className={styles.words}>
         {view.unit.words.map((word) => (
@@ -102,7 +102,7 @@ function ReviewActions({ view, onChange }: { view: UnitView; onChange: () => voi
   );
 }
 
-/** The unit's title, what it is about and holds, and its progress (Lesson page). */
+/** The unit's title, what it holds and is about, and its summary (Lesson page). */
 function Header({ view, english }: { view: UnitView; english: boolean }) {
   const t = useT();
   const { unit } = view;
@@ -113,14 +113,13 @@ function Header({ view, english }: { view: UnitView; english: boolean }) {
         <h1 lang="ja" className={styles.titleJa}>
           {unit.titleJa}
         </h1>
-        <p className={styles.text}>
+        <p className={styles.order}>{`${order} · ${holdsLine(t, view)}`}</p>
+        <p className={styles.theme}>
           {unit.theme}
           <EnMark english={english} />
         </p>
-        <p className={styles.muted}>{`${order} · ${holdsLine(t, view)}`}</p>
       </div>
       <p className={styles.muted}>{unit.summary}</p>
-      <Progress view={view} />
     </header>
   );
 }
@@ -137,7 +136,10 @@ function Overview({ view, english, onMode, onChange }: OverviewProps) {
   return (
     <>
       <Header view={view} english={english} />
-      <UnitParts view={view} onMode={onMode} />
+      <div className={styles.partsCard}>
+        <Progress view={view} />
+        <UnitParts view={view} onMode={onMode} />
+      </div>
       <ReviewActions view={view} onChange={onChange} />
       <Contents view={view} />
       <UnitFooter view={view} onMode={onMode} />

@@ -3,7 +3,14 @@ import { Link } from 'react-router';
 import { BottomNav } from '../../ui/bottom-nav.tsx';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import type { PlainKey } from '../../ui/i18n/types.ts';
-import { BarsIcon, BookIcon, BrushIcon, NoteIcon } from '../../ui/icons.tsx';
+import {
+  BarsIcon,
+  BookIcon,
+  BrushIcon,
+  GrammarIcon,
+  KanjiIcon,
+  NoteIcon,
+} from '../../ui/icons.tsx';
 import { ListRow } from '../../ui/list-row.tsx';
 import { paths } from '../../ui/paths.ts';
 import { Screen } from '../../ui/screen.tsx';
@@ -15,30 +22,21 @@ interface Tile {
   to: string;
   title: PlainKey;
   icon: ReactNode;
-  /** The accent tile (Lessons) leads the grid. */
-  lead?: boolean;
   detail: (t: ReturnType<typeof useT>, facts: LearnFacts | undefined) => string;
 }
-
-const glyph = (text: string) => (
-  <span lang="ja" className={styles.glyph}>
-    {text}
-  </span>
-);
 
 const TILES: Tile[] = [
   {
     to: paths.units,
     title: 'learn.lessons',
     icon: <BookIcon />,
-    lead: true,
     detail: (t, facts) =>
       facts?.unit ? t('learn.lessonsAt', facts.unit) : t('learn.lessonsDetail'),
   },
   {
     to: paths.kanji,
     title: 'learn.kanji',
-    icon: glyph('字'),
+    icon: <KanjiIcon />,
     detail: (t, facts) =>
       facts && facts.kanjiThisWeek > 0
         ? t('learn.kanjiWeek', { n: facts.kanjiThisWeek })
@@ -47,7 +45,7 @@ const TILES: Tile[] = [
   {
     to: paths.grammarIndex,
     title: 'learn.grammar',
-    icon: glyph('〜は'),
+    icon: <GrammarIcon />,
     detail: (t) => t('learn.grammarDetail'),
   },
   {
@@ -78,7 +76,7 @@ function Tiles() {
       {TILES.map((tile) => (
         <li key={tile.to}>
           <Link to={tile.to} className={styles.tile}>
-            <span className={tile.lead ? styles.iconLead : styles.icon} aria-hidden="true">
+            <span className={styles.icon} aria-hidden="true">
               {tile.icon}
             </span>
             <span className={styles.tileText}>

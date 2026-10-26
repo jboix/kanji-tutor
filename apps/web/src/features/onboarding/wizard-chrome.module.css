@@ -27,13 +27,13 @@
 .here {
   flex: 1 1 0;
   height: 4px;
-  border-radius: 2px;
-  background: var(--dot-empty);
+  border-radius: var(--radius-pill);
+  background: var(--track);
   transition: background-color 300ms ease-out;
 }
 
 .done {
-  background: var(--ink);
+  background: var(--accent);
 }
 
 .here {
@@ -107,8 +107,9 @@
   gap: 4px;
   flex-shrink: 0;
   padding: 12px 20px max(20px, calc(env(safe-area-inset-bottom) + 8px));
-  border-top: 1px solid var(--rule);
-  background: var(--paper);
+  border-radius: var(--radius-bar) var(--radius-bar) 0 0;
+  background: var(--bar);
+  box-shadow: 0 -1px 0 var(--rule);
 }
 
 .navRow {
@@ -144,14 +145,14 @@
   justify-content: center;
   min-width: var(--tap);
   min-height: var(--tap);
-  padding: 0 4px;
+  padding: 0 8px;
   border: 0;
+  border-radius: var(--radius-chip);
   background: none;
   color: var(--accent);
   font-family: inherit;
   font-size: var(--text-sm);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  font-weight: 600;
   cursor: pointer;
 }
 

@@ -1,5 +1,5 @@
 /* JLPT-shaped questions (J1–J5, T6) in the app's look: read.html's sentence and rules, numbered
-   option rows like the exam, pills for actions. Green (--ok) only marks the right answer once
+   option rows like the exam, as answer chips. Green (--ok) only marks the right answer once
    it was chosen. A wrong choice is struck in ink: static grading never uses the AI red. */
 
 .header {
@@ -68,7 +68,8 @@
   line-height: 1.7;
 }
 
-/* Four numbered rows (1–4), 52px tall: a full-width tap target each. */
+/* Four numbered rows (1–4), 52px tall: a full-width tap target each, as answer chips on the
+   soft fill with no edge. */
 .options,
 .chips,
 .notes {
@@ -86,20 +87,26 @@
   align-items: center;
   gap: 14px;
   width: 100%;
-  min-height: 52px;
+  min-height: var(--control);
   padding: 6px 18px;
-  border: 1px solid var(--border);
-  border-radius: 26px;
-  background: transparent;
+  border: 0;
+  border-radius: var(--radius-chip);
+  background: var(--paper-soft);
   color: var(--ink);
   font: inherit;
   text-align: left;
   cursor: pointer;
 }
 
-.option:hover:not([aria-disabled="true"], .still),
-.chip:hover:not(:disabled) {
-  border-color: var(--ink-faint);
+.option:active:not([aria-disabled="true"], .still),
+.chip:active:not(:disabled) {
+  background: color-mix(in srgb, var(--ink) 8%, var(--paper-soft));
+}
+
+.option:focus-visible,
+.chip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .option[aria-disabled="true"],
@@ -123,13 +130,17 @@
   font-size: 24px;
 }
 
-/* After answering: the right row in ink, then green once it was the learner's choice. */
+/* After answering: the right row tonal, then green once it was the learner's choice. */
 .right {
-  border-color: var(--ink);
+  background: var(--tonal);
+  color: var(--on-tonal);
+}
+
+.right .number {
+  color: inherit;
 }
 
 .right:has([data-check]) {
-  border-color: var(--ok);
   background: var(--ok-surface);
   color: var(--ok-ink);
 }
@@ -152,7 +163,6 @@
    opacity, so it keeps AA contrast (U5). */
 .still.other {
   opacity: 1;
-  border-color: var(--rule);
   color: var(--ink-muted);
 }
 
@@ -288,9 +298,10 @@
   gap: 10px;
   min-height: var(--tap);
   padding: 0 4px 0 14px;
-  border: 1px solid var(--rule);
-  border-radius: 14px;
+  border: 0;
+  border-radius: var(--radius-chip);
   background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
   color: var(--ink);
   font: inherit;
   font-size: var(--text-md);

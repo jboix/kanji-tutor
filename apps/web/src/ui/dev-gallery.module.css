@@ -3,7 +3,9 @@
   grid-template-columns: minmax(0, 1fr);
   gap: 0;
   width: 100%;
-  min-height: 100dvh;
+  /* The page itself never scrolls (U13): the gallery scrolls in its own box. */
+  height: 100dvh;
+  overflow-y: auto;
 }
 
 @media (min-width: 820px) {
@@ -135,4 +137,10 @@
   padding: 16px var(--gutter);
   background: var(--paper);
   border-bottom: 1px solid var(--rule);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }

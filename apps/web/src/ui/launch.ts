@@ -11,7 +11,7 @@ export const MIN_LAUNCH_MS = 600;
 
 /**
  * Past the minimum, the launch screen also waits for the fonts the first screen asked for, so
- * it never fades onto a fallback font that then swaps to Klee One or Zen Kaku, but never
+ * it never fades onto a fallback font that then swaps to Klee One or Figtree, but never
  * longer than this: a slow font then swaps in under the screen.
  */
 export const FONT_WAIT_MS = 700;

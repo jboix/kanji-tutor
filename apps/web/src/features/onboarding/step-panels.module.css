@@ -20,10 +20,11 @@
   position: relative;
   display: inline-flex;
   align-items: center;
+  gap: 6px;
   min-height: var(--tap);
   padding: 0 16px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-chip);
+  background: var(--paper-soft);
   font-size: 14px;
   cursor: pointer;
 }
@@ -35,10 +36,9 @@
 }
 
 .chip:has(:checked) {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: var(--on-ink);
-  font-weight: 500;
+  background: var(--tonal);
+  color: var(--on-tonal);
+  font-weight: 600;
 }
 
 .chip:has(:focus-visible) {
@@ -51,8 +51,9 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 10px 10px 16px;
-  border: 1px solid var(--rule);
-  border-radius: 18px;
+  border-radius: var(--radius-card);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
 }
 
 .lessonText {
@@ -75,10 +76,10 @@
 .stepButton {
   width: var(--tap);
   height: var(--tap);
-  border: 1px solid var(--border);
+  border: 0;
   border-radius: 50%;
-  background: transparent;
-  color: var(--ink);
+  background: var(--tonal);
+  color: var(--on-tonal);
   font-family: inherit;
   font-size: 20px;
   cursor: pointer;
@@ -95,12 +96,13 @@
   outline-offset: -2px;
 }
 
-/* A grouped panel of rows (Settings.dc.html). */
+/* A grouped panel of rows (Settings.dc.html): one raised card, ruled between. */
 .group {
   display: flex;
   flex-direction: column;
-  border-radius: var(--radius-panel);
-  background: var(--paper-soft);
+  border-radius: var(--radius-card);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
   overflow: hidden;
 }
 
@@ -167,7 +169,7 @@
   min-height: 96px;
   padding: 12px 14px;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-chip);
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-ja);

@@ -45,7 +45,9 @@ function Sections({ unit }: { unit: UnitView }) {
             className={cx(styles.section, styles[state])}
             aria-current={state === 'now' ? 'step' : undefined}
           >
-            <span className={styles.sectionBar} aria-hidden="true" />
+            <span className={styles.sectionBar} aria-hidden="true">
+              <span className={styles.sectionFill} />
+            </span>
             <span lang="ja">{SECTION_TITLES[section]}</span>
             <span className="visually-hidden"> {label}</span>
           </li>
@@ -73,7 +75,7 @@ function ContinueLink({ unit }: { unit: UnitView }) {
         <span className={styles.continueLine}>{line}</span>
       </span>
       <span className={styles.continueDisc} aria-hidden="true">
-        <PlayIcon />
+        <PlayIcon size={20} />
       </span>
     </Link>
   );
@@ -84,13 +86,13 @@ export function NextUp({ unit }: { unit: UnitView }) {
   const t = useT();
   return (
     <section
-      className={styles.outlined}
+      className={styles.next}
       aria-label={t('today.nextUpLabel')}
       data-current-unit={unit.unit.id}
     >
       <p className={styles.kicker}>{t('today.nextUp', { order: unit.unit.order })}</p>
       <Link to={paths.unit(unit.unit.id)} className={styles.unitTitle}>
-        <Ja variant="emph">{unit.unit.titleJa}</Ja>
+        <Ja>{unit.unit.titleJa}</Ja>
       </Link>
       <Sections unit={unit} />
       <ContinueLink unit={unit} />

@@ -1,5 +1,5 @@
-/* A grammar dialogue (dialogue.tsx): ruled rows on paper, one per line, a round initial chip for
-   each speaker, the grammar form underlined in indigo like a target. App data, not the tutor: no
+/* A grammar dialogue (dialogue.tsx): ruled rows on paper, one per line, each speaker's initial
+   on a cast disc, the grammar form underlined in indigo like a target. App data, not the tutor: no
    tint of --ai anywhere, and no chat bubbles. */
 .lines {
   display: flex;
@@ -51,20 +51,19 @@ button.line:focus-visible {
   flex: none;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
-  margin-top: 3px;
+  width: 32px;
+  height: 32px;
+  margin-top: 2px;
   border-radius: 50%;
-  background: var(--paper-soft);
-  color: var(--ink);
+  background: var(--disc-ken);
+  color: var(--portrait-ink);
   font-family: var(--font-ja);
   font-size: 15px;
   font-weight: 600;
 }
 
 .other {
-  background: color-mix(in srgb, var(--accent) 14%, var(--paper));
-  color: var(--accent);
+  background: var(--disc-yuki);
 }
 
 .ja {
@@ -103,7 +102,7 @@ button.line:focus-visible {
 }
 
 .translation {
-  margin: 0 0 0 42px;
+  margin: 0 0 0 44px;
   font-size: var(--text-sm);
   line-height: 1.5;
   color: var(--ink-muted);

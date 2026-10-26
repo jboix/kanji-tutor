@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styles from './dev-gallery.module.css';
+import { ButtonsSample, ChipsSample } from './dev-gallery-buttons.tsx';
 import { ComposeSample, KanjiSample, NotesSample } from './dev-gallery-more.tsx';
 import { ExplainSample, ReadSample, TodaySample, VoiceSample } from './dev-gallery-read.tsx';
 import { HandwriteSample, InputsSample, NavSample } from './dev-gallery-tools.tsx';
@@ -19,6 +20,9 @@ function Pane({ theme }: { theme: Theme }) {
     <div data-theme={theme} className={styles.pane}>
       <div className={styles.phone}>
         <h2 className={styles.paneTitle}>{theme === 'light' ? 'Light' : 'Dark'}</h2>
+        <ButtonsSample />
+        <ChipsSample />
+        <NavSample />
         <TodaySample />
         <ReadSample />
         <VoiceSample />
@@ -28,7 +32,6 @@ function Pane({ theme }: { theme: Theme }) {
         <HandwriteSample />
         <NotesSample />
         <InputsSample />
-        <NavSample />
       </div>
     </div>
   );

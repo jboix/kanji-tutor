@@ -100,10 +100,17 @@
   padding: 0 4px;
   border: 0;
   background: transparent;
+  border-radius: var(--radius-chip);
   color: var(--accent);
   font-family: inherit;
   font-size: var(--text-sm);
+  font-weight: 600;
   cursor: pointer;
+}
+
+.textButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .textButton:hover {

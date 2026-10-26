@@ -1,4 +1,4 @@
-/* The welcome wizard (P5): paper, ink, ruled lines and pills, as in today.html. */
+/* The welcome wizard (P5): raised cards on the paper, tonal for what is chosen. */
 
 /* The slide clips sideways only, so the body still scrolls up and down. */
 .viewport {
@@ -65,13 +65,13 @@
   color: var(--ink-muted);
 }
 
-/* The kana prerequisite (P8): a quiet box on soft paper, ruled on the left. */
+/* The kana prerequisite (P8): a quiet well on the soft paper. */
 .kana {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 12px 14px;
-  border-left: 3px solid var(--accent);
+  padding: 12px 16px;
+  border-radius: 16px;
   background: var(--paper-soft);
 }
 
@@ -91,7 +91,7 @@
   color: var(--ink-muted);
 }
 
-/* Option cards: a ruled list of tall rows, the chosen one on soft paper. */
+/* Option cards: raised rows, the chosen one tonal. */
 .cards {
   display: flex;
   flex-direction: column;
@@ -110,14 +110,16 @@
   align-items: center;
   min-height: 56px;
   padding: 12px 16px;
-  border: 1px solid var(--border);
   border-radius: 18px;
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
   cursor: pointer;
 }
 
 .card:has(:checked) {
-  border-color: var(--ink);
-  background: var(--paper-soft);
+  background: var(--tonal);
+  box-shadow: none;
+  color: var(--on-tonal);
 }
 
 .card:has(:focus-visible) {
@@ -131,14 +133,14 @@
   width: 20px;
   height: 20px;
   margin: 0;
-  border: 1.5px solid var(--ink-faint);
+  border: 1.5px solid var(--border);
   border-radius: 50%;
 }
 
 .radio:checked {
-  border-color: var(--ink);
-  box-shadow: inset 0 0 0 4px var(--paper-soft);
-  background: var(--ink);
+  border: 2px solid var(--accent);
+  box-shadow: inset 0 0 0 3px var(--tonal);
+  background: var(--accent);
 }
 
 .radio:focus {
@@ -155,6 +157,10 @@
   font-size: var(--text-sm);
   line-height: 1.5;
   color: var(--ink-muted);
+}
+
+.card:has(:checked) .cardHint {
+  color: var(--on-tonal);
 }
 
 .loading {
@@ -195,7 +201,7 @@
   min-height: var(--tap);
   padding: 0 16px;
   border: 0;
-  border-radius: 22px;
+  border-radius: var(--radius-chip);
   background: var(--paper-soft);
   color: var(--ink);
   font-family: var(--font-ja);
@@ -248,14 +254,14 @@
   justify-content: center;
   min-width: var(--tap);
   min-height: var(--tap);
-  padding: 0 4px;
+  padding: 0 8px;
   border: 0;
+  border-radius: var(--radius-chip);
   background: none;
   color: var(--accent);
   font-family: inherit;
   font-size: var(--text-sm);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -294,8 +300,9 @@
   flex-direction: column;
   gap: 10px;
   padding: 16px;
-  border: 1px solid var(--rule);
-  border-radius: var(--radius-panel);
+  border-radius: var(--radius-card);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
 }
 
 .demoSentence {
@@ -323,8 +330,9 @@
 /* How sessions feel: the sentence as a session shows it. */
 .preview {
   padding: 20px 18px 14px;
-  border: 1px solid var(--rule);
-  border-radius: var(--radius-panel);
+  border-radius: var(--radius-card);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
 }
 
 .previewSentence {

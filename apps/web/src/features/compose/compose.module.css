@@ -113,8 +113,9 @@
   color: var(--ai);
 }
 
+/* A style note: a dashed underline in AI red (straight, like every line in the app). */
 .wavy {
-  text-decoration: underline wavy var(--ai);
+  text-decoration: underline dashed 1.5px var(--ai);
   text-underline-offset: 6px;
 }
 
@@ -166,10 +167,10 @@
 }
 
 .input {
-  height: 46px;
+  height: var(--control);
   padding: 0 16px;
-  border: 0;
-  border-radius: 23px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-button);
   background: var(--paper-soft);
   color: var(--ink);
   font-family: var(--font-ui);

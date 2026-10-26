@@ -23,8 +23,8 @@
     "screenshots": "SCREENSHOTS=1 playwright test tests/e2e/screenshots --project phone-390 --workers 2"
   },
   "dependencies": {
+    "@fontsource/figtree": "^5",
     "@fontsource/klee-one": "^5.3.1",
-    "@fontsource/zen-kaku-gothic-new": "^5.3.1",
     "@google/genai": "^2.30.0",
     "@simplewebauthn/browser": "^14.0.0",
     "dexie": "^4.4.0",

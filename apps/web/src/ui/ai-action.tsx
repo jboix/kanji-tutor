@@ -26,8 +26,8 @@ export type AiRun = (client: AiClient) => void;
 export type AiPeek = (client: AiClient) => Promise<unknown>;
 
 /**
- * chip: a follow-up pill (default) · primary / secondary: the 52px pill · text: a link line ·
- * icon: a 52px outlined circle with the seal at its corner (its hint is the tooltip).
+ * chip: a follow-up chip (default) · primary / secondary: the 52px button · text: accent text ·
+ * icon: a 52px tonal square with the seal at its corner (its hint is the tooltip).
  */
 export type AiActionLook = 'chip' | 'primary' | 'secondary' | 'text' | 'icon';
 

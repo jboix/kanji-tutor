@@ -1,9 +1,9 @@
 .group {
   display: inline-flex;
   margin: 0;
-  padding: 3px;
+  padding: 4px;
   border: 0;
-  border-radius: 20px;
+  border-radius: var(--radius-button);
   min-inline-size: 0;
   background: var(--paper-soft);
 }
@@ -12,24 +12,26 @@
   position: relative;
   display: flex;
   align-items: center;
-  height: 34px;
+  height: 36px;
   padding: 0 16px;
-  border-radius: 17px;
+  border-radius: var(--radius-chip);
   font-size: var(--text-sm);
-  color: var(--ink-muted);
+  font-weight: 500;
+  color: var(--ink);
   cursor: pointer;
 }
 
-/* 34px drawn, 44px to the touch (N6). */
+/* 36px drawn, 44px to the touch (N6). */
 .option::before {
   content: "";
   position: absolute;
-  inset: -5px 0;
+  inset: -4px 0;
 }
 
+/* The selected segment: a strong fill, so the choice reads at a glance against the soft pill. */
 .option:has(:checked) {
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--segment);
+  color: var(--on-segment);
   font-weight: 700;
 }
 

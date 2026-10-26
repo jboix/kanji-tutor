@@ -23,6 +23,7 @@ export default defineConfig({
     baseURL: `http://localhost:${port}`,
     trace: 'retain-on-failure',
     serviceWorkers: 'allow',
+    colorScheme: (process.env.PW_SCHEME as 'dark' | 'light' | undefined) ?? 'light',
   },
   projects: [
     {

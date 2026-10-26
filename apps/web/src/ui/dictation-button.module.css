@@ -1,8 +1,8 @@
-/* Listening: ink mic on paper, so it shows inside the paper-soft input pill (read.html). */
+/* Listening: ink mic on raised paper, so it shows inside the paper-soft input field (read.html). */
 .listening,
 .listening[aria-pressed="true"] {
   color: var(--ink);
-  background: var(--paper);
+  background: var(--paper-raised);
   animation: listen 1.6s ease-in-out infinite;
 }
 

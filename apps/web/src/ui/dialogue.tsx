@@ -1,6 +1,6 @@
 /**
  * A grammar dialogue as the intro card, the grammar page and the "complete the line" drill show
- * it: each line with its speaker's initial in a round chip, the grammar form underlined in
+ * it: each line with its speaker's initial on a cast disc, the grammar form underlined in
  * indigo, and its translation under it. Static content written for the app, so nothing here
  * looks like the tutor. The Japanese shows as written: no hand-written readings.
  */
@@ -67,7 +67,7 @@ function LineText({ line, look }: { line: DialogueLine; look: FocusLook }) {
   );
 }
 
-/** The speaker's initial in a round chip, the two speakers in different tints. */
+/** The speaker's initial on a cast disc, the two speakers on different discs. */
 function Speaker({ name, by }: { name: string; by: 0 | 1 }) {
   const t = useT();
   return (

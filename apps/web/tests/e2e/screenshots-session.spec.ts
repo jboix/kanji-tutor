@@ -58,8 +58,12 @@ test('read: intro card, card, hint, sentence help, skip, wrap-up, particle', asy
   await beginMix(page);
   await expect(page.getByRole('region', { name: /^New word: / })).toBeVisible({ timeout: 15_000 });
   await shot(page, 'read-intro', { full: true });
-  await answerField(page);
+  const input = await answerField(page);
   await shotBothThemes(page, 'read-card');
+  // The viewport resizes of the full shot leave the keyboard layout on (U1), where a first tap
+  // only closes the keyboard: put the field down first, as a phone user would.
+  await input.blur();
+  await expect(page.locator('html')).not.toHaveAttribute('data-keyboard', 'open');
   await page.locator('main [data-target] button').first().click();
   await expect(page.getByRole('dialog', { name: /^Hint for / })).toBeVisible();
   await shot(page, 'read-hint');

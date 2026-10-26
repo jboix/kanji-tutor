@@ -37,7 +37,7 @@ function UnitCard({ view, lookup }: { view: UnitView; lookup: ContentLookup }) {
     </>
   );
   return (
-    <div data-unit={unit.id} data-state={view.state}>
+    <div className={styles.unitCard} data-unit={unit.id} data-state={view.state}>
       <LessonCard
         to={paths.unit(unit.id)}
         title={<Ja>{unit.titleJa}</Ja>}

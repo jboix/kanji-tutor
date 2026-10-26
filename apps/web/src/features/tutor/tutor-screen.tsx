@@ -3,6 +3,7 @@ import { BottomNav } from '../../ui/bottom-nav.tsx';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { paths } from '../../ui/paths.ts';
 import { Screen } from '../../ui/screen.tsx';
+import { TutorMark } from '../../ui/tutor.tsx';
 import { modelName, type TutorSetup, useTutorSetup } from '../../ui/use-tutor-setup.ts';
 import { HistoryButton, useGeneralTutor } from './general-tutor.tsx';
 import { SetUpCard } from './set-up-card.tsx';
@@ -37,7 +38,10 @@ export function TutorScreen() {
     <Screen footer={<BottomNav />} gap={22}>
       <header className={styles.header}>
         <div className={styles.titleRow}>
-          <h1 className={styles.title}>{t('tutor.title')}</h1>
+          <h1 className={styles.title}>
+            <TutorMark />
+            {t('tutor.title')}
+          </h1>
           {ready && tutor && <HistoryButton tutor={tutor} />}
         </div>
         <p className={styles.lead}>{t('tutor.lead')}</p>

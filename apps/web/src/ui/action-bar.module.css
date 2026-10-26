@@ -1,11 +1,14 @@
+/* The fixed bottom row of exercises, explanations and introductions: the bar colour, a hairline
+   and rounded top corners (no nav below it), Ask on the left and the main action on the right. */
 .bar {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
   flex-shrink: 0;
-  padding: 12px 20px max(32px, calc(env(safe-area-inset-bottom) + 12px));
-  border-top: 1px solid var(--rule);
-  background: var(--paper);
+  padding: 12px var(--gutter) max(14px, calc(env(safe-area-inset-bottom) + 6px));
+  border-radius: var(--radius-bar) var(--radius-bar) 0 0;
+  background: var(--bar);
+  box-shadow: 0 -1px 0 var(--rule);
 }
 
 /* compose.html "Rewrite | Accept corrections", capture.html camera + add. */

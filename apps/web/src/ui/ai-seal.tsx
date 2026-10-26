@@ -36,8 +36,8 @@ export function AiSeal({ size = 24, outline = false, dashed = false }: AiSealPro
 }
 
 /**
- * The Tutor tab's seal in the bottom bar: solid crimson when the tab is active, an outline in the
- * bar's muted ink when not, dashed while the tutor is not set up.
+ * The Tutor tab's seal in the bottom bar: solid crimson when the tab is active, a rose outline
+ * when not, dashed while the tutor is not set up.
  */
 export function TabSeal({ active, unset }: { active: boolean; unset: boolean }) {
   return (

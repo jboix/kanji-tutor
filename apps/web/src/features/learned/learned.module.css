@@ -1,5 +1,6 @@
 /* The learned screen (P3): quiet coverage lines, a kanji grid and ruled rows, in the kit's
-   type and tokens. State reads in ink for known, accent for learning, faint for not started. */
+   type and tokens. In the grid, known kanji are tonal, learning ones a dashed persimmon outline,
+   and not started ones an outline with faint ink; in rows the state is a word in those inks. */
 .title {
   margin: 0;
   font-size: 22px;
@@ -47,7 +48,7 @@
   width: 18px;
   height: 18px;
   margin: 0;
-  accent-color: var(--ink);
+  accent-color: var(--accent-fill);
 }
 
 .groups {
@@ -121,8 +122,9 @@
   justify-content: center;
   width: 48px;
   height: 48px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
+  box-sizing: border-box;
+  border: 1.5px solid transparent;
+  border-radius: 12px;
   font-family: var(--font-ja);
   font-size: 26px;
   font-weight: 600;
@@ -180,11 +182,18 @@
 }
 
 .learning {
-  color: var(--accent);
+  color: var(--new);
+}
+
+.cell.known {
+  background: var(--tonal);
+  color: var(--on-tonal);
 }
 
 .cell.learning {
-  border-color: var(--accent);
+  border-color: var(--new);
+  border-style: dashed;
+  color: var(--ink);
 }
 
 .not-started {
@@ -192,20 +201,22 @@
 }
 
 .cell.not-started {
-  border-style: dashed;
+  border-width: 1px;
+  border-color: var(--border);
 }
 
 .more {
   align-self: flex-start;
   min-height: var(--tap);
-  padding: 0;
+  padding: 0 8px;
+  margin-left: -8px;
   border: 0;
+  border-radius: var(--radius-chip);
   background: none;
   color: var(--accent);
   font-family: inherit;
-  font-size: var(--text-sm);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  font-size: var(--text-md);
+  font-weight: 600;
   cursor: pointer;
 }
 

@@ -29,9 +29,9 @@
 }
 
 .help[aria-expanded="true"] .mark {
-  border-color: var(--ink);
-  background: var(--ink);
-  color: var(--on-ink);
+  border-color: var(--tonal);
+  background: var(--tonal);
+  color: var(--on-tonal);
 }
 
 .help:focus-visible {

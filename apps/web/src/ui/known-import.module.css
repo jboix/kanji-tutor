@@ -29,7 +29,7 @@
   width: 20px;
   height: 20px;
   margin: 0;
-  accent-color: var(--ink);
+  accent-color: var(--accent-fill);
 }
 
 .minna {
@@ -39,13 +39,15 @@
 }
 
 .number {
-  width: 64px;
-  height: var(--tap);
-  padding: 0 10px;
+  box-sizing: border-box;
+  width: 72px;
+  height: var(--control);
+  padding: 0 14px;
   border: 1px solid var(--border);
-  border-radius: 12px;
-  background: transparent;
+  border-radius: var(--radius-button);
+  background: var(--paper-soft);
   font-size: 16px;
+  color: var(--ink);
 }
 
 .hint {
@@ -63,9 +65,10 @@
 .area,
 .text {
   width: 100%;
+  box-sizing: border-box;
   padding: 12px 14px;
-  border: 0;
-  border-radius: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-button);
   background: var(--paper-soft);
   font-size: 16px;
   color: var(--ink);
@@ -77,8 +80,7 @@
 }
 
 .text {
-  min-height: var(--tap);
-  border-radius: 23px;
+  min-height: var(--control);
 }
 
 .kinds {

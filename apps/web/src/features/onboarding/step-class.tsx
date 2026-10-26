@@ -1,5 +1,6 @@
 import { useId } from 'react';
 import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
+import { TickIcon } from '../../ui/icons.tsx';
 import { Ja } from '../../ui/ja.tsx';
 import { BOOKS, type BookId, LAST_LESSON, lessonTag } from './class-books.ts';
 import { KnownStatus } from './known-status.tsx';
@@ -31,6 +32,7 @@ function Books({ wizard }: Props) {
             checked={wizard.draft.book === choice.id}
             onChange={() => wizard.setDraft({ book: choice.id })}
           />
+          {wizard.draft.book === choice.id && <TickIcon />}
           <span>{choice.label}</span>
         </label>
       ))}

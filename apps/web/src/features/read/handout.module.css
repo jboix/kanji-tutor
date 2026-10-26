@@ -9,15 +9,20 @@
 
 .link {
   min-height: var(--tap);
-  padding: 0;
+  padding: 0 8px;
   border: 0;
+  border-radius: var(--radius-chip);
   background: transparent;
   color: var(--accent);
   font-family: inherit;
-  font-size: var(--text-sm);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  font-size: var(--text-md);
+  font-weight: 600;
   cursor: pointer;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .prompt {
@@ -47,15 +52,20 @@
 
 .input {
   width: 100%;
-  min-height: var(--tap);
+  min-height: var(--control);
   box-sizing: border-box;
-  padding: 10px 14px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: var(--paper-raised);
+  padding: 10px 16px;
+  border: 0;
+  border-radius: var(--radius-button);
+  background: var(--paper-soft);
   color: var(--ink);
   font-family: var(--font-ja);
   font-size: 18px;
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .marks {

@@ -63,11 +63,11 @@
 }
 
 .button[aria-pressed="true"] {
-  color: var(--ink);
-  background: var(--paper-soft);
+  color: var(--on-tonal);
+  background: var(--tonal);
 }
 
 .button:disabled {
-  color: var(--ink-faint);
+  color: var(--ink-muted);
   cursor: default;
 }

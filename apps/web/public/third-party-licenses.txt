@@ -526,9 +526,9 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 FONTS AND LIBRARIES
 ==============================================================================
 
-@fontsource/klee-one  (OFL-1.1)
+@fontsource/figtree  (OFL-1.1)
 ------------------------------------------------------------------------------
-Copyright 2020 The Klee Project Authors (https://github.com/fontworks-fonts/Klee) KleeOne-SemiBold.ttf: Copyright 2020 The Klee Project Authors (https://github.com/fontworks-fonts/Klee)
+Copyright 2022 The Figtree Project Authors (https://github.com/erikdkennedy/figtree) Figtree-Italic[wght].ttf: Copyright 2022 The Figtree Project Authors (https://github.com/erikdkennedy/figtree)
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:
@@ -623,9 +623,9 @@ FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
 OTHER DEALINGS IN THE FONT SOFTWARE.
 ------------------------------------------------------------------------------
 
-@fontsource/zen-kaku-gothic-new  (OFL-1.1)
+@fontsource/klee-one  (OFL-1.1)
 ------------------------------------------------------------------------------
-Copyright 2022 The Zen Project Authors (https://github.com/googlefonts/zen-kakugothic) ZenKakuGothicNew-Regular.ttf: Copyright 2022 The Zen Project Authors (https://github.com/googlefonts/zen-kakugothic) ZenKakuGothicNew-Medium.ttf: Copyright 2022 The Zen Project Authors (https://github.com/googlefonts/zen-kakugothic) ZenKakuGothicNew-Bold.ttf: Copyright 2022 The Zen Project Authors (https://github.com/googlefonts/zen-kakugothic) ZenKakuGothicNew-Black.ttf: Copyright 2022 The Zen Project Authors (https://github.com/googlefonts/zen-kakugothic)
+Copyright 2020 The Klee Project Authors (https://github.com/fontworks-fonts/Klee) KleeOne-SemiBold.ttf: Copyright 2020 The Klee Project Authors (https://github.com/fontworks-fonts/Klee)
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:
