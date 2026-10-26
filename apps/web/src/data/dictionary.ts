@@ -15,6 +15,20 @@ function byCommonness(a: WordRow, b: WordRow): number {
   return Number(b.common) - Number(a.common) || (a.kana[0]?.length ?? 0) - (b.kana[0]?.length ?? 0);
 }
 
+/**
+ * Words written or read as `text`, most common first: two index reads side by side, where an
+ * `or` query would walk a cursor, a round trip per row.
+ */
+async function wordsByText(db: KanjiTutorDb, text: string): Promise<Word[]> {
+  const kana = toHiragana(text, { passRomaji: true });
+  const found = await Promise.all([
+    db.words.where('forms').equals(text).toArray(),
+    db.words.where('kana').equals(kana).toArray(),
+  ]);
+  const rows = [...new Map(found.flat().map((row) => [row.id, row])).values()];
+  return rows.sort(byCommonness).flatMap((row) => toWord(row) ?? []);
+}
+
 /** Kanji lookups over the `kanji` table. */
 function kanjiLookups(db: KanjiTutorDb) {
   return {
@@ -27,7 +41,7 @@ function kanjiLookups(db: KanjiTutorDb) {
   };
 }
 
-/** Dictionary packs over Dexie, cached in memory until the packs are next written. */
+/** Dictionary packs over Dexie, cached in memory until the next pack install. */
 export function dexieDictionary(db: KanjiTutorDb): DictionaryRepo {
   return cachedDictionary(db, dexieLookups(db));
 }
@@ -36,11 +50,7 @@ function dexieLookups(db: KanjiTutorDb): DictionaryRepo {
   return {
     word: async (id) => toWord(await db.words.get(id)),
     words: async (ids) => (await db.words.bulkGet([...ids])).map(toWord),
-    wordsByText: async (text) => {
-      const kana = toHiragana(text, { passRomaji: true });
-      const rows = await db.words.where('forms').equals(text).or('kana').equals(kana).toArray();
-      return rows.sort(byCommonness).flatMap((row) => toWord(row) ?? []);
-    },
+    wordsByText: (text) => wordsByText(db, text),
     wordsByReadingPrefix: async (kana, limit) => {
       const prefix = toHiragana(kana, { passRomaji: true });
       const rows = await db.words

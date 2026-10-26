@@ -37,4 +37,14 @@ describe('dexie dictionary', () => {
     const kanji = await dexieDictionary(db).kanjiByJlpt?.(5);
     expect(kanji?.map((entry) => entry.char)).toEqual(['本']);
   });
+
+  it('finds a word by a written form or a reading in either kana, once', async () => {
+    db = new KanjiTutorDb('dictionary-text-test');
+    const both: Word = { id: '4', forms: ['えき'], readings: ['えき'], glosses: [], common: false };
+    await db.words.bulkPut([...words, both].map(toWordRow));
+    const dictionary = dexieDictionary(db);
+    expect((await dictionary.wordsByText('駅')).map((word) => word.id)).toEqual(['1']);
+    expect((await dictionary.wordsByText('エキ')).map((word) => word.id)).toEqual(['1', '4']);
+    expect((await dictionary.wordsByText('えき')).map((word) => word.id)).toEqual(['1', '4']);
+  });
 });
