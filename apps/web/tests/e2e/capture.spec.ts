@@ -127,10 +127,11 @@ test('a handout question is answered, then the tutor’s answer shows as the tut
   await page.getByRole('link', { name: /^Practise this lesson/ }).click();
   await expect(page).toHaveURL(/\/read\?scan=/);
   await toHandoutQuestion(page);
-  await expect(page.getByText('雨が降り＿＿です。')).toBeVisible();
+  await expect(page.locator('p:has([data-blank])', { hasText: '雨が降り' })).toBeVisible();
   await expect(page.getByText(/so it looks about to rain/)).toHaveCount(0);
   await page.getByRole('button', { name: 'そう' }).click();
   await expect(page.getByText('Right', { exact: true })).toBeVisible();
+  await expect(page.locator('[data-fill]')).toHaveText('そう');
   const tutor = page.getByLabel('Answer from the tutor');
   await expect(tutor).toContainText('Your handout prints none.');
   await expect(tutor).toContainText('looks about to rain');

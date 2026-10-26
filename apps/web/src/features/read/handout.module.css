@@ -66,3 +66,23 @@
 .marks > * {
   flex: 1 1 0;
 }
+
+/* The stem's blank, then the answer written into it. */
+.blank {
+  display: inline-block;
+  min-width: 3.2em;
+  height: 1.1em;
+  margin: 0 0.15em;
+  border-bottom: 2px solid var(--ink);
+  vertical-align: -0.1em;
+}
+
+.filled {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 8px;
+}
+
+.right {
+  color: var(--ok);
+}

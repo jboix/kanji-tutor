@@ -21,6 +21,7 @@ import { Screen } from '../../ui/screen.tsx';
 import { TutorChip, TutorNext, useTutor } from '../../ui/tutor.tsx';
 import { ChoiceActions } from './drill-choices.tsx';
 import styles from './handout.module.css';
+import { HandoutStem } from './handout-stem.tsx';
 import read from './read.module.css';
 import type { DrillResult } from './session-state.ts';
 import { SkipButton } from './skip-button.tsx';
@@ -242,9 +243,11 @@ export function HandoutScreen({ card, topBar, onDone }: HandoutScreenProps) {
           t(TYPE_LABELS[question.type])
         )}
       </p>
-      <p lang="ja" className={styles.stem}>
-        {question.stem}
-      </p>
+      <HandoutStem
+        question={question}
+        answered={Boolean(grade) || controls.revealed}
+        right={grade?.verdict === 'correct'}
+      />
       {!grade && tutor && <TutorChip tutor={tutor} label={t('read.askTutorHandout')} />}
       {grade && <Result grade={grade} />}
       {(grade || controls.revealed) && <TutorAnswer question={question} />}

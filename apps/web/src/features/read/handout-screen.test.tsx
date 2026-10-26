@@ -5,6 +5,7 @@ import type { SessionCard } from '../../domain/session-types.ts';
 import { createMemoryRepos } from '../../test/memory-repos.ts';
 import { fakeServices, renderWithServices } from '../../test/render.tsx';
 import { HandoutScreen } from './handout-screen.tsx';
+import { splitBlank } from './handout-stem.tsx';
 
 const CHOOSE: HandoutQuestion = {
   id: '0-4',
@@ -74,6 +75,14 @@ async function show(question: HandoutQuestion) {
   return { repos, onDone };
 }
 
+describe('splitBlank', () => {
+  it('finds the one blank, and none when there are several or none', () => {
+    expect(splitBlank('雨が降り＿＿です。')).toEqual({ before: '雨が降り', after: 'です。' });
+    expect(splitBlank('＿＿は＿＿です。')).toBeUndefined();
+    expect(splitBlank('雨です。')).toBeUndefined();
+  });
+});
+
 describe('a handout question', () => {
   it('says where it is printed and keeps the tutor’s answer hidden until answered', async () => {
     await show(CHOOSE);
@@ -85,8 +94,11 @@ describe('a handout question', () => {
 
   it('grades a choice against the tutor’s answer, then shows it as the tutor’s', async () => {
     const { repos, onDone } = await show(CHOOSE);
+    expect(document.querySelector('[data-blank]')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'そう' }));
     expect(await screen.findByText('Right')).toBeTruthy();
+    expect(document.querySelector('[data-fill]')?.textContent).toBe('そう');
+    expect(document.querySelector('[data-blank]')).toBeNull();
     expect(screen.getByLabelText('Answer from the tutor')).toBeTruthy();
     expect(screen.getByText(CHOOSE.explanation)).toBeTruthy();
     expect(screen.getByText('Your handout prints none.')).toBeTruthy();
