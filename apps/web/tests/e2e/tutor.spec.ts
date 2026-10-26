@@ -2,18 +2,21 @@ import { onboard } from './helpers.ts';
 import { expect, test } from './test.ts';
 
 /**
- * The Tutor tab: ask the tutor anything and carry the conversation on later; without a key, one
- * card to set it up, and what needs the tutor says so.
+ * The Tutor tab: ask the tutor anything, its suggested questions inside the sheet, and carry the
+ * conversation on later from the history button; without a key, one card to set it up, and what
+ * needs the tutor says so.
  */
 
 test('a starter asks the tutor, and the conversation can be carried on', async ({ page }) => {
   await onboard(page);
   await page.goto('/tutor');
-  await page.getByRole('button', { name: /^は or が\?, 1 request/ }).click();
+  await expect(page.getByRole('button', { name: /^Carry on/ })).toHaveCount(0);
+  await page.getByRole('button', { name: /^Ask the tutor/ }).click();
   const sheet = page.getByRole('dialog', { name: /anything Japanese/ });
+  await sheet.getByRole('button', { name: /^は or が\?, 1 request/ }).click();
   await expect(sheet.getByRole('note', { name: 'Answer' })).toBeVisible();
   await sheet.getByRole('button', { name: 'Close' }).click();
-  await page.getByRole('button', { name: /^Carry on · today/ }).click();
+  await page.getByRole('button', { name: 'Carry on your last conversation (today)' }).click();
   await expect(sheet.getByText('は or が?', { exact: true })).toBeVisible();
   await expect(sheet.getByRole('note', { name: /Answer/ })).toBeVisible();
 });
@@ -28,7 +31,7 @@ test('without a key, the tab offers to set the tutor up', async ({ page }) => {
   await expect(nav.getByRole('link', { name: 'Tutor, not set up yet' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'The tutor isn’t set up yet' })).toBeVisible();
   await expect(page.getByRole('textbox')).toHaveCount(0);
-  await expect(page.getByText('Needs the tutor')).toHaveCount(2);
+  await expect(page.getByText('Needs the tutor')).toHaveCount(3);
   await page.getByRole('button', { name: 'Where do I get a key?' }).click();
   const help = page.getByRole('dialog', { name: 'Getting a Gemini key' });
   await expect(help.getByText(/aistudio\.google\.com/)).toBeVisible();

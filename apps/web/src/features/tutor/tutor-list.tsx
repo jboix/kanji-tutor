@@ -8,6 +8,7 @@ import { CameraIcon, ChevronIcon, NoteIcon, PenIcon } from '../../ui/icons.tsx';
 import { JaRuns } from '../../ui/ja-runs.tsx';
 import { paths } from '../../ui/paths.ts';
 import { useServices } from '../../ui/services.tsx';
+import { type Tutor, TutorMark } from '../../ui/tutor.tsx';
 import styles from './tutor.module.css';
 
 /** The newest scanned lesson; null when there is none, undefined while it is read. */
@@ -42,7 +43,9 @@ function ScanDetail({ ready }: { ready: boolean }) {
 }
 
 interface RowProps {
-  to: string;
+  /** A link to a screen, or else `onClick` (the tutor's sheet). */
+  to?: string;
+  onClick?: () => void;
   icon: ReactNode;
   title: string;
   detail: ReactNode;
@@ -50,13 +53,15 @@ interface RowProps {
   off?: boolean;
   /** A quieter row: no tile behind its icon, its title not bold. */
   quiet?: boolean;
+  /** No tile behind the icon, which draws its own (the 解 seal). */
+  bare?: boolean;
 }
 
-function Row({ to, icon, title, detail, off = false, quiet = false }: RowProps) {
+function RowInner({ icon, title, detail, off = false, quiet = false, bare = false }: RowProps) {
   const t = useT();
-  const inner = (
+  return (
     <>
-      <span className={cx(styles.tile, quiet && styles.quietTile)} aria-hidden="true">
+      <span className={cx(styles.tile, (quiet || bare) && styles.quietTile)} aria-hidden="true">
         {icon}
       </span>
       <span className={styles.text}>
@@ -72,39 +77,66 @@ function Row({ to, icon, title, detail, off = false, quiet = false }: RowProps) 
       )}
     </>
   );
-  if (off) return <div className={cx(styles.row, styles.off)}>{inner}</div>;
+}
+
+function Row(props: RowProps) {
+  const inner = <RowInner {...props} />;
+  if (props.off) return <div className={cx(styles.row, styles.off)}>{inner}</div>;
+  if (props.to === undefined) {
+    return (
+      <button type="button" className={cx(styles.row, styles.rowButton)} onClick={props.onClick}>
+        {inner}
+      </button>
+    );
+  }
   return (
-    <Link to={to} className={styles.row}>
+    <Link to={props.to} className={styles.row}>
       {inner}
     </Link>
   );
 }
 
-/**
- * "From your class": scanned lessons and writing a sentence, which need the tutor, and the
- * week's words, which do not.
- */
-export function ClassSection({ ready }: { ready: boolean }) {
+/** Scanned lessons and a sentence of your own: what comes from class, and needs the tutor. */
+function ClassRows({ ready }: { ready: boolean }) {
   const t = useT();
-  const off = !ready;
   return (
-    <section className={styles.class} aria-labelledby="tutor-class">
-      <h2 id="tutor-class" className={styles.classTitle}>
-        {t('tutor.classTitle')}
-      </h2>
+    <>
       <Row
         to={paths.capture}
         icon={<CameraIcon />}
         title={t('tutor.capture')}
         detail={<ScanDetail ready={ready} />}
-        off={off}
+        off={!ready}
       />
       <Row
         to={paths.compose}
         icon={<PenIcon />}
         title={t('tutor.compose')}
         detail={t(ready ? 'tutor.composeDetail' : 'tutor.composeOff')}
-        off={off}
+        off={!ready}
+      />
+    </>
+  );
+}
+
+/**
+ * The tab's one list: scanned lessons and a sentence of your own first, then asking the tutor
+ * anything (its sheet, with suggested questions inside), then the week's words. What needs the
+ * tutor is muted while it is not set up.
+ */
+export function TutorList({ ready, tutor }: { ready: boolean; tutor: Tutor | undefined }) {
+  const t = useT();
+  const off = !ready;
+  return (
+    <section className={styles.list} aria-label={t('tutor.listLabel')}>
+      <ClassRows ready={ready} />
+      <Row
+        onClick={() => tutor?.open()}
+        icon={<TutorMark />}
+        title={t('tutor.askTitle')}
+        detail={t('tutor.askDetail')}
+        off={off || !tutor}
+        bare
       />
       <Row
         to={paths.knownImport}

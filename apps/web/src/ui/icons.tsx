@@ -261,3 +261,11 @@ export const MixIcon = () => (
     <path d="M4 7h12l-3-3M20 17H8l3 3" />
   </Svg>
 );
+/** A clock with a turning arrow: an earlier conversation, to carry on. */
+export const HistoryIcon = () => (
+  <Svg size={22} width={1.6}>
+    <path d="M3.5 12a8.5 8.5 0 102.5-6" />
+    <path d="M3.5 3.5V8H8" />
+    <path d="M12 7.5V12l3 2" />
+  </Svg>
+);

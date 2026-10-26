@@ -38,13 +38,21 @@ function render(options: { ready?: boolean; scans?: ScannedLesson[] } = {}) {
   });
 }
 
+const ROW_NAMES = /^(Scanned lessons|Write a sentence|Ask the tutor|Words from class)$/;
+
 describe('TutorScreen', () => {
-  it('asks the tutor, with starters, and brings in what is studied in class', async () => {
+  it('lists scanned lessons first, then asking the tutor, as rows', async () => {
     render();
     expect(screen.getByRole('heading', { name: 'Tutor', level: 1 })).toBeTruthy();
-    expect(
-      await screen.findByRole('textbox', { name: /^Your question to the tutor/ }),
-    ).toBeTruthy();
+    const list = await screen.findByRole('region', { name: 'What the tutor does' });
+    const rows = within(list).getAllByText(ROW_NAMES);
+    expect(rows.map((row) => row.textContent)).toEqual([
+      'Scanned lessons',
+      'Write a sentence',
+      'Ask the tutor',
+      'Words from class',
+    ]);
+    expect(screen.queryByRole('textbox')).toBeNull();
     const href = (name: RegExp) => screen.getByRole('link', { name }).getAttribute('href');
     expect(href(/^Scanned lessons/)).toBe('/capture');
     expect(href(/^Write a sentence/)).toBe('/compose');
@@ -55,11 +63,12 @@ describe('TutorScreen', () => {
     expect(tab.getAttribute('aria-current')).toBe('page');
   });
 
-  it('opens the sheet on a general topic with the starter pressed', async () => {
+  it('opens the sheet on a general topic, its suggestions inside', async () => {
     render();
-    fireEvent.click(await screen.findByRole('button', { name: /^は or が\?, 1 request/ }));
+    expect(screen.queryByRole('button', { name: /^は or が\?/ })).toBeNull();
+    fireEvent.click(await screen.findByRole('button', { name: /^Ask the tutor/ }));
     const sheet = await screen.findByRole('dialog', { name: 'About anything Japanese' });
-    expect(sheet.textContent).toBe('は or が?');
+    expect(sheet.textContent).toBe('');
   });
 
   it('carries on the last conversation, on its own topic', async () => {
@@ -69,7 +78,9 @@ describe('TutorScreen', () => {
       at: Date.now(),
     });
     render();
-    fireEvent.click(await screen.findByRole('button', { name: /^Carry on · today/ }));
+    fireEvent.click(
+      await screen.findByRole('button', { name: 'Carry on your last conversation (today)' }),
+    );
     const sheet = await screen.findByRole('dialog', { name: 'About 〜そうだ' });
     expect(sheet.textContent).toBe('〜そうだ or 〜ようだ?');
   });
@@ -87,7 +98,8 @@ describe('TutorScreen', () => {
     const setUp = screen.getByRole('link', { name: 'Set up the tutor' });
     expect(setUp.getAttribute('href')).toBe('/settings/tutor');
     expect(screen.queryByRole('link', { name: /^Scanned lessons/ })).toBeNull();
-    expect(screen.getAllByText('Needs the tutor')).toHaveLength(2);
+    expect(screen.getAllByText('Needs the tutor')).toHaveLength(3);
+    expect(screen.queryByRole('button', { name: /^Carry on/ })).toBeNull();
     expect(screen.getByRole('link', { name: /^Words from class/ })).toBeTruthy();
     const nav = screen.getByRole('navigation', { name: 'Main' });
     expect(await within(nav).findByRole('link', { name: 'Tutor, not set up yet' })).toBeTruthy();

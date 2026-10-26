@@ -166,3 +166,8 @@ export function TutorCardHeading(props: {
     </div>
   );
 }
+
+/** The tutor's 解 mark for a row that opens it, such as Ask the tutor on the Tutor tab. */
+export function TutorMark() {
+  return <AiSeal size={28} />;
+}
