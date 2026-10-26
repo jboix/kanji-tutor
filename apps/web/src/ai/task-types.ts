@@ -85,7 +85,8 @@ export interface ConversationTurn {
 }
 
 export interface QuestionInput {
-  scope: 'sentence' | 'word';
+  /** `general`: asked from the Tutor tab, about no sentence in particular (its text is empty). */
+  scope: 'sentence' | 'word' | 'general';
   sentence: SentenceContext;
   surface?: string;
   question: string;

@@ -1,14 +1,16 @@
 import { type CSSProperties, type ReactNode, useLayoutEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router';
+import { TabSeal } from './ai-seal.tsx';
 import { useAppUpdate, useUpdateDismissed } from './app-update.ts';
 import styles from './bottom-nav.module.css';
 import { cx } from './cx.ts';
 import { useT } from './i18n/i18n.tsx';
 import type { PlainKey } from './i18n/types.ts';
-import { BookIcon, HomeIcon, PlayIcon, PlusIcon, SettingsIcon } from './icons.tsx';
+import { BookIcon, HomeIcon, PlayIcon, SettingsIcon } from './icons.tsx';
 import { InstallBanner } from './install-banner.tsx';
 import { paths } from './paths.ts';
 import { StartSheet } from './start-sheet.tsx';
+import { useTutorSetup } from './use-tutor-setup.ts';
 
 interface Tab {
   to: string;
@@ -28,7 +30,6 @@ const LEARN_PATHS = [
   paths.learned,
   paths.notes,
   paths.handwrite,
-  paths.knownImport,
 ];
 
 const TABS_START: Tab[] = [
@@ -45,10 +46,11 @@ const TABS_START: Tab[] = [
 
 const TABS_END: Tab[] = [
   {
-    to: paths.add,
-    label: 'ui.navAdd',
-    icon: <PlusIcon />,
-    owns: [paths.add, paths.capture, paths.compose],
+    to: paths.tutor,
+    label: 'ui.navTutor',
+    // Drawn by TabLink: the seal shows whether the tab is active and the tutor set up.
+    icon: null,
+    owns: [paths.tutor, paths.capture, paths.compose, paths.knownImport],
     column: 3,
   },
   {
@@ -78,18 +80,30 @@ function useUpdateWaiting(): boolean {
   return useUpdateDismissed(next);
 }
 
+/** The dot and the accessible name of a tab that waits on something: an update, the tutor. */
+function useTabNotice(tab: Tab): string | undefined {
+  const t = useT();
+  const update = useUpdateWaiting() && tab.to === paths.settings;
+  const setup = useTutorSetup();
+  if (update) return t('ui.navSettingsUpdate');
+  if (tab.to === paths.tutor && setup?.ready === false) return t('ui.navTutorUnset');
+  return undefined;
+}
+
 function TabLink({ tab, active }: { tab: Tab; active: boolean }) {
   const t = useT();
-  const waiting = useUpdateWaiting() && tab.to === paths.settings;
+  const notice = useTabNotice(tab);
+  const unset = tab.to === paths.tutor && notice !== undefined;
+  const icon = tab.to === paths.tutor ? <TabSeal active={active} unset={unset} /> : tab.icon;
   return (
     <Link
       to={tab.to}
       className={cx(styles.link, active && styles.active)}
       aria-current={active ? 'page' : undefined}
-      aria-label={waiting ? t('ui.navSettingsUpdate') : undefined}
+      aria-label={notice}
     >
-      {waiting && <span className={styles.dot} aria-hidden="true" />}
-      <span className={styles.icon}>{tab.icon}</span>
+      {notice && <span className={styles.dot} aria-hidden="true" />}
+      <span className={styles.icon}>{icon}</span>
       <span className={styles.label}>{t(tab.label)}</span>
     </Link>
   );
@@ -153,7 +167,7 @@ function Indicator({ column }: { column: number | undefined }) {
 }
 
 /**
- * The bottom bar (IA3): Today · Learn · Start · Add · Settings. The hubs carry it, so it also
+ * The bottom bar (IA3): Today · Learn · Start · Tutor · Settings. The hubs carry it, so it also
  * carries the install banner (N1d), unless `install` is false (Settings, a session's end).
  */
 export function BottomNav({ install = true }: { install?: boolean }) {

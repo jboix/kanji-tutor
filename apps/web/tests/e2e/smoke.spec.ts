@@ -4,7 +4,7 @@ import { expect, test } from './test.ts';
 test('first run loads the dictionary, then the bottom nav reaches every tab', async ({ page }) => {
   await onboard(page);
   const nav = page.getByRole('navigation', { name: 'Main' });
-  for (const tab of ['Learn', 'Add', 'Settings', 'Home']) {
+  for (const tab of ['Learn', 'Tutor', 'Settings', 'Home']) {
     await nav.getByRole('link', { name: tab }).click();
     await expect(nav.getByRole('link', { name: tab })).toHaveAttribute('aria-current', 'page');
   }

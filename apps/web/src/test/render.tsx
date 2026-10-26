@@ -39,6 +39,8 @@ export function fakeServices(overrides: Partial<Services> & { repos?: Repos } = 
     repos: createMemoryRepos(),
     lang: fakeLang(),
     ai: fakeAi(),
+    // The mock tutor counts as set up; pass `tutorReady: () => false` for the state without.
+    tutorReady: () => true,
     backup: {
       exportJson: async () => '{}',
       importJson: async () => ({ ok: true }),

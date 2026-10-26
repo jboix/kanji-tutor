@@ -79,7 +79,7 @@ function Card({ lesson }: { lesson: ScannedLesson }) {
 export function ScanList() {
   const t = useT();
   const lessons = useLessons();
-  const back = <BackButton parent={paths.add} label={t('common.back')} />;
+  const back = <BackButton parent={paths.tutor} label={t('common.back')} />;
   const add = (
     <Link to={NEW_SCAN} className={styles.newScan}>
       {t('capture.newScan')}

@@ -27,5 +27,7 @@ afterEach(async () => {
   cleanup();
   // A saved session (R14) must not resume in the next test.
   localStorage.removeItem('kanji-reader:session');
+  // Nor a conversation the Tutor tab would offer to carry on.
+  localStorage.removeItem('kanji-reader:tutor-last');
   await vi.dynamicImportSettled();
 });

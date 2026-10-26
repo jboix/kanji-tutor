@@ -24,16 +24,16 @@ const indicator = (nav: HTMLElement) => {
 describe('BottomNav (IA3)', () => {
   beforeEach(resetIndicator);
 
-  it('has Home, Learn, Start, Add and Settings, with Start in the middle', () => {
+  it('has Home, Learn, Start, Tutor and Settings, with Start in the middle', () => {
     const nav = navAt('/');
     const links = within(nav).getAllByRole('link');
     expect(links.map((link) => link.getAttribute('href'))).toEqual([
       '/',
       '/learn',
-      '/add',
+      '/tutor',
       '/settings',
     ]);
-    // Start sits between Learn and Add, and opens the sheet of rounds rather than a screen.
+    // Start sits between Learn and Tutor, and opens the sheet of rounds rather than a screen.
     const start = within(nav).getByRole('button', { name: 'Start a round' });
     expect(start.getAttribute('aria-haspopup')).toBe('dialog');
     expect(links[1]?.compareDocumentPosition(start)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
@@ -45,19 +45,33 @@ describe('BottomNav (IA3)', () => {
     ['/learn', 'Learn'],
     ['/kanji/%E5%BE%85', 'Learn'],
     ['/notes', 'Learn'],
-    ['/capture', 'Add'],
+    ['/capture', 'Tutor'],
+    ['/import', 'Tutor'],
     ['/settings/backup', 'Settings'],
     ['/plan', 'Home'],
   ])('marks the tab of %s', (path, tab) => {
     expect(current(navAt(path))).toEqual([tab]);
   });
 
-  it('has no dot: the icon carries real line art, never a kanji', () => {
+  it('draws line art for Learn, and the 解 seal for Tutor, with no dot', async () => {
     const nav = navAt('/learn');
     const learn = within(nav).getByRole('link', { name: 'Learn' });
     expect(learn.querySelector('svg')).toBeTruthy();
     expect(learn.textContent).toBe('Learn');
-    expect(nav.querySelector('[lang="ja"]')).toBeNull();
+    const tutor = within(nav).getByRole('link', { name: 'Tutor' });
+    expect(tutor.querySelector('[data-seal="解"]')).toBeTruthy();
+    await Promise.resolve();
+    expect(tutor.querySelector('[data-unset]')).toBeNull();
+  });
+
+  it('dashes the seal and shows the dot while the tutor is not set up', async () => {
+    renderWithServices(<BottomNav install={false} />, {
+      services: fakeServices({ tutorReady: () => false }),
+      path: '/',
+    });
+    const nav = screen.getByRole('navigation', { name: 'Main' });
+    const tutor = await within(nav).findByRole('link', { name: 'Tutor, not set up yet' });
+    expect(tutor.querySelector('[data-unset]')).toBeTruthy();
   });
 
   it('puts the highlight on the active column, and hides it where no tab owns the screen', () => {
@@ -75,7 +89,7 @@ describe('BottomNav (IA3)', () => {
   it('moves the highlight when the route changes', () => {
     renderWithServices(
       <>
-        <Link to="/add">go</Link>
+        <Link to="/tutor">go</Link>
         <BottomNav install={false} />
       </>,
       { services: fakeServices(), path: '/' },

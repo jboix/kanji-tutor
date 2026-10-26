@@ -83,3 +83,20 @@
   align-items: center;
   gap: 12px;
 }
+
+/* The heading of a tutor card on the Tutor tab: the seal, the title and a muted line. */
+.cardHeading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cardHeading[data-unset] {
+  gap: 12px;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+}

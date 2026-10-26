@@ -25,7 +25,7 @@ function ComposeTopBar({ target }: { target?: ComposeTarget }) {
   const t = useT();
   return (
     <TopBar
-      start={<BackButton parent={paths.add} label={t('common.back')} />}
+      start={<BackButton parent={paths.tutor} label={t('common.back')} />}
       center={<h1 className={styles.title}>{headerLine(t, target)}</h1>}
     />
   );

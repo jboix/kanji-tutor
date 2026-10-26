@@ -1,0 +1,37 @@
+/** French messages: the Tutor tab. */
+import type { Messages } from '../../types.ts';
+
+export const tutor = {
+  title: 'Tuteur',
+  lead: 'Posez une question sur le japonais, ou apportez ce que vous étudiez en cours.',
+  askTitle: 'Demander au tuteur',
+  askLabel: 'Votre question au tuteur',
+  askPlaceholder: 'En français ou en japonais…',
+  askByVoice: 'Demander à voix haute',
+  about: 'tout ce qui touche au japonais',
+  starterParticles: 'は ou が ?',
+  starterSay: 'Comment dire « je suis sur le point de partir » ?',
+  starterQuiz: 'Interroge-moi sur mes mots récents',
+  carryOn: 'Reprendre · {when}',
+  whenToday: 'aujourd’hui',
+  whenYesterday: 'hier',
+  whenAgo: { one: 'il y a {n} jour', other: 'il y a {n} jours' },
+  classTitle: 'De votre cours',
+  capture: 'Leçons scannées',
+  captureDetail: 'Le tuteur lit vos polycopiés',
+  compose: 'Écrire une phrase',
+  composeDetail: 'Le tuteur la lit, dit ce qui marche et une chose à essayer',
+  composeOff: 'Le tuteur vérifie ce que vous écrivez',
+  class: 'Les mots du cours',
+  classDetail: 'Marquer les mots de la semaine comme connus',
+  needsTutor: 'Demande le tuteur',
+  model: '{model} · votre clé',
+  settings: 'Réglages du tuteur',
+  setUpTitle: 'Le tuteur n’est pas encore prêt',
+  setUpLine: 'Une étape, environ deux minutes',
+  setUpBody:
+    'Il lui faut une clé d’API Gemini, gratuite sur Google AI Studio. La clé reste sur ce téléphone. Tout le reste de l’app marche sans elle.',
+  setUp: 'Configurer le tuteur',
+  whereKey: 'Où trouver une clé ?',
+  keySheet: 'Obtenir une clé Gemini',
+} satisfies Messages['tutor'];

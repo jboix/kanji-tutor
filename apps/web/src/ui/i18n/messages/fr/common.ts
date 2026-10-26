@@ -12,7 +12,7 @@ export const common = {
   retry: 'Réessayer',
   skip: 'Passer',
   done: 'Terminé',
-  loading: 'Chargement…',
+  loading: 'Chargement',
   errorTitle: 'Un problème est survenu',
   errorBody: 'L’app a rencontré une erreur en ouvrant cet écran. Recharger suffit en général.',
   reload: 'Recharger',

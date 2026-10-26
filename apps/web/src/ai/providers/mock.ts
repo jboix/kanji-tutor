@@ -69,6 +69,8 @@ async function replay(request: AiRequest, signal?: AbortSignal): Promise<AiRespo
 export interface MockProbe {
   calls: number;
   failNext?: { status: number; message: string } | undefined;
+  /** As if no key were set: the app treats the tutor as not set up (e2e of that state). */
+  noKey?: boolean | undefined;
 }
 
 export interface MockOptions {

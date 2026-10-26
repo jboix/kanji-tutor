@@ -12,7 +12,7 @@ export const common = {
   retry: 'Reintentar',
   skip: 'Saltar',
   done: 'Listo',
-  loading: 'Cargando…',
+  loading: 'Cargando',
   errorTitle: 'Algo salió mal',
   errorBody: 'La app tuvo un error al abrir esta pantalla. Recargar suele solucionarlo.',
   reload: 'Recargar',

@@ -1,9 +1,10 @@
-import { screen } from '@testing-library/react';
+import { cleanup, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import type { AiClient } from '../../ai/types.ts';
 import { ANSWER, noKey, ok } from '../../test/explain-results.ts';
 import { fakeAi, fakeServices, renderWithServices } from '../../test/render.tsx';
+import { loadLastConversation } from '../../ui/last-conversation.ts';
 import type { TutorTopic } from '../../ui/slots.tsx';
 import { TutorSheet } from './tutor-sheet.tsx';
 
@@ -74,5 +75,52 @@ describe('TutorSheet', () => {
     render({ answerQuestion: () => noKey() }, 'Why は?');
     expect(await screen.findByText(/Gemini key/)).toBeTruthy();
     expect(screen.getByRole('dialog').textContent).toContain('Why は?');
+  });
+
+  it('keeps the conversation to carry on, and carries on with its turns', async () => {
+    const answerQuestion = vi.fn(() => ok(ANSWER));
+    render({ answerQuestion }, 'Why は?');
+    expect(await screen.findByRole('note', { name: 'Answer' })).toBeTruthy();
+    const last = loadLastConversation();
+    expect(last?.topic).toEqual(TOPIC);
+    expect(last?.turns).toEqual([{ question: 'Why は?', answer: ANSWER }]);
+    cleanup();
+    const client = fakeAi({ answerQuestion });
+    renderWithServices(
+      <TutorSheet topic={TOPIC} starters={[]} resume={last?.turns} onClose={vi.fn()} />,
+      { services: fakeServices({ ai: client }) },
+    );
+    expect(screen.getByRole('dialog').textContent).toContain('Why は?');
+    expect(screen.getByRole('note', { name: /Answer/ })).toBeTruthy();
+    await userEvent.type(screen.getByLabelText('Ask the tutor'), 'And casually?{Enter}');
+    await waitFor(() => expect(screen.getAllByRole('note', { name: /Answer/ })).toHaveLength(2));
+    expect(answerQuestion).toHaveBeenLastCalledWith(
+      expect.objectContaining({ history: [{ question: 'Why は?', answer: ANSWER.answer }] }),
+    );
+  });
+
+  it('asks a general question without a sentence', async () => {
+    const answerQuestion = vi.fn(() => ok(ANSWER));
+    const client = fakeAi({ answerQuestion });
+    const general: TutorTopic = {
+      about: 'anything Japanese',
+      sentence: { text: '' },
+      general: true,
+    };
+    renderWithServices(
+      <TutorSheet
+        topic={general}
+        starters={[]}
+        first={{ question: 'は or が?', client }}
+        onClose={vi.fn()}
+      />,
+      { services: fakeServices({ ai: client }) },
+    );
+    expect(await screen.findByRole('note', { name: 'Answer' })).toBeTruthy();
+    expect(answerQuestion).toHaveBeenCalledWith({
+      scope: 'general',
+      sentence: { text: '' },
+      question: 'は or が?',
+    });
   });
 });

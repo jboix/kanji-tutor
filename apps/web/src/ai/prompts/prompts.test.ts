@@ -158,6 +158,14 @@ describe('prompts', () => {
     );
   });
 
+  it('sends a general question from the Tutor tab without a sentence', () => {
+    const built = answerQuestionPrompt.build(
+      { scope: 'general', sentence: { text: '' }, question: 'は or が?' },
+      { knownWords: [], recentErrors: [] },
+    );
+    expect(built).toBe('Question (general): は or が?');
+  });
+
   it('every prompt that returns Japanese text asks for its readings', () => {
     const withReadings = [explainMistakePrompt, explainWordPrompt, breakdownSentencePrompt];
     for (const prompt of [...withReadings, answerQuestionPrompt, followUpPrompt]) {

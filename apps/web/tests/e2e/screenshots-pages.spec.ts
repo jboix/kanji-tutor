@@ -178,7 +178,7 @@ test('use it: the red pen on the particle it names', async ({ page }) => {
   await shot(page, 'compose-particles', { full: true });
 });
 
-test('navigation: Learn, Add, Settings and a category, the plan (IA3–IA6)', async ({ page }) => {
+test('navigation: Learn, Tutor, Settings and a category, the plan (IA3–IA6)', async ({ page }) => {
   await onboard(page);
   await page.goto('/learn');
   await expect(page.getByText(/^Unit \d+ of \d+ · N5$/)).toBeVisible({ timeout: 20_000 });
@@ -186,8 +186,9 @@ test('navigation: Learn, Add, Settings and a category, the plan (IA3–IA6)', as
   await page.getByRole('searchbox', { name: 'Look up' }).fill('gakusei');
   await expect(page.getByRole('list', { name: 'Words' })).toBeVisible();
   await shot(page, 'learn-look-up');
-  await page.goto('/add');
-  await shot(page, 'add');
+  await page.goto('/tutor');
+  await expect(page.getByRole('heading', { name: 'Ask the tutor' })).toBeVisible();
+  await shot(page, 'tutor');
   await page.goto('/settings');
   await expect(page.getByRole('link', { name: /^Sessions/ })).toBeVisible();
   await shot(page, 'settings', { full: true });

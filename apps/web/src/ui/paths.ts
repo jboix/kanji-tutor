@@ -3,8 +3,10 @@ export const paths = {
   today: '/',
   /** The Learn hub (IA4): lessons, kanji, grammar, what you've learned, notes. */
   learn: '/learn',
-  /** The Add chooser (IA3): photograph a page, write a sentence. */
-  add: '/add',
+  /** The Tutor tab: ask the tutor, and bring in what you study in class. */
+  tutor: '/tutor',
+  /** The Tutor tab's old name, still redirected for old links and installed shortcuts. */
+  oldAdd: '/add',
   /** The centre button (IA3): resolves the next round and hands over to the session. */
   start: '/start',
   /** This week's plan, opened from Today's "Change" (IA6). */

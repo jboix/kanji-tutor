@@ -52,3 +52,56 @@
   font-size: 13px;
   transform: none;
 }
+
+/* The tutor-tab set-up card: a large seal. */
+.s44 {
+  width: 44px;
+  height: 44px;
+  border-radius: 9px;
+  font-size: 24px;
+}
+
+/* Not set up yet: the seal's outline, dashed. */
+.dashed {
+  box-sizing: border-box;
+  border: 2px dashed var(--ai);
+  background: transparent;
+  color: var(--ai);
+}
+
+/* The Tutor tab in the bottom bar: an outline in the bar's muted ink, solid when active. */
+.tab {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid var(--ink-muted);
+  border-radius: 5px;
+  color: var(--ink-muted);
+  font-family: var(--font-ja);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  transform: rotate(-4deg);
+}
+
+.tab::before {
+  content: attr(data-seal);
+}
+
+.tabUnset {
+  border-style: dashed;
+}
+
+.tabActive {
+  border-color: var(--ai);
+  background: var(--ai);
+  color: var(--on-ai);
+}
+
+.tabActive.tabUnset {
+  background: transparent;
+  color: var(--ai);
+}

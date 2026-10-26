@@ -8,7 +8,8 @@ import {
   useState,
 } from 'react';
 import type { AiClient, Answer, ConversationTurn, QuestionInput } from '../../ai/types.ts';
-import type { TutorTopic } from '../../ui/slots.tsx';
+import { saveLastConversation } from '../../ui/last-conversation.ts';
+import type { AnsweredTurn, TutorTopic } from '../../ui/slots.tsx';
 import { type AiState, settle, thrown } from './use-ai.ts';
 
 /** One question to the tutor and where its answer stands. */
@@ -21,14 +22,32 @@ export interface Turn {
 /** Earlier turns sent with a question: enough to follow on, short enough to stay cheap. */
 const HISTORY_TURNS = 4;
 
+/** The turns answered so far, in order. */
+function answered(turns: readonly Turn[]): AnsweredTurn[] {
+  return turns.flatMap((turn) =>
+    turn.state.status === 'done' ? [{ question: turn.question, answer: turn.state.value }] : [],
+  );
+}
+
 function historyOf(turns: readonly Turn[]): ConversationTurn[] {
-  return turns
-    .flatMap((turn) =>
-      turn.state.status === 'done'
-        ? [{ question: turn.question, answer: turn.state.value.answer }]
-        : [],
-    )
+  return answered(turns)
+    .map((turn) => ({ question: turn.question, answer: turn.answer.answer }))
     .slice(-HISTORY_TURNS);
+}
+
+/** An earlier conversation's turns, answered already: shown as saved, with no request. */
+function resumed(turns: readonly AnsweredTurn[]): Turn[] {
+  return turns.map((turn, id) => ({
+    id,
+    question: turn.question,
+    state: { status: 'done', value: turn.answer, cached: true },
+  }));
+}
+
+/** Scope of a question: the Tutor tab's general topic, a word, or the sentence. */
+function scopeOf(topic: TutorTopic): QuestionInput['scope'] {
+  if (topic.general) return 'general';
+  return topic.surface ? 'word' : 'sentence';
 }
 
 /** The question as the tutor gets it: the topic, the question and the turns before it. */
@@ -38,7 +57,7 @@ export function questionInput(
   history: ConversationTurn[],
 ): QuestionInput {
   const input: QuestionInput = {
-    scope: topic.surface ? 'word' : 'sentence',
+    scope: scopeOf(topic),
     sentence: topic.sentence,
     question,
   };
@@ -81,16 +100,26 @@ function useSend(topic: TutorTopic, latest: RefObject<Turn[]>, setTurns: SetTurn
   );
 }
 
+/** Keeps the conversation for the Tutor tab's "Carry on" each time a new answer comes. */
+function useKeepLast(topic: TutorTopic, turns: readonly Turn[], from: number) {
+  const count = answered(turns).length;
+  useEffect(() => {
+    if (count <= from) return;
+    saveLastConversation({ topic, turns: answered(turns), at: Date.now() });
+  }, [count, from, topic, turns]);
+}
+
 /**
  * A conversation with the tutor about one topic (A4): every question is one request, sent with
  * the answers before it so it can build on them. Each turn keeps its own answer; Retry asks
- * that turn again.
+ * that turn again. `resume` carries on an earlier conversation from its answered turns.
  */
-export function useConversation(topic: TutorTopic) {
-  const [turns, setTurns] = useState<Turn[]>([]);
-  const latest = useRef<Turn[]>([]);
+export function useConversation(topic: TutorTopic, resume: readonly AnsweredTurn[] = []) {
+  const [turns, setTurns] = useState<Turn[]>(() => resumed(resume));
+  const latest = useRef<Turn[]>(turns);
   latest.current = turns;
-  const next = useRef(0);
+  const next = useRef(resume.length);
+  useKeepLast(topic, turns, resume.length);
   const send = useSend(topic, latest, setTurns);
   const ask = useCallback(
     (client: AiClient, question: string) => {

@@ -10,7 +10,7 @@ export const common = {
   retry: 'Retry',
   skip: 'Skip',
   done: 'Done',
-  loading: 'Loading…',
+  loading: 'Loading',
   errorTitle: 'Something went wrong',
   errorBody: 'The app hit an error opening this screen. Reloading usually fixes it.',
   reload: 'Reload',

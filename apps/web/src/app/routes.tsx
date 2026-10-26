@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react';
-import { createBrowserRouter, Outlet, type RouteObject } from 'react-router';
+import { createBrowserRouter, Navigate, Outlet, type RouteObject } from 'react-router';
 import { PackGate } from '../features/onboarding/pack-gate.tsx';
 import { paths } from '../ui/paths.ts';
 import { syncServer } from '../ui/sync-server.ts';
@@ -21,7 +21,8 @@ const settingsSection = () => import('../features/settings/settings-section-scre
 const GATED: RouteObject[] = [
   screen(paths.today, today),
   screen(paths.learn, async () => (await import('../features/learn/learn-screen.tsx')).LearnScreen),
-  screen(paths.add, async () => (await import('../features/add/add-screen.tsx')).AddScreen),
+  screen(paths.tutor, async () => (await import('../features/tutor/tutor-screen.tsx')).TutorScreen),
+  { path: paths.oldAdd, element: <Navigate to={paths.tutor} replace /> },
   screen(paths.start, async () => (await import('../features/start/start-screen.tsx')).StartScreen),
   screen(paths.plan, async () => (await import('../features/today/plan-screen.tsx')).PlanScreen),
   screen(paths.read, async () => (await import('../features/read/read-screen.tsx')).ReadScreen),

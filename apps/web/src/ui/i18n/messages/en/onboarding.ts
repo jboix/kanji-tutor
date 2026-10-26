@@ -54,7 +54,7 @@ export const onboarding = {
   summaryHeading: 'Your choices',
   summaryLead: 'Everything here can be changed later in Settings.',
   summaryBar:
-    'Home shows where you are and lets you choose what to practise. The round Start button in the middle of the bar begins the next round; Learn holds the lessons, kanji, grammar and notes, and Add takes a photo of a page or a sentence of your own.',
+    'Home shows where you are and lets you choose what to practise. The round Start button in the middle of the bar begins the next round; Learn holds the lessons, kanji, grammar and notes, and Tutor is where you ask the tutor anything and bring in your class handouts.',
   change: 'Change',
   changeRow: 'Change {row}',
   rowLanguage: 'Language',

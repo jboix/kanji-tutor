@@ -1,7 +1,6 @@
 /** All es messages, one namespace per file. */
 import type { Messages } from '../../types.ts';
 import { account } from './account.ts';
-import { add } from './add.ts';
 import { ai } from './ai.ts';
 import { capture } from './capture.ts';
 import { common } from './common.ts';
@@ -30,6 +29,7 @@ import { settings } from './settings.ts';
 import { settingsAi } from './settings-ai.ts';
 import { teach } from './teach.ts';
 import { today } from './today.ts';
+import { tutor } from './tutor.ts';
 import { ui } from './ui.ts';
 import { units } from './units.ts';
 import { voice } from './voice.ts';
@@ -56,7 +56,7 @@ export const es = {
   knownImport,
   today,
   learn,
-  add,
+  tutor,
   learned,
   capture,
   handwrite,

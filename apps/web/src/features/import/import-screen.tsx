@@ -94,7 +94,7 @@ function Body({ state }: { state: ReturnType<typeof useKnownImport> }) {
 export function ImportScreen() {
   const { t, rich } = useI18n();
   const state = useKnownImport();
-  const back = <BackButton parent={paths.learn} label={t('common.back')} />;
+  const back = <BackButton parent={paths.tutor} label={t('common.back')} />;
   return (
     <Screen topBar={<TopBar start={back} title={t('importScreen.heading')} />}>
       <p className={styles.intro}>{rich('importScreen.intro', { example: <Ja>これ</Ja> })}</p>

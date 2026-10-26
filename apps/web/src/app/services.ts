@@ -48,10 +48,17 @@ function mockProbe(): MockProbe {
  * through the app-wide rate limiter (A14).
  */
 function providerFor(settings: Settings): AiProvider | undefined {
+  if (!tutorReady(settings)) return undefined;
   if (import.meta.env.VITE_AI_PROVIDER === 'mock') {
     return createMockProvider({ limiter: sharedLimiter, probe: mockProbe() });
   }
   return settings.apiKey ? createGeminiProvider(settings.apiKey) : undefined;
+}
+
+/** A key, or the mock (unless an e2e test switched it to "no key"). */
+function tutorReady(settings: Settings): boolean {
+  if (import.meta.env.VITE_AI_PROVIDER === 'mock') return mockProbe().noKey !== true;
+  return Boolean(settings.apiKey);
 }
 
 /**
@@ -118,6 +125,7 @@ export function createServices(db = new KanjiTutorDb()): Services {
     repos,
     lang,
     ai: createAiClient(aiContext(repos, lang, createLearnerView(repos))),
+    tutorReady,
     backup: createBackupPort(db),
     packs: createPackLoader(db, `${base}packs/${packVariant()}`),
     ...cloud,

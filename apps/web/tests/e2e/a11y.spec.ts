@@ -17,7 +17,7 @@ const SCREENS = [
   '/settings/tutor',
   '/settings/backup',
   '/learn',
-  '/add',
+  '/tutor',
   '/plan',
   '/import',
   '/log-in',

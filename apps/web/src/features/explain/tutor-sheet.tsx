@@ -82,9 +82,9 @@ function useFirst(
   }, [first, ask]);
 }
 
-export function TutorSheet({ topic, starters, first, onClose }: TutorSheetSlotProps) {
+export function TutorSheet({ topic, starters, first, resume, onClose }: TutorSheetSlotProps) {
   const t = useT();
-  const { turns, ask, retry } = useConversation(topic);
+  const { turns, ask, retry } = useConversation(topic, resume);
   useFirst(first, ask);
   const suggestions = useSuggestions(starters, turns);
   return (

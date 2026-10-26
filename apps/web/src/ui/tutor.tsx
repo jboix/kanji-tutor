@@ -8,6 +8,7 @@ import { AiSeal } from './ai-seal.tsx';
 import { Chip } from './chip.tsx';
 import { useT } from './i18n/i18n.tsx';
 import { JaRuns } from './ja-runs.tsx';
+import type { LastConversation } from './last-conversation.ts';
 import { type TutorQuestion, type TutorTopic, useSlot } from './slots.tsx';
 import styles from './tutor.module.css';
 
@@ -20,6 +21,8 @@ export interface TutorOptions {
 export interface Tutor extends TutorOptions {
   /** Opens the sheet, asking `first` when a suggested question was pressed. */
   open: (first?: TutorQuestion) => void;
+  /** Opens the sheet on an earlier conversation, its topic and turns, to carry it on. */
+  carryOn: (last: LastConversation) => void;
   /** The sheet while open: render it anywhere on the screen. */
   sheet: ReactNode;
 }
@@ -27,17 +30,23 @@ export interface Tutor extends TutorOptions {
 /** The tutor for what is on screen; undefined when the explain feature is not wired. */
 export function useTutor(options: TutorOptions): Tutor | undefined {
   const Sheet = useSlot('tutorSheet');
-  const [opened, setOpened] = useState<{ first?: TutorQuestion | undefined }>();
+  const [opened, setOpened] = useState<{ first?: TutorQuestion; last?: LastConversation }>();
   if (!Sheet) return undefined;
   const sheet = opened && (
     <Sheet
-      topic={options.topic}
-      starters={options.starters}
+      topic={opened.last?.topic ?? options.topic}
+      starters={opened.last ? [] : options.starters}
       first={opened.first}
+      resume={opened.last?.turns}
       onClose={() => setOpened(undefined)}
     />
   );
-  return { ...options, open: (first) => setOpened({ first }), sheet };
+  return {
+    ...options,
+    open: (first) => setOpened(first ? { first } : {}),
+    carryOn: (last) => setOpened({ last }),
+    sheet,
+  };
 }
 
 /** "Your tutor · About 〜ました", heading the conversation sheet (Tutor-sheet). */
@@ -134,5 +143,26 @@ export function TutorNext({ tutor, children }: { tutor: Tutor | undefined; child
       </div>
       {tutor.sheet}
     </>
+  );
+}
+
+/** A card's heading led by the tutor's seal ("Ask the tutor"); `unset` dashes it (not set up). */
+export function TutorCardHeading(props: {
+  id: string;
+  title: string;
+  line?: string | undefined;
+  unset?: boolean;
+}) {
+  const { id, title, line, unset = false } = props;
+  return (
+    <div className={styles.cardHeading} data-unset={unset ? '' : undefined}>
+      <AiSeal size={unset ? 44 : 28} dashed={unset} />
+      <span className={styles.lines}>
+        <h2 id={id} className={styles.cardTitle}>
+          {title}
+        </h2>
+        {line && <span className={styles.sub}>{line}</span>}
+      </span>
+    </div>
   );
 }

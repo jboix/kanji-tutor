@@ -3,19 +3,19 @@ import { expect, type Page, test } from './test.ts';
 
 /**
  * Wave 11's navigation (IA1–IA6): the bar, Start, the Learn hub, the Settings
- * categories and the Add chooser, each sub-screen going back to its hub.
+ * categories and the Tutor tab, each sub-screen going back to its hub.
  */
 
 const nav = (page: Page) => page.getByRole('navigation', { name: 'Main' });
 const back = (page: Page, name = 'Back') => page.getByRole('button', { name, exact: true });
 
-test('the bar is Today · Learn · Start · Add · Settings, Start raised in the middle', async ({
+test('the bar is Today · Learn · Start · Tutor · Settings, Start raised in the middle', async ({
   page,
 }) => {
   await onboard(page);
   const links = nav(page).getByRole('link');
   await expect(links).toHaveCount(4);
-  const names = ['Home', 'Learn', 'Add', 'Settings'];
+  const names = ['Home', 'Learn', 'Tutor', 'Settings'];
   for (const [i, name] of names.entries()) {
     await expect(links.nth(i)).toHaveAccessibleName(name);
   }
@@ -118,18 +118,29 @@ test('Settings opens each category as its own screen, and Back returns to the li
   }
 });
 
-test('Add chooses Scanned lessons or Use it, each going back to Add', async ({ page }) => {
+test('Tutor opens Scanned lessons, Use it and Words from class, each going back to Tutor', async ({
+  page,
+}) => {
   await onboard(page);
-  await nav(page).getByRole('link', { name: 'Add' }).click();
-  await expect(page.getByRole('heading', { name: 'Add', level: 1 })).toBeVisible();
-  await page.getByRole('link', { name: /^Scanned lessons/ }).click();
-  await expect(page).toHaveURL(/\/capture$/);
-  await back(page).click();
-  await expect(page).toHaveURL(/\/add$/);
-  await page.getByRole('link', { name: /^Write a sentence/ }).click();
-  await expect(page).toHaveURL(/\/compose$/);
-  await back(page).click();
-  await expect(page).toHaveURL(/\/add$/);
+  await nav(page).getByRole('link', { name: 'Tutor' }).click();
+  await expect(page.getByRole('heading', { name: 'Tutor', level: 1 })).toBeVisible();
+  for (const [name, url] of [
+    [/^Scanned lessons/, /\/capture$/],
+    [/^Write a sentence/, /\/compose$/],
+    [/^Words from class/, /\/import$/],
+  ] as const) {
+    await page.getByRole('link', { name }).click();
+    await expect(page).toHaveURL(url);
+    await back(page).click();
+    await expect(page).toHaveURL(/\/tutor$/);
+  }
+});
+
+test('the old Add address opens the Tutor tab', async ({ page }) => {
+  await onboard(page);
+  await page.goto('/add');
+  await expect(page).toHaveURL(/\/tutor$/);
+  await expect(page.getByRole('heading', { name: 'Tutor', level: 1 })).toBeVisible();
 });
 
 test('old links still open: notes, kanji, units, grammar and settings', async ({ page }) => {
@@ -187,7 +198,7 @@ test('the active tab is highlighted behind it, and the highlight slides', async 
   const settings = await highlightAndIcon(page, 'Settings');
   expect(Math.abs(settings.pill.x - settings.icon.x)).toBeLessThan(2);
   // Each tab is still a 44px target, and the active one keeps aria-current.
-  for (const name of ['Home', 'Learn', 'Add', 'Settings']) {
+  for (const name of ['Home', 'Learn', 'Tutor', 'Settings']) {
     const link = await nav(page).getByRole('link', { name }).boundingBox();
     expect(link?.height).toBeGreaterThanOrEqual(44);
   }

@@ -82,7 +82,7 @@ export const onboarding = {
   summaryFeel: '{sounds}, {furigana}',
   none: 'Ninguna',
   summaryBar:
-    'Inicio muestra dónde estás y te deja elegir qué practicar. El botón redondo Empezar, en el centro de la barra, inicia la siguiente ronda; Aprender reúne las lecciones, los kanji, la gramática y las notas, y Añadir fotografía una página o recoge una frase tuya.',
+    'Inicio muestra dónde estás y te deja elegir qué practicar. El botón redondo Empezar, en el centro de la barra, inicia la siguiente ronda; Aprender reúne las lecciones, los kanji, la gramática y las notas, y Tutor te deja preguntar al tutor y traer tus hojas de clase.',
   welcomeName: 'Kanji Tutor',
   welcomeTagline: 'Lee japonés con un {tutor} a tu lado.',
   welcomeStart: 'Empezar',

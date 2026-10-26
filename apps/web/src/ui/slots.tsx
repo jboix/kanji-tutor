@@ -3,7 +3,7 @@
  * import each other). `src/app` fills them; a feature renders `useSlot('name')` if present.
  */
 import { type ComponentType, createContext, type ReactNode, use } from 'react';
-import type { AiClient } from '../ai/types.ts';
+import type { AiClient, Answer } from '../ai/types.ts';
 import type { SessionCard, Target } from '../domain/session-types.ts';
 import type { Grade, Sentence, Settings } from '../domain/types.ts';
 
@@ -183,6 +183,14 @@ export interface TutorTopic {
   sentence: { text: string; translation?: string };
   surface?: string;
   grammar?: { pattern: string; meaning: string };
+  /** Asked from the Tutor tab, about nothing on screen: the sentence is empty. */
+  general?: boolean;
+}
+
+/** A question the tutor answered, kept so the conversation can be carried on later. */
+export interface AnsweredTurn {
+  question: string;
+  answer: Answer;
 }
 
 /** A question asked as the sheet opens: a suggested question pressed outside it. */
@@ -197,6 +205,8 @@ export interface TutorSheetSlotProps {
   /** Suggested questions, shown as chips while nothing is asked. */
   starters: readonly string[];
   first?: TutorQuestion | undefined;
+  /** The turns of an earlier conversation on the same topic, carried on (the Tutor tab). */
+  resume?: readonly AnsweredTurn[] | undefined;
   onClose: () => void;
 }
 
