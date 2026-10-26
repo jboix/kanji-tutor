@@ -78,10 +78,7 @@ describe('the unit path (T3, T4)', () => {
     expect(view?.progress.readAt).toBe(NOW);
     await finishLessonPart(repos, id, 'review', 1, NOW);
     expect(await lessonNext(repos, id)).toBeUndefined();
-    // Every section done but the words not known yet: まとめ again, until the unit is done.
-    expect((await unitView(repos, id, NOW))?.step).toBe('review');
-    await know(repos, view?.wordIds ?? []);
-    await rightGrammar(repos, unitById(id)?.grammar ?? []);
+    // Every section done, the words not known yet: the unit is done and the path goes on.
     const path = await unitPath(repos, NOW);
     expect(path.units[0]).toMatchObject({ state: 'done', step: 'done' });
     expect(path.current?.unit.id).toBe('self-introduction');

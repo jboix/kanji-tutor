@@ -24,7 +24,7 @@ export const units = {
   back: 'Atrás',
   title: 'Lecciones',
   intro:
-    'Unidades temáticas en el orden del JLPT. Una unidad está hecha cuando conoces la mayoría de sus palabras y has usado su gramática. Puedes abrir cualquier unidad antes.',
+    'Unidades temáticas en el orden del JLPT. Una unidad está hecha cuando has completado sus secciones, o cuando ya conoces la mayoría de sus palabras y has usado su gramática. Puedes abrir cualquier unidad antes.',
   levelUnits: 'Unidades N{level}',
   yourLevel: 'N{level} · tu nivel',
   levelTitle: 'N{level}',

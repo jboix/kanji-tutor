@@ -24,7 +24,7 @@ export const units = {
   back: 'Retour',
   title: 'Leçons',
   intro:
-    'Des unités thématiques dans l’ordre du JLPT. Une unité est terminée quand vous connaissez la plupart de ses mots et avez utilisé sa grammaire. Vous pouvez ouvrir n’importe quelle unité en avance.',
+    'Des unités thématiques dans l’ordre du JLPT. Une unité est terminée une fois ses sections parcourues, ou quand vous connaissez déjà la plupart de ses mots et avez utilisé sa grammaire. Vous pouvez ouvrir n’importe quelle unité en avance.',
   levelUnits: 'Unités N{level}',
   yourLevel: 'N{level} · votre niveau',
   levelTitle: 'N{level}',

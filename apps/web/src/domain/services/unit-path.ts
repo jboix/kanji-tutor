@@ -84,16 +84,19 @@ function countsOf(unit: Unit, wordIds: readonly string[], input: PathInput): Uni
   };
 }
 
-/** The done rule (T3): ≥ 80% of its words known and each grammar point reviewed right once. */
+/**
+ * The done rule (T3) for a unit not worked through: ≥ 80% of its words known and each grammar
+ * point reviewed right once.
+ */
 export function meetsDone({ words, grammar }: UnitCounts): boolean {
   const wordsDone = words.total > 0 && words.known / words.total >= UNIT_DONE_SHARE;
   return wordsDone && grammar.reviewed >= grammar.total;
 }
 
-/** The first section not done (S3); まとめ again once all are, until the unit is done. */
+/** The first section not done (S3), or done. */
 function stepOf(done: boolean, progress: UnitProgress): UnitStep {
   if (done) return 'done';
-  return currentSection(progress) ?? 'review';
+  return currentSection(progress) ?? 'done';
 }
 
 function draft(unit: Unit, input: PathInput): UnitView {
@@ -102,7 +105,9 @@ function draft(unit: Unit, input: PathInput): UnitView {
   const progress = input.status[unit.id] ?? {};
   const counts = countsOf(unit, wordIds, input);
   const marked = progress.doneAt !== undefined || progress.skippedAt !== undefined;
-  const done = marked || (pack !== undefined && meetsDone(counts));
+  // Every section worked through: the path goes on, and the words settle in the daily reviews.
+  const worked = currentSection(progress) === undefined;
+  const done = marked || worked || (pack !== undefined && meetsDone(counts));
   return {
     ...counts,
     unit,

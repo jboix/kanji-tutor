@@ -22,7 +22,7 @@ export const units = {
   back: 'Back',
   title: 'Lessons',
   intro:
-    'Themed units in JLPT order. A unit is done when you know most of its words and have used its grammar. You can open any unit early.',
+    'Themed units in JLPT order. A unit is done once you have worked through its sections, or when you already know most of its words and have used its grammar. You can open any unit early.',
   levelUnits: 'N{level} units',
   yourLevel: 'N{level} · your level',
   levelTitle: 'N{level}',
