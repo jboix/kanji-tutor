@@ -1,11 +1,12 @@
 /**
  * One lesson section on a unit page: a round badge (a check once done, its number otherwise),
- * its name and sample, its parts done, and a tap to open it. The section to do next is a tonal
- * card with a straight line of its parts; badges are never filled with the accent.
+ * its name and sample, its parts done or "Again" once done, and a tap to open it. The section to
+ * do next is a tonal card with a straight line of its parts; badges are never filled with the
+ * accent.
  */
 import type { ReactNode } from 'react';
 import { useT } from '../../ui/i18n/i18n.tsx';
-import { ChevronIcon, TickIcon } from '../../ui/icons.tsx';
+import { ChevronIcon, RefreshIcon, TickIcon } from '../../ui/icons.tsx';
 import { ProgressLine } from '../../ui/progress-line.tsx';
 import styles from './section-row.module.css';
 
@@ -61,19 +62,37 @@ function Lines({ name, sample, detail, count, state }: SectionRowProps) {
   );
 }
 
+/** The row's end: "Again" once the section is done ("Done" for a screen reader), else its parts. */
+function Tail({ state, count, aside }: SectionRowProps) {
+  const t = useT();
+  if (state === 'done') {
+    return (
+      <span className={styles.again}>
+        <span className="visually-hidden">{aside} · </span>
+        <RefreshIcon />
+        {t('units.sectionAgain')}
+      </span>
+    );
+  }
+  return (
+    <>
+      <span className={styles.count}>{count ? t('ui.partOf', count) : aside}</span>
+      <span className={styles.chevron}>
+        <ChevronIcon />
+      </span>
+    </>
+  );
+}
+
 /** The row (see the module comment); the badge sits beside the button, out of its name. */
 export function SectionRow(props: SectionRowProps) {
-  const t = useT();
-  const { order, state, count, aside, onClick } = props;
+  const { order, state, onClick } = props;
   return (
     <div className={styles.row} data-state={state}>
       <Badge order={order} state={state} />
       <button type="button" className={styles.button} onClick={onClick}>
         <Lines {...props} />
-        <span className={styles.count}>{count ? t('ui.partOf', count) : aside}</span>
-        <span className={styles.chevron}>
-          <ChevronIcon />
-        </span>
+        <Tail {...props} />
       </button>
     </div>
   );

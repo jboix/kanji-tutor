@@ -112,6 +112,18 @@
   white-space: nowrap;
 }
 
+/* A done section opens again: the accent word with its turning arrow, in place of the chevron. */
+.again {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
 .chevron {
   display: flex;
   color: var(--ink-muted);

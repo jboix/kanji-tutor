@@ -39,6 +39,7 @@ export const units = {
   detailReading: 'El texto y sus preguntas',
   detailReview: 'Un repaso variado de la lección',
   sectionDone: 'Hecha',
+  sectionAgain: 'Otra vez',
   contents: 'En esta unidad',
   belowLevel: 'Esta unidad está por debajo de tu nivel.',
   markDone: 'Marcar como hecha',

@@ -37,6 +37,7 @@ export const units = {
   detailReading: 'The passage and its questions',
   detailReview: 'A mixed review of the lesson',
   sectionDone: 'Done',
+  sectionAgain: 'Again',
   contents: 'In this unit',
   belowLevel: 'This unit is below your level.',
   markDone: 'Mark as done',

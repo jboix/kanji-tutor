@@ -285,6 +285,13 @@ export const HistoryIcon = () => (
     <path d="M12 8v4l2.5 2" />
   </Svg>
 );
+/** Again: a turning arrow, to go through something once more. */
+export const RefreshIcon = () => (
+  <Svg size={16}>
+    <path d="M19 12a7 7 0 1 1-2.1-5" />
+    <path d="M19 4.5V8h-3.5" />
+  </Svg>
+);
 /** Selected or right: a bare check. */
 export const TickIcon = () => (
   <Svg size={16} width={2.2}>
