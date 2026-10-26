@@ -85,22 +85,39 @@ export async function putBatch(db: KanjiTutorDb, store: PackStore, rows: unknown
   }
 }
 
+/** The keys of `keys` the new version did not load, deleted from `table`. */
+async function dropUnseen(
+  table: { bulkDelete(keys: string[]): Promise<void> },
+  keys: readonly string[],
+  seen: ReadonlySet<string>,
+): Promise<void> {
+  const stale = keys.filter((key) => !seen.has(key));
+  if (stale.length > 0) await table.bulkDelete(stale);
+}
+
+/** The keys of the sentences that came from the packs; the learner's are never pruned. */
+async function packSentenceKeys(db: KanjiTutorDb): Promise<string[]> {
+  const bySource = PACK_SOURCES.map((source) =>
+    db.sentences.where('source').equals(source).primaryKeys(),
+  );
+  return (await Promise.all(bySource)).flat();
+}
+
 /**
- * Removes pack rows that the newly loaded version doesn't have, in one transaction. The
+ * Removes pack rows that the newly loaded version doesn't have, in one transaction. Only keys
+ * are read for the large stores: testing every row there reads and decodes each one. The
  * learner's sentences and grammar points are never touched, nor a catalogue point that has an item.
  */
 export async function prunePacks(db: KanjiTutorDb, seen: Seen): Promise<void> {
   const tables = [db.words, db.kanji, db.sentences, db.grammar, db.clusters, db.units, db.items];
+  const keys = (table: { toCollection(): { primaryKeys(): Promise<string[]> } }) =>
+    table.toCollection().primaryKeys();
   await db.transaction('rw', tables, async () => {
-    await db.words.filter((row) => !seen.words.has(row.id)).delete();
-    await db.kanji.filter((row) => !seen.kanji.has(row.char)).delete();
-    await db.sentences
-      .where('source')
-      .anyOf(PACK_SOURCES)
-      .filter((row) => !seen.sentences.has(row.id))
-      .delete();
-    await db.clusters.filter((row) => !seen.clusters.has(row.id)).delete();
-    await db.units.filter((row) => !seen.units.has(row.id)).delete();
+    await dropUnseen(db.words, await keys(db.words), seen.words);
+    await dropUnseen(db.kanji, await keys(db.kanji), seen.kanji);
+    await dropUnseen(db.sentences, await packSentenceKeys(db), seen.sentences);
+    await dropUnseen(db.clusters, await keys(db.clusters), seen.clusters);
+    await dropUnseen(db.units, await keys(db.units), seen.units);
     const tracked = new Set(await db.items.where('kind').equals('grammar').primaryKeys());
     await db.grammar
       .filter((row) => row.catalogue === true && !seen.grammar.has(row.id))
