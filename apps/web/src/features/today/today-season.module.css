@@ -1,0 +1,86 @@
+/* The word of the season: persimmon, the colour of the season and of what is new, on its own
+   soft card in light and a raised grey card in dark, where persimmon is never a fill. */
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 60px;
+  padding: 8px 12px 8px 8px;
+  border: 0;
+  border-radius: var(--radius-card);
+  background: var(--season);
+  color: var(--on-season);
+  box-shadow: var(--shadow-card);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.card:disabled {
+  cursor: default;
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.disc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-pill);
+  background: var(--season-disc);
+  color: var(--season-mark);
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--season-label);
+}
+
+.word {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 8px;
+}
+
+.written {
+  font-family: var(--font-ja);
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--season-word);
+}
+
+.reading {
+  font-family: var(--font-ja);
+  font-size: 13px;
+}
+
+.gloss {
+  font-size: 13px;
+}
+
+.chevron {
+  display: flex;
+  color: var(--season-label);
+}
+
+.chevron svg {
+  width: 20px;
+  height: 20px;
+}

@@ -72,6 +72,12 @@
 
   /* Persimmon: what is new to you or still being learned; text and outlines, never a fill */
   --new: #a4501c;
+  --season: #f8e8db; /* the word of the season's card */
+  --on-season: #6e3210;
+  --season-label: #6e3210;
+  --season-word: #6e3210;
+  --season-mark: #c0622a; /* its leaf */
+  --season-disc: #ffffff;
 
   /* The cast: name colours, portrait discs, the line ink of their portraits */
   --cast-yuki: #a4501c;
@@ -170,6 +176,12 @@
     --on-ai: #1e1e1e;
     --link-hover: #c9ddf3;
     --new: #e9a678;
+    --season: #303030;
+    --on-season: #e2e2e2;
+    --season-label: #ababab;
+    --season-word: #e9a678;
+    --season-mark: #e9a678;
+    --season-disc: #383838;
     --cast-yuki: #e9a678;
     --cast-ken: #86c6bf;
     --cast-mori: #b9addb;
@@ -239,6 +251,12 @@
   --on-ai: #1e1e1e;
   --link-hover: #c9ddf3;
   --new: #e9a678;
+  --season: #303030;
+  --on-season: #e2e2e2;
+  --season-label: #ababab;
+  --season-word: #e9a678;
+  --season-mark: #e9a678;
+  --season-disc: #383838;
   --cast-yuki: #e9a678;
   --cast-ken: #86c6bf;
   --cast-mori: #b9addb;

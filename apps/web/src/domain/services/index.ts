@@ -163,6 +163,7 @@ export {
   titleFromLines,
   withPageKind,
 } from './scans.ts';
+export { type SeasonWordView, seasonWord } from './season-word.ts';
 export { type BuildSessionOptions, buildSession, type SessionFocus } from './session.ts';
 export { DEFAULT_SESSION_MINUTES } from './session-length.ts';
 export { cardType } from './session-mix.ts';

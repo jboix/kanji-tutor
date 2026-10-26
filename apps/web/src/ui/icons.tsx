@@ -285,6 +285,26 @@ export const HistoryIcon = () => (
     <path d="M12 8v4l2.5 2" />
   </Svg>
 );
+/** The season: a line maple leaf with a soft fill, on its own 40 grid. */
+export const LeafIcon = ({ size = 28 }: Sized) => (
+  <svg width={size} height={size} viewBox="0 0 40 40" aria-hidden="true">
+    <path
+      d="M20 4l3 8 7-4-2 8h8l-6 6 4 4H24l-2 4-2-2-2 2-2-4H6l4-4-6-6h8l-2-8 7 4z"
+      fill="currentColor"
+      fillOpacity="0.14"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M20 37V12M20 28l-6-9M20 28l6-9"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.2"
+      strokeLinecap="round"
+    />
+  </svg>
+);
 /** Again: a turning arrow, to go through something once more. */
 export const RefreshIcon = () => (
   <Svg size={16}>

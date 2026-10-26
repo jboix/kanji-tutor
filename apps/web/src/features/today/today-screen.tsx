@@ -20,6 +20,7 @@ import { LevelUpRow } from './today-lesson.tsx';
 import { NextUp } from './today-next.tsx';
 import { WeekPlanLine } from './today-plan.tsx';
 import { Practice } from './today-practice.tsx';
+import { SeasonWordCard } from './today-season.tsx';
 import { WhereYouAre } from './today-where.tsx';
 import { useHome } from './use-home.ts';
 import { type TodayData, type TodaySessionView, useToday } from './use-today.ts';
@@ -98,11 +99,12 @@ interface TodayBodyProps {
   onChange: () => void;
 }
 
-/** Home 1: the lesson to go on with, where you are, a tile per round, lessons, then the rest. */
+/** Home 1: the word of the season, the lesson to go on with, where you are, a tile per round, lessons, then the rest. */
 function TodayBody({ overview, session, now, onChange }: TodayBodyProps) {
   const home = useHome(now);
   return (
     <>
+      <SeasonWordCard now={now} />
       {overview.unit && <NextUp unit={overview.unit} />}
       <WhereYouAre key={now} last={overview.lastTime} />
       <Practice session={session} />
@@ -134,6 +136,7 @@ function FirstRun({ overview, now }: { overview: TodayOverview; now: number }) {
   const t = useT();
   return (
     <>
+      <SeasonWordCard now={now} />
       {overview.unit && <NextUp unit={overview.unit} />}
       <section className={styles.lead} aria-labelledby="first-run">
         <h2 id="first-run" className={styles.firstTitle}>
