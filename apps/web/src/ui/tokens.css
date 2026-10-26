@@ -41,11 +41,11 @@
   --miss-shadow: rgb(179 36 58 / 0.18);
 
   /* The inverted "Next up" card on Today (W-today) */
-  --hero: #14202b;
+  --hero: #1e4d7a; /* the indigo of Start: Home's lesson card */
   --on-hero: #f7f8f6;
-  --hero-muted: #b9c3cc;
-  --hero-track: #34414e;
-  --hero-fill: #8fb4dc;
+  --hero-muted: #c7d3df;
+  --hero-track: #3d6890;
+  --hero-fill: #e3edf7;
 
   /* Chart series (A16), checked for colour-blind separation; never --ai or --ok */
   --series-1: #2a78d6;
