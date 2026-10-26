@@ -123,6 +123,9 @@ describe('DrillScreen', () => {
     const onDone = show(repos, drill);
     expect(screen.getByText('Which pattern fits?')).toBeTruthy();
     expect(screen.getByText('＿＿＿')).toBeTruthy();
+    // The meaning decides between forms that all fit the blank, so it shows from the start.
+    expect(screen.getByText('s-wait in English')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Show meaning' })).toBeNull();
     await userEvent.click(screen.getByRole('button', { name: 'ている' }));
     expect(await screen.findByText('· ongoing action')).toBeTruthy();
     expect(screen.queryByText('You chose')).toBeNull();

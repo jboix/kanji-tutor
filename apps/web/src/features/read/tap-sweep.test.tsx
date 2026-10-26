@@ -317,7 +317,6 @@ describe('the help bar (U6)', () => {
       ),
     ],
     ['lookalike', () => <DrillScreen drill={lookalike} topBar={null} onDone={() => {}} />],
-    ['cloze', () => <DrillScreen drill={cloze} topBar={null} onDone={() => {}} />],
   ];
   for (const [name, ui] of screens) {
     it(`${name}: the bar is there, the meaning hidden until pressed`, async () => {
@@ -332,4 +331,12 @@ describe('the help bar (U6)', () => {
       expect(skip !== null).toBe(name !== 'typed reading');
     });
   }
+
+  it('cloze: the bar is there and the meaning shows from the start, since it decides', async () => {
+    await show(<DrillScreen drill={cloze} topBar={null} onDone={() => {}} />);
+    expect(document.querySelector('[data-exercise-help]')).toBeTruthy();
+    expect(screen.getByText('I read while waiting.')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Show meaning' })).toBeNull();
+    expect(screen.getByRole('button', { name: "I don't know" })).toBeTruthy();
+  });
 });

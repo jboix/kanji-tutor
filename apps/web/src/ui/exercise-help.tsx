@@ -28,6 +28,8 @@ export interface ExerciseHelpProps {
   answered: boolean;
   /** Show the translation by itself once answered (questions); typed reading has its wrap-up. */
   meaningOnAnswer?: boolean;
+  /** Show the translation from the start: a cloze whose meaning decides between forms that fit. */
+  meaningFirst?: boolean;
   /** The exercise's own "I don't know", shown until the answer. */
   skip?: ReactNode;
 }
@@ -68,7 +70,8 @@ export function ExerciseHelp(props: ExerciseHelpProps) {
   const Help = useSlot('sentenceHelp');
   const [pressed, setPressed] = useState(false);
   const meaning = useMeaning(props);
-  const shown = pressed || (props.answered && props.meaningOnAnswer === true);
+  const shown =
+    pressed || props.meaningFirst === true || (props.answered && props.meaningOnAnswer === true);
   const explain = props.explain;
   const chips = use(ExerciseChips);
   return (

@@ -123,6 +123,7 @@ function DrillHelp({ drill, controls }: { drill: Drill; controls: DrillControls 
       explain={explain || undefined}
       answered={controls.answered}
       meaningOnAnswer={drill.kind !== 'build'}
+      meaningFirst={drill.kind === 'cloze'}
       skip={<SkipButton onSkip={controls.skip} />}
     />
   );
