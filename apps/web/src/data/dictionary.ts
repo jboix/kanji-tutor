@@ -2,6 +2,7 @@ import { toHiragana } from 'wanakana';
 import type { DictionaryRepo } from '../domain/repos.ts';
 import type { Word } from '../domain/types.ts';
 import type { KanjiTutorDb, WordRow } from './db.ts';
+import { cachedDictionary } from './dictionary-cache.ts';
 
 /** Drops the search-only `kana` field from a stored row. */
 function toWord(row: WordRow | undefined): Word | undefined {
@@ -26,8 +27,12 @@ function kanjiLookups(db: KanjiTutorDb) {
   };
 }
 
-/** Dictionary packs over Dexie. */
+/** Dictionary packs over Dexie, cached in memory until the packs are next written. */
 export function dexieDictionary(db: KanjiTutorDb): DictionaryRepo {
+  return cachedDictionary(db, dexieLookups(db));
+}
+
+function dexieLookups(db: KanjiTutorDb): DictionaryRepo {
   return {
     word: async (id) => toWord(await db.words.get(id)),
     words: async (ids) => (await db.words.bulkGet([...ids])).map(toWord),

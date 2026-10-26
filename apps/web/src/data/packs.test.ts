@@ -116,11 +116,15 @@ describe('createPackLoader', () => {
       glosses: [],
       common: false,
     });
+    const { dictionary } = createDexieRepos(db);
+    expect(await dictionary.word('old')).toBeDefined();
     serve('v2');
     await createPackLoader(db, '/packs/').install(() => undefined);
     const ids = (await db.sentences.toArray()).map((s) => s.id).sort();
     expect(ids).toEqual(['capture:1', 'tatoeba:v2']);
     expect(await db.words.get('old')).toBeUndefined();
+    // The dictionary's lookups, kept in memory, are dropped with the old rows.
+    expect(await dictionary.word('old')).toBeUndefined();
     expect(await createPackLoader(db, '/packs/').installed()).toBe('v2');
   });
 

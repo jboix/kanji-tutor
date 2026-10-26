@@ -1,4 +1,5 @@
 import type { KanjiTutorDb } from './db.ts';
+import { forgetDictionary } from './dictionary-cache.ts';
 
 /** Runs one clean-up step; a browser without that storage (or that refuses it) is skipped. */
 async function attempt(step: () => unknown): Promise<void> {
@@ -26,6 +27,7 @@ async function unregisterWorkers(): Promise<void> {
  */
 export async function eraseLocalData(db: KanjiTutorDb): Promise<void> {
   await db.delete();
+  forgetDictionary(db);
   await attempt(() => localStorage.clear());
   await attempt(() => sessionStorage.clear());
   if (typeof caches !== 'undefined') await attempt(clearCaches);

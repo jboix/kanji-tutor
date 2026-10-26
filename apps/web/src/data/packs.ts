@@ -8,6 +8,7 @@ import type {
 } from '../domain/repos.ts';
 import type { Settings } from '../domain/types.ts';
 import type { KanjiTutorDb } from './db.ts';
+import { forgetDictionary } from './dictionary-cache.ts';
 import { applyLanguage } from './pack-languages.ts';
 import { emptySeen, PACK_STORES, prunePacks, putBatch, rowId } from './pack-stores.ts';
 
@@ -100,6 +101,19 @@ async function applyLanguages(db: KanjiTutorDb, base: string, next: PackManifest
  * Installed languages are applied again before the version is recorded.
  */
 async function install(db: KanjiTutorDb, base: string, next: PackManifest, report: Report) {
+  await forgettingAfter(db, () => installRows(db, base, next, report));
+}
+
+/** Runs a pack write, then drops the cached lookups, which may now be out of date. */
+async function forgettingAfter(db: KanjiTutorDb, write: () => Promise<void>): Promise<void> {
+  try {
+    await write();
+  } finally {
+    forgetDictionary(db);
+  }
+}
+
+async function installRows(db: KanjiTutorDb, base: string, next: PackManifest, report: Report) {
   const seen = emptySeen();
   const total = next.files.reduce((sum, file) => sum + file.count, 0);
   const overall = { done: 0, total: Math.max(total, 1) };
@@ -136,7 +150,9 @@ export function createPackLoader(db: KanjiTutorDb, baseUrl: string): PackLoader 
       await addLanguage(db, lang);
       if ((await installed()) !== next.version) return install(db, baseUrl, next, onProgress);
       const read = (url: string) => readRecords(`${baseUrl}${url}`);
-      await applyLanguage({ db, lang, read, report: onProgress, batch: BATCH }, files);
+      await forgettingAfter(db, () =>
+        applyLanguage({ db, lang, read, report: onProgress, batch: BATCH }, files),
+      );
       onProgress({ stage: 'done', loaded: files.length, total: files.length });
     },
     installedLanguages: () => installedLanguages(db),
