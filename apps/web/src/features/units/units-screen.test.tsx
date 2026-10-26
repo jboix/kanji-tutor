@@ -55,9 +55,9 @@ describe('UnitScreen (T3)', { timeout: 30_000 }, () => {
     renderUnit(repos, 'self-introduction');
     expect(await screen.findByRole('heading', { name: 'はじめまして' })).toBeTruthy();
     expect(screen.getByRole('progressbar', { name: 'Progress: Not started' })).toBeTruthy();
-    expect(
-      screen.getByText(/^0 of 5 sections · 0 of \d+ words known · 0 of \d grammar$/),
-    ).toBeTruthy();
+    expect(screen.queryByText(/sections ·/)).toBeNull();
+    const contents = screen.getByRole('region', { name: 'In this unit' });
+    expect(within(contents).getByText(/^0 of \d+ words known · 0 of \d grammar$/)).toBeTruthy();
     const sections = screen.getByRole('region', { name: 'Sections' });
     const rows = within(sections).getAllByRole('button');
     const names = [

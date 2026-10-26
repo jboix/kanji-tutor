@@ -2,10 +2,8 @@ import { useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { localGrammar, localUnit } from '../../domain/content-language.ts';
 import {
-  LESSON_SECTIONS,
   lastPractised,
   markUnitDone,
-  sectionsDone,
   type UnitView,
   unitPractised,
 } from '../../domain/services/index.ts';
@@ -30,19 +28,11 @@ import styles from './units.module.css';
 import { holdsLine, progressLine } from './units-copy.ts';
 import { useUnit } from './use-units.ts';
 
-/**
- * The unit's items practised, as the line shows them, with when it was last practised; under it
- * the sections done and the words and grammar known (T7).
- */
+/** The unit's items practised, one line, with when it was last practised (T7). */
 function Progress({ view }: { view: UnitView }) {
   const { t, format } = useI18n();
   const at = lastPractised(view);
   const date = at === undefined ? undefined : format.date(at, { day: 'numeric', month: 'short' });
-  const known = progressLine(t, view);
-  const sections = t('units.sectionsOf', {
-    done: sectionsDone(view),
-    total: LESSON_SECTIONS.length,
-  });
   return (
     <div className={styles.progress}>
       <PractisedProgress
@@ -50,19 +40,17 @@ function Progress({ view }: { view: UnitView }) {
         {...unitPractised(view)}
         aside={date && t('units.lastPractised', { date })}
       />
-      <p className={styles.muted}>
-        {view.pack ? t('units.withSections', { sections, line: known }) : known}
-      </p>
     </div>
   );
 }
 
+/** The unit's words and grammar, with how many are known beside the title, as detail. */
 function Contents({ view }: { view: UnitView }) {
   const t = useT();
   const lookup = useContentLanguage();
   return (
     <section className={styles.section} aria-label={t('units.contents')}>
-      <SectionHeader title={t('units.contents')} />
+      <SectionHeader title={t('units.contents')} meta={progressLine(t, view)} />
       <ul className={styles.words}>
         {view.unit.words.map((word) => (
           <li key={word.written}>

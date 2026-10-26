@@ -1,26 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import type { UnitView } from './unit-path.ts';
-import { lastPractised, levelUnits, sectionsDone, unitPractised } from './unit-progress.ts';
+import { lastPractised, levelUnits, unitPractised } from './unit-progress.ts';
 
 const counts = (known: number, total: number, reviewed: number, points: number) => ({
   words: { known, met: known, total },
   grammar: { reviewed, total: points },
-});
-
-describe('sectionsDone', () => {
-  const sections = {
-    words: { parts: 2, done: 2 },
-    grammar: { parts: 1, done: 1 },
-    practice: { parts: 2, done: 2 },
-    reading: { parts: 1, done: 1 },
-    review: { parts: 2, done: 1 },
-  };
-  const progress = { sections } as unknown as UnitView['progress'];
-
-  it('counts the sections with all their parts done', () => {
-    expect(sectionsDone({ progress })).toBe(4);
-    expect(sectionsDone({ progress: {} as UnitView['progress'] })).toBe(0);
-  });
 });
 
 describe('levelUnits (T4, T7)', () => {

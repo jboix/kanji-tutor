@@ -18,8 +18,6 @@ export const units = {
   wordsOf: { one: '{known} sur {n} mot connu', other: '{known} sur {n} mots connus' },
   grammarOf: '{known} sur {total} en grammaire',
   levelStarted: '{line} · {n} en cours',
-  sectionsOf: '{done} sur {total} sections',
-  withSections: '{sections} · {line}',
   counts: '{words} · {grammar}',
   levelDone: '{done} sur {total} terminées',
   ofTotal: '{done} sur {total}',

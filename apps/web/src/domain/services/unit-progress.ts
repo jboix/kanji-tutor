@@ -1,15 +1,9 @@
 /**
- * Progress shown with what it measures (T7), pure: one unit's items practised and its sections
- * done, and a level's unit counts. Built on the counts `unit-path.ts` already works out.
+ * Progress shown with what it measures (T7), pure: one unit's items practised, and a level's unit
+ * counts. Built on the counts `unit-path.ts` already works out.
  */
 import type { LearnerLevel } from '../types.ts';
-import { LESSON_SECTIONS, sectionDone } from './lesson-sections.ts';
 import type { UnitView } from './unit-path.ts';
-
-/** The sections of a unit's lesson that are done, out of all of them. */
-export function sectionsDone({ progress }: Pick<UnitView, 'progress'>): number {
-  return LESSON_SECTIONS.filter((section) => sectionDone(progress.sections?.[section])).length;
-}
 
 /** A unit's items practised, out of all of them: plain counts for its progress line. */
 export interface Practised {

@@ -198,7 +198,6 @@ export {
   lastPractised,
   levelUnits,
   type Practised,
-  sectionsDone,
   unitPractised,
 } from './unit-progress.ts';
 export {
