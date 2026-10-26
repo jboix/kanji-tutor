@@ -129,6 +129,10 @@
   scrollbar-width: none;
 }
 
+.units::-webkit-scrollbar {
+  display: none;
+}
+
 /* Every card as tall as the tallest: the row stretches the items, each item its card. */
 .units > li {
   display: flex;

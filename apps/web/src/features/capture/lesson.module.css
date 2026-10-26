@@ -55,6 +55,11 @@
   display: flex;
   gap: 10px;
   overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.photos::-webkit-scrollbar {
+  display: none;
 }
 
 .photo {

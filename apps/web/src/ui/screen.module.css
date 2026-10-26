@@ -17,6 +17,8 @@
   overflow-y: auto;
   /* Its own bounce stays; the scroll never chains to the page (U13). */
   overscroll-behavior-y: contain;
+  /* It scrolls without a visible bar: a classic desktop scrollbar would cut into the frame. */
+  scrollbar-width: none;
   scroll-padding-top: 16px;
   /* The safe area (status bar, notch) plus a little air; no fixed 56px on top of it (U11). */
   padding: max(16px, calc(env(safe-area-inset-top) + 8px)) var(--gutter) var(--gutter);
@@ -31,6 +33,10 @@
 .frame:has([data-bottom-nav]) .body {
   padding-bottom: 56px;
   scroll-padding-bottom: 56px;
+}
+
+.body::-webkit-scrollbar {
+  display: none;
 }
 
 /* The body scrolls: its sections keep their height instead of shrinking to fit. */

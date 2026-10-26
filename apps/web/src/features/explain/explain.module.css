@@ -164,6 +164,11 @@
   gap: 8px;
   max-height: 40vh;
   overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.answer::-webkit-scrollbar {
+  display: none;
 }
 
 .asked {

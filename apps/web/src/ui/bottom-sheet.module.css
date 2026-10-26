@@ -36,12 +36,17 @@
   max-width: 480px;
   max-height: calc(100% - 48px);
   overflow-y: auto;
+  scrollbar-width: none;
   padding: 10px var(--gutter) max(32px, calc(env(safe-area-inset-bottom) + 12px));
   border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
   background: var(--paper);
   outline: none;
   /* A pull past the top drags the sheet (U10), it does not bounce or scroll the page. */
   overscroll-behavior: contain;
+}
+
+.sheet::-webkit-scrollbar {
+  display: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
