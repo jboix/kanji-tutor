@@ -53,13 +53,18 @@ describe("Today's session mixes exercise types (S7)", { timeout: 60_000 }, () =>
     const repos = await curriculumRepos();
     const off: string[] = [];
     const on: string[] = [];
+    const later: string[] = [];
     for (let day = 0; day < 8; day++) {
       const now = NOW + day * DAY_MS;
       off.push(...s4(await buildSession(repos, { now })).map((d) => d.kind));
       on.push(...s4(await buildSession(repos, { now, listening: true })).map((d) => d.kind));
+      // The voice may still be looked up while the session is built.
+      const voice = Promise.resolve(true);
+      later.push(...s4(await buildSession(repos, { now, listening: voice })).map((d) => d.kind));
     }
     expect(off).not.toContain('listening');
     expect(on).toContain('listening');
+    expect(later).toEqual(on);
   });
 });
 

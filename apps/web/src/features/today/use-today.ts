@@ -35,7 +35,8 @@ export function useToday(now: number): TodayData {
     const merge = (patch: TodayData) => live && setData((prev) => ({ ...prev, ...patch }));
     const shared = sharedReads(repos);
     void todayOverview(shared, now).then((overview) => merge({ overview }));
-    const session = canListen().then((listening) => todaySession(shared, now, listening));
+    // The voice is looked up while the session is built; only its exercises wait for it.
+    const session = todaySession(shared, now, canListen());
     void session.then((session) => {
       if (!live) return;
       merge({ session: { ...session, handoff: offerSession(session.cards, Date.now()) } });

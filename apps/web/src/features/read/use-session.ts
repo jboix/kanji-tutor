@@ -98,8 +98,8 @@ const PLAIN_KEY = requestKey({});
  * Builds the session, with listening exercises where the device has a Japanese voice (S4). Its
  * steps share their reads (the lesson path, the word items) over one view.
  */
-async function build(repos: Repos, options: Omit<BuildSessionOptions, 'now'>) {
-  const listening = await canListen();
+function build(repos: Repos, options: Omit<BuildSessionOptions, 'now'>) {
+  const listening = canListen();
   return buildSession(sharedReads(repos), { now: Date.now(), ...options, listening });
 }
 

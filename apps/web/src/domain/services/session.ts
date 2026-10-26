@@ -83,8 +83,11 @@ export interface BuildSessionOptions {
   scan?: string;
   /** With `unit`: the lesson's 練習 section (S3), the unit's practice without its passage. */
   practice?: boolean;
-  /** The device has a Japanese voice, so listening exercises can be made (S4). */
-  listening?: boolean;
+  /**
+   * The device has a Japanese voice, so listening exercises can be made (S4). It may still be
+   * being looked up: only the steps that make exercises wait for it.
+   */
+  listening?: boolean | Promise<boolean>;
   /** With `unit`: one section of the unit lesson (S3), and its part (1-based). */
   section?: LessonSection;
   part?: number;
@@ -177,7 +180,7 @@ async function s4Exercises(
   const room = Math.max(0, cards.length - 1 - known.taken);
   const need = Math.max(1, exerciseSlots(cards.length) - known.taken);
   const introduced = [...known.introduced];
-  const listening = options.listening === true;
+  const listening = (await options.listening) === true;
   const exerciseInput = { pool, now: options.now, listening, introduced };
   const count = Math.min(SESSION_EXERCISES, room, need);
   return sessionExercises(repos, cards, exerciseInput, count);
@@ -285,12 +288,17 @@ async function tailFor(repos: Repos, options: BuildSessionOptions) {
   return localPassageCard(repos, options.unit);
 }
 
+async function scanSession(repos: Repos, scan: string, options: BuildSessionOptions) {
+  const listening = (await options.listening) === true;
+  return scanSessionCards(repos, scan, { now: options.now, listening });
+}
+
 /** The sessions that are not a reading mix: kanji cards, a grammar point, a scanned lesson. */
 function specialSession(repos: Repos, options: BuildSessionOptions) {
   const { now } = options;
   if (options.kanjiCards) return kanjiCardSession(repos, now);
   if (options.scan) {
-    return scanSessionCards(repos, options.scan, { now, listening: options.listening === true });
+    return scanSession(repos, options.scan, options);
   }
   if (options.grammar) {
     return buildGrammarSession(repos, options.grammar, now, (c) => finish(c, false));
@@ -321,7 +329,7 @@ export async function buildSession(
     return card ? [card] : [];
   };
   if (unit && options.section) {
-    const listening = options.listening === true;
+    const listening = (await options.listening) === true;
     const input = {
       unit,
       section: options.section,

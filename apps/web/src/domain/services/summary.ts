@@ -195,7 +195,7 @@ export async function todayOverview(repos: Repos, now: number): Promise<TodayOve
 export async function todaySession(
   repos: Repos,
   now: number,
-  listening = false,
+  listening: boolean | Promise<boolean> = false,
 ): Promise<TodaySession> {
   const [cards, words] = await Promise.all([
     buildSession(repos, { now, listening }),
