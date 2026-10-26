@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { Repos } from '../domain/repos.ts';
-import { type StartPlan, startPlan } from '../domain/services/index.ts';
+import { type StartPlan, sharedReads, startPlan } from '../domain/services/index.ts';
 import { useServices } from './services.tsx';
 
 /** What each choice in the Start sheet plays now. */
@@ -16,7 +16,9 @@ export interface StartOptions {
 const narrow = <K extends StartPlan['kind']>(plan: StartPlan, kind: K) =>
   plan.kind === kind ? (plan as Extract<StartPlan, { kind: K }>) : undefined;
 
-async function loadOptions(repos: Repos, now: number): Promise<StartOptions> {
+/** The three plans over one shared view, so the lesson path they each start from is read once. */
+async function loadOptions(base: Repos, now: number): Promise<StartOptions> {
+  const repos = sharedReads(base);
   const [lesson, grammar, kanji] = await Promise.all([
     startPlan(repos, now, 'lesson'),
     startPlan(repos, now, 'grammar'),

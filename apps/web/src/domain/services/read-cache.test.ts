@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { createMemoryRepos } from '../../test/memory-repos.ts';
 import { newWordItem } from './items.ts';
-import { sharedReads } from './read-cache.ts';
+import { sharedReads, sharedResult } from './read-cache.ts';
 
 const NOW = Date.UTC(2026, 9, 17);
 
@@ -40,5 +40,18 @@ describe('sharedReads (N10)', () => {
       wordIds: [],
     });
     expect(await shared.kanjiReadings.all()).toHaveLength(1);
+  });
+
+  it('builds a shared result once per view, again after a write, and each time over plain repos', async () => {
+    const repos = createMemoryRepos();
+    const load = vi.fn(async () => ({ built: true }));
+    await Promise.all([sharedResult(repos, 'path', load), sharedResult(repos, 'path', load)]);
+    expect(load).toHaveBeenCalledTimes(2);
+    const shared = sharedReads(repos);
+    await Promise.all([sharedResult(shared, 'path', load), sharedResult(shared, 'path', load)]);
+    expect(load).toHaveBeenCalledTimes(3);
+    await shared.settings.patch({ learnerLevel: 4 });
+    await sharedResult(shared, 'path', load);
+    expect(load).toHaveBeenCalledTimes(4);
   });
 });

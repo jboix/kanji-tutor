@@ -61,13 +61,28 @@ function settings(base: Repos['settings'], memo: Memo): Repos['settings'] {
   };
 }
 
+/** Each shared view's memo, so results built from its reads can be kept with them. */
+const memos = new WeakMap<Repos, Memo>();
+
 /** The repos with word items, settings and kanji readings read once while in use (N10). */
 export function sharedReads(repos: Repos): Repos {
   const memo: Memo = new Map();
-  return {
+  const view: Repos = {
     ...repos,
     items: items(repos.items, memo),
     kanjiReadings: kanjiReadings(repos.kanjiReadings, memo),
     settings: settings(repos.settings, memo),
   };
+  memos.set(view, memo);
+  return view;
+}
+
+/**
+ * `load`'s result, built once per shared view and dropped with its reads on a write through it.
+ * Over repos that are not a shared view, `load` runs on every call. The result is shared, so
+ * callers must not change it.
+ */
+export function sharedResult<T>(repos: Repos, key: string, load: () => Promise<T>): Promise<T> {
+  const memo = memos.get(repos);
+  return memo ? once(memo, key, load) : load();
 }

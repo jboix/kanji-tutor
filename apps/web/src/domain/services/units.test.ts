@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { curriculumRepos } from '../../test/fixture-curriculum.ts';
 import { NOW } from '../../test/reading-fixtures.ts';
 import type { Repos } from '../repos.ts';
@@ -6,6 +6,7 @@ import { unitById } from '../themes/index.ts';
 import type { KnowledgeLevel } from '../types.ts';
 import { newWordItem } from './items.ts';
 import { lessonPlan } from './lesson-plan.ts';
+import { sharedReads } from './read-cache.ts';
 import { meetsDone } from './unit-path.ts';
 import {
   finishLessonPart,
@@ -85,6 +86,24 @@ describe('the unit path (T3, T4)', () => {
     expect(path.units[0]).toMatchObject({ state: 'done', step: 'done' });
     expect(path.current?.unit.id).toBe('self-introduction');
     expect((await repos.settings.get()).unitStatus?.[id]?.doneAt).toBe(NOW);
+  });
+
+  it('stores every unit that became done in one write, and reads the path once per view', async () => {
+    const repos = await curriculumRepos();
+    const ids = ['i-am-a-student', 'self-introduction'];
+    const first = await unitPath(repos, NOW);
+    for (const id of ids) {
+      await know(repos, first.units.find((v) => v.unit.id === id)?.wordIds ?? []);
+      await rightGrammar(repos, unitById(id)?.grammar ?? []);
+    }
+    const patch = vi.spyOn(repos.settings, 'patch');
+    const units = vi.spyOn(repos.units, 'all');
+    const shared = sharedReads(repos);
+    await Promise.all([unitPath(shared, NOW), unitPath(shared, NOW)]);
+    expect(patch).toHaveBeenCalledTimes(1);
+    expect(units).toHaveBeenCalledTimes(1);
+    const status = (await repos.settings.get()).unitStatus ?? {};
+    expect(ids.map((id) => status[id]?.doneAt)).toEqual([NOW, NOW]);
   });
 
   it('counts the Read step of the earlier path as 読み物 done', async () => {

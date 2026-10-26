@@ -14,6 +14,7 @@ import type {
 } from '../types.ts';
 import { learnerLevelOf } from './learner-level.ts';
 import { currentSection, finishPart, nextPart } from './lesson-sections.ts';
+import { sharedResult } from './read-cache.ts';
 import { newlyDone, type PathInput, type UnitView, unitPathOf } from './unit-path.ts';
 
 export type { UnitCounts, UnitState, UnitStep, UnitView } from './unit-path.ts';
@@ -32,7 +33,15 @@ async function grammarRight(repos: Repos, ids: readonly string[]): Promise<Set<s
   return new Set(right.map((r) => r.itemId.slice('grammar:'.length)));
 }
 
-async function pathInput(repos: Repos, settings: Settings): Promise<PathInput> {
+/**
+ * What the path is built from. Today's steps each ask for the path side by side; over a shared
+ * view (`sharedReads`) it is read once for all of them.
+ */
+function pathInput(repos: Repos, settings: Settings): Promise<PathInput> {
+  return sharedResult(repos, 'unit-path-input', () => readPathInput(repos, settings));
+}
+
+async function readPathInput(repos: Repos, settings: Settings): Promise<PathInput> {
   const packs = new Map((await repos.units.all()).map((pack) => [pack.id, pack]));
   const status = settings.unitStatus ?? {};
   const ids = [...packs.values()].flatMap((pack) => pack.wordIds);
@@ -72,9 +81,14 @@ async function markDone(repos: Repos, views: readonly UnitView[], now: number): 
 
 /**
  * Every unit with its state, step and counts, in path order (T4). A unit that now meets the done
- * rule is stored as done, so it stays done when a word lapses later.
+ * rule is stored as done, so it stays done when a word lapses later. Over a shared view, callers
+ * side by side share one path, and so one write.
  */
-export async function unitPath(repos: Repos, now: number): Promise<UnitPath> {
+export function unitPath(repos: Repos, now: number): Promise<UnitPath> {
+  return sharedResult(repos, `unit-path:${now}`, () => storedUnitPath(repos, now));
+}
+
+async function storedUnitPath(repos: Repos, now: number): Promise<UnitPath> {
   const settings = await repos.settings.get();
   const input = await pathInput(repos, settings);
   const path = unitPathOf(input);

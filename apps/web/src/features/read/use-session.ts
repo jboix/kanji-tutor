@@ -8,6 +8,7 @@ import {
   prepareScanCard,
   recordAnswer,
   type SessionFocus,
+  sharedReads,
 } from '../../domain/services/index.ts';
 import type { AnswerMode, LessonSection } from '../../domain/types.ts';
 import { canListen } from '../../lang/speech.ts';
@@ -93,10 +94,13 @@ function readySession(key: string, handoff: unknown): SessionAction | undefined 
 
 const PLAIN_KEY = requestKey({});
 
-/** Builds the session, with listening exercises where the device has a Japanese voice (S4). */
+/**
+ * Builds the session, with listening exercises where the device has a Japanese voice (S4). Its
+ * steps share their reads (the lesson path, the word items) over one view.
+ */
 async function build(repos: Repos, options: Omit<BuildSessionOptions, 'now'>) {
   const listening = await canListen();
-  return buildSession(repos, { now: Date.now(), ...options, listening });
+  return buildSession(sharedReads(repos), { now: Date.now(), ...options, listening });
 }
 
 /** The build options back from their key (`requestKey` keeps every option, sorted). */

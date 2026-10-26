@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
 import type { LevelCoverage } from '../../domain/learner-view.ts';
-import { learnerCoverage, type UnitView, unitPath } from '../../domain/services/index.ts';
+import {
+  learnerCoverage,
+  sharedReads,
+  type UnitView,
+  unitPath,
+} from '../../domain/services/index.ts';
 import { useServices } from '../../ui/services.tsx';
 
 /** Words, kanji and grammar points known, over every level. */
@@ -20,7 +25,8 @@ export interface HomeFacts {
 
 const sum = (levels: readonly LevelCoverage[]) => levels.reduce((n, l) => n + l.known, 0);
 
-async function loadHome(repos: ReturnType<typeof useServices>['repos'], now: number) {
+async function loadHome(base: ReturnType<typeof useServices>['repos'], now: number) {
+  const repos = sharedReads(base);
   const [coverage, path] = await Promise.all([learnerCoverage(repos), unitPath(repos, now)]);
   const at = Math.max(
     0,
