@@ -14,7 +14,7 @@ import { UpdateCard } from '../../ui/update-card.tsx';
 import { PlacementRows } from './placement-row.tsx';
 import styles from './today.module.css';
 import { ClassSection } from './today-class.tsx';
-import { dateLine } from './today-copy.ts';
+import { dateLine, greeting } from './today-copy.ts';
 import { KnownSection, UnitsSection } from './today-known.tsx';
 import { LevelUpRow } from './today-lesson.tsx';
 import { NextUp } from './today-next.tsx';
@@ -64,7 +64,7 @@ function TodayHeader({ now }: { now: number }) {
   return (
     <header className={styles.header}>
       <h1 lang="ja" className={styles.title}>
-        今日
+        {greeting(now)}
       </h1>
       <span className={styles.date} lang="ja">
         {dateLine(now)}

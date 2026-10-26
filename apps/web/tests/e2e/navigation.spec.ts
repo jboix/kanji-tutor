@@ -42,7 +42,9 @@ test('Start offers the first lesson part from zero, and its close returns to Tod
   await expect(page).toHaveURL(/\/read\?unit=i-am-a-student&section=words&part=1$/);
   await page.getByRole('button', { name: 'End session' }).click();
   await expect(page).toHaveURL(/\/$/);
-  await expect(page.getByRole('heading', { name: '今日' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: /^(おはようございます|こんにちは|こんばんは)$/ }),
+  ).toBeVisible();
 });
 
 test('the Start sheet plays the round chosen in it, and closes without starting', async ({

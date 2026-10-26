@@ -52,7 +52,9 @@ describe('the Start button (IA3)', { timeout: 20_000 }, () => {
     expect(read.textContent).not.toContain('handed 0 cards');
     expect(router.state.historyAction).toBe('PUSH');
     await router.navigate(-1);
-    expect(await screen.findByRole('heading', { name: '今日' })).toBeTruthy();
+    expect(
+      await screen.findByRole('heading', { name: /^(おはようございます|こんにちは|こんばんは)$/ }),
+    ).toBeTruthy();
   });
 
   it('offers the next lesson part first in the sheet', async () => {

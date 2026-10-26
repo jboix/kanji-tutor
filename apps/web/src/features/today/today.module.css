@@ -196,6 +196,18 @@ a.small:hover {
   color: var(--hero-fill);
 }
 
+/* The unit's title and its theme under it, kept close as one heading. */
+.unitHead {
+  display: flex;
+  flex-direction: column;
+}
+
+.unitTheme {
+  margin: 0;
+  font-size: 14px;
+  color: var(--hero-muted);
+}
+
 .unitTitle {
   display: inline-flex;
   align-items: center;

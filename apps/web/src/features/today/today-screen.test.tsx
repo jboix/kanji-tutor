@@ -6,7 +6,7 @@ import { fakeServices, renderWithServices } from '../../test/render.tsx';
 import { offerUpdate, resetAppUpdate } from '../../ui/app-update.ts';
 import { ENGLISH } from '../../ui/i18n/load.ts';
 import { createTranslator } from '../../ui/i18n/translate.ts';
-import { dateLine, missLead, whenLine } from './today-copy.ts';
+import { dateLine, greeting, missLead, whenLine } from './today-copy.ts';
 import { TodayScreen } from './today-screen.tsx';
 
 const t = createTranslator('en', ENGLISH, ENGLISH);
@@ -16,6 +16,14 @@ describe('today copy', () => {
     expect(t('today.minutes', { n: 1 })).toBe('1 minute');
     expect(t('today.minutes', { n: 12 })).toBe('12 minutes');
     expect(dateLine(NOW)).toBe('10月17日（土）');
+  });
+
+  it('greets by the hour of the day', () => {
+    const at = (hour: number) => new Date(2026, 9, 17, hour).getTime();
+    expect(greeting(at(4))).toBe('こんばんは');
+    expect(greeting(at(5))).toBe('おはようございます');
+    expect(greeting(at(11))).toBe('こんにちは');
+    expect(greeting(at(18))).toBe('こんばんは');
   });
 
   it('describes the misses and when', () => {

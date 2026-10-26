@@ -36,5 +36,7 @@ test('write a sentence with a grammar point, read the red pen, accept it', async
 
   await page.getByRole('button', { name: 'Save fixed' }).click();
   await expect(page).toHaveURL(/\/$/);
-  await expect(page.getByRole('heading', { name: '今日' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: /^(おはようございます|こんにちは|こんばんは)$/ }),
+  ).toBeVisible();
 });

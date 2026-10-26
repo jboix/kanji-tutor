@@ -81,7 +81,7 @@ function ContinueLink({ unit }: { unit: UnitView }) {
   );
 }
 
-/** The unit's title links to its page; the sections show which are done and which is next. */
+/** The unit's title links to its page, its theme under it; the sections show which are done and which is next. */
 export function NextUp({ unit }: { unit: UnitView }) {
   const t = useT();
   return (
@@ -91,9 +91,12 @@ export function NextUp({ unit }: { unit: UnitView }) {
       data-current-unit={unit.unit.id}
     >
       <p className={styles.kicker}>{t('today.nextUp', { order: unit.unit.order })}</p>
-      <Link to={paths.unit(unit.unit.id)} className={styles.unitTitle}>
-        <Ja>{unit.unit.titleJa}</Ja>
-      </Link>
+      <div className={styles.unitHead}>
+        <Link to={paths.unit(unit.unit.id)} className={styles.unitTitle}>
+          <Ja>{unit.unit.titleJa}</Ja>
+        </Link>
+        <p className={styles.unitTheme}>{unit.unit.theme}</p>
+      </div>
       <Sections unit={unit} />
       <ContinueLink unit={unit} />
     </section>

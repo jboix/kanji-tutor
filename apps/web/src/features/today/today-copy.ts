@@ -2,6 +2,14 @@
 import type { ErrorType } from '../../domain/types.ts';
 import type { Translate } from '../../ui/i18n/types.ts';
 
+/** The greeting at the top of Home, in Japanese like the date: by the hour of the day. */
+export function greeting(now: number): string {
+  const hour = new Date(now).getHours();
+  if (hour >= 5 && hour < 11) return 'おはようございます';
+  if (hour >= 11 && hour < 18) return 'こんにちは';
+  return 'こんばんは';
+}
+
 /** "10月17日（土）": the date on Today is always in Japanese, whatever the interface language. */
 export function dateLine(now: number): string {
   const parts = new Intl.DateTimeFormat('ja-JP', { month: 'long', day: 'numeric' }).format(now);
