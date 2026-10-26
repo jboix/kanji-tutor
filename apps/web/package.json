@@ -27,11 +27,11 @@
     "@fontsource/klee-one": "^5.3.1",
     "@google/genai": "^2.30.0",
     "@simplewebauthn/browser": "^14.0.0",
-    "dexie": "^4.4.0",
+    "dexie": "^4.4.7",
     "kuromoji": "^0.1.2",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
-    "react-router": "^8.4.0",
+    "react-router": "^8.5.0",
     "ts-fsrs": "^5.4.0",
     "wanakana": "^5.3.0",
     "zod": "^4.6.0"
