@@ -52,7 +52,10 @@ export interface ReviewRepo {
   add(review: Review): Promise<number>;
   since(at: number): Promise<Review[]>;
   byItem(itemId: ItemId): Promise<Review[]>;
+  /** The reviews of any of these items, in one read. */
+  byItems(itemIds: readonly ItemId[]): Promise<Review[]>;
   all(): Promise<Review[]>;
+  count(): Promise<number>;
 }
 
 /** Level gate and size of a sentence query (G3). */

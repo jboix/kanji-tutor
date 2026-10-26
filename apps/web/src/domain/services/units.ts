@@ -4,7 +4,14 @@
  */
 import type { Repos } from '../repos.ts';
 import { UNITS } from '../themes/index.ts';
-import type { LearnerLevel, LessonSection, Settings, UnitProgress, Word } from '../types.ts';
+import type {
+  ItemId,
+  LearnerLevel,
+  LessonSection,
+  Settings,
+  UnitProgress,
+  Word,
+} from '../types.ts';
 import { learnerLevelOf } from './learner-level.ts';
 import { currentSection, finishPart, nextPart } from './lesson-sections.ts';
 import { newlyDone, type PathInput, type UnitView, unitPathOf } from './unit-path.ts';
@@ -19,9 +26,10 @@ export interface UnitPath {
 }
 
 async function grammarRight(repos: Repos, ids: readonly string[]): Promise<Set<string>> {
-  const unique = [...new Set(ids)];
-  const reviews = await Promise.all(unique.map((id) => repos.reviews.byItem(`grammar:${id}`)));
-  return new Set(unique.filter((_, i) => reviews[i]?.some((r) => r.verdict === 'correct')));
+  const keys = [...new Set(ids)].map((id): ItemId => `grammar:${id}`);
+  const reviews = await repos.reviews.byItems(keys);
+  const right = reviews.filter((r) => r.verdict === 'correct');
+  return new Set(right.map((r) => r.itemId.slice('grammar:'.length)));
 }
 
 async function pathInput(repos: Repos, settings: Settings): Promise<PathInput> {
@@ -53,6 +61,15 @@ async function patchUnit(repos: Repos, id: string, patch: UnitProgress): Promise
   });
 }
 
+/** Stores these units as done, in one write. */
+async function markDone(repos: Repos, views: readonly UnitView[], now: number): Promise<void> {
+  if (views.length === 0) return;
+  const { unitStatus = {} } = await repos.settings.get();
+  const next = { ...unitStatus };
+  for (const { unit } of views) next[unit.id] = { ...next[unit.id], doneAt: now };
+  await repos.settings.patch({ unitStatus: next });
+}
+
 /**
  * Every unit with its state, step and counts, in path order (T4). A unit that now meets the done
  * rule is stored as done, so it stays done when a word lapses later.
@@ -61,7 +78,7 @@ export async function unitPath(repos: Repos, now: number): Promise<UnitPath> {
   const settings = await repos.settings.get();
   const input = await pathInput(repos, settings);
   const path = unitPathOf(input);
-  for (const view of newlyDone(path.units)) await patchUnit(repos, view.unit.id, { doneAt: now });
+  await markDone(repos, newlyDone(path.units), now);
   return { level: input.level, ...path };
 }
 

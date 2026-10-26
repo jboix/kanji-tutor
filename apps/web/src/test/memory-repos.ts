@@ -67,7 +67,9 @@ function reviewRepo(): Repos['reviews'] {
     },
     since: async (at) => rows.filter((row) => row.at >= at).map((row) => structuredClone(row)),
     byItem: async (itemId) => rows.filter((row) => row.itemId === itemId),
+    byItems: async (itemIds) => rows.filter((row) => itemIds.includes(row.itemId)),
     all: async () => rows.map((row) => structuredClone(row)),
+    count: async () => rows.length,
   };
 }
 

@@ -1,7 +1,7 @@
 import { DEFAULT_SETTINGS, migrateSettings } from '../domain/defaults.ts';
 import type { JlptLevel } from '../domain/learner-view.ts';
 import type { Repos, SentenceQuery } from '../domain/repos.ts';
-import type { Sentence, Settings } from '../domain/types.ts';
+import type { ItemId, Review, Sentence, Settings } from '../domain/types.ts';
 import type { KanjiTutorDb } from './db.ts';
 import { dexieDictionary } from './dictionary.ts';
 import { grammarKey, toSentence, wordKey } from './sentence-keys.ts';
@@ -54,12 +54,28 @@ function readingRepo(db: KanjiTutorDb): Repos['kanjiReadings'] {
   };
 }
 
+/**
+ * The reviews of these items in one read: the index range from the lowest id to the highest,
+ * filtered. A read per id, or an anyOf cursor (a round trip per row), costs a request each; ids
+ * of one kind (`grammar:…`) keep the range to that kind.
+ */
+async function reviewsOf(db: KanjiTutorDb, itemIds: readonly ItemId[]): Promise<Review[]> {
+  const wanted = new Set(itemIds);
+  const sorted = [...wanted].sort();
+  const [first, last] = [sorted[0], sorted.at(-1)];
+  if (first === undefined || last === undefined) return [];
+  const rows = await db.reviews.where('itemId').between(first, last, true, true).toArray();
+  return rows.filter((row) => wanted.has(row.itemId));
+}
+
 function reviewRepo(db: KanjiTutorDb): Repos['reviews'] {
   return {
     add: (review) => db.reviews.add(review) as Promise<number>,
     since: (at) => db.reviews.where('at').aboveOrEqual(at).toArray(),
     byItem: (itemId) => db.reviews.where('itemId').equals(itemId).toArray(),
+    byItems: (itemIds) => reviewsOf(db, itemIds),
     all: () => db.reviews.toArray(),
+    count: () => db.reviews.count(),
   };
 }
 

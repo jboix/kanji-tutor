@@ -45,9 +45,12 @@ export interface LevelSuggestion {
 
 /** The learner's review count and, when the reviews point elsewhere, a suggested level. */
 export async function levelSuggestion(repos: Repos, now: number): Promise<LevelSuggestion> {
-  const [all, settings] = await Promise.all([repos.reviews.all(), repos.settings.get()]);
+  const [count, recent, settings] = await Promise.all([
+    repos.reviews.count(),
+    repos.reviews.since(now - ESTIMATE_WINDOW_MS),
+    repos.settings.get(),
+  ]);
   const current = learnerLevelOf(settings);
-  const recent = all.filter((review) => review.at >= now - ESTIMATE_WINDOW_MS);
   const levels = await levelsOf(repos, recent);
   const tagged = recent.flatMap((review) => {
     const level = levelOf(levels, review);
@@ -55,7 +58,7 @@ export async function levelSuggestion(repos: Repos, now: number): Promise<LevelS
     return level ? [{ level, correct }] : [];
   });
   const suggested = levelFromReviews(tagged);
-  const result: LevelSuggestion = { reviews: all.length, current };
+  const result: LevelSuggestion = { reviews: count, current };
   if (suggested !== undefined && suggested !== current) result.suggested = suggested;
   return result;
 }

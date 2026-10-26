@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import type { ItemId } from '../domain/types.ts';
 import { KanjiTutorDb } from './db.ts';
 import { createDexieRepos } from './repos.ts';
 
@@ -62,5 +63,33 @@ describe('settings repo', () => {
     expect((await repos.settings.get()).modelId).toBe('gemini-3.5-flash-lite');
     await repos.settings.patch({ modelId: 'gemini-2.5-flash' });
     expect((await repos.settings.get()).modelId).toBe('gemini-2.5-flash');
+  });
+});
+
+describe('review repo', () => {
+  it('reads the reviews of several items at once, and nothing for none', async () => {
+    const repos = createDexieRepos(db);
+    const answers: [number, ItemId][] = [
+      [1, 'grammar:te-iru'],
+      [2, 'grammar:kara'],
+      [3, 'grammar:node'],
+      [4, 'word:1'],
+      [5, 'grammar:te-iru'],
+    ];
+    for (const [at, itemId] of answers) {
+      await repos.reviews.add({
+        at,
+        itemId,
+        answer: 'a',
+        expected: 'a',
+        verdict: 'correct',
+        durationMs: 1,
+        mode: 'typed',
+      });
+    }
+    const found = await repos.reviews.byItems(['grammar:te-iru', 'grammar:node', 'grammar:none']);
+    expect(found.map((review) => review.at).sort()).toEqual([1, 3, 5]);
+    expect(await repos.reviews.byItems([])).toEqual([]);
+    expect(await repos.reviews.count()).toBe(5);
   });
 });
