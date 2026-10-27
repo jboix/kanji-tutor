@@ -8,6 +8,7 @@ const SCREENS = [
   '/read',
   '/kanji',
   '/kanji/生',
+  '/kanji/wall',
   '/capture',
   '/notes',
   '/compose',

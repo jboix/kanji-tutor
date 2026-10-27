@@ -312,6 +312,15 @@ export const RefreshIcon = () => (
     <path d="M19 4.5V8h-3.5" />
   </Svg>
 );
+/** The kanji wall: four tiles, the last still dashed. */
+export const WallIcon = () => (
+  <Svg>
+    <rect x="4" y="4" width="7" height="7" rx="1.5" />
+    <rect x="13" y="4" width="7" height="7" rx="1.5" />
+    <rect x="4" y="13" width="7" height="7" rx="1.5" />
+    <rect x="13" y="13" width="7" height="7" rx="1.5" strokeDasharray="2 2" />
+  </Svg>
+);
 /** Selected or right: a bare check. */
 export const TickIcon = () => (
   <Svg size={16} width={2.2}>

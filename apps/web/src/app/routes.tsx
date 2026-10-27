@@ -27,6 +27,10 @@ const GATED: RouteObject[] = [
   screen(paths.plan, async () => (await import('../features/today/plan-screen.tsx')).PlanScreen),
   screen(paths.read, async () => (await import('../features/read/read-screen.tsx')).ReadScreen),
   screen(paths.kanji, kanji),
+  screen(
+    paths.kanjiWall(),
+    async () => (await import('../features/kanji/kanji-wall-screen.tsx')).KanjiWallScreen,
+  ),
   screen('/kanji/:char', kanji),
   screen(
     paths.capture,

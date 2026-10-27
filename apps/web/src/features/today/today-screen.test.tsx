@@ -77,6 +77,9 @@ describe('TodayScreen', () => {
     expect(within(where).getByRole('link', { name: 'Details' }).getAttribute('href')).toBe(
       '/learned',
     );
+    expect(within(where).getByRole('link', { name: 'Kanji wall' }).getAttribute('href')).toBe(
+      '/kanji/wall',
+    );
     expect(
       await within(where).findByRole('progressbar', { name: /^Kanji: \d+ of \d+ known$/ }),
     ).toBeTruthy();

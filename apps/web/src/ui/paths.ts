@@ -13,6 +13,11 @@ export const paths = {
   plan: '/plan',
   read: '/read',
   kanji: '/kanji',
+  /** The kanji wall: of `at`'s level, that kanji's tile ringed, or of the learner's level. */
+  kanjiWall: (at?: { char: string; level: number }) =>
+    at
+      ? `/kanji/wall?${new URLSearchParams({ at: at.char, level: String(at.level) })}`
+      : '/kanji/wall',
   kanjiDetail: (char: string) => `/kanji/${encodeURIComponent(char)}`,
   capture: '/capture',
   notes: '/notes',

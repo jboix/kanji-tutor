@@ -1,4 +1,7 @@
-/** "Where you are" on Today (IA2): level bars for kanji, words and grammar, and last time. */
+/**
+ * "Where you are" on Today (IA2): level bars for kanji, words and grammar, the way to the kanji
+ * wall, and last time.
+ */
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { type LastTime, type LevelProgress, levelProgress } from '../../domain/services/index.ts';
@@ -6,12 +9,14 @@ import { foldKana, toKana } from '../../lang/index.ts';
 import { cx } from '../../ui/cx.ts';
 import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
 import type { PlainKey } from '../../ui/i18n/types.ts';
+import { WallIcon } from '../../ui/icons.tsx';
 import { Ja } from '../../ui/ja.tsx';
 import { paths } from '../../ui/paths.ts';
 import { ProgressLine } from '../../ui/progress-line.tsx';
 import { useServices } from '../../ui/services.tsx';
 import styles from './today.module.css';
 import { missLead, whenLine } from './today-copy.ts';
+import wall from './today-wall.module.css';
 
 /** The level's counts, read after the overview so they never hold up the first paint (N10). */
 function useLevelProgress(): LevelProgress | undefined {
@@ -126,7 +131,13 @@ export function WhereYouAre({ last }: { last: LastTime | undefined }) {
           <span>{t('today.details')}</span>
         </Link>
       </div>
-      <Bars key={progress ? 'counts' : 'waiting'} progress={progress} />
+      <div className={wall.panelBody}>
+        <Bars key={progress ? 'counts' : 'waiting'} progress={progress} />
+        <Link to={paths.kanjiWall()} className={wall.wallLink}>
+          <WallIcon />
+          {t('today.kanjiWall')}
+        </Link>
+      </div>
       {last && <LastTimeLine last={last} />}
     </section>
   );

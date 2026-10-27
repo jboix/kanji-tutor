@@ -46,6 +46,7 @@ export const today = {
   whereLabel: 'Où vous en êtes',
   whereLevel: 'Où vous en êtes · N{level}',
   details: 'Détails',
+  kanjiWall: 'Mur des kanji',
   barKanji: 'Kanji',
   barWords: 'Mots',
   barGrammar: 'Grammaire',

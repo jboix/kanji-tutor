@@ -3,14 +3,14 @@ import { Link, useNavigate } from 'react-router';
 import { type KanjiDetail, readingLabel } from '../../domain/services/index.ts';
 import type { Source } from '../../domain/types.ts';
 import { Chip, ChipRow } from '../../ui/chip.tsx';
-import { ExternalLink, ExternalLinks } from '../../ui/external-link.tsx';
-import { jishoKanjiUrl, wiktionaryKanjiUrl } from '../../ui/external-links.ts';
+import { KanjiLinks } from '../../ui/external-link.tsx';
 import { type I18n, useI18n, useT } from '../../ui/i18n/i18n.tsx';
 import { Ja } from '../../ui/ja.tsx';
 import { paths } from '../../ui/paths.ts';
 import { SectionLabel } from '../../ui/section-label.tsx';
 import { TutorCard, TutorFloat, useTutor } from '../../ui/tutor.tsx';
 import styles from './kanji.module.css';
+import { WallGlimpse } from './kanji-wall.tsx';
 import { ReadingRows } from './reading-rows.tsx';
 
 function sinceText({ t, format }: I18n, source: Source): string {
@@ -47,10 +47,7 @@ function Hero({ detail }: { detail: KanjiDetail }) {
         <p className={styles.meanings}>{kanji.meanings.slice(0, 3).join(', ')}</p>
         <p className={styles.meta}>{countLine(i18n.t, detail)}</p>
         {since && <p className={styles.meta}>{sinceText(i18n, since)}</p>}
-        <ExternalLinks>
-          <ExternalLink site="jisho" href={jishoKanjiUrl(kanji.char)} />
-          <ExternalLink site="wiktionary" href={wiktionaryKanjiUrl(kanji.char)} />
-        </ExternalLinks>
+        <KanjiLinks char={kanji.char} subject={false} />
       </div>
     </header>
   );
@@ -130,7 +127,7 @@ function KanjiTutor({ detail, floating }: { detail: KanjiDetail; floating: boole
 
 /**
  * The kanji page (kanji.html, K3): readings and how well each is read, the tutor, family,
- * practice. `floating` (its own screen, not a peek over a session) adds the floating Ask.
+ * practice, and the kanji wall around it. `floating` (its own screen, not a peek over a session) adds the floating Ask.
  */
 export function KanjiDetailView(props: { detail: KanjiDetail; floating?: boolean }) {
   const { detail } = props;
@@ -141,6 +138,7 @@ export function KanjiDetailView(props: { detail: KanjiDetail; floating?: boolean
       <ReadingRows detail={detail} />
       {detail.family && <Family family={detail.family} />}
       <Practice detail={detail} />
+      <WallGlimpse kanji={detail.kanji} />
     </>
   );
 }
