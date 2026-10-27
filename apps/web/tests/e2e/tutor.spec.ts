@@ -31,7 +31,7 @@ test('without a key, the tab offers to set the tutor up', async ({ page }) => {
   await expect(nav.getByRole('link', { name: 'Tutor, not set up yet' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'The tutor isn’t set up yet' })).toBeVisible();
   await expect(page.getByRole('textbox')).toHaveCount(0);
-  await expect(page.getByText('Needs the tutor')).toHaveCount(3);
+  await expect(page.getByText('Needs the tutor')).toHaveCount(4);
   await page.getByRole('button', { name: 'Where do I get a key?' }).click();
   const help = page.getByRole('dialog', { name: 'Getting a Gemini key' });
   await expect(help.getByText(/aistudio\.google\.com/)).toBeVisible();
