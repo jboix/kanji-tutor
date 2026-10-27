@@ -24,7 +24,7 @@ export interface AiError {
   /** For `rate-limit`: how long to wait before a retry, in ms (A14). */
   retryAfterMs?: number;
   /** For `provider`: a known cause the UI words in the learner's language. */
-  code?: 'cancelled' | 'refused' | 'no-answer';
+  code?: 'cancelled' | 'refused' | 'no-answer' | 'timeout' | 'busy';
   /** For `refused`: the HTTP status Google answered with. */
   status?: number;
 }

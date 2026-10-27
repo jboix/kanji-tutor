@@ -12,4 +12,7 @@ export const ai = {
   cancelled: 'Se canceló la solicitud.',
   refused: 'Gemini rechazó la solicitud ({status}). Revisa la clave y el modelo en Ajustes.',
   noAnswer: 'Gemini no respondió.',
+  timeout:
+    'Gemini tardó demasiado en responder; puede estar saturado. Vuelve a intentarlo en un momento.',
+  busy: 'Gemini está saturado ahora mismo. Vuelve a intentarlo en un momento.',
 } satisfies Messages['ai'];

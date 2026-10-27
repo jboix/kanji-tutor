@@ -4,6 +4,8 @@ import type { Translate } from './i18n/types.ts';
 
 function providerText(t: Translate, error: AiError): string {
   if (error.code === 'cancelled') return t('ai.cancelled');
+  if (error.code === 'timeout') return t('ai.timeout');
+  if (error.code === 'busy') return t('ai.busy');
   if (error.code === 'refused') return t('ai.refused', { status: error.status ?? 0 });
   if (error.code === 'no-answer' || !error.message) return t('ai.noAnswer');
   return error.message;

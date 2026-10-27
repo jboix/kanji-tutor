@@ -10,4 +10,6 @@ export const ai = {
   cancelled: 'The request was cancelled.',
   refused: 'Gemini refused the request ({status}). Check the key and model in Settings.',
   noAnswer: 'Gemini did not answer.',
+  timeout: 'Gemini took too long to answer; it may be busy. Try again in a moment.',
+  busy: 'Gemini is busy right now. Try again in a moment.',
 } as const;

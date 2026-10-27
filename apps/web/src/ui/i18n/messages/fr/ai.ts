@@ -12,4 +12,7 @@ export const ai = {
   cancelled: 'La requête a été annulée.',
   refused: 'Gemini a refusé la requête ({status}). Vérifiez la clé et le modèle dans les Réglages.',
   noAnswer: 'Gemini n’a pas répondu.',
+  timeout:
+    'Gemini a mis trop de temps à répondre ; il est peut-être surchargé. Réessayez dans un instant.',
+  busy: 'Gemini est surchargé en ce moment. Réessayez dans un instant.',
 } satisfies Messages['ai'];

@@ -269,4 +269,49 @@ describe('thinking and tools (A12, A10)', () => {
       { functionResponse: { name: 'lookup_word', response: { output: 'まつ' } } },
     ]);
   });
+
+  it('gives up a request past its deadline with a TimeoutError, the request sent once', async () => {
+    let sent = 0;
+    class GoogleGenAI {
+      models = {
+        generateContent: (params: GenerateContentParameters) => {
+          sent += 1;
+          return new Promise<Reply>((_resolve, reject) => {
+            params.config?.abortSignal?.addEventListener('abort', () =>
+              reject(Object.assign(new Error('aborted'), { name: 'AbortError' })),
+            );
+          });
+        },
+      };
+    }
+    const provider = createGeminiProvider('k', {
+      loadSdk: async () => ({ GoogleGenAI }),
+      limiter: createRateLimiter(),
+      deadlineMs: 10,
+    });
+    await expect(provider.generate(REQUEST)).rejects.toMatchObject({ name: 'TimeoutError' });
+    expect(sent).toBe(1);
+  });
+
+  it('leaves a cancel by the learner an AbortError', async () => {
+    const stop = new AbortController();
+    class GoogleGenAI {
+      models = {
+        generateContent: (params: GenerateContentParameters) =>
+          new Promise<Reply>((_resolve, reject) => {
+            params.config?.abortSignal?.addEventListener('abort', () =>
+              reject(Object.assign(new Error('aborted'), { name: 'AbortError' })),
+            );
+            stop.abort();
+          }),
+      };
+    }
+    const provider = createGeminiProvider('k', {
+      loadSdk: async () => ({ GoogleGenAI }),
+      limiter: createRateLimiter(),
+    });
+    await expect(provider.generate(REQUEST, stop.signal)).rejects.toMatchObject({
+      name: 'AbortError',
+    });
+  });
 });

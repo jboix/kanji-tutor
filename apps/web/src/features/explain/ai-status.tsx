@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import type { AiError } from '../../ai/types.ts';
-import type { AiRun } from '../../ui/ai-action.tsx';
+import { AiAction, type AiRun } from '../../ui/ai-action.tsx';
 import { AiBlockStatus, AiWriting } from '../../ui/ai-block.tsx';
 import { aiErrorText } from '../../ui/ai-error-text.ts';
 import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
@@ -18,7 +18,10 @@ interface AiProblemProps {
   error: AiError;
   /** What still works, e.g. "the session continues" (already in the learner's language). */
   rest?: string;
-  /** Asks again; offered after a rate limit, once its wait has passed (A14). */
+  /**
+   * Asks again: after a rate limit once its wait has passed (A14), and at once when Gemini was
+   * too slow or busy.
+   */
   onRetry?: AiRun | undefined;
 }
 
@@ -28,6 +31,20 @@ export function AiProblem(props: AiProblemProps) {
     <AiBlockStatus>
       <ProblemLine {...props} />
     </AiBlockStatus>
+  );
+}
+
+/** Gemini too slow or overloaded: asking again soon may well work. */
+const passing = (error: AiError) => error.code === 'timeout' || error.code === 'busy';
+
+/** The reason, with Retry beside it when asking again may work. */
+function Failed({ error, onRetry }: AiProblemProps) {
+  const t = useT();
+  return (
+    <div className={styles.problem} role="status">
+      <p className={styles.status}>{t('explain.failed', { reason: aiErrorText(t, error) })}</p>
+      {onRetry && passing(error) && <AiAction label={t('common.retry')} run={onRetry} />}
+    </div>
   );
 }
 
@@ -46,13 +63,10 @@ function ProblemLine({ error, rest, onRetry }: AiProblemProps) {
       </p>
     );
   }
-  const text =
-    error.kind === 'offline'
-      ? t('explain.offline', { rest: rest ?? t('explain.restSession') })
-      : t('explain.failed', { reason: aiErrorText(t, error) });
+  if (error.kind !== 'offline') return <Failed error={error} onRetry={onRetry} />;
   return (
     <p className={styles.status} role="status">
-      {text}
+      {t('explain.offline', { rest: rest ?? t('explain.restSession') })}
     </p>
   );
 }

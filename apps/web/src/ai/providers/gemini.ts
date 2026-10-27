@@ -38,6 +38,35 @@ export interface GeminiOptions {
   loadSdk?: () => Promise<GenAiSdk>;
   /** Every request, tool rounds included, waits its turn here (A14); the app-wide one by default. */
   limiter?: RateLimiter;
+  /** How long one request may take, in ms; {@link deadlineOf} by default. */
+  deadlineMs?: number;
+}
+
+/** How long a text request may take before it is given up: Gemini may be overloaded. */
+export const TEXT_DEADLINE_MS = 45_000;
+/** The same for a request with photos, which take longer to read. */
+export const MEDIA_DEADLINE_MS = 90_000;
+
+export function deadlineOf(request: AiRequest): number {
+  return request.media?.length ? MEDIA_DEADLINE_MS : TEXT_DEADLINE_MS;
+}
+
+/**
+ * Runs `call` with the request's signal joined to a deadline. The SDK reports either as an
+ * `AbortError`, so a passed deadline is rethrown as its own `TimeoutError`.
+ */
+async function withinDeadline<T>(
+  ms: number,
+  signal: AbortSignal | undefined,
+  call: (signal: AbortSignal) => Promise<T>,
+): Promise<T> {
+  const deadline = AbortSignal.timeout(ms);
+  try {
+    return await call(signal ? AbortSignal.any([signal, deadline]) : deadline);
+  } catch (error) {
+    if (deadline.aborted && !signal?.aborted) throw deadline.reason;
+    throw error;
+  }
 }
 
 /**
@@ -132,11 +161,17 @@ function resultsContent(results: ToolResult[]): Content {
 function session(ai: GenAiClient, request: AiRequest, link: Link): ToolSession {
   const { signal, limiter } = link;
   const contents: Content[] = [userContent(request)];
+  const ms = link.deadlineMs ?? deadlineOf(request);
   return {
     next: async (results, allowTools) => {
       if (results) contents.push(resultsContent(results));
-      const params = toParams(request, signal, [...contents], allowTools);
-      const response = await limited(limiter, signal, () => ai.models.generateContent(params));
+      const turn = [...contents];
+      // The deadline starts once the limiter lets the request go.
+      const response = await limited(limiter, signal, () =>
+        withinDeadline(ms, signal, (bounded) =>
+          ai.models.generateContent(toParams(request, bounded, turn, allowTools)),
+        ),
+      );
       const content = response.candidates?.[0]?.content;
       if (content) contents.push(content);
       return toTurn(response);
@@ -144,10 +179,11 @@ function session(ai: GenAiClient, request: AiRequest, link: Link): ToolSession {
   };
 }
 
-/** What every round of one request shares: its abort signal and the rate limiter. */
+/** What every round of one request shares: its abort signal, the rate limiter, the deadline. */
 interface Link {
   signal?: AbortSignal | undefined;
   limiter: RateLimiter;
+  deadlineMs?: number | undefined;
 }
 
 async function generate(ai: GenAiClient, request: AiRequest, link: Link) {
@@ -177,6 +213,7 @@ export function createGeminiProvider(apiKey: string, options: GeminiOptions = {}
   };
   return {
     id: 'gemini',
-    generate: async (request, signal) => generate(await getClient(), request, { signal, limiter }),
+    generate: async (request, signal) =>
+      generate(await getClient(), request, { signal, limiter, deadlineMs: options.deadlineMs }),
   };
 }

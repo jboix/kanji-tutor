@@ -26,6 +26,22 @@ describe('mapProviderError', () => {
     });
     expect(mapProviderError({ status: '500' }).kind).toBe('provider');
   });
+
+  it('codes a passed deadline and an overloaded Gemini, so the learner can ask again', () => {
+    const late = new DOMException('signal timed out', 'TimeoutError');
+    expect(mapProviderError(late)).toEqual({
+      kind: 'provider',
+      code: 'timeout',
+      message: 'Gemini took too long to answer.',
+    });
+    const overloaded = Object.assign(new Error('The model is overloaded.'), { status: 503 });
+    expect(mapProviderError(overloaded)).toEqual({
+      kind: 'provider',
+      code: 'busy',
+      status: 503,
+      message: 'The model is overloaded.',
+    });
+  });
 });
 
 describe('retryDelayMs (A14)', () => {

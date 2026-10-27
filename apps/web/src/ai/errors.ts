@@ -24,7 +24,26 @@ function isAbort(error: unknown): boolean {
   return error instanceof Error && error.name === 'AbortError';
 }
 
+/** A request stopped by its deadline (`AbortSignal.timeout`'s `DOMException`), not by the learner. */
+function isTimeout(error: unknown): boolean {
+  return (
+    typeof error === 'object' && error !== null && 'name' in error && error.name === 'TimeoutError'
+  );
+}
+
 const KEY_STATUSES = new Set([400, 401, 403, 404]);
+/** Google's side failing or overloaded: worth asking again in a moment. */
+const BUSY_STATUSES = new Set([500, 502, 503, 504]);
+
+function busyOrTimeout(error: unknown, status: number | undefined): AiError | undefined {
+  if (isTimeout(error)) {
+    return { kind: 'provider', code: 'timeout', message: 'Gemini took too long to answer.' };
+  }
+  if (status !== undefined && BUSY_STATUSES.has(status)) {
+    return { kind: 'provider', code: 'busy', status, message: messageOf(error) };
+  }
+  return undefined;
+}
 
 /** The wait used when a 429 names none (Google's per-minute quota resets within a minute). */
 export const DEFAULT_RETRY_MS = 60_000;
@@ -70,7 +89,8 @@ export function isRateLimit(error: unknown): boolean {
 
 /**
  * Maps whatever a provider threw to an `AiError`: HTTP 429 or `RESOURCE_EXHAUSTED` is
- * `rate-limit`, with the wait Google asked for (A14); everything else is `provider`.
+ * `rate-limit`, with the wait Google asked for (A14); everything else is `provider`, a deadline
+ * passed or a 5xx coded so the UI can offer to ask again.
  */
 export function mapProviderError(error: unknown): AiError {
   const status = statusOf(error);
@@ -85,6 +105,8 @@ export function mapProviderError(error: unknown): AiError {
   if (isAbort(error)) {
     return { kind: 'provider', code: 'cancelled', message: 'The request was cancelled.' };
   }
+  const passing = busyOrTimeout(error, status);
+  if (passing) return passing;
   if (status !== undefined && KEY_STATUSES.has(status)) {
     return {
       kind: 'provider',
