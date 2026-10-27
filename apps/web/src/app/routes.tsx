@@ -55,6 +55,7 @@ const GATED: RouteObject[] = [
   ),
   screen(paths.units, async () => (await units()).UnitsScreen),
   screen('/units/:id', async () => (await units()).UnitScreen),
+  screen('/units/:id/episode', async () => (await units()).EpisodeScreen),
   screen(
     paths.placement,
     async () => (await import('../features/placement/placement-screen.tsx')).PlacementScreen,

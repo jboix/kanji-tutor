@@ -34,6 +34,8 @@ export const paths = {
   units: '/units',
   /** One thematic unit and its steps (T3). */
   unit: (id: string) => `/units/${encodeURIComponent(id)}`,
+  /** A unit's episode: the cast in a short chat on its theme. */
+  unitEpisode: (id: string) => `/units/${encodeURIComponent(id)}/episode`,
   /** One part of a unit lesson's section as a session (S3). */
   lessonPart: (unit: string, section: string, part: number) =>
     `/read?${new URLSearchParams({ unit, section, part: String(part) }).toString()}`,

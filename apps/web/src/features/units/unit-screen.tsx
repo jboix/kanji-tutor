@@ -23,6 +23,7 @@ import { TopBar } from '../../ui/top-bar.tsx';
 import { UnitCast } from '../../ui/unit-cast.tsx';
 import { useContentLanguage } from '../../ui/use-content-language.ts';
 import { TapText } from '../../ui/word-tap.tsx';
+import { EpisodeCard } from './episode-card.tsx';
 import { UnitFooter } from './unit-footer.tsx';
 import { type Mode, UnitParts } from './unit-parts.tsx';
 import { UnitRead } from './unit-read.tsx';
@@ -138,6 +139,7 @@ function Overview({ view, english, onMode, onChange }: OverviewProps) {
   return (
     <>
       <Header view={view} english={english} />
+      <EpisodeCard unitId={view.unit.id} />
       <div className={styles.partsCard}>
         <Progress view={view} />
         <UnitParts view={view} onMode={onMode} />

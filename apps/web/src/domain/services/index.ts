@@ -196,7 +196,7 @@ export {
   todaySession,
   todaySummary,
 } from './summary.ts';
-export { unitCast } from './unit-cast.ts';
+export { unitCast, unitEpisode } from './unit-cast.ts';
 export {
   type LevelUnits,
   lastPractised,

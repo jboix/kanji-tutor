@@ -24,11 +24,11 @@ describe('the cast', () => {
   });
 
   it("finds a unit's cast in the dialogues of its grammar points", async () => {
-    expect((await unitCast({ grammar: ['koto-ni-suru'] })).map((m) => m.id)).toEqual([
+    expect((await unitCast({ id: 'none', grammar: ['koto-ni-suru'] })).map((m) => m.id)).toEqual([
       'yuki',
       'ken',
     ]);
-    expect(await unitCast({ grammar: ['koto-ni-naru'] })).toEqual([]);
-    expect(await unitCast({ grammar: [] })).toEqual([]);
+    expect(await unitCast({ id: 'none', grammar: ['koto-ni-naru'] })).toEqual([]);
+    expect(await unitCast({ id: 'none', grammar: [] })).toEqual([]);
   });
 });

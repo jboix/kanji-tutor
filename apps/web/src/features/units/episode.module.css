@@ -1,0 +1,162 @@
+/* An episode as a chat (episode-chat.tsx): raised bubbles on the left beside a portrait, the
+   companion's tonal bubbles on the right, names in each cast colour. App data: no --ai. */
+
+.feed {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.message {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  max-width: 92%;
+}
+
+.message[data-mine] {
+  align-self: flex-end;
+}
+
+.face {
+  display: flex;
+  flex: none;
+  width: 32px;
+}
+
+.bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 8px 14px;
+  border-radius: 22px;
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
+}
+
+.bubble[data-first] {
+  border-top-left-radius: 6px;
+}
+
+.message[data-mine] .bubble {
+  background: var(--tonal);
+  color: var(--on-tonal);
+  box-shadow: none;
+}
+
+.message[data-mine] .bubble[data-first] {
+  border-top-left-radius: 22px;
+  border-top-right-radius: 6px;
+}
+
+.name {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.name[data-who="yuki"] {
+  color: var(--cast-yuki);
+}
+
+.name[data-who="ken"] {
+  color: var(--cast-ken);
+}
+
+.name[data-who="mori"] {
+  color: var(--cast-mori);
+}
+
+.message[data-mine] .name {
+  color: var(--on-tonal);
+}
+
+.ja {
+  margin: 0;
+  font-family: var(--font-ja);
+  font-size: 18px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.tr {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  color: var(--ink-muted);
+}
+
+.message[data-mine] .tr {
+  color: var(--on-tonal);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.titles {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.unit {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+/* The episode on the unit page: portraits, its title and a way in. */
+.card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: 10px 12px 10px 14px;
+  border-radius: var(--radius-card);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
+  color: var(--ink);
+  text-decoration: none;
+  --stack-ring: var(--paper-raised);
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.cardText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cardLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.cardTitle {
+  font-size: var(--text-md);
+  font-weight: 700;
+}
+
+.chevron {
+  display: flex;
+  color: var(--ink-muted);
+}
