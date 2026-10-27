@@ -26,6 +26,8 @@ function usePointerInk(dispatch: Dispatch<InkAction>) {
   return {
     onPointerDown(event: PointerEvent<HTMLCanvasElement>) {
       if (!event.isPrimary || event.button > 0) return;
+      // A stroke is not the start of a text selection.
+      event.preventDefault();
       event.currentTarget.setPointerCapture?.(event.pointerId);
       down.current = true;
       dispatch({ type: 'down', point: localPoint(event.currentTarget, event) });

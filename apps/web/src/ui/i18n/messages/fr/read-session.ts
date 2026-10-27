@@ -22,4 +22,7 @@ export const readSession = {
   moreCommonReading: 'est la lecture la plus courante.',
   nextWord: 'Mot suivant',
   nextSentence: 'Phrase suivante',
+  whereUnit: 'Unité {order}',
+  whereScan: 'Leçon scannée',
+  whereExercises: 'Exercices',
 } satisfies Messages['readSession'];

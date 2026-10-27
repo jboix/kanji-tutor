@@ -160,4 +160,6 @@ export const ui = {
   notStarted: 'Not started',
   progressOf: 'Progress: {line}',
   partOf: '{done} of {total}',
+  photoZoomHint: 'Pinch or double-tap to zoom',
+  photoBroken: 'This photo can no longer be shown on this phone. Scan the page again to see it.',
 } as const;

@@ -4,11 +4,11 @@ import type { LearnerOverview, LearnerView, LevelCoverage } from '../../domain/l
 /** Added to the system instruction of teacher-tier requests that carry the tools. */
 export const TEACHER_RULE = [
   "Before explaining, check the learner's level and which words they know; explain using known",
-  'words and grammar; introduce at most one new item and mark it; match the explanation’s',
-  'difficulty to the learner.',
+  'words and grammar; introduce at most one new item and say plainly that it is new; match the',
+  'explanation’s difficulty to the learner.',
   'Use the tools for this: get_learner_profile first, then check_known on the words you plan to',
   'use, lookup_word before you state a meaning or reading, and known_examples for examples and',
-  'memory hooks. Mark the one new item by writing ［新］ right after it, e.g. 鉛筆［新］.',
+  'memory hooks. Never tag the new item with a mark such as ［新］.',
   'Never invent what the learner knows: if a tool fails, explain simply without it.',
 ].join(' ');
 

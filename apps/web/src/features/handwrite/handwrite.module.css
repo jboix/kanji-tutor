@@ -1,5 +1,13 @@
 /* handwrite.html: drawing pad, candidate row, detail strip and the describe panel. */
 
+/* Drawing never selects text or opens iOS's long-press menu, on the pad or around it. */
+.pad,
+.answer {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 .pad {
   position: relative;
   flex-shrink: 0;

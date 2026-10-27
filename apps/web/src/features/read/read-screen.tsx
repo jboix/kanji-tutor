@@ -1,5 +1,5 @@
 import { type ReactNode, useCallback, useEffect, useState } from 'react';
-import { useLocation, useNavigate, useSearchParams } from 'react-router';
+import { useLocation, useSearchParams } from 'react-router';
 import { MAX_DRILL_SHARE } from '../../domain/drills/index.ts';
 import {
   cardType,
@@ -26,6 +26,7 @@ import { TopBar } from '../../ui/top-bar.tsx';
 import { DrillScreen } from './drill-screen.tsx';
 import { GrammarIntroScreen } from './grammar-intro-screen.tsx';
 import { HandoutScreen } from './handout-screen.tsx';
+import { useLessonOpening } from './lesson-opening.tsx';
 import { NewChips } from './new-chips.tsx';
 import { QuestionCardScreen } from './question-screen.tsx';
 import styles from './read.module.css';
@@ -36,6 +37,7 @@ import { EmptySession, SessionEnd } from './session-end.tsx';
 import { roundOf } from './session-round.ts';
 import { current, currentCard, lastStep } from './session-state.ts';
 import { SessionView } from './session-view.tsx';
+import { type SessionWhere, useSessionWhere } from './session-where.tsx';
 import { useGradeSound } from './use-answer-sound.ts';
 import { type SessionControls, type SessionRequest, useSession } from './use-session.ts';
 
@@ -89,23 +91,36 @@ function useExplainFirst(): boolean {
   return on;
 }
 
+/** The session's close: back to where it was opened from, or Today. */
+function SessionClose() {
+  const t = useT();
+  return (
+    <BackButton parent={paths.today} label={t('read.endSession')}>
+      <CloseIcon />
+    </BackButton>
+  );
+}
+
 function ReadTopBar(props: {
   index: number;
   total: number;
   outline: SessionOutline | undefined;
+  where: SessionWhere;
   all: boolean;
   onToggle: () => void;
 }) {
-  const _navigate = useNavigate();
   const t = useT();
   return (
     <TopBar
-      start={
-        <BackButton parent={paths.today} label={t('read.endSession')}>
-          <CloseIcon />
-        </BackButton>
+      start={<SessionClose />}
+      center={
+        <SessionProgress
+          current={props.index}
+          total={props.total}
+          outline={props.outline}
+          where={props.where}
+        />
       }
-      center={<SessionProgress current={props.index} total={props.total} outline={props.outline} />}
       end={
         <IconButton
           aria-label={t('read.furiganaAll')}
@@ -225,14 +240,14 @@ function exerciseScreen(card: SessionCard, topBar: ReactNode, controls: SessionC
 
 function SessionTopBar(props: {
   state: SessionControls['state'];
+  where: SessionWhere;
   all: boolean;
   onToggle: () => void;
 }) {
   const { cards, index } = props.state;
   const outline = cards ? sessionOutline(cards, index) : undefined;
   const total = cards?.length ?? 0;
-  const { all, onToggle } = props;
-  return <ReadTopBar index={index} total={total} outline={outline} all={all} onToggle={onToggle} />;
+  return <ReadTopBar index={index} total={total} outline={outline} {...props} />;
 }
 
 /** With explanations skipped, the current card's "New" chips for its help bar (L7). */
@@ -244,13 +259,13 @@ function CardChips({ state }: { state: SessionControls['state'] }) {
   return <NewChips key={key} card={card} target={current(state)?.target} answered={answered} />;
 }
 
-function Session({ controls }: { controls: SessionControls }) {
+function Session({ controls, where }: { controls: SessionControls; where: SessionWhere }) {
   const [all, toggle] = useFuriganaToggle();
   const explainFirst = useExplainFirst();
   const [voice, setVoice] = useState(false);
   const { state } = controls;
   useGradeSound(state.answered?.grade);
-  const topBar = <SessionTopBar state={state} all={all} onToggle={toggle} />;
+  const topBar = <SessionTopBar state={state} where={where} all={all} onToggle={toggle} />;
   const card = currentCard(state);
   const reading = { controls, topBar, all, voice, onVoice: setVoice, explainFirst };
   const body = (card && exerciseScreen(card, topBar, controls)) || <Reading {...reading} />;
@@ -287,8 +302,11 @@ export function ReadScreen() {
 
 function RequestedSession({ request }: { request: SessionRequest }) {
   const controls = useSession(request);
+  const where = useSessionWhere(request);
+  const opening = useLessonOpening(request, <SessionClose />);
   const { cards, results, drills } = controls.state;
-  if (cards === undefined) {
+  if (opening) return opening;
+  if (cards === undefined || opening === undefined) {
     return <EmptySession loading />;
   }
   if (cards.length === 0) return <EmptySession focus={request.focus} />;
@@ -306,7 +324,7 @@ function RequestedSession({ request }: { request: SessionRequest }) {
       />
     );
   }
-  return <ImmersedSession controls={controls} />;
+  return <ImmersedSession controls={controls} where={where} />;
 }
 
 /** The lesson part a session was, for its end screen (S3). */
@@ -316,12 +334,12 @@ function lessonPart(request: SessionRequest) {
 }
 
 /** The session with its copy in the immersion mode (M3). */
-function ImmersedSession({ controls }: { controls: SessionControls }) {
+function ImmersedSession({ controls, where }: { controls: SessionControls; where: SessionWhere }) {
   const mode = useCopyMode();
   return (
     <CopyModeContext value={mode}>
       <PeekProvider>
-        <Session controls={controls} />
+        <Session controls={controls} where={where} />
       </PeekProvider>
     </CopyModeContext>
   );

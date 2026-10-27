@@ -4,6 +4,7 @@ import type { Repos, SentenceQuery } from '../domain/repos.ts';
 import type { ItemId, Review, Sentence, Settings } from '../domain/types.ts';
 import type { KanjiTutorDb } from './db.ts';
 import { dexieDictionary } from './dictionary.ts';
+import { withFreshPhotos } from './fresh-photos.ts';
 import { grammarKey, toSentence, wordKey } from './sentence-keys.ts';
 import { tableStore } from './store.ts';
 
@@ -142,6 +143,12 @@ function packRepos(db: KanjiTutorDb): Pick<Repos, 'clusters' | 'units'> {
 function scanRepo(db: KanjiTutorDb): Repos['scans'] {
   return {
     ...tableStore(db.scans),
+    put: async (lesson) => {
+      await db.scans.put(await withFreshPhotos(lesson));
+    },
+    putMany: async (lessons) => {
+      await db.scans.bulkPut(await Promise.all(lessons.map(withFreshPhotos)));
+    },
     recent: (limit) => db.scans.orderBy('createdAt').reverse().limit(limit).toArray(),
   };
 }

@@ -6,7 +6,6 @@
  * fewer than three times, each time in a type it has not had. The 練習 and 読み物 sections are
  * sessions of their own (see `buildSession`).
  */
-import { classOf } from '../conjugation/forms.ts';
 import { lessonCloze } from '../drills/index.ts';
 import { seededOrder } from '../drills/seed.ts';
 import { GRAMMAR_CATALOGUE } from '../grammar/catalogue.ts';
@@ -21,6 +20,7 @@ import { drillCard } from './drills.ts';
 import {
   buildCard,
   conjugationCard,
+  cuesOf,
   type ExerciseMaterial,
   exerciseMaterial,
   listeningCard,
@@ -220,16 +220,15 @@ type Maker = (data: LessonData, key: string) => Promise<SessionCard | undefined>
 
 const wordOf = (data: LessonData, key: string) => data.words.find((w) => `word:${w.id}` === key);
 
-/** A pattern drill with the word as its cue, on one of the unit's points. */
+/**
+ * A pattern drill with the word as its cue, on one of the unit's points. Only a real noun, verb
+ * or adjective is a cue: an expression such as はじめまして takes no です.
+ */
 async function wordPattern(data: LessonData, key: string) {
   const word = wordOf(data, key);
-  const written = word?.forms[0] ?? word?.readings[0];
-  const reading = word?.readings[0];
-  if (!word || !written || !reading) return undefined;
-  const cls = word.pos?.includes('n') ? undefined : classOf(written, word.pos, reading);
-  const cue = { written, reading, wordId: word.id, cls };
+  const cues = word ? cuesOf(word) : [];
   const m = { ...data.m, cues: [] };
-  return data.unit.grammar.map((g) => patternCard(m, g, new Set(), [cue])).find(Boolean);
+  return data.unit.grammar.map((g) => patternCard(m, g, new Set(), cues)).find(Boolean);
 }
 
 const MAKERS: Readonly<Record<ExerciseType, Maker | undefined>> = {

@@ -6,7 +6,7 @@ import { readingRepos, S, W } from '../../test/reading-fixtures.ts';
 import { fakeServices, renderWithServices } from '../../test/render.tsx';
 import { typeKanji } from '../../ui/kanji-drawing.ts';
 import type { KanjiDrawSlotProps, Slots } from '../../ui/slots.tsx';
-import { DRAW_LATER_MS, drawingQuiet, drawLater } from './draw-later.ts';
+import { DRAW_LATER_MS, drawingQuiet, drawNow } from './draw-later.ts';
 import { DrillScreen } from './drill-screen.tsx';
 
 const drill = writeDrill({
@@ -43,7 +43,7 @@ async function show(slots: Slots = PAD) {
 const main = () => document.querySelector('main')?.textContent ?? '';
 
 afterEach(() => {
-  drawLater(Date.now() - DRAW_LATER_MS);
+  drawNow();
   typeKanji(false);
 });
 
@@ -89,11 +89,21 @@ describe('Write the kanji', () => {
     await waitFor(() => expect(document.querySelector('[data-answer="correct"]')).toBeTruthy());
   });
 
+  it('draws again on Draw it again, in the same session', async () => {
+    await show();
+    await userEvent.click(screen.getByRole('button', { name: "I can't draw now" }));
+    await userEvent.click(screen.getByRole('button', { name: 'Draw it again' }));
+    expect(screen.getByRole('button', { name: 'Draw it right' })).toBeTruthy();
+    expect(drawingQuiet()).toBe(false);
+    expect(screen.getByRole('button', { name: "I can't draw now" })).toBeTruthy();
+  });
+
   it('is typed from the start when Settings says Type, with nothing to draw', async () => {
     typeKanji(true);
     await show();
     expect(screen.getByText('Which word fits? Type its reading')).toBeTruthy();
     expect(screen.queryByRole('button', { name: "I can't draw now" })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Draw it again' })).toBeNull();
     expect(screen.getByLabelText('Type its reading')).toBeTruthy();
   });
 

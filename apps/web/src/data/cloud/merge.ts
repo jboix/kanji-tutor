@@ -34,6 +34,21 @@ function unnumbered<T extends { id?: number }>(record: T): Omit<T, 'id'> {
 
 const byId = (record: { id: string }) => record.id;
 
+/**
+ * An AI log entry by what it says, field by field: the same entry read back from a save lists
+ * its fields in another order, so its JSON text would not match.
+ */
+const logKey = (entry: SaveData['aiLog'][number]) =>
+  [
+    entry.at,
+    entry.task,
+    entry.model,
+    entry.cached,
+    entry.ok,
+    entry.inputTokens,
+    entry.outputTokens,
+  ].join('|');
+
 /** The record changed last; on a tie, the preferred side's. */
 const newer =
   (side: <T>(a: T, b: T) => T) =>
@@ -65,12 +80,7 @@ export function mergeSaves(mine: SaveData, theirs: SaveData, prefer: Prefer): Sa
       (r) => `${r.itemId}|${r.at}`,
       side,
     ),
-    aiLog: union(
-      mine.aiLog.map(unnumbered),
-      theirs.aiLog.map(unnumbered),
-      (entry) => JSON.stringify(entry),
-      side,
-    ),
+    aiLog: union(mine.aiLog.map(unnumbered), theirs.aiLog.map(unnumbered), logKey, side),
     kanjiReadings: sameId(mine.kanjiReadings, theirs.kanjiReadings),
     sentences: sameId(mine.sentences, theirs.sentences),
     grammar: sameId(mine.grammar, theirs.grammar),

@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   isEditable,
   keyboardOpen,
@@ -43,6 +43,20 @@ describe('keyboard detection', () => {
 });
 
 describe('trackViewport', () => {
+  it('puts back a page iOS left scrolled once the keyboard is gone', () => {
+    const view = new FakeViewport();
+    const input = field();
+    const stop = trackViewport(view, document.createElement('div'), document);
+    input.focus();
+    const scrollTo = vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined);
+    Object.defineProperty(window, 'scrollY', { value: 48, configurable: true });
+    input.blur();
+    expect(scrollTo).toHaveBeenCalledWith(0, 0);
+    Object.defineProperty(window, 'scrollY', { value: 0, configurable: true });
+    scrollTo.mockRestore();
+    stop();
+  });
+
   it('follows the visual viewport into --vvh and marks the keyboard open while typing', () => {
     const view = new FakeViewport();
     const root = document.createElement('div');

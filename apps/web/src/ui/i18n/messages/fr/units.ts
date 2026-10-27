@@ -68,4 +68,8 @@ export const units = {
   lessonSub: '{section} · {minutes} min',
   tutorBefore: 'Que dois-je savoir avant cette leçon ?',
   tutorGrammar: 'Comment les points de grammaire de cette unité s’articulent-ils ?',
+  introConversation: 'D’abord, la conversation',
+  introConversationLine:
+    'Les mots et la grammaire de la leçon, en situation. Lisez-la ou écoutez-la, puis commencez.',
+  introStart: 'Commencer : {section}',
 } satisfies Messages['units'];

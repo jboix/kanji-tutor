@@ -1,11 +1,12 @@
 /* The whole bar is one button: a 44px target around thin marks (R13), across the top bar
-   between ✕ and ふ (W-read). */
+   between ✕ and ふ (W-read). Where the session is sits over the marks, inside the same 44px. */
 .progress {
   display: flex;
   flex: 1;
+  flex-direction: column;
+  justify-content: center;
   min-width: 0;
-  align-items: center;
-  gap: 10px;
+  gap: 5px;
   min-height: var(--tap);
   padding: 0 4px;
   border: 0;
@@ -14,6 +15,21 @@
   color: var(--ink-muted);
   font: inherit;
   cursor: pointer;
+}
+
+.line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.where {
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .progress:disabled {

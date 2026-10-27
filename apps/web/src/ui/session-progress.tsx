@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useId, useRef, useState } from 'react';
 import type { OutlineKind, SessionOutline } from '../domain/services/index.ts';
 import { cx } from './cx.ts';
 import { useT } from './i18n/i18n.tsx';
@@ -10,6 +10,8 @@ export interface SessionProgressProps {
   total: number;
   /** What is done and left; when given, the bar opens it on a press (R13). */
   outline?: SessionOutline | undefined;
+  /** Where the session is, over the bar: the lesson and its section, or the kind of round. */
+  where?: { label: string; content: ReactNode } | undefined;
 }
 
 /** Up to this many cards, one dash each; longer sessions get one continuous bar. */
@@ -99,7 +101,7 @@ function useDismiss(open: boolean, close: () => void, root: React.RefObject<HTML
  * Where the session is (read.html top bar): one dash per card for short sessions, a continuous
  * bar for long ones, and the count. A press shows a small panel of what is done and left (R13).
  */
-export function SessionProgress({ current, total, outline }: SessionProgressProps) {
+export function SessionProgress({ current, total, outline, where }: SessionProgressProps) {
   const t = useT();
   const id = useId();
   const root = useRef<HTMLSpanElement>(null);
@@ -107,20 +109,26 @@ export function SessionProgress({ current, total, outline }: SessionProgressProp
   useDismiss(open, () => setOpen(false), root);
   const number = Math.min(current + 1, total);
   const label = t('ui.sentenceOf', { current: number, total });
+  // The visible text first, as it reads: the caption, then the count.
+  const shown = where ? `${where.label} ${number}/${total}` : `${number}/${total}`;
   return (
     <span ref={root} className={styles.root}>
       <button
         type="button"
         className={styles.progress}
-        aria-label={`${number}/${total}, ${outline ? t('ui.outlineOpen', { label }) : label}`}
+        aria-label={`${shown}, ${outline ? t('ui.outlineOpen', { label }) : label}`}
         aria-expanded={outline ? open : undefined}
         aria-controls={open ? id : undefined}
         disabled={!outline}
         onClick={() => setOpen((was) => !was)}
       >
-        <Bar current={current} total={total} />
-        <span className={styles.count} aria-hidden>
-          {number}/{total}
+        {/* The space keeps the text as it is named: "Daily mix 1/7", not "Daily mix1/7". */}
+        {where && <span className={styles.where}>{where.content} </span>}
+        <span className={styles.line}>
+          <Bar current={current} total={total} />
+          <span className={styles.count} aria-hidden>
+            {number}/{total}
+          </span>
         </span>
       </button>
       {open && outline && <Panel outline={outline} id={id} />}

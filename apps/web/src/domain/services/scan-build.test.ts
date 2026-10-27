@@ -9,7 +9,7 @@ import {
   SCAN_WORDS as W,
 } from '../../test/scan-fixtures.ts';
 import type { LegacyCapture } from '../scan-types.ts';
-import { buildScan, rematchScan } from './scan-build.ts';
+import { buildScan, needsMatch, rematchScan } from './scan-build.ts';
 import { matchPattern, patternKey } from './scan-match.ts';
 import { emptyScan, saveScan, scanFromCapture, titleFromLines } from './scans.ts';
 
@@ -112,10 +112,34 @@ describe('buildScan', () => {
     const pasted = { kind: 'reading' as const, lines: [LINE_RAIN], questions: [] };
     const { lesson } = await buildScan(r, { base: base(), pages: [pasted], level: 5 });
     expect(lesson.items.map((i) => [i.kind, i.text, i.from])).toEqual([
+      ['kanji', '雨', 'text'],
       ['word', '雨', 'text'],
       ['word', '降る', 'text'],
     ]);
     expect(lesson.title).toBe('');
+  });
+
+  it('matches again a lesson matched an older way, and only that', async () => {
+    const r = repos();
+    const pasted = { kind: 'reading' as const, lines: [LINE_RAIN], questions: [] };
+    const { lesson } = await buildScan(r, { base: base(), pages: [pasted], level: 5 });
+    expect(needsMatch(lesson)).toBe(false);
+    const { matchVersion: _version, ...older } = lesson;
+    expect(needsMatch(older)).toBe(true);
+  });
+
+  it('offers no kanji from the lines that the learner already reads', async () => {
+    const r = repos();
+    await r.kanjiReadings.put({
+      id: '雨:あめ',
+      kanji: '雨',
+      reading: 'あめ',
+      level: 3,
+      wordIds: [],
+    });
+    const pasted = { kind: 'reading' as const, lines: [LINE_RAIN], questions: [] };
+    const { lesson } = await buildScan(r, { base: base(), pages: [pasted], level: 5 });
+    expect(lesson.items.some((i) => i.kind === 'kanji')).toBe(false);
   });
 });
 
@@ -169,6 +193,7 @@ describe('scanFromCapture', () => {
     const lesson = await rematchScan(r, scanFromCapture(capture), 5);
     expect(lesson.unmatched).toBeUndefined();
     expect(lesson.items.map((i) => [i.kind, i.ref])).toEqual([
+      ['kanji', '雨'],
       ['word', 's3'],
       ['word', 's4'],
       ['grammar', 'deshou'],

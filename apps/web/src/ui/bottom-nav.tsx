@@ -8,6 +8,7 @@ import { useT } from './i18n/i18n.tsx';
 import type { PlainKey } from './i18n/types.ts';
 import { BookIcon, HomeIcon, PlayIcon, SettingsIcon } from './icons.tsx';
 import { InstallBanner } from './install-banner.tsx';
+import { useNavRoot } from './nav-root.ts';
 import { paths } from './paths.ts';
 import { StartSheet } from './start-sheet.tsx';
 import { useTutorSetup } from './use-tutor-setup.ts';
@@ -186,6 +187,7 @@ function Indicator({ column }: { column: number | undefined }) {
  */
 export function BottomNav({ install = true }: { install?: boolean }) {
   const t = useT();
+  useNavRoot();
   const column = activeColumn(useLocation().pathname);
   const link = (tab: Tab) => <TabLink key={tab.to} tab={tab} active={tab.column === column} />;
   return (

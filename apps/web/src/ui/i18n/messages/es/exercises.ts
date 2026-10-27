@@ -31,6 +31,7 @@ export const exercises = {
   promptWriteTyped: '¿Qué palabra va aquí? Escribe su lectura',
   typeReading: 'Escribe su lectura',
   cantDraw: 'Ahora no puedo dibujar',
+  drawAgain: 'Volver a dibujar',
   cantDrawHint: 'Para teclear durante 15 minutos',
   drawnAs: 'Escribiste',
   tutorExplain: 'Explicar esta frase',

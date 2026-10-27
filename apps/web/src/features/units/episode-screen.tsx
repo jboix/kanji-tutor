@@ -28,7 +28,7 @@ import { EpisodeChat } from './episode-chat.tsx';
 import { useEpisode } from './use-episode.ts';
 
 /** The tutor on the whole conversation. */
-function useEpisodeTutor(episode: Episode, title: string) {
+export function useEpisodeTutor(episode: Episode, title: string) {
   const t = useT();
   const { language } = useContentLanguage();
   const options = useMemo(() => {

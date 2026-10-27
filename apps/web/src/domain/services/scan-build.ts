@@ -149,6 +149,7 @@ export async function buildScan(repos: Repos, input: ScanBuildInput): Promise<Bu
     pages: [...base.pages, ...drafts.map((draft, p) => pageOf(draft, ids[p] ?? []))],
     items,
     questions: [...base.questions, ...questionsOf(drafts, offset, items)],
+    matchVersion: SCAN_MATCH_VERSION,
   };
   return { lesson, sentences };
 }
@@ -188,6 +189,17 @@ const addedRefs = (lesson: ScannedLesson, kind: 'word' | 'grammar') =>
   );
 
 /**
+ * How items are matched now: 2 offers the unread kanji of a page the tutor listed none for. A
+ * lesson matched an older way is matched again when it opens.
+ */
+export const SCAN_MATCH_VERSION = 2;
+
+/** The lesson's items should be matched again: a converted capture, or matched an older way. */
+export function needsMatch(lesson: ScannedLesson): boolean {
+  return lesson.unmatched === true || (lesson.matchVersion ?? 1) < SCAN_MATCH_VERSION;
+}
+
+/**
  * The items of a stored lesson matched again from its lines and the tutor's lists: for a capture
  * converted into a lesson (`unmatched`, with what was added from it), or after a line was fixed.
  */
@@ -200,5 +212,5 @@ export async function rematchScan(
   const found = await matchScanItems(repos, pages, { level, wordIds: addedRefs(lesson, 'word') });
   const items = mergedItems(found, await addedGrammar(repos, addedRefs(lesson, 'grammar')));
   const { unmatched: _unmatched, ...rest } = lesson;
-  return { ...rest, items };
+  return { ...rest, items, matchVersion: SCAN_MATCH_VERSION };
 }

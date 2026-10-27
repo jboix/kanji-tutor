@@ -1,10 +1,12 @@
 /**
- * A photographed page, shown as large as the screen allows in a sheet: a scanned lesson's page,
- * opened from its lesson or from a handout question.
+ * A photographed page: a scanned lesson's page, opened from its lesson or from a handout
+ * question. The photo opens in the full-screen viewer, to zoom; a page without one (pasted text)
+ * shows its lines in a sheet.
  */
 import { useEffect, useState } from 'react';
 import { BottomSheet } from './bottom-sheet.tsx';
 import styles from './photo-sheet.module.css';
+import { PhotoViewer } from './photo-viewer.tsx';
 
 /** A blob as an object URL, revoked when it changes or the component unmounts. */
 export function useObjectUrl(blob: Blob | undefined): string | undefined {
@@ -35,16 +37,13 @@ export interface PhotoSheetProps {
 
 export function PhotoSheet({ photo, label, onClose, text }: PhotoSheetProps) {
   const url = useObjectUrl(photo);
+  if (url) return <PhotoViewer url={url} label={label} onClose={onClose} />;
   return (
     <BottomSheet open label={label} onClose={onClose}>
       <div className={styles.body}>
-        {url ? (
-          <img className={styles.photo} src={url} alt={label} />
-        ) : (
-          <p lang="ja" className={styles.text}>
-            {text}
-          </p>
-        )}
+        <p lang="ja" className={styles.text}>
+          {text}
+        </p>
       </div>
     </BottomSheet>
   );

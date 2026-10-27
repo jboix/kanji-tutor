@@ -61,6 +61,12 @@ describe('ReadScreen', () => {
     expect(review).toMatchObject({ answer: 'もって', verdict: 'wrong', errorType: 'wrong-kanji' });
   });
 
+  it('says which kind of session it is over its progress', async () => {
+    const repos = await waitingRepos();
+    await open(repos);
+    expect(screen.getByRole('button', { name: /^Daily mix 1\/1, Sentence 1 of 1/ })).toBeTruthy();
+  });
+
   it('confirms a right answer quietly and moves to the next target with Enter', async () => {
     const repos = await waitingRepos();
     const input = await open(repos);

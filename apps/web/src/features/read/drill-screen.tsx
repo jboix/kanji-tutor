@@ -16,11 +16,13 @@ import { ActionBar } from '../../ui/action-bar.tsx';
 import { blankHelpCard } from '../../ui/exercise-cards.ts';
 import { ExerciseHelp } from '../../ui/exercise-help.tsx';
 import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
+import { kanjiTyped } from '../../ui/kanji-drawing.ts';
 import { PillButton } from '../../ui/pill-button.tsx';
 import { Screen } from '../../ui/screen.tsx';
 import { useSlot } from '../../ui/slots.tsx';
 import { TutorNext } from '../../ui/tutor.tsx';
-import { asTyped, drawingQuiet, drawLater } from './draw-later.ts';
+import type { DrawSwitch } from './draw-chip.tsx';
+import { asTyped, drawingQuiet, drawLater, drawNow } from './draw-later.ts';
 import { BuildActions, type BuildOrder, BuildView, useBuildOrder } from './drill-build.tsx';
 import { ChoiceActions, ClozeView, LookalikeView } from './drill-choices.tsx';
 import { DialogueView } from './drill-dialogue.tsx';
@@ -51,15 +53,15 @@ interface BodyProps {
   order: BuildOrder;
   /** "I can't listen now" on a listening exercise. */
   onWritten?: (() => void) | undefined;
-  /** "I can't draw now" on a writing exercise. */
-  onTyped?: (() => void) | undefined;
+  /** "I can't draw now" on a writing exercise, and drawing again. */
+  draw?: DrawSwitch | undefined;
 }
 
-function ExerciseBody({ drill, controls, order, onWritten, onTyped }: BodyProps) {
+function ExerciseBody({ drill, controls, order, onWritten, draw }: BodyProps) {
   const answer = controls.answered ? controls.answers[controls.step] : undefined;
-  if (drill.kind === 'write') return <WriteView drill={drill} answer={answer} onTyped={onTyped} />;
+  if (drill.kind === 'write') return <WriteView drill={drill} answer={answer} draw={draw} />;
   if (drill.kind === 'kanji-card') {
-    return <KanjiCardView drill={drill} answer={answer} onTyped={onTyped} />;
+    return <KanjiCardView drill={drill} answer={answer} draw={draw} />;
   }
   if (drill.kind === 'meaning') return <MeaningView drill={drill} answer={answer} />;
   if (drill.kind === 'particle') return <ParticleView drill={drill} answer={answer} />;
@@ -267,16 +269,26 @@ function useShownDrill(drill: Drill) {
     listenLater();
     setQuiet(true);
   };
-  const onTyped = () => {
-    drawLater();
-    setTyped(true);
+  const draw: DrawSwitch = {
+    onTyped: () => {
+      drawLater();
+      setTyped(true);
+    },
+    // Paused by "I can't draw now", not typed by the settings or for want of a pad.
+    onDraw:
+      typed && pad && !kanjiTyped()
+        ? () => {
+            drawNow();
+            setTyped(false);
+          }
+        : undefined,
   };
-  return { shown, onWritten, onTyped };
+  return { shown, onWritten, draw };
 }
 
 /** One drill: choices, tiles or a typed answer, plain feedback, then on to the next one. */
 export function DrillCard({ drill: given, card, onDone, nextLabel, layout }: DrillCardProps) {
-  const { shown: drill, onWritten, onTyped } = useShownDrill(given);
+  const { shown: drill, onWritten, draw } = useShownDrill(given);
   const controls = useDrill(drill, onDone);
   const order = useBuildOrder();
   useGradeSound(controls.answered ? controls.answers[controls.step]?.grade : undefined);
@@ -292,7 +304,7 @@ export function DrillCard({ drill: given, card, onDone, nextLabel, layout }: Dri
         controls={controls}
         order={order}
         onWritten={onWritten}
-        onTyped={onTyped}
+        draw={draw}
       />
       <DrillHelp drill={drill} controls={controls} />
       <StepTeaching drill={drill} card={card} controls={controls} />

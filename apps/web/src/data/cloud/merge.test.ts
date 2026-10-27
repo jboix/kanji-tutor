@@ -23,6 +23,19 @@ describe('merging two saves', () => {
     expect(merged.reviews.every((r) => !('id' in r))).toBe(true);
   });
 
+  it('keeps each AI log entry once, whatever the order of its fields', () => {
+    const entry = { at: 5, task: 'explainWord', model: 'm', cached: false, ok: true };
+    const counts = { inputTokens: 10, outputTokens: 2 };
+    const mine = save({
+      aiLog: [
+        { ...entry, ...counts, id: 1 },
+        { ...entry, ...counts, id: 2 },
+      ],
+    }).data;
+    const theirs = save({ aiLog: [{ ...counts, ...entry }] }).data;
+    expect(mergeSaves(mine, theirs, 'mine').aiLog).toHaveLength(1);
+  });
+
   it('lets the preferred side win what says nothing of its age: notes, settings', () => {
     const note = (body: string) => ({ id: 'n1', createdAt: 1, title: 'て形', body });
     const mine = save({ notes: [note('mine')] }).data;

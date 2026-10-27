@@ -11,6 +11,29 @@ import { expect, type Page, test } from './test.ts';
 const sections = (page: Page) => page.getByRole('region', { name: 'Sections' });
 const next = (page: Page) => page.getByRole('link', { name: /^Next: / });
 
+/** A lesson not begun opens with its conversation; Start goes on to its first part. */
+async function startLesson(page: Page) {
+  await expect(page.getByRole('heading', { name: 'First, the conversation' })).toBeVisible();
+  await expect(page.getByRole('button', { name: /^Ask the tutor/ })).toBeInViewport();
+  await page.getByRole('button', { name: 'Start: 言葉 · Words' }).click();
+  await expect(
+    page.getByRole('button', { name: /^Unit 1 · .+ · 言葉 · Words 1\/\d+, / }),
+  ).toBeVisible();
+}
+
+test('close leaves the lesson after its next part, back to the unit', async ({ page }) => {
+  test.setTimeout(120_000);
+  await onboard(page);
+  await page.goto('/units/i-am-a-student');
+  await sections(page).getByRole('button').first().click();
+  await startLesson(page);
+  await playSession(page);
+  await next(page).click();
+  await expect(sessionDone(page)).toBeHidden();
+  await page.getByRole('button', { name: 'End session' }).click();
+  await expect(page).toHaveURL(/\/units\/i-am-a-student$/);
+});
+
 test('a unit lesson, section by section, then every section done', async ({ page }) => {
   test.setTimeout(300_000);
   await onboard(page);
@@ -29,6 +52,7 @@ test('a unit lesson, section by section, then every section done', async ({ page
   );
   await rows.first().click();
   await expect(page).toHaveURL(/\/read\?unit=i-am-a-student&section=words&part=1$/);
+  await startLesson(page);
 
   const seen: string[] = [];
   const visited: string[] = [];

@@ -1,7 +1,10 @@
 import { type ReactNode, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
+import { useT } from './i18n/i18n.tsx';
 import { IconButton } from './icon-button.tsx';
-import { BackIcon } from './icons.tsx';
+import { BackIcon, CloseIcon } from './icons.tsx';
+import { historyIdx, stepsToRoot } from './nav-root.ts';
+import styles from './top-bar.module.css';
 
 /**
  * The app's first history entry: opened directly (key "default"), or a first entry since replaced,
@@ -9,9 +12,7 @@ import { BackIcon } from './icons.tsx';
  * index in `history.state.idx`.
  */
 function firstEntry(key: string): boolean {
-  if (key === 'default') return true;
-  const state: unknown = window.history.state;
-  return typeof state === 'object' && state !== null && 'idx' in state && state.idx === 0;
+  return key === 'default' || historyIdx() === 0;
 }
 
 /**
@@ -37,12 +38,37 @@ export interface BackButtonProps {
   children?: ReactNode;
 }
 
+/**
+ * Close beside back, two or more pages away from the last screen with the bottom bar: it goes
+ * straight back to that screen, however many pages were opened on the way.
+ */
+function CloseToRoot() {
+  const t = useT();
+  const navigate = useNavigate();
+  useLocation();
+  const steps = stepsToRoot();
+  if (steps === undefined || steps < 2) return null;
+  return (
+    <IconButton aria-label={t('common.closeAll')} onClick={() => void navigate(-steps)}>
+      <CloseIcon />
+    </IconButton>
+  );
+}
+
 /** The screen's back (or close) button, wired to `useBack`. */
 export function BackButton({ parent, label, className, children }: BackButtonProps) {
   const back = useBack(parent);
-  return (
+  const button = (
     <IconButton aria-label={label} onClick={back} {...(className ? { className } : {})}>
       {children ?? <BackIcon />}
     </IconButton>
+  );
+  // A session's own close (its children) needs no second one.
+  if (children) return button;
+  return (
+    <span className={styles.backs}>
+      {button}
+      <CloseToRoot />
+    </span>
   );
 }

@@ -4,10 +4,10 @@
  */
 import type { KanjiCardDrill } from '../../domain/drills/index.ts';
 import { ActionBar } from '../../ui/action-bar.tsx';
-import { Chip, ChipRow } from '../../ui/chip.tsx';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { Ja } from '../../ui/ja.tsx';
 import { useSlot } from '../../ui/slots.tsx';
+import { DrawChip, type DrawSwitch } from './draw-chip.tsx';
 import styles from './drill.module.css';
 import { ChoiceActions } from './drill-choices.tsx';
 import { Outcome } from './drill-exercises.tsx';
@@ -37,14 +37,7 @@ function BigKanji({ drill }: { drill: KanjiCardDrill }) {
 }
 
 /** Before the answer: the kanji to read, or the readings to write it from. */
-function CardFront({
-  drill,
-  onTyped,
-}: {
-  drill: KanjiCardDrill;
-  onTyped?: (() => void) | undefined;
-}) {
-  const t = useT();
+function CardFront({ drill, draw }: { drill: KanjiCardDrill; draw?: DrawSwitch | undefined }) {
   if (drill.direction === 'read') {
     return (
       <>
@@ -59,13 +52,7 @@ function CardFront({
         <Ja>{readingLine(drill.cue)}</Ja>
       </p>
       <Meanings drill={drill} />
-      {!drill.typed && onTyped && (
-        <ChipRow>
-          <Chip onClick={onTyped} title={t('exercises.cantDrawHint')}>
-            {t('exercises.cantDraw')}
-          </Chip>
-        </ChipRow>
-      )}
+      <DrawChip typed={drill.typed === true} draw={draw} />
     </>
   );
 }
@@ -78,18 +65,18 @@ function promptOf(drill: KanjiCardDrill) {
 export interface KanjiCardViewProps {
   drill: KanjiCardDrill;
   answer: DrillAnswer | undefined;
-  /** "I can't draw now": writing cards become a choice. */
-  onTyped?: (() => void) | undefined;
+  /** "I can't draw now": writing cards become a choice; and drawing again. */
+  draw?: DrawSwitch | undefined;
 }
 
 /** The card; once answered, the kanji with all its readings and what was given when wrong. */
-export function KanjiCardView({ drill, answer, onTyped }: KanjiCardViewProps) {
+export function KanjiCardView({ drill, answer, draw }: KanjiCardViewProps) {
   const t = useT();
   const drawn = drill.direction === 'write' && !drill.typed;
   return (
     <>
       <p className={styles.prompt}>{t(promptOf(drill))}</p>
-      {answer ? <BigKanji drill={drill} /> : <CardFront drill={drill} onTyped={onTyped} />}
+      {answer ? <BigKanji drill={drill} /> : <CardFront drill={drill} draw={draw} />}
       {answer && (
         <Outcome
           answer={answer}

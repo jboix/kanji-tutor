@@ -87,6 +87,7 @@ export {
   type ExerciseType,
   LESSON_SECTIONS,
   type LessonSection,
+  lessonBegun,
   nextPart,
   PART_SECONDS,
   SECTION_TITLES,
@@ -124,6 +125,7 @@ export {
 export {
   buildScan,
   type LineDraft,
+  needsMatch,
   type PageDraft,
   type QuestionDraft,
   rematchScan,

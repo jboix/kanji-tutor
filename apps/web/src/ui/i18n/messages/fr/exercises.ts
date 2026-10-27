@@ -31,6 +31,7 @@ export const exercises = {
   promptWriteTyped: 'Quel mot va ici ? Tapez sa lecture',
   typeReading: 'Tapez sa lecture',
   cantDraw: 'Je ne peux pas dessiner',
+  drawAgain: 'Dessiner à nouveau',
   cantDrawHint: 'À taper pendant 15 minutes',
   drawnAs: 'Vous avez écrit',
   tutorExplain: 'Expliquer cette phrase',

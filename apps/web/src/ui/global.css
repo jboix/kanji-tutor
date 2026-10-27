@@ -10,6 +10,8 @@
 html,
 body {
   margin: 0;
+  /* A pinch still zooms, for whoever needs it; a double tap no longer does by accident. */
+  touch-action: manipulation;
   height: 100%;
   /* Only a screen's body scrolls (U13). The page never does: on iOS a scroll that reaches the top
      of the body would otherwise bounce the whole page and bring Safari's toolbar back, moving the
@@ -54,6 +56,14 @@ textarea,
 select {
   font: inherit;
   color: inherit;
+}
+
+/* iOS zooms into any field under 16px when it takes focus, and leaves the page zoomed after:
+   on a phone every field is at least 16px. `:root` outweighs a field's own class. */
+@media (pointer: coarse) {
+  :root :is(input, textarea, select) {
+    font-size: max(16px, 1em);
+  }
 }
 
 :focus-visible {

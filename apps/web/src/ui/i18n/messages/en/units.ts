@@ -66,4 +66,7 @@ export const units = {
   lessonSub: '{section} · {minutes} min',
   tutorBefore: 'What should I know before this lesson?',
   tutorGrammar: 'How do the grammar points of this unit fit together?',
+  introConversation: 'First, the conversation',
+  introConversationLine: "The lesson's words and grammar, in use. Read it or play it, then start.",
+  introStart: 'Start: {section}',
 } as const;

@@ -3,8 +3,10 @@
  * sentences and made into the usual cards, and the handout's own questions. A word is read in a
  * pack sentence that uses it (else alone) and its meaning checked; a kanji is read in a word
  * written with it, else on a kanji card; a grammar point gets its introduction when new and two
- * of its drills ("Practise this point"). Items not practised yet come first; answers go through
- * `scan-answer.ts`, which updates the same knowledge levels and FSRS cards as everywhere.
+ * of its drills ("Practise this point"). Like a unit lesson, grammar comes first, then kanji,
+ * then words, then the handout's questions. While anything is left to practise, only that is
+ * offered; once all of it is, everything comes back, least recently practised first. Answers go
+ * through `scan-answer.ts`, which updates the same knowledge levels and FSRS cards as everywhere.
  */
 import { kanjiCardDrill } from '../drills/index.ts';
 import { hasKanji } from '../kana.ts';
@@ -123,49 +125,57 @@ function cardsFor(ctx: Ctx, item: ScanItem, words: readonly Word[]): Promise<Ses
   return item.kind === 'word' ? wordCards(ctx, ref) : grammarCards(ctx, ref);
 }
 
-/** Items with a ref (ours), those not practised yet first, then the least recently practised. */
+/** The order of a unit lesson: grammar, then kanji, then words. */
+const KIND_ORDER = { grammar: 0, kanji: 1, word: 2 } as const;
+
+/** The least recently practised first, never practised before all. */
 function practiseOrder<T extends { key: string }>(list: readonly T[], lesson: ScannedLesson) {
   const at = (key: string) => lesson.practised[key] ?? 0;
   return [...list].sort((a, b) => at(a.key) - at(b.key));
 }
 
-async function itemCards(ctx: Ctx, lesson: ScannedLesson, size: number): Promise<ScanCard[]> {
-  const ours = lesson.items.filter((item) => item.ref !== undefined);
-  const refs = ours.filter((i) => i.kind === 'word').map((i) => i.ref ?? '');
+/** What was never practised. */
+function stillToPractise<T extends { key: string }>(list: readonly T[], lesson: ScannedLesson) {
+  return list.filter((entry) => lesson.practised[entry.key] === undefined);
+}
+
+interface Entry {
+  item: ScanItem;
+  key: string;
+}
+
+async function itemCards(ctx: Ctx, items: readonly Entry[], size: number): Promise<ScanCard[]> {
+  const refs = items.filter((e) => e.item.kind === 'word').map((e) => e.item.ref ?? '');
   const words = (await ctx.repos.dictionary.words(refs)).flatMap((w) => w ?? []);
-  const ordered = practiseOrder(
-    ours.map((item) => ({ item, key: scanItemKey(item) })),
-    lesson,
-  );
   const out: ScanCard[] = [];
-  for (const { item, key } of ordered) {
+  for (const { item, key } of items) {
     if (out.length >= size) break;
     for (const card of await cardsFor(ctx, item, words)) out.push({ kind: 'card', key, card });
   }
   return out.slice(0, size);
 }
 
-/** The handout's questions, those not practised yet first. */
-function questionCards(lesson: ScannedLesson): ScanCard[] {
-  const cards = lesson.questions.map(
-    (question): ScanCard => ({ kind: 'question', key: questionKey(question), question }),
-  );
-  return practiseOrder(cards, lesson);
+interface Chosen {
+  items: readonly Entry[];
+  questions: readonly ScanCard[];
 }
 
-/** Two item cards, then a handout question, in turn; then whatever is left of either. */
-function interleave(items: readonly ScanCard[], questions: readonly ScanCard[]): ScanCard[] {
-  const out: ScanCard[] = [];
-  let q = 0;
-  items.forEach((card, i) => {
-    out.push(card);
-    const question = questions[q];
-    if (i % 2 === 1 && question) {
-      out.push(question);
-      q += 1;
-    }
-  });
-  return [...out, ...questions.slice(q)];
+/** The lesson's items with a ref (ours), grammar first, and its questions. */
+function everything(lesson: ScannedLesson): Chosen {
+  const ours = lesson.items.filter((item) => item.ref !== undefined);
+  const byKind = [...ours].sort((a, b) => KIND_ORDER[a.kind] - KIND_ORDER[b.kind]);
+  const items = byKind.map((item): Entry => ({ item, key: scanItemKey(item) }));
+  const questions = lesson.questions.map(
+    (question): ScanCard => ({ kind: 'question', key: questionKey(question), question }),
+  );
+  return { items, questions };
+}
+
+/** The item cards, then the questions, which keep at least a third of the cards. */
+async function practice(ctx: Ctx, chosen: Chosen, size: number): Promise<ScanCard[]> {
+  const share = size - Math.min(chosen.questions.length, Math.ceil(size / 3));
+  const cards = await itemCards(ctx, chosen.items, share);
+  return [...cards, ...chosen.questions.slice(0, size - cards.length)];
 }
 
 /** Words the lesson teaches may be read one level harder, or at their own level (G3). */
@@ -200,7 +210,7 @@ async function contextFor(repos: Repos, lesson: ScannedLesson, options: ScanPrac
 
 /**
  * The practice of one scanned lesson (see the module comment): at most `size` cards (12 by
- * default), item cards and handout questions in turn.
+ * default): what is left to practise, or when nothing is, all of it again.
  */
 export async function buildScanPractice(
   repos: Repos,
@@ -209,8 +219,16 @@ export async function buildScanPractice(
 ): Promise<ScanCard[]> {
   const size = options.size ?? SCAN_PRACTICE_CARDS;
   const ctx = await contextFor(repos, lesson, options);
-  const questions = questionCards(lesson);
-  const share = questions.length === 0 ? size : Math.ceil((size * 2) / 3);
-  const items = await itemCards(ctx, lesson, share);
-  return interleave(items, questions).slice(0, size);
+  const all = everything(lesson);
+  const left = {
+    items: stillToPractise(all.items, lesson),
+    questions: stillToPractise(all.questions, lesson),
+  };
+  const fresh = await practice(ctx, left, size);
+  if (fresh.length > 0) return fresh;
+  const again = {
+    items: practiseOrder(all.items, lesson),
+    questions: practiseOrder(all.questions, lesson),
+  };
+  return practice(ctx, again, size);
 }

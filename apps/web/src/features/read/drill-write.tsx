@@ -7,13 +7,13 @@ import { blankedWord, KANJI_BLANK, type WriteDrill } from '../../domain/drills/i
 import { glossesIn } from '../../domain/localized.ts';
 import { answerSpan } from '../../domain/services/index.ts';
 import { ActionBar } from '../../ui/action-bar.tsx';
-import { Chip, ChipRow } from '../../ui/chip.tsx';
 import { EnMark } from '../../ui/en-mark.tsx';
 import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
 import { Ja } from '../../ui/ja.tsx';
 import { useSlot } from '../../ui/slots.tsx';
 import { TapSentence } from '../../ui/word-tap.tsx';
 import { maskSentence } from '../../ui/word-tap-data.ts';
+import { DrawChip, type DrawSwitch } from './draw-chip.tsx';
 import styles from './drill.module.css';
 import { Outcome } from './drill-exercises.tsx';
 import { FormRuby } from './drill-forms.tsx';
@@ -68,12 +68,12 @@ function WriteCue({ drill }: { drill: WriteDrill }) {
 export interface WriteViewProps {
   drill: WriteDrill;
   answer: DrillAnswer | undefined;
-  /** "I can't draw now": the reading is typed instead. */
-  onTyped?: (() => void) | undefined;
+  /** "I can't draw now": the reading is typed instead; and drawing again. */
+  draw?: DrawSwitch | undefined;
 }
 
 /** The blanked sentence and its cue; once answered, the sentence and the word with its reading. */
-export function WriteView({ drill, answer, onTyped }: WriteViewProps) {
+export function WriteView({ drill, answer, draw }: WriteViewProps) {
   const t = useT();
   const word = <FormRuby written={drill.word.written} reading={drill.word.reading} />;
   return (
@@ -90,13 +90,7 @@ export function WriteView({ drill, answer, onTyped }: WriteViewProps) {
         <BlankedWord drill={drill} />
       )}
       {!answer && <WriteCue drill={drill} />}
-      {!answer && !drill.typed && onTyped && (
-        <ChipRow>
-          <Chip onClick={onTyped} title={t('exercises.cantDrawHint')}>
-            {t('exercises.cantDraw')}
-          </Chip>
-        </ChipRow>
-      )}
+      {!answer && <DrawChip typed={drill.typed === true} draw={draw} />}
       {answer && (
         <Outcome
           answer={answer}

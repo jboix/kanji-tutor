@@ -11,9 +11,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--tap);
+  min-width: var(--tap);
   min-height: var(--tap);
   flex-shrink: 0;
+}
+
+/* Back, and close to the last screen with the bottom bar once two or more pages deep. */
+.backs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
 }
 
 .center {

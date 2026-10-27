@@ -29,6 +29,7 @@ export const exercises = {
   promptWriteTyped: 'Which word fits? Type its reading',
   typeReading: 'Type its reading',
   cantDraw: "I can't draw now",
+  drawAgain: 'Draw it again',
   cantDrawHint: 'Typed for the next 15 minutes',
   drawnAs: 'You wrote',
   tutorExplain: 'Explain this sentence',

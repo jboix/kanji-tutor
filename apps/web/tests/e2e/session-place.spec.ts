@@ -9,7 +9,7 @@ import { expect, test } from './test.ts';
 
 const FOCUS = `/read?kanji=${encodeURIComponent('紹')}&reading=${encodeURIComponent('ショウ')}`;
 const progress = (page: import('@playwright/test').Page) =>
-  page.getByRole('button', { name: /^\d+\/\d+, Sentence \d+ of \d+\. Show what is left$/ });
+  page.getByRole('button', { name: /^.+ \d+\/\d+, Sentence \d+ of \d+\. Show what is left$/ });
 
 test('a grammar link in a session opens in a sheet, and the exercise is still there', async ({
   page,
@@ -36,10 +36,10 @@ test('leaving a session and coming back resumes at the same card', async ({ page
   await input.pressSequentially('nu');
   await input.press('Enter');
   await page.getByRole('button', { name: /^Next (sentence|word)$/ }).click();
-  await expect(progress(page)).toHaveAccessibleName(/^2\/\d+, Sentence 2 of/);
+  await expect(progress(page)).toHaveAccessibleName(/ 2\/\d+, Sentence 2 of/);
   await page.goto('/kanji');
   await page.goto('/read');
-  await expect(progress(page)).toHaveAccessibleName(/^2\/\d+, Sentence 2 of/);
+  await expect(progress(page)).toHaveAccessibleName(/ 2\/\d+, Sentence 2 of/);
 });
 
 test('the progress bar opens a small panel of what is done and left', async ({ page }) => {

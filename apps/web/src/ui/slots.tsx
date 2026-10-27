@@ -210,7 +210,20 @@ export interface TutorSheetSlotProps {
   onClose: () => void;
 }
 
+/**
+ * Before a unit lesson's first part (units feature): the unit, its conversation to read or play,
+ * and Start. Shown in the session screen, with its close button.
+ */
+export interface LessonIntroSlotProps {
+  unitId: string;
+  close: ReactNode;
+  /** The section the lesson starts with, e.g. "言葉 · Words", for the Start button. */
+  first: string;
+  onStart: () => void;
+}
+
 export interface Slots {
+  lessonIntro?: ComponentType<LessonIntroSlotProps>;
   tutorSheet?: ComponentType<TutorSheetSlotProps>;
   pointPractice?: ComponentType<PointPracticeSlotProps>;
   pagePeek?: ComponentType<PagePeekSlotProps>;

@@ -142,6 +142,8 @@ export interface ScannedLesson {
    * first time it opens.
    */
   unmatched?: true;
+  /** How its items were matched (`SCAN_MATCH_VERSION`); absent means the first way. */
+  matchVersion?: number;
 }
 
 /** A capture as stored before scanned lessons: converted on upgrade and on backup import. */

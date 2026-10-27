@@ -7,6 +7,7 @@ export const common = {
   back: 'Atrás',
   next: 'Siguiente',
   close: 'Cerrar',
+  closeAll: 'Cerrar estas páginas',
   cancel: 'Cancelar',
   save: 'Guardar',
   retry: 'Reintentar',

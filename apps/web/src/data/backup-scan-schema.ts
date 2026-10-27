@@ -55,6 +55,7 @@ export const scanSchema = z.object({
   practised: z.record(z.string(), z.number()),
   addedItemIds: z.array(itemIdSchema).exactOptional(),
   unmatched: z.literal(true).exactOptional(),
+  matchVersion: z.number().exactOptional(),
 });
 
 /** A capture from a backup made before scanned lessons; imported as a scanned lesson. */

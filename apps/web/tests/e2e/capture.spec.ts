@@ -1,7 +1,7 @@
 import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { Page } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 import { onboard, photograph } from './helpers.ts';
 import { expect, test } from './test.ts';
 
@@ -61,7 +61,8 @@ test('three handout pages become one scanned lesson', async ({ page }) => {
   await expect(pages.getByText('Kanji list')).toBeVisible();
   await expect(pages.getByText('Grammar explanation')).toBeVisible();
   await expect(pages.getByText('Exercise handout')).toBeVisible();
-  await expect(page.getByRole('region', { name: /^Kanji · 5$/ })).toBeVisible();
+  // Its 5 listed kanji, and those of the other pages' lines the learner cannot read yet.
+  await expect(page.getByRole('region', { name: /^Kanji · 14$/ })).toBeVisible();
   await expect(page.getByRole('region', { name: /^Words · 5$/ })).toContainText('not in our lists');
   await expect(page.getByRole('region', { name: 'Exercises from page 3 · 8' })).toContainText(
     'Choose the right form · 2 questions',
@@ -106,13 +107,19 @@ async function toHandoutQuestion(page: Page) {
   const onward = page.getByRole('button', {
     name: /^(Next( sentence| word| question| card)?|Done)$/,
   });
-  for (let step = 0; step < 20; step++) {
+  // A card can change between looking and clicking: a missed click just goes round again.
+  const tap = (button: Locator) =>
+    button
+      .first()
+      .click({ timeout: 3_000 })
+      .catch(() => undefined);
+  for (let step = 0; step < 30; step++) {
     await expect(handout.or(gotIt).or(dontKnow).first()).toBeVisible({ timeout: 15_000 });
     if (await handout.isVisible()) return;
-    if (await gotIt.isVisible()) await gotIt.click();
+    if (await gotIt.isVisible()) await tap(gotIt);
     else {
-      await dontKnow.click();
-      await onward.first().click();
+      await tap(dontKnow);
+      await tap(onward);
     }
   }
   await expect(handout).toBeVisible();
@@ -143,9 +150,9 @@ test('a handout question is answered, then the tutor’s answer shows as the tut
   await expect(tutor).toContainText('looks about to rain');
   await shot(page, 'practice');
   await page.getByRole('button', { name: 'See the page' }).click();
-  const sheet = page.getByRole('dialog', { name: 'Page 3 of your handout' });
-  await expect(sheet).toBeVisible();
-  await sheet.getByRole('button', { name: 'Close', exact: true }).click();
+  const viewer = page.getByRole('dialog', { name: 'Page 3 of your handout' });
+  await expect(viewer.getByRole('img', { name: 'Page 3 of your handout' })).toBeVisible();
+  await viewer.getByRole('button', { name: 'Close', exact: true }).click();
   const card = page.locator('[data-card]');
   const before = await card.getAttribute('data-sentence');
   await page.getByRole('button', { name: 'Next', exact: true }).click();

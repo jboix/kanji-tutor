@@ -98,9 +98,11 @@ function NextPart({ unit, next }: { unit: string; next: NonNullable<Next> }) {
   const section = <Ja>{SECTION_TITLES[next.section]}</Ja>;
   const to = paths.lessonPart(unit, next.section, next.part);
   const navigate = useNavigate();
-  useEnterKey(() => void navigate(to));
+  // The next part takes this one's place: close, then, leaves the lesson instead of going back
+  // to the part just done.
+  useEnterKey(() => void navigate(to, { replace: true }));
   return (
-    <PillLink to={to} arrow>
+    <PillLink to={to} replace arrow>
       <span>{rich('read.nextSection', { section, name: t(SECTION_NAME[next.section]) })}</span>
     </PillLink>
   );
@@ -234,7 +236,7 @@ export function SessionEnd(props: SessionEndProps) {
 function BackToUnit({ unit }: { unit: string }) {
   const t = useT();
   return (
-    <PillLink to={paths.unit(unit)} variant="secondary">
+    <PillLink to={paths.unit(unit)} replace variant="secondary">
       {t('read.backToUnit')}
     </PillLink>
   );
@@ -244,7 +246,7 @@ function BackToUnit({ unit }: { unit: string }) {
 function BackToLesson({ scan }: { scan: string }) {
   const t = useT();
   return (
-    <PillLink to={`${paths.capture}?id=${encodeURIComponent(scan)}`} variant="secondary">
+    <PillLink to={`${paths.capture}?id=${encodeURIComponent(scan)}`} replace variant="secondary">
       {t('read.backToLesson')}
     </PillLink>
   );

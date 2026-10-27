@@ -3,7 +3,9 @@
  * to KANJIDIC, JMdict and the grammar catalogue. The tutor's lists are matched as printed;
  * grammar is also found by the catalogue detectors over every line (but for the plain endings
  * of every sentence), and the new words of the lines of a page the tutor did not read (pasted
- * text, older captures). What our data does not know is kept, marked by a missing
+ * text, older captures). A page the tutor listed no kanji for (an exercise handout, a reading)
+ * offers the kanji in its lines the learner cannot read yet, up to a level above theirs. What
+ * our data does not know is kept, marked by a missing
  * `ref`, with the tutor's gloss and its reading as checked.
  */
 
@@ -129,7 +131,35 @@ function grammarItems(pages: readonly MatchPage[], level: LearnerLevel): ScanIte
   return [...listed, ...text];
 }
 
-async function kanjiItems(repos: Repos, page: MatchPage): Promise<ScanItem[]> {
+/** Kanji offered from one page's lines, at most. */
+const TEXT_KANJI = 8;
+
+/** The kanji in a page's lines the learner cannot read yet, within reach of their level. */
+async function textKanji(repos: Repos, page: MatchPage, reach: Reach): Promise<ScanItem[]> {
+  const surfaces = page.lines.flatMap((line) => line.tokens.map((t) => t.surface));
+  const chars = [...new Set([...surfaces.join('')].filter(hasKanji))];
+  const found = await repos.dictionary.kanjiMany(chars.filter((c) => !reach.known.has(c)));
+  return found
+    .flatMap((k) => (k && (k.jlpt ?? 0) >= reach.lowest ? [k.char] : []))
+    .slice(0, TEXT_KANJI)
+    .map((char) => ({ kind: 'kanji', text: char, ref: char, page: page.page, from: 'text' }));
+}
+
+interface Reach {
+  /** Kanji the learner reads (a reading at level 3 or more). */
+  known: ReadonlySet<string>;
+  /** The hardest JLPT level offered: one above the learner's. */
+  lowest: number;
+}
+
+async function reachOf(repos: Repos, level: LearnerLevel): Promise<Reach> {
+  const readings = await repos.kanjiReadings.all();
+  const known = new Set(readings.filter((r) => r.level >= KNOWN_LEVEL).map((r) => r.kanji));
+  return { known, lowest: level - 1 };
+}
+
+async function kanjiItems(repos: Repos, page: MatchPage, reach: Reach): Promise<ScanItem[]> {
+  if (listedOf(page).kanji.length === 0) return textKanji(repos, page, reach);
   const listed = listedOf(page).kanji.filter((k) => [...k.text.trim()].length === 1);
   const found = await repos.dictionary.kanjiMany(listed.map((k) => k.text.trim()));
   return listed.map((k, i) => {
@@ -225,7 +255,8 @@ export async function matchScanItems(
   pages: readonly MatchPage[],
   options: MatchOptions,
 ): Promise<ScanItem[]> {
-  const kanji = (await Promise.all(pages.map((page) => kanjiItems(repos, page)))).flat();
+  const reach = await reachOf(repos, options.level);
+  const kanji = (await Promise.all(pages.map((page) => kanjiItems(repos, page, reach)))).flat();
   const words = await wordItems(repos, pages, options);
   return unique([...kanji, ...words, ...grammarItems(pages, options.level)]);
 }

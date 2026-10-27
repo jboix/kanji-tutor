@@ -95,6 +95,24 @@ test('Learn looks up a kanji and a grammar pattern', async ({ page }) => {
   await expect(page).toHaveURL(/\/grammar\/.+/);
 });
 
+test('pages opened one after another close back to the tab in one step', async ({ page }) => {
+  await onboard(page);
+  await page.goto('/learn');
+  await page.getByRole('searchbox', { name: 'Look up' }).fill('学');
+  await page.getByRole('link', { name: '学', exact: true }).click();
+  await expect(page).toHaveURL(/\/kanji\/%E5%AD%A6$/);
+  const closeAll = page.getByRole('button', { name: 'Close these pages' });
+  // One page away, back is enough.
+  await expect(closeAll).toHaveCount(0);
+  await page.getByRole('link', { name: /^All \d+/ }).click();
+  await expect(page).toHaveURL(/\/kanji\/wall/);
+  await page.locator('a[href^="/kanji/%"]').first().click();
+  await expect(page).toHaveURL(/\/kanji\/%[^/]+$/);
+  await closeAll.click();
+  await expect(page).toHaveURL(/\/learn$/);
+  await expect(page.getByRole('heading', { name: 'Learn', level: 1 })).toBeVisible();
+});
+
 test('Settings opens each category as its own screen, and Back returns to the list', async ({
   page,
 }) => {

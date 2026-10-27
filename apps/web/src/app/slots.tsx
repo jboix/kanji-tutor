@@ -48,6 +48,7 @@ export const SLOTS: Slots = {
   sentenceHelp: lazySlot(async () => (await teach()).SentenceHelp),
   sentenceWrapUp: lazySlot(async () => (await teach()).SentenceWrapUp),
   pagePeek: PagePeek,
+  lessonIntro: lazySlot(async () => (await import('../features/units/index.ts')).LessonIntro),
   pointPractice: lazySlot(
     async () => (await import('../features/read/point-practice.tsx')).PointPractice,
   ),

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { curriculumRepos } from '../../test/fixture-curriculum.ts';
 import { NOW } from '../../test/reading-fixtures.ts';
 import type { SessionCard } from '../session-types.ts';
+import type { Word } from '../types.ts';
 import {
   COMES_BACK,
   cardItems,
@@ -36,6 +37,10 @@ async function lesson(unit: string, listening = false) {
   const review = await reviewSection(data, [...words, ...grammar]);
   return { repos, data, words, grammar, review };
 }
+
+/** Words that are neither nouns, verbs nor adjectives: greetings and set expressions. */
+const phrasesOf = (words: readonly Word[]) =>
+  words.filter((w) => !w.pos?.some((tag) => /^(n|v|adj)/u.test(tag)));
 
 const drillKind = (card: SessionCard) => card.drill?.kind;
 /** Spoken listening, not a sentence meaning check (which is shown, not spoken). */
@@ -75,13 +80,15 @@ describe('a unit lesson in sections (S3)', { timeout: 60_000 }, () => {
     }
   });
 
+  // A greeting the passages never use (いいえ) has only its meaning to drill, in two ways.
   it('brings every word and point back at least three times, in different types', async () => {
     for (const unit of UNITS) {
       const { data, words, grammar, review } = await lesson(unit);
       const coverage = coverageOf([...words, ...grammar, ...review], lessonItems(data));
+      const phrases = new Set(phrasesOf(data.words).map((w) => `word:${w.id}`));
       for (const [key, types] of coverage) {
         expect(types.size, `${unit} ${key}: ${[...types].join(', ')}`).toBeGreaterThanOrEqual(
-          COMES_BACK,
+          phrases.has(key) ? 2 : COMES_BACK,
         );
       }
     }
@@ -93,6 +100,16 @@ describe('a unit lesson in sections (S3)', { timeout: 60_000 }, () => {
     expect(new Set(review.map(cardType)).size).toBeGreaterThan(1);
     const shuffled = withoutRuns(review);
     expect(longestRun(shuffled)).toBeLessThanOrEqual(Math.max(2, longestRun(review)));
+  });
+
+  it('drills patterns on nouns, verbs and adjectives only, never on a greeting', async () => {
+    for (const unit of UNITS) {
+      const { data, words, grammar, review } = await lesson(unit);
+      const cues = [...words, ...grammar, ...review].flatMap((c) =>
+        c.drill?.kind === 'pattern' ? [c.drill.cue.wordId] : [],
+      );
+      expect(phrasesOf(data.words).filter((w) => cues.includes(w.id))).toEqual([]);
+    }
   });
 
   it('offers listening only with a Japanese voice', async () => {

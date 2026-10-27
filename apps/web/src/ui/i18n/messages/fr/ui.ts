@@ -173,4 +173,7 @@ export const ui = {
   progressOf: 'Progression : {line}',
   partOf: '{done} sur {total}',
   percent: '{n} %',
+  photoZoomHint: 'Pincez ou touchez deux fois pour zoomer',
+  photoBroken:
+    'Cette photo ne peut plus s’afficher sur ce téléphone. Scannez la page à nouveau pour la voir.',
 } satisfies Messages['ui'];

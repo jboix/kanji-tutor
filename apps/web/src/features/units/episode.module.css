@@ -169,3 +169,25 @@
   display: flex;
   color: var(--ink-muted);
 }
+
+/* A lesson's opening (lesson-intro.tsx): what the conversation is for, over the chat. */
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 4px;
+}
+
+.introTitle {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: 600;
+}
+
+/* Start alone, when the unit has no episode: the player bar's look without its controls. */
+.introFooter {
+  padding: 12px var(--gutter) max(14px, calc(env(safe-area-inset-bottom) + 6px));
+  border-radius: var(--radius-bar) var(--radius-bar) 0 0;
+  background: var(--bar);
+  box-shadow: 0 -1px 0 var(--rule);
+}

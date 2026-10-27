@@ -130,6 +130,36 @@ describe('buildScanPractice', () => {
     expect(cards).toHaveLength(4);
     expect(cards[0]?.key).toBe('word:s1');
   });
+
+  it('goes kanji, then words, then the handout questions, like a unit lesson', async () => {
+    const { r, lesson } = await setup();
+    const cards = await buildScanPractice(r, lesson, { now: NOW, listening: false, size: 30 });
+    const kinds = cards.map((c) => c.key.split(':')[0]);
+    const last = (kind: string) => kinds.lastIndexOf(kind);
+    expect(last('kanji')).toBeLessThan(kinds.indexOf('word'));
+    expect(last('word')).toBeLessThan(kinds.indexOf('question'));
+  });
+
+  it('leaves out what was practised while anything is left, then brings it all back', async () => {
+    const { r, lesson } = await setup();
+    const done = { 'question:2-1': NOW, 'question:2-2': NOW };
+    const some = await buildScanPractice(
+      r,
+      { ...lesson, practised: done },
+      { now: NOW, listening: false, size: 30 },
+    );
+    expect(some.some((c) => c.kind === 'question')).toBe(false);
+    const keys = (await buildScanPractice(r, lesson, { now: NOW, listening: false, size: 30 })).map(
+      (c) => c.key,
+    );
+    const all = Object.fromEntries(keys.map((key) => [key, NOW]));
+    const again = await buildScanPractice(
+      r,
+      { ...lesson, practised: all },
+      { now: NOW, listening: false, size: 30 },
+    );
+    expect(again.map((c) => c.key)).toEqual(keys);
+  });
 });
 
 describe('scan answers', () => {

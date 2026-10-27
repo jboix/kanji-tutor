@@ -20,4 +20,7 @@ export const readSession = {
   moreCommonReading: 'is the more common reading.',
   nextWord: 'Next word',
   nextSentence: 'Next sentence',
+  whereUnit: 'Unit {order}',
+  whereScan: 'Scanned lesson',
+  whereExercises: 'Exercises',
 } as const;

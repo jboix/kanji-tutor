@@ -1,7 +1,7 @@
 /**
  * A saved scanned lesson, from storage only, so it opens offline. A capture converted into a
- * lesson is matched the first time it opens. Its title, a page's kind and a misread line are
- * edited in place.
+ * lesson, or a lesson matched an older way, is matched again when it opens. Its title, a page's
+ * kind and a misread line are edited in place.
  */
 import { useCallback, useEffect, useState } from 'react';
 import type { Repos } from '../../domain/repos.ts';
@@ -9,6 +9,7 @@ import type { PageKind, ScannedLesson } from '../../domain/scan-types.ts';
 import {
   describeScanItems,
   learnerLevelOf,
+  needsMatch,
   rematchScan,
   renameScan,
   type ScanItemView,
@@ -26,7 +27,7 @@ interface Loaded {
 export type SavedState = { status: 'loading' } | { status: 'missing' } | { status: 'ready' };
 
 async function matched(repos: Repos, lesson: ScannedLesson): Promise<ScannedLesson> {
-  if (!lesson.unmatched) return lesson;
+  if (!needsMatch(lesson)) return lesson;
   const level = learnerLevelOf(await repos.settings.get());
   const next = await rematchScan(repos, lesson, level);
   await repos.scans.put(next);

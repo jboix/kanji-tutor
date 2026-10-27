@@ -50,11 +50,19 @@ export async function playCard(page: Page): Promise<string> {
   return type;
 }
 
+/** Waits for a card or the session's end, starting the lesson when it opens with its episode. */
+async function cardOrEnd(page: Page): Promise<void> {
+  const start = page.getByRole('button', { name: /^Start: / });
+  await expect(card(page).or(sessionDone(page)).or(start).first()).toBeVisible({ timeout: 20_000 });
+  if (await start.isVisible()) await start.click();
+  await expect(card(page).or(sessionDone(page)).first()).toBeVisible({ timeout: 20_000 });
+}
+
 /** Plays cards until the session ends, at most `max`; returns the types met in order. */
 export async function playSession(page: Page, max = 40): Promise<string[]> {
   const types: string[] = [];
   for (let i = 0; i < max; i++) {
-    await expect(card(page).or(sessionDone(page)).first()).toBeVisible({ timeout: 20_000 });
+    await cardOrEnd(page);
     if (await sessionDone(page).isVisible()) return types;
     types.push(await playCard(page));
   }
@@ -64,7 +72,7 @@ export async function playSession(page: Page, max = 40): Promise<string[]> {
 /** Plays until a card of `type` shows; false when the session ends first. */
 export async function playUntil(page: Page, type: string, max = 30): Promise<boolean> {
   for (let i = 0; i < max; i++) {
-    await expect(card(page).or(sessionDone(page)).first()).toBeVisible({ timeout: 20_000 });
+    await cardOrEnd(page);
     if (await sessionDone(page).isVisible()) return false;
     if ((await card(page).getAttribute('data-card')) === type) return true;
     await playCard(page);

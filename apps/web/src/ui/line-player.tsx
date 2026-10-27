@@ -86,6 +86,8 @@ export interface PlayerBarProps {
   onTranslate: () => void;
   /** The tutor's Ask, at the row's start. */
   start?: ReactNode;
+  /** Under the row: the way on, when the conversation leads somewhere (a lesson's Start). */
+  below?: ReactNode;
 }
 
 /** The track: one step per line, "3 / 8" beside it. */
@@ -112,7 +114,8 @@ function Track({ player, total }: Pick<PlayerBarProps, 'player' | 'total'>) {
 }
 
 /** The sticky footer: the track over Ask, the translations and Play or Pause. */
-export function PlayerBar({ player, total, translated, onTranslate, start }: PlayerBarProps) {
+export function PlayerBar(props: PlayerBarProps) {
+  const { player, total, translated, onTranslate, start, below } = props;
   const t = useT();
   const speaks = canSpeak();
   return (
@@ -141,6 +144,7 @@ export function PlayerBar({ player, total, translated, onTranslate, start }: Pla
           </button>
         )}
       </div>
+      {below}
     </div>
   );
 }

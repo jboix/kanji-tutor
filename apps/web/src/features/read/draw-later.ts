@@ -16,6 +16,11 @@ export function drawLater(now = Date.now()): void {
   typedUntil = now + DRAW_LATER_MS;
 }
 
+/** Drawing again at once, after "I can't draw now". */
+export function drawNow(): void {
+  typedUntil = 0;
+}
+
 /** True while writing exercises are typed instead of drawn: for a while, or by the settings. */
 export function drawingQuiet(now = Date.now()): boolean {
   return kanjiTyped() || now < typedUntil;

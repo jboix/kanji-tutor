@@ -46,6 +46,15 @@ function follow(root: HTMLElement, view: ViewportLike, editing: boolean): void {
   root.style.setProperty('--vv-top', `${view.offsetTop}px`);
 }
 
+/**
+ * With no keyboard up the page itself never scrolls; iOS can leave it scrolled after the keyboard
+ * closes, which lifts the whole frame and leaves a strip under the bottom bar. Put it back.
+ */
+function unscroll(doc: Document): void {
+  const page = doc.defaultView;
+  if (page && page.scrollY !== 0) page.scrollTo(0, 0);
+}
+
 /** Follows `view` into CSS variables and `data-keyboard` on `root`; returns the remover. */
 export function trackViewport(view: ViewportLike, root: HTMLElement, doc: Document): () => void {
   let width = view.width;
@@ -54,6 +63,7 @@ export function trackViewport(view: ViewportLike, root: HTMLElement, doc: Docume
     if (view.width !== width) [width, full] = [view.width, view.height];
     full = Math.max(full, view.height);
     follow(root, view, editing);
+    if (!editing) unscroll(doc);
     if (keyboardOpen(view.height, full, editing)) root.dataset.keyboard = 'open';
     else delete root.dataset.keyboard;
   };

@@ -145,6 +145,11 @@ export function sectionDone(progress: SectionProgress | undefined): boolean {
   return progress !== undefined && progress.done >= progress.parts;
 }
 
+/** Whether any part of the lesson is done: before that, its first part opens with the episode. */
+export function lessonBegun(progress: UnitProgress | undefined): boolean {
+  return Object.values(progress?.sections ?? {}).some((section) => (section?.done ?? 0) > 0);
+}
+
 /** The part to do next in a section: the first not done, or the first again once all are. */
 export function nextPart(progress: SectionProgress | undefined): number {
   if (!progress || sectionDone(progress)) return 1;

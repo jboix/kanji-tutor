@@ -6,6 +6,7 @@
 import type { z } from 'zod';
 import { summaryOf } from './immersion.ts';
 import { checkImmersion } from './immersion-check.ts';
+import { withoutNewMarks } from './new-marks.ts';
 import { type HiddenReading, spoilsReading } from './no-spoil.ts';
 import { proseReadings } from './prose-readings.ts';
 import type { Plan } from './request.ts';
@@ -31,11 +32,12 @@ async function summaryReadings(
 /** The output of one reply; `def` is the task's own definition (its prose is the Japanese). */
 export async function finishTask<T extends TaskName, S extends z.ZodType>(
   def: TaskDef<T, S>,
-  raw: z.output<S>,
+  reply: z.output<S>,
   input: TaskInput<T>,
   context: AiContext,
   plan: Pick<Plan, 'immersion'>,
 ): Promise<TaskOutput<T>> {
+  const raw = withoutNewMarks(reply);
   const value = await def.finalize(raw, input, context.lang);
   if (!plan.immersion) return value;
   const summary = summaryOf(raw);
