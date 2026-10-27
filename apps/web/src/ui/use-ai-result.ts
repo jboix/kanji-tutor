@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import type { AiError, Result } from '../../ai/types.ts';
+import type { AiError, Result } from '../ai/types.ts';
 
 /** Where an AI call stands; `offLanguage` is kept so the reply can be marked. */
 export type AiResult<T> =

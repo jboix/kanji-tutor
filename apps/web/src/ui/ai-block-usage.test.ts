@@ -31,6 +31,8 @@ const AI_VIEWS = [
   'src/features/read/handout-screen.tsx',
   'src/features/notes/letter-view.tsx',
   'src/features/placement/tutor-assessment.tsx',
+  'src/features/kanji/kanji-story.tsx',
+  'src/features/kanji/kanji-story-parts.tsx',
   'src/features/handwrite/candidate-picker.tsx',
   'src/features/handwrite/status-line.tsx',
   'src/features/handwrite/draw-panel.tsx',

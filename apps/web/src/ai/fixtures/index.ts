@@ -11,6 +11,7 @@ import explainSentence from './explain-sentence.json' with { type: 'json' };
 import explainWord from './explain-word.json' with { type: 'json' };
 import followUp from './follow-up.json' with { type: 'json' };
 import generateSentences from './generate-sentences.json' with { type: 'json' };
+import kanjiStory from './kanji-story.json' with { type: 'json' };
 import memoryHook from './memory-hook.json' with { type: 'json' };
 import paraphraseQuestion from './paraphrase-question.json' with { type: 'json' };
 import recognizeHandwriting from './recognize-handwriting.json' with { type: 'json' };
@@ -47,6 +48,7 @@ export const FIXTURES: Readonly<Record<TaskName, { fixtures: readonly Fixture[] 
   recognizeHandwriting,
   explainSentence,
   memoryHook,
+  kanjiStory,
   paraphraseQuestion,
   assessLevel,
 };

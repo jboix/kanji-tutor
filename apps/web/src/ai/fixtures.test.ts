@@ -14,6 +14,7 @@ import { explainSentenceSchema } from './schemas/explain-sentence.ts';
 import { explainWordSchema } from './schemas/explain-word.ts';
 import { followUpSchema } from './schemas/follow-up.ts';
 import { generatedSentencesSchema } from './schemas/generate-sentences.ts';
+import { kanjiStorySchema } from './schemas/kanji-story.ts';
 import { memoryHookSchema } from './schemas/memory-hook.ts';
 import { paraphraseSchema } from './schemas/paraphrase-question.ts';
 import { handwritingSchema } from './schemas/recognize-handwriting.ts';
@@ -38,6 +39,7 @@ const SCHEMAS: Record<TaskName, z.ZodType> = {
   recognizeHandwriting: handwritingSchema,
   explainSentence: explainSentenceSchema,
   memoryHook: memoryHookSchema,
+  kanjiStory: kanjiStorySchema,
   paraphraseQuestion: paraphraseSchema,
   assessLevel: assessLevelSchema,
 };

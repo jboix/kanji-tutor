@@ -80,6 +80,7 @@ const TASK_LABELS: Readonly<Record<string, PlainKey>> = {
   recognizeHandwriting: 'settingsAi.taskRecognizeHandwriting',
   explainSentence: 'settingsAi.taskExplainSentence',
   memoryHook: 'settingsAi.taskMemoryHook',
+  kanjiStory: 'settingsAi.taskKanjiStory',
   paraphraseQuestion: 'settingsAi.taskParaphraseQuestion',
   assessLevel: 'settingsAi.taskAssessLevel',
 };

@@ -88,6 +88,14 @@ Target: 待つ (まつ) to wait
 Known words: 駅"
 `;
 
+exports[`prompts > kanjiStory is versioned, calm and asks for JSON 1`] = `
+"Kanji: 休
+Meaning: rest, day off
+Parts: 亻 person + 木 tree
+Kanji the learner reads: 山大木下
+Take: 0"
+`;
+
 exports[`prompts > memoryHook is versioned, calm and asks for JSON 1`] = `
 "Target: 待つ
 Reading: まつ

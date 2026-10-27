@@ -1,0 +1,59 @@
+{
+  "fixtures": [
+    {
+      "inputTokens": 540,
+      "outputTokens": 120,
+      "toolCalls": [[{ "id": "call_1", "name": "get_learner_profile", "args": {} }]],
+      "response": {
+        "line": "Picture its parts side by side, and say the meaning out loud as you trace them.",
+        "story": {
+          "text": "毎日、日本語の本を読みます。",
+          "translation": "I read a Japanese book every day."
+        },
+        "readings": [
+          { "surface": "毎日", "reading": "まいにち" },
+          { "surface": "日本語", "reading": "にほんご" },
+          { "surface": "本", "reading": "ほん" },
+          { "surface": "読みます", "reading": "よみます" }
+        ]
+      }
+    },
+    {
+      "match": "Take: 1",
+      "inputTokens": 552,
+      "outputTokens": 118,
+      "response": {
+        "line": "Trace the parts one by one, top to bottom, and the meaning will come with them.",
+        "story": {
+          "text": "友達と山に行きました。",
+          "translation": "I went to the mountains with a friend."
+        },
+        "readings": [
+          { "surface": "友達", "reading": "ともだち" },
+          { "surface": "山", "reading": "やま" },
+          { "surface": "行きました", "reading": "いきました" }
+        ]
+      }
+    },
+    {
+      "match": "Kanji: 休",
+      "inputTokens": 548,
+      "outputTokens": 126,
+      "response": {
+        "line": "A person 亻 leaning against a tree 木, taking a rest. On a shop door, 休み means closed for the day.",
+        "story": {
+          "text": "山の大きい木の下で休みました。",
+          "translation": "I rested under a big tree on the mountain."
+        },
+        "readings": [
+          { "surface": "休み", "reading": "やすみ" },
+          { "surface": "山", "reading": "やま" },
+          { "surface": "大きい", "reading": "おおきい" },
+          { "surface": "木", "reading": "き" },
+          { "surface": "下", "reading": "した" },
+          { "surface": "休みました", "reading": "やすみました" }
+        ]
+      }
+    }
+  ]
+}

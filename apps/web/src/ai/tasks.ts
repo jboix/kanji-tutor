@@ -14,6 +14,7 @@ import { explainSentencePrompt } from './prompts/explain-sentence.ts';
 import { explainWordPrompt } from './prompts/explain-word.ts';
 import { followUpPrompt } from './prompts/follow-up.ts';
 import { generateSentencesPrompt } from './prompts/generate-sentences.ts';
+import { kanjiStoryPrompt } from './prompts/kanji-story.ts';
 import { memoryHookPrompt } from './prompts/memory-hook.ts';
 import { paraphraseQuestionPrompt } from './prompts/paraphrase-question.ts';
 import { recognizeHandwritingPrompt } from './prompts/recognize-handwriting.ts';
@@ -31,6 +32,7 @@ import { explainSentenceSchema, finalizeSentenceExplanation } from './schemas/ex
 import { explainWordSchema, finalizeWord } from './schemas/explain-word.ts';
 import { finalizeFollowUp, followUpSchema } from './schemas/follow-up.ts';
 import { finalizeSentences, generatedSentencesSchema } from './schemas/generate-sentences.ts';
+import { finalizeKanjiStory, kanjiStorySchema } from './schemas/kanji-story.ts';
 import { finalizeMemoryHook, memoryHookSchema } from './schemas/memory-hook.ts';
 import { finalizeParaphrase, paraphraseSchema } from './schemas/paraphrase-question.ts';
 import { finalizeHandwriting, handwritingSchema } from './schemas/recognize-handwriting.ts';
@@ -230,6 +232,16 @@ export const memoryHook = task({
   prompt: memoryHookPrompt,
   schema: memoryHookSchema,
   finalize: finalizeMemoryHook,
+});
+
+/** A kanji's story from the tutor, from its parts, with a short story in known kanji. */
+export const kanjiStory = task({
+  name: 'kanjiStory',
+  tier: 'teacher',
+  prose: (raw) => [raw.line, raw.story.translation],
+  prompt: kanjiStoryPrompt,
+  schema: kanjiStorySchema,
+  finalize: finalizeKanjiStory,
 });
 
 /** J6: a 言い換え類義 question; offer it only with a key, and only when `verified`. */

@@ -10,6 +10,7 @@ import { paths } from '../../ui/paths.ts';
 import { SectionLabel } from '../../ui/section-label.tsx';
 import { TutorCard, TutorFloat, useTutor } from '../../ui/tutor.tsx';
 import styles from './kanji.module.css';
+import { KanjiStoryCard } from './kanji-story.tsx';
 import { WallGlimpse } from './kanji-wall.tsx';
 import { ReadingRows } from './reading-rows.tsx';
 
@@ -126,8 +127,8 @@ function KanjiTutor({ detail, floating }: { detail: KanjiDetail; floating: boole
 }
 
 /**
- * The kanji page (kanji.html, K3): readings and how well each is read, the tutor, family,
- * practice, and the kanji wall around it. `floating` (its own screen, not a peek over a session) adds the floating Ask.
+ * The kanji page (kanji.html, K3): the tutor, its parts and story, readings and how well each is
+ * read, family, practice, and the kanji wall around it. `floating` (its own screen, not a peek over a session) adds the floating Ask.
  */
 export function KanjiDetailView(props: { detail: KanjiDetail; floating?: boolean }) {
   const { detail } = props;
@@ -135,6 +136,7 @@ export function KanjiDetailView(props: { detail: KanjiDetail; floating?: boolean
     <>
       <Hero detail={detail} />
       <KanjiTutor detail={detail} floating={props.floating ?? false} />
+      <KanjiStoryCard char={detail.kanji.char} />
       <ReadingRows detail={detail} />
       {detail.family && <Family family={detail.family} />}
       <Practice detail={detail} />

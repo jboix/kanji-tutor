@@ -56,6 +56,7 @@ export const settingsAi = {
   taskRecognizeHandwriting: 'Handwriting',
   taskExplainSentence: 'Explain a sentence',
   taskMemoryHook: 'Memory hooks',
+  taskKanjiStory: 'Kanji stories',
   taskParaphraseQuestion: 'Paraphrase questions',
   taskAssessLevel: 'Level assessment',
 

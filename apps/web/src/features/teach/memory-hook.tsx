@@ -3,9 +3,9 @@ import type { AiClient, MemoryHookInput } from '../../ai/types.ts';
 import { AiAction } from '../../ui/ai-action.tsx';
 import { AiBlock, AiWriting } from '../../ui/ai-block.tsx';
 import { useT } from '../../ui/i18n/i18n.tsx';
+import { useAiResult } from '../../ui/use-ai-result.ts';
 import { ImmersionFooter, JaProse, OffLanguage, TutorProblem, Unconfirmed } from './ja-prose.tsx';
 import styles from './teach.module.css';
-import { useAiResult } from './use-ai-result.ts';
 import type { WordTeaching } from './word-teaching.ts';
 
 function hookInput(teaching: WordTeaching, sentence: string): MemoryHookInput {

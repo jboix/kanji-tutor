@@ -252,6 +252,22 @@ export interface MemoryHook extends Immersed {
   readings: CheckedReading[];
 }
 
+export interface KanjiStoryInput {
+  kanji: { char: string; meanings: string[]; parts: { char: string; meaning?: string }[] };
+  /** Kanji the learner reads, most frequent first, for the short story. */
+  knownKanji: string[];
+  /** 0 for the first story, 1 for "Another story", and so on: each is cached on its own. */
+  take: number;
+}
+/** A kanji's story from the tutor: a way to remember it, and a short story with known kanji. */
+export interface KanjiStory {
+  /** One or two sentences in the learner's language, from the parts to the meaning. */
+  line: string;
+  /** One or two short Japanese sentences with the kanji, otherwise only known kanji. */
+  story: { text: string; translation: string };
+  readings: CheckedReading[];
+}
+
 export interface ParaphraseInput {
   sentence: SentenceContext;
   /** The underlined part the question asks about; the whole sentence when absent. */
@@ -318,6 +334,7 @@ export interface Tasks {
   recognizeHandwriting: [HandwritingInput, HandwritingCandidates];
   explainSentence: [ExplainSentenceInput, SentenceExplanation];
   memoryHook: [MemoryHookInput, MemoryHook];
+  kanjiStory: [KanjiStoryInput, KanjiStory];
   paraphraseQuestion: [ParaphraseInput, ParaphraseQuestion];
   assessLevel: [AssessLevelInput, LevelAssessment];
 }

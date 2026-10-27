@@ -17,12 +17,12 @@ import { RuledSentence } from '../../ui/ruled-sentence.tsx';
 import { SectionLabel } from '../../ui/section-label.tsx';
 import { useServices } from '../../ui/services.tsx';
 import type { SentenceHelpSlotProps } from '../../ui/slots.tsx';
+import { useAiResult } from '../../ui/use-ai-result.ts';
 import { useContentLanguage } from '../../ui/use-content-language.ts';
 import { sentenceGrammar } from './grammar-line.ts';
 import { ImmersionFooter, JaProse, OffLanguage, TutorProblem, Unconfirmed } from './ja-prose.tsx';
 import { explainInput } from './sentence-input.ts';
 import styles from './teach.module.css';
-import { useAiResult } from './use-ai-result.ts';
 
 /** The catalogue's notes on the grammar found in the sentence: app data, no seal. */
 function CatalogueGrammar({ entries: source }: { entries: readonly GrammarEntry[] }) {

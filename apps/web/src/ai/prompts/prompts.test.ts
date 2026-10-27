@@ -11,6 +11,7 @@ import { explainSentencePrompt } from './explain-sentence.ts';
 import { explainWordPrompt } from './explain-word.ts';
 import { followUpPrompt } from './follow-up.ts';
 import { generateSentencesPrompt } from './generate-sentences.ts';
+import { kanjiStoryPrompt } from './kanji-story.ts';
 import { memoryHookPrompt } from './memory-hook.ts';
 import { paraphraseQuestionPrompt } from './paraphrase-question.ts';
 import { recognizeHandwritingPrompt } from './recognize-handwriting.ts';
@@ -117,6 +118,22 @@ const BUILT: [string, Prompt<never>, unknown][] = [
     },
   ],
   [
+    'kanjiStory',
+    kanjiStoryPrompt,
+    {
+      kanji: {
+        char: '休',
+        meanings: ['rest', 'day off'],
+        parts: [
+          { char: '亻', meaning: 'person' },
+          { char: '木', meaning: 'tree' },
+        ],
+      },
+      knownKanji: ['山', '大', '木', '下'],
+      take: 0,
+    },
+  ],
+  [
     'paraphraseQuestion',
     paraphraseQuestionPrompt,
     { sentence: SENTENCE, phrase: '待っている間に' },
@@ -132,7 +149,7 @@ describe('prompts', () => {
 
   it('forbids praise and gamified wording in every tutor prompt', () => {
     const tutor = BUILT.filter(([, prompt]) => prompt.system.startsWith('You are a calm'));
-    expect(tutor).toHaveLength(11);
+    expect(tutor).toHaveLength(12);
     for (const [, prompt] of tutor) expect(prompt.system).toContain('No praise, cheering');
   });
 
@@ -175,6 +192,7 @@ describe('prompts', () => {
     expect(generateSentencesPrompt.system).toContain('"readings"');
     expect(explainSentencePrompt.system).toContain('"readings"');
     expect(memoryHookPrompt.system).toContain('"readings"');
+    expect(kanjiStoryPrompt.system).toContain('"readings"');
     expect(paraphraseQuestionPrompt.system).toContain('"readings"');
   });
 

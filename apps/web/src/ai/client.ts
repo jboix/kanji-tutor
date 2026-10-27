@@ -22,6 +22,7 @@ export function createAiClient(getContext: () => Promise<AiContext>): AiClient {
     recognizeHandwriting: bind('recognizeHandwriting'),
     explainSentence: bind('explainSentence'),
     memoryHook: bind('memoryHook'),
+    kanjiStory: bind('kanjiStory'),
     paraphraseQuestion: bind('paraphraseQuestion'),
     assessLevel: bind('assessLevel'),
     peek: async (name, input) => lazyPeek(name)(input, await getContext()),
