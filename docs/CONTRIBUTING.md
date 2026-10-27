@@ -125,5 +125,6 @@ an issue instead.
 
 ## Pull requests
 
-Keep them scoped to one change. CI runs the same checks, the end-to-end tests and commit linting.
+Keep them scoped to one change. CI runs the same checks, the end-to-end tests and commit linting,
+and comments with the coverage and the security scan's findings.
 A pull request merges with a green `quality` check and a review from the maintainer.

@@ -23,6 +23,8 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: read
+      # The coverage comment on a pull request. Dependabot's token is read-only unless asked.
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -54,6 +56,14 @@ jobs:
         run: bun run knip
       - name: Unit tests
         run: bun run test
+      # A sticky comment with the PWA's coverage, the changed files first. A fork's token cannot
+      # comment, so its pull requests keep the summary in the job's log.
+      - name: Coverage report
+        if: ${{ !cancelled() && github.event_name == 'pull_request' && !github.event.pull_request.head.repo.fork }}
+        uses: davelosert/vitest-coverage-report-action@8f86cfb56ed6d5613ea8cdc5259f207fbfd51ece # v2.13.1
+        with:
+          working-directory: apps/web
+          name: web
       - name: Build
         run: bun run build
       - name: Bundle budget

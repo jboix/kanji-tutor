@@ -5,7 +5,8 @@ name: Scan
 # build: the findings go to the Security tab (code scanning) as SARIF, beside CodeQL's. On a pull
 # request they show on the pull request; from a fork, whose token cannot upload, they stay in the
 # job's log. Both tools run from their own actions, pinned by commit, which Dependabot updates
-# with the other actions.
+# with the other actions. On a pull request, the `report` job sums the findings up in one sticky
+# comment, updated on every push.
 #
 # zizmor audits the workflows. Trivy checks the deploy files for misconfigurations, and the images
 # the server runs, the sync server's latest and Caddy's, for known vulnerabilities.
@@ -39,11 +40,20 @@ jobs:
           persist-credentials: false
 
       - name: zizmor
+        id: zimor
         uses: zizmorcore/zizmor-action@85b2b9fb8e3325e7a23d7d0a9d7ba5ae0f999e3e # v0.7.1
         with:
           version: 1.30.1
           inputs: .github
           advanced-security: ${{ !github.event.pull_request.head.repo.fork }}
+
+      - name: Keep the results
+        if: ${{ github.event_name == 'pull_request' && steps.zizmor.outputs.output-file != '' }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: sarif-zizmor
+          path: ${{ steps.zizmor.outputs.output-file }}
+          retention-days: 1
 
   trivy-config:
     runs-on: ubuntu-latest
@@ -72,6 +82,14 @@ jobs:
         with:
           sarif_file: trivy.sarif
           category: trivy-config
+
+      - name: Keep the results
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: sarif-trivy-config
+          path: trivy.sarif
+          retention-days: 1
 
   trivy-images:
     runs-on: ubuntu-latest
@@ -104,3 +122,70 @@ jobs:
         with:
           sarif_file: trivy.sarif
           category: trivy-${{ matrix.name }}
+
+      - name: Keep the results
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: sarif-trivy-${{ matrix.name }}
+          path: trivy.sarif
+          retention-days: 1
+
+  # One sticky comment on the pull request: findings per scan, and the first few of each. A fork's
+  # token cannot comment; Dependabot's can, since the job asks for it.
+  report:
+    if: ${{ !cancelled() && github.event_name == 'pull_request' && !github.event.pull_request.head.repo.fork }}
+    needs: [zizmor, trivy-config, trivy-images]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Results
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: sarif-*
+          path: sarif
+
+      - name: Comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+          JOBS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          marker='<!-- scan-report -->'
+          {
+            echo "$marker"
+            echo "### Security scan"
+            echo
+            echo "| Scan | Findings |"
+            echo "| --- | --- |"
+            for dir in sarif/sarif-*; do
+              [ -d "$dir" ] || continue
+              name="${dir#sarif/sarif-}"
+              count=$(jq '[.runs[].results[]] | length' "$dir"/*)
+              echo "| $name | $count |"
+            done
+            echo
+            for dir in sarif/sarif-*; do
+              [ -d "$dir" ] || continue
+              jq -r --arg scan "${dir#sarif/sarif-}" '.runs[].results[:10][]
+                | "- **\($scan)** `\(.ruleId)`: \(.message.text | split("\n")[0])"
+                + " (\(.locations[0].physicalLocation.artifactLocation.uri // "image"))"' \
+                "$dir"/*
+            done
+            case " $JOBS " in
+              *" failure "*) echo; echo "A scan job failed; its findings may be missing." ;;
+            esac
+            echo
+            echo "Commit $SHA. Details in the Security tab (code scanning)."
+          } > comment.md
+          id=$(gh api "repos/$REPO/issues/$PR/comments" --paginate \
+            --jq "map(select(.body | startswith(\"$marker\"))) | .[0].id // empty" | head -n 1)
+          if [ -n "$id" ]; then
+            gh api --method PATCH "repos/$REPO/issues/comments/$id" -F body=@comment.md
+          else
+            gh api --method POST "repos/$REPO/issues/$PR/comments" -F body=@comment.md
+          fi

@@ -112,7 +112,8 @@ device names in clear.
 The **Scan** workflow runs like CodeQL, on every push and pull request to `main` and weekly:
 zizmor audits the workflows, and Trivy checks `deploy/` for misconfigurations and the running
 images, this one and Caddy's, for known vulnerabilities. Its findings go to the repository's
-Security tab. No scanner runs in the build or the deploy.
+Security tab, and on a pull request a comment sums them up. No scanner runs in the build or the
+deploy.
 
 Before a release, scan the image you are about to publish:
 

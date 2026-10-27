@@ -12,7 +12,7 @@ export default defineConfig({
     css: false,
     coverage: {
       provider: 'v8',
-      reporter: ['text-summary', 'json-summary'],
+      reporter: ['text-summary', 'json-summary', 'json'],
       reportOnFailure: true,
       include: ['src/**/*.{ts,tsx}'],
       exclude: [
