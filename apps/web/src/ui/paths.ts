@@ -22,6 +22,8 @@ export const paths = {
   capture: '/capture',
   /** In the wild: a photo of a sign or a menu, read by the tutor. */
   wild: '/wild',
+  /** A photo read in the wild, kept with what the tutor read on it. */
+  wildPhoto: (id: string) => `/wild/${encodeURIComponent(id)}`,
   notes: '/notes',
   compose: '/compose',
   handwrite: '/handwrite',

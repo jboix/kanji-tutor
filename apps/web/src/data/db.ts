@@ -18,6 +18,7 @@ import type {
   WeeklyPlan,
   Word,
 } from '../domain/types.ts';
+import type { WildPhoto } from '../domain/wild-types.ts';
 import { type SentenceRow, sentenceKeysMiddleware } from './sentence-keys.ts';
 
 /** Dictionary row: a word plus its readings folded to hiragana, for prefix search. */
@@ -37,7 +38,7 @@ async function capturesToScans(tx: Transaction): Promise<void> {
 }
 
 /**
- * Kanji Tutor's IndexedDB database, schema v6. It keeps its first name, `kanji-reader`, as do the
+ * Kanji Tutor's IndexedDB database, schema v7. It keeps its first name, `kanji-reader`, as do the
  * localStorage keys: renaming them would empty every install.
  */
 export class KanjiTutorDb extends Dexie {
@@ -49,6 +50,7 @@ export class KanjiTutorDb extends Dexie {
   kanjiReadings!: Table<KanjiReading, string>;
   reviews!: EntityTable<Review, 'id'>;
   scans!: Table<ScannedLesson, string>;
+  wildPhotos!: Table<WildPhoto, string>;
   notes!: Table<Note, string>;
   plans!: Table<WeeklyPlan, string>;
   aiCache!: Table<AiCacheEntry, string>;
@@ -90,6 +92,8 @@ export class KanjiTutorDb extends Dexie {
     this.version(5).stores({ scans: 'id, createdAt' }).upgrade(capturesToScans);
     // v6: captures live on as scanned lessons only.
     this.version(6).stores({ captures: null });
+    // v7: In the wild's photos, each with what the tutor read on it.
+    this.version(7).stores({ wildPhotos: 'id, createdAt' });
     this.use(sentenceKeysMiddleware);
   }
 }

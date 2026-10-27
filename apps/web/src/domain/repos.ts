@@ -24,6 +24,7 @@ import type {
   WeeklyPlan,
   Word,
 } from './types.ts';
+import type { WildPhoto } from './wild-types.ts';
 
 /** Basic keyed store. */
 export interface Store<T, K extends string = string> {
@@ -154,6 +155,8 @@ export interface Repos {
   sentences: SentenceRepo;
   grammar: Store<GrammarPoint>;
   scans: ScanRepo;
+  /** In the wild's photos, kept on this device only (not in backups: photos are large). */
+  wildPhotos: Store<WildPhoto>;
   notes: Store<Note>;
   plans: Store<WeeklyPlan>;
   settings: SettingsRepo;

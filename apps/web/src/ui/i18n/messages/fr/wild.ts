@@ -29,4 +29,12 @@ export const wild = {
   tutorAsk: 'Que dit ce panneau ?',
   tutorAbout: 'cette photo',
   notWord: 'Absent du dictionnaire, il ne peut pas être ajouté',
+  untitled: 'Une photo',
+  saved: 'Vos photos',
+  savedMeta: '{date} · {n} kanji',
+  delete: 'Supprimer cette photo',
+  deleteConfirm:
+    'Supprimer cette photo et ce que le tuteur y a lu ? Les mots que vous en avez ajoutés restent.',
+  deleteYes: 'Supprimer',
+  missing: 'Cette photo n’est plus sur ce téléphone.',
 } satisfies Messages['wild'];

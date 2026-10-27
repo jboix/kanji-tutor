@@ -173,6 +173,7 @@ export function createDexieRepos(db: KanjiTutorDb): Repos {
     sentences: sentenceRepo(db),
     grammar: tableStore(db.grammar),
     scans: scanRepo(db),
+    wildPhotos: tableStore(db.wildPhotos),
     notes: tableStore(db.notes),
     plans: tableStore(db.plans),
     settings: settingsRepo(db),

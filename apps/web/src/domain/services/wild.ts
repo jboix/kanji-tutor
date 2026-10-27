@@ -7,15 +7,10 @@
 import { itemId } from '../ids.ts';
 import { hasKanji } from '../kana.ts';
 import type { Repos } from '../repos.ts';
+import type { SignInput, WildPhoto, WildReading } from '../wild-types.ts';
 import { ensureItem } from './items.ts';
 
-/** What the tutor read, as the domain needs it (the AI layer's `SignReading`). */
-export interface SignInput {
-  place: string;
-  kanji: readonly { char: string; box: readonly [number, number, number, number] }[];
-  words: readonly { surface: string; reading: string; meaning: string }[];
-  readings: readonly { surface: string; reading: string; verified: boolean }[];
-}
+export type { SignInput, WildPhoto, WildReading } from '../wild-types.ts';
 
 export interface WildKanji {
   char: string;
@@ -93,4 +88,23 @@ export async function wildView(repos: Repos, input: SignInput): Promise<WildView
 /** Adds words to study as captures; words already there are left as they are. */
 export async function addWildWords(repos: Repos, wordIds: readonly string[], now: number) {
   for (const wordId of wordIds) await ensureItem(repos, { wordId, kind: 'capture', now });
+}
+
+/** Keeps a photo with what the tutor read on it; saving the same photo again replaces it. */
+export async function saveWildPhoto(
+  repos: Repos,
+  photo: { id: string; photo: Blob; reading: WildReading; now: number },
+) {
+  const { now, ...rest } = photo;
+  await repos.wildPhotos.put({ ...rest, createdAt: now });
+}
+
+/** Forgets a saved photo; the words added from it stay. */
+export async function deleteWildPhoto(repos: Repos, id: string): Promise<void> {
+  await repos.wildPhotos.delete(id);
+}
+
+/** The saved photos, newest first. */
+export async function wildPhotos(repos: Repos): Promise<WildPhoto[]> {
+  return (await repos.wildPhotos.all()).sort((a, b) => b.createdAt - a.createdAt);
 }

@@ -27,4 +27,11 @@ export const wild = {
   tutorAsk: 'What does this sign say?',
   tutorAbout: 'this photo',
   notWord: 'Not in the dictionary, so it cannot be added',
+  untitled: 'A photo',
+  saved: 'Your photos',
+  savedMeta: '{date} · {n} kanji',
+  delete: 'Delete this photo',
+  deleteConfirm: 'Delete this photo and what the tutor read on it? Words you added from it stay.',
+  deleteYes: 'Delete',
+  missing: 'This photo is no longer on this phone.',
 } as const;

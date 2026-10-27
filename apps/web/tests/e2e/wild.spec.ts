@@ -46,4 +46,14 @@ test('a photo is read when asked: known kanji solid, new ones dashed, new words 
   await expect(tutor).toContainText('Station sign');
   await expect(page.locator('figure span[style*="top"]')).toHaveCount(9);
   await expect(page.getByRole('button', { name: /^Ask/ })).toBeInViewport();
+
+  await page.goto('/wild');
+  const saved = page.getByRole('region', { name: 'Your photos' });
+  await saved.getByRole('link', { name: /^Station sign/ }).click();
+  await expect(page).toHaveURL(/\/wild\/[\w-]+$/);
+  await expect(
+    page.getByRole('heading', { name: /^You can read \d+ of the 8 kanji here\.$/ }),
+  ).toBeVisible();
+  await expect(page.locator('figure img')).toBeVisible();
+  await expect(page.getByRole('button', { name: /^Read this photo/ })).toHaveCount(0);
 });

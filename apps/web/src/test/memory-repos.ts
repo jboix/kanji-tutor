@@ -151,6 +151,7 @@ export function createMemoryRepos(
       recent: async (limit) =>
         (await scans.all()).sort((a, b) => b.createdAt - a.createdAt).slice(0, limit),
     },
+    wildPhotos: memoryStore((row) => row.id),
     notes: memoryStore((row) => row.id),
     plans: memoryStore((row) => row.id),
     settings: settingsRepo(options.settings ?? {}),
