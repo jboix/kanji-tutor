@@ -207,4 +207,15 @@ export const settings = {
   catInstallDetail: 'Añadir a la pantalla de inicio',
   catAbout: 'Acerca de y versión',
   catAboutDetail: 'Buscar actualizaciones, recargar de cero, créditos',
+  developer: 'Modo desarrollador',
+  devOffHint: 'Para informar de un problema: muestra diagnósticos para copiar o guardar.',
+  devOnHint:
+    'Diagnósticos: esta versión y este dispositivo, tus ajustes, las últimas peticiones al tutor con su duración y sus errores, y los últimos errores de la app. Nunca tu clave API ni tus fotos. El archivo también guarda las últimas respuestas del tutor.',
+  devCopy: 'Copiar diagnósticos',
+  devSave: 'Guardar archivo de diagnósticos',
+  devCopied: 'Copiado. Pégalo en tu mensaje.',
+  devCopyFailed: 'Este navegador no pudo copiar. Guarda el archivo.',
+  devSaved: 'Guardado en tus descargas.',
+  devTurnOn: 'Activar el modo desarrollador',
+  devTurnOff: 'Desactivar el modo desarrollador',
 } satisfies Messages['settings'];

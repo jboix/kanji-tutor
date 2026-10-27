@@ -20,6 +20,7 @@ import { AboutSection } from './about-section.tsx';
 import { AiUseSection } from './ai-use-section.tsx';
 import { BackupSection } from './backup-section.tsx';
 import { CloudSection } from './cloud-section.tsx';
+import { DeveloperSection } from './developer-section.tsx';
 import { EraseSection } from './erase-section.tsx';
 import { ImmersionSection } from './immersion-section.tsx';
 import { InstallSection } from './install-section.tsx';
@@ -177,10 +178,11 @@ export const CATEGORIES: readonly (readonly Category[])[] = [
       icon: <InfoIcon />,
       tone: 'muted',
       detail: (t) => t('settings.catAboutDetail'),
-      render: ({ onWelcomeAgain }) => (
+      render: ({ settings, patch, onWelcomeAgain }) => (
         <>
           <VersionSection />
           <AboutSection onWelcomeAgain={onWelcomeAgain} />
+          <DeveloperSection settings={settings} onPatch={patch} />
         </>
       ),
     },

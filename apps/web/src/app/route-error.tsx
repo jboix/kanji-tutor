@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useRouteError } from 'react-router';
+import { recordError } from '../ui/error-log.ts';
 import { useT } from '../ui/i18n/i18n.tsx';
 import { PillButton } from '../ui/pill-button.tsx';
 import { Screen } from '../ui/screen.tsx';
@@ -15,7 +16,8 @@ export function RouteError() {
   const stale = isStaleChunk(error);
   useEffect(() => {
     if (stale) reloadOnce();
-  }, [stale]);
+    else recordError(error, 'screen');
+  }, [stale, error]);
   return (
     <Screen>
       <h1>{t('common.errorTitle')}</h1>

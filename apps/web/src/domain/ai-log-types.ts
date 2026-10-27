@@ -12,6 +12,10 @@ export interface AiLogEntry {
   /** Prompt tokens Gemini served from its implicit cache, part of `inputTokens` (A15). */
   cachedTokens?: number;
   ok: boolean;
+  /** How long the provider took, in ms; absent for cached answers and older entries. */
+  ms?: number;
+  /** Why it failed, as "kind: message"; absent when it worked. */
+  error?: string;
 }
 
 /** Cached, validated AI response keyed by input hash (A9). */

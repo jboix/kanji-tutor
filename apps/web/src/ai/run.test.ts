@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
+import { recentReplies } from './recent-replies.ts';
 import { cacheKey, parseReply, runTask } from './run.ts';
 import { explainWordSchema, finalizeWord } from './schemas/explain-word.ts';
 import type { TaskDef } from './task-def.ts';
@@ -66,6 +67,21 @@ describe('runTask', () => {
     expect(provider.requests).toHaveLength(2);
     expect(context.logEntries.map((entry) => entry.ok)).toEqual([false, false]);
     expect(context.cacheEntries.size).toBe(0);
+  });
+
+  it('logs how long each request took and why it failed, and keeps its raw reply', async () => {
+    const provider = scriptedProvider(['not json', new Error('socket hang up')]);
+    const context = testContext({ provider });
+    await explainWord(INPUT, context);
+    expect(context.logEntries).toEqual([
+      expect.objectContaining({ ms: 0, error: 'invalid-response: The reply was not valid JSON.' }),
+      expect.objectContaining({ ms: 0, error: 'provider: socket hang up' }),
+    ]);
+    expect(recentReplies().at(-1)).toMatchObject({
+      task: 'explainWord',
+      ok: false,
+      text: 'not json',
+    });
   });
 
   it('accepts a valid reply on the retry', async () => {

@@ -10,9 +10,11 @@ import { createRoot } from 'react-dom/client';
 import { App } from './app/app.tsx';
 import { boot } from './app/boot.ts';
 import { createServices } from './app/services.ts';
+import { installErrorLog } from './ui/error-log.ts';
 import { loadInitialLanguage } from './ui/i18n/i18n.tsx';
 import { endLaunch } from './ui/launch.ts';
 
+installErrorLog();
 const services = createServices();
 const root = document.getElementById('root');
 /** If no screen ever mounts (an error before the first one), the launch screen still goes. */

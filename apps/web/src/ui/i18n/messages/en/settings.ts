@@ -198,4 +198,15 @@ export const settings = {
   creditsApp: 'This app',
   creditsAppBy: 'Source code on {link}',
   creditsDownload: 'Download the full licence texts',
+  developer: 'Developer mode',
+  devOffHint: 'For reporting a problem: shows diagnostics you can copy or save.',
+  devOnHint:
+    'Diagnostics: this version and device, your settings, the tutor’s recent requests with their timings and errors, and the app’s last errors. Never your API key or photos. The file also holds the tutor’s last replies.',
+  devCopy: 'Copy diagnostics',
+  devSave: 'Save diagnostics file',
+  devCopied: 'Copied. Paste it into your message.',
+  devCopyFailed: 'This browser would not copy. Save the file instead.',
+  devSaved: 'Saved to your downloads.',
+  devTurnOn: 'Turn on developer mode',
+  devTurnOff: 'Turn off developer mode',
 } as const;

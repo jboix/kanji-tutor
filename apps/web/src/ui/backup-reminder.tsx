@@ -39,7 +39,8 @@ export function backupReminderText(t: Translate, settings: Settings, now: number
   return t('ui.backupAgo', { n: days });
 }
 
-function download(text: string, name: string): void {
+/** Saves this JSON text as a file with this name, through the browser's download. */
+export function downloadJson(text: string, name: string): void {
   const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
   const link = Object.assign(document.createElement('a'), { href: url, download: name });
   link.click();
@@ -60,7 +61,7 @@ export async function exportBackupFile(
   now = Date.now(),
 ): Promise<Settings> {
   const json = await services.backup.exportJson();
-  download(json, backupFileName(now));
+  downloadJson(json, backupFileName(now));
   return services.repos.settings.patch({ lastBackupAt: now });
 }
 

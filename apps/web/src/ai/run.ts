@@ -3,6 +3,7 @@ import { type Failure, failure, mapProviderError } from './errors.ts';
 import { finishTask } from './finish.ts';
 import { sha256Hex, stableJson } from './hash.ts';
 import { proseInLanguage } from './language.ts';
+import { keepReply } from './recent-replies.ts';
 import { type Plan, planRequest } from './request.ts';
 import type { TaskDef } from './task-def.ts';
 import { MAX_TOOL_ROUNDS } from './tools/loop.ts';
@@ -57,14 +58,26 @@ interface Usage {
   inputTokens: number;
   outputTokens: number;
   cachedTokens?: number | undefined;
+  ms?: number;
+  error?: Failure['error'];
 }
 
-/** Logs one call; Gemini's implicitly cached prompt tokens only when there were some (A15). */
+/**
+ * Logs one call; Gemini's implicitly cached prompt tokens only when there were some (A15), and
+ * how long it took and why it failed, for diagnostics.
+ */
 function record(context: AiContext, request: AiRequest, usage: Usage): Promise<void> {
   const { task, model } = request;
-  const { cachedTokens, ...rest } = usage;
-  const entry = { at: context.now(), task, model, ...rest };
-  const logged = cachedTokens ? { ...entry, cachedTokens } : entry;
+  const { cachedTokens, error, ms, ...rest } = usage;
+  const logged = {
+    at: context.now(),
+    task,
+    model,
+    ...rest,
+    ...(cachedTokens ? { cachedTokens } : {}),
+    ...(ms === undefined ? {} : { ms }),
+    ...(error ? { error: `${error.kind}: ${error.message}` } : {}),
+  };
   return safely(() => context.log.add(logged));
 }
 
@@ -113,16 +126,26 @@ async function fromCache(def: AnyDef, hash: string, context: AiContext) {
 /** One provider call and the requests it made: one, plus one per tool round. */
 async function callOnce(def: AnyDef, request: AiRequest, provider: AiProvider, context: AiContext) {
   const usage = { cached: false, ok: false, inputTokens: 0, outputTokens: 0 };
+  const start = context.now();
   try {
     const response = await provider.generate(request, context.signal);
     const outcome = parseReply(def.schema, response.text);
     const { inputTokens, outputTokens, cachedTokens } = response;
-    const counts = { inputTokens, outputTokens, cachedTokens };
-    await record(context, request, { ...usage, ok: outcome.ok, ...counts });
+    const counts = { inputTokens, outputTokens, cachedTokens, ms: context.now() - start };
+    const error = outcome.ok ? undefined : outcome.error;
+    await record(context, request, {
+      ...usage,
+      ok: outcome.ok,
+      ...counts,
+      ...(error && { error }),
+    });
+    const { task, model } = request;
+    keepReply({ at: start, task, model, ok: outcome.ok, text: response.text });
     return { outcome, requests: 1 + (response.toolRounds ?? 0) };
-  } catch (error) {
-    await record(context, request, usage);
-    const outcome = { ok: false, error: mapProviderError(error) } satisfies Failure;
+  } catch (thrown) {
+    const error = mapProviderError(thrown);
+    await record(context, request, { ...usage, ms: context.now() - start, error });
+    const outcome = { ok: false, error } satisfies Failure;
     return { outcome, requests: 1 + (request.maxToolRounds ?? MAX_TOOL_ROUNDS) };
   }
 }

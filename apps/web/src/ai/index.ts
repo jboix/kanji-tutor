@@ -8,5 +8,6 @@ export { isHiddenReading, type NoSpoil, redactOutput } from './no-spoil-output.t
 export { estimateCostUsd, MODEL_CHOICES, type ModelPrice, PRICES, priceFor } from './pricing.ts';
 export { createGeminiProvider, type GeminiOptions } from './providers/gemini.ts';
 export { createMockProvider, type MockProbe } from './providers/mock.ts';
+export { type RawReply, recentReplies } from './recent-replies.ts';
 export { testKey } from './test-key.ts';
 export type * from './types.ts';

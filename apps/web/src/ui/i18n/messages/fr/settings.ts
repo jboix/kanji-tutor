@@ -208,4 +208,15 @@ export const settings = {
   catInstallDetail: 'Ajouter à l’écran d’accueil',
   catAbout: 'À propos et version',
   catAboutDetail: 'Mises à jour, recharger à neuf, crédits',
+  developer: 'Mode développeur',
+  devOffHint: 'Pour signaler un problème : affiche des diagnostics à copier ou enregistrer.',
+  devOnHint:
+    'Diagnostics : cette version et cet appareil, vos réglages, les dernières requêtes au tuteur avec leur durée et leurs erreurs, et les dernières erreurs de l’app. Jamais votre clé API ni vos photos. Le fichier contient aussi les dernières réponses du tuteur.',
+  devCopy: 'Copier les diagnostics',
+  devSave: 'Enregistrer le fichier de diagnostics',
+  devCopied: 'Copié. Collez-le dans votre message.',
+  devCopyFailed: 'Ce navigateur n’a pas pu copier. Enregistrez plutôt le fichier.',
+  devSaved: 'Enregistré dans vos téléchargements.',
+  devTurnOn: 'Activer le mode développeur',
+  devTurnOff: 'Désactiver le mode développeur',
 } satisfies Messages['settings'];

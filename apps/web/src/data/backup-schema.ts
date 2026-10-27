@@ -148,6 +148,8 @@ const aiLog = z.object({
   outputTokens: z.number(),
   cachedTokens: z.number().exactOptional(),
   ok: z.boolean(),
+  ms: z.number().exactOptional(),
+  error: z.string().exactOptional(),
 });
 
 /** One section of a unit lesson (S3): its parts and how many are done. */
@@ -186,6 +188,7 @@ const settings = z.object({
   levelUpSnoozedUntil: z.number().exactOptional(),
   installBannerClosed: z.boolean().exactOptional(),
   onboarded: z.boolean(),
+  developerMode: z.boolean().exactOptional(),
   onboardingStep: z.string().exactOptional(),
   onboardingKnown: z
     .object({

@@ -385,6 +385,8 @@ export interface Settings {
   /** The install banner was closed, or the app installed: it never shows again (N1d). */
   installBannerClosed?: boolean;
   onboarded: boolean;
+  /** Settings › About shows the diagnostics to copy or save, for reporting a problem. */
+  developerMode?: boolean;
   /** The welcome wizard step to resume at after a reload (P5); absent or '' means the first. */
   onboardingStep?: string;
   /** What the wizard's "What you know" step did, so its summary survives a reload (P5). */
