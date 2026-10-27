@@ -119,6 +119,8 @@ Recent error types: long-vowel, wrong-kanji
 Current lesson: Tobira 第4課"
 `;
 
+exports[`prompts > readSign is versioned, calm and asks for JSON 1`] = `"Read this photo."`;
+
 exports[`prompts > recognizeHandwriting is versioned, calm and asks for JSON 1`] = `"Which kanji is drawn in this image?"`;
 
 exports[`prompts > transcribeReading is versioned, calm and asks for JSON 1`] = `"Transcribe this recording in hiragana, exactly as pronounced."`;

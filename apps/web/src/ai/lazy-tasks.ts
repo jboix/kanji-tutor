@@ -46,5 +46,6 @@ export const recognizeHandwriting = lazyTask('recognizeHandwriting');
 export const explainSentence = lazyTask('explainSentence');
 export const memoryHook = lazyTask('memoryHook');
 export const kanjiStory = lazyTask('kanjiStory');
+export const readSign = lazyTask('readSign');
 export const paraphraseQuestion = lazyTask('paraphraseQuestion');
 export const assessLevel = lazyTask('assessLevel');

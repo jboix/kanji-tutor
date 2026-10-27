@@ -247,3 +247,4 @@ export {
   weekBounds,
   weekStats,
 } from './week-stats.ts';
+export { addWildWords, type SignInput, type WildBox, type WildView, wildView } from './wild.ts';

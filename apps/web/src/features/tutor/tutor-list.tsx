@@ -4,7 +4,7 @@ import type { ScannedLesson } from '../../domain/scan-types.ts';
 import { scanProgress } from '../../domain/services/index.ts';
 import { cx } from '../../ui/cx.ts';
 import { useT } from '../../ui/i18n/i18n.tsx';
-import { CameraIcon, ChevronIcon, NoteIcon, PenIcon } from '../../ui/icons.tsx';
+import { CameraIcon, ChevronIcon, NoteIcon, PenIcon, SignIcon } from '../../ui/icons.tsx';
 import { JaRuns } from '../../ui/ja-runs.tsx';
 import { paths } from '../../ui/paths.ts';
 import { useServices } from '../../ui/services.tsx';
@@ -107,6 +107,13 @@ function ClassRows({ ready }: { ready: boolean }) {
         icon={<CameraIcon />}
         title={t('tutor.capture')}
         detail={<ScanDetail ready={ready} />}
+        off={!ready}
+      />
+      <Row
+        to={paths.wild}
+        icon={<SignIcon />}
+        title={t('tutor.wild')}
+        detail={t('tutor.wildDetail')}
         off={!ready}
       />
       <Row

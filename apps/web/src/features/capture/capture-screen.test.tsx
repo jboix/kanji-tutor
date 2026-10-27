@@ -12,8 +12,8 @@ import {
 } from '../../test/scan-fixtures.ts';
 import { CaptureScreen } from './capture-screen.tsx';
 
-vi.mock('./image.ts', async (load) => ({
-  ...(await load<typeof import('./image.ts')>()),
+vi.mock('../../ui/image.ts', async (load) => ({
+  ...(await load<typeof import('../../ui/image.ts')>()),
   prepareImage: async () => ({
     blob: new Blob(['jpeg'], { type: 'image/jpeg' }),
     media: { mime: 'image/jpeg', data: 'anBlZw==' },

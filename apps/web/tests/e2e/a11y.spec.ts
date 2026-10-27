@@ -9,6 +9,7 @@ const SCREENS = [
   '/kanji',
   '/kanji/生',
   '/kanji/wall',
+  '/wild',
   '/units/at-the-station/episode',
   '/capture',
   '/notes',

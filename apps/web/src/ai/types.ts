@@ -12,6 +12,7 @@ import type { TaskInput, TaskName, TaskOutput } from './task-types.ts';
 export type * from './scan-task-types.ts';
 export type * from './task-shared-types.ts';
 export type * from './task-types.ts';
+export type * from './wild-task-types.ts';
 
 // ── Results, providers, context ───────────────────────────────────────────────
 

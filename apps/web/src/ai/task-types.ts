@@ -11,6 +11,7 @@ import type {
   Media,
   SentenceContext,
 } from './task-shared-types.ts';
+import type { ReadSignInput, SignReading } from './wild-task-types.ts';
 
 // ── Task inputs and outputs ───────────────────────────────────────────────────
 
@@ -335,6 +336,7 @@ export interface Tasks {
   explainSentence: [ExplainSentenceInput, SentenceExplanation];
   memoryHook: [MemoryHookInput, MemoryHook];
   kanjiStory: [KanjiStoryInput, KanjiStory];
+  readSign: [ReadSignInput, SignReading];
   paraphraseQuestion: [ParaphraseInput, ParaphraseQuestion];
   assessLevel: [AssessLevelInput, LevelAssessment];
 }

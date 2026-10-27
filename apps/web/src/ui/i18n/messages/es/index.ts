@@ -33,6 +33,7 @@ import { tutor } from './tutor.ts';
 import { ui } from './ui.ts';
 import { units } from './units.ts';
 import { voice } from './voice.ts';
+import { wild } from './wild.ts';
 
 export const es = {
   common,
@@ -47,6 +48,7 @@ export const es = {
   dialogues,
   exercises,
   voice,
+  wild,
   settings,
   settingsAi,
   explain,

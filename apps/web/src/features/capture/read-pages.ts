@@ -6,7 +6,7 @@
 import type { AiClient, AnalysedQuestion, PageAnalysis } from '../../ai/types.ts';
 import type { PageDraft, QuestionDraft } from '../../domain/services/index.ts';
 import type { Lang } from '../../lang/types.ts';
-import { prepareImage } from './image.ts';
+import { prepareImage } from '../../ui/image.ts';
 import type { ReadProblem } from './scan-copy.ts';
 
 /** A page picked on the import screen: a photo, or pasted text. */

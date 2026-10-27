@@ -20,6 +20,8 @@ export const paths = {
       : '/kanji/wall',
   kanjiDetail: (char: string) => `/kanji/${encodeURIComponent(char)}`,
   capture: '/capture',
+  /** In the wild: a photo of a sign or a menu, read by the tutor. */
+  wild: '/wild',
   notes: '/notes',
   compose: '/compose',
   handwrite: '/handwrite',

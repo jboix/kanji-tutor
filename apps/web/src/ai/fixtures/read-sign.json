@@ -1,0 +1,31 @@
+{
+  "fixtures": [
+    {
+      "inputTokens": 1320,
+      "outputTokens": 410,
+      "response": {
+        "place": "Station sign",
+        "lines": ["大阪駅", "改札口　東出口 →"],
+        "kanji": [
+          { "char": "大", "box": [300, 280, 420, 400] },
+          { "char": "阪", "box": [300, 420, 420, 540] },
+          { "char": "駅", "box": [300, 560, 420, 680] },
+          { "char": "改", "box": [560, 140, 640, 220] },
+          { "char": "札", "box": [560, 230, 640, 310] },
+          { "char": "口", "box": [560, 320, 640, 400] },
+          { "char": "東", "box": [560, 560, 640, 640] },
+          { "char": "出", "box": [560, 650, 640, 730] },
+          { "char": "口", "box": [560, 740, 640, 820] }
+        ],
+        "words": [
+          { "surface": "大阪", "reading": "おおさか", "meaning": "Osaka" },
+          { "surface": "駅", "reading": "えき", "meaning": "station" },
+          { "surface": "改札口", "reading": "かいさつぐち", "meaning": "ticket gate" },
+          { "surface": "東", "reading": "ひがし", "meaning": "east" },
+          { "surface": "出口", "reading": "でぐち", "meaning": "exit" }
+        ],
+        "readings": []
+      }
+    }
+  ]
+}

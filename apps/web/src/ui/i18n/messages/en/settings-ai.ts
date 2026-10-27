@@ -57,6 +57,7 @@ export const settingsAi = {
   taskExplainSentence: 'Explain a sentence',
   taskMemoryHook: 'Memory hooks',
   taskKanjiStory: 'Kanji stories',
+  taskReadSign: 'Photos in the wild',
   taskParaphraseQuestion: 'Paraphrase questions',
   taskAssessLevel: 'Level assessment',
 

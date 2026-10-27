@@ -38,7 +38,7 @@ function render(options: { ready?: boolean; scans?: ScannedLesson[] } = {}) {
   });
 }
 
-const ROW_NAMES = /^(Scanned lessons|Write a sentence|Ask the tutor|Words from class)$/;
+const ROW_NAMES = /^(Scanned lessons|In the wild|Write a sentence|Ask the tutor|Words from class)$/;
 
 describe('TutorScreen', () => {
   it('lists scanned lessons first, then asking the tutor, as rows', async () => {
@@ -48,6 +48,7 @@ describe('TutorScreen', () => {
     const rows = within(list).getAllByText(ROW_NAMES);
     expect(rows.map((row) => row.textContent)).toEqual([
       'Scanned lessons',
+      'In the wild',
       'Write a sentence',
       'Ask the tutor',
       'Words from class',
@@ -55,6 +56,7 @@ describe('TutorScreen', () => {
     expect(screen.queryByRole('textbox')).toBeNull();
     const href = (name: RegExp) => screen.getByRole('link', { name }).getAttribute('href');
     expect(href(/^Scanned lessons/)).toBe('/capture');
+    expect(href(/^In the wild/)).toBe('/wild');
     expect(href(/^Write a sentence/)).toBe('/compose');
     expect(href(/^Words from class/)).toBe('/import');
     expect(href(/Tutor settings$/)).toBe('/settings/tutor');
@@ -98,7 +100,7 @@ describe('TutorScreen', () => {
     const setUp = screen.getByRole('link', { name: 'Set up the tutor' });
     expect(setUp.getAttribute('href')).toBe('/settings/tutor');
     expect(screen.queryByRole('link', { name: /^Scanned lessons/ })).toBeNull();
-    expect(screen.getAllByText('Needs the tutor')).toHaveLength(3);
+    expect(screen.getAllByText('Needs the tutor')).toHaveLength(4);
     expect(screen.queryByRole('button', { name: /^Carry on/ })).toBeNull();
     expect(screen.getByRole('link', { name: /^Words from class/ })).toBeTruthy();
     const nav = screen.getByRole('navigation', { name: 'Main' });

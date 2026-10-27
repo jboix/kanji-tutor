@@ -1,5 +1,5 @@
-/** Photo preparation for OCR (C1): downscale to a sensible size, JPEG, base64. */
-import type { Media } from '../../ai/types.ts';
+/** Photo preparation for the tutor's eyes (C1, In the wild): downscale, JPEG, base64. */
+import type { Media } from '../ai/types.ts';
 
 /** Longest edge sent to the model: enough for printed handout text, a few hundred KB. */
 export const MAX_EDGE = 1600;

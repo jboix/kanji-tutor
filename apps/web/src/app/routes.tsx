@@ -36,6 +36,7 @@ const GATED: RouteObject[] = [
     paths.capture,
     async () => (await import('../features/capture/capture-screen.tsx')).CaptureScreen,
   ),
+  screen(paths.wild, async () => (await import('../features/wild/wild-screen.tsx')).WildScreen),
   screen(paths.notes, async () => (await import('../features/notes/notes-screen.tsx')).NotesScreen),
   screen(
     paths.compose,

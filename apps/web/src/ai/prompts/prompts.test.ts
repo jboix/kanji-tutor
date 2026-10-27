@@ -14,6 +14,7 @@ import { generateSentencesPrompt } from './generate-sentences.ts';
 import { kanjiStoryPrompt } from './kanji-story.ts';
 import { memoryHookPrompt } from './memory-hook.ts';
 import { paraphraseQuestionPrompt } from './paraphrase-question.ts';
+import { readSignPrompt } from './read-sign.ts';
 import { recognizeHandwritingPrompt } from './recognize-handwriting.ts';
 import { transcribeReadingPrompt } from './transcribe-reading.ts';
 import { weeklyNotesPrompt } from './weekly-notes.ts';
@@ -117,6 +118,7 @@ const BUILT: [string, Prompt<never>, unknown][] = [
       sentence: SENTENCE,
     },
   ],
+  ['readSign', readSignPrompt, { image: { mime: 'image/jpeg', data: 'AAAA' } }],
   [
     'kanjiStory',
     kanjiStoryPrompt,
@@ -193,6 +195,7 @@ describe('prompts', () => {
     expect(explainSentencePrompt.system).toContain('"readings"');
     expect(memoryHookPrompt.system).toContain('"readings"');
     expect(kanjiStoryPrompt.system).toContain('"readings"');
+    expect(readSignPrompt.system).toContain('"readings"');
     expect(paraphraseQuestionPrompt.system).toContain('"readings"');
   });
 

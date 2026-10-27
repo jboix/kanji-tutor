@@ -17,6 +17,7 @@ import { generateSentencesPrompt } from './prompts/generate-sentences.ts';
 import { kanjiStoryPrompt } from './prompts/kanji-story.ts';
 import { memoryHookPrompt } from './prompts/memory-hook.ts';
 import { paraphraseQuestionPrompt } from './prompts/paraphrase-question.ts';
+import { readSignPrompt } from './prompts/read-sign.ts';
 import { recognizeHandwritingPrompt } from './prompts/recognize-handwriting.ts';
 import { transcribeReadingPrompt } from './prompts/transcribe-reading.ts';
 import { weeklyNotesPrompt } from './prompts/weekly-notes.ts';
@@ -35,6 +36,7 @@ import { finalizeSentences, generatedSentencesSchema } from './schemas/generate-
 import { finalizeKanjiStory, kanjiStorySchema } from './schemas/kanji-story.ts';
 import { finalizeMemoryHook, memoryHookSchema } from './schemas/memory-hook.ts';
 import { finalizeParaphrase, paraphraseSchema } from './schemas/paraphrase-question.ts';
+import { finalizeSignReading, readSignSchema } from './schemas/read-sign.ts';
 import { finalizeHandwriting, handwritingSchema } from './schemas/recognize-handwriting.ts';
 import { finalizeTranscription, transcriptionSchema } from './schemas/transcribe-reading.ts';
 import { finalizeWeeklyNotes, weeklyNotesSchema } from './schemas/weekly-notes.ts';
@@ -157,6 +159,17 @@ export const analysePage = task({
   schema: pageAnalysisSchema,
   media: (input) => [input.image],
   finalize: finalizePageAnalysis,
+});
+
+/** In the wild: a photo of a sign or a menu, kanji by kanji with boxes; readings verified. */
+export const readSign = task({
+  name: 'readSign',
+  tier: 'fast',
+  prose: (raw) => [raw.place, ...raw.words.map((word) => word.meaning)],
+  prompt: readSignPrompt,
+  schema: readSignSchema,
+  media: (input) => [input.image],
+  finalize: finalizeSignReading,
 });
 
 /** I2: spoken reading as hiragana, exactly as pronounced. */

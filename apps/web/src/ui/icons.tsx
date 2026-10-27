@@ -312,6 +312,13 @@ export const RefreshIcon = () => (
     <path d="M19 4.5V8h-3.5" />
   </Svg>
 );
+/** In the wild: a signboard on its post. */
+export const SignIcon = () => (
+  <Svg>
+    <rect x="4" y="4" width="16" height="10" rx="2" />
+    <path d="M12 14v6M9 20h6M8 9h8" />
+  </Svg>
+);
 /** The kanji wall: four tiles, the last still dashed. */
 export const WallIcon = () => (
   <Svg>

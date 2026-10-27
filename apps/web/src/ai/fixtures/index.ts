@@ -14,6 +14,7 @@ import generateSentences from './generate-sentences.json' with { type: 'json' };
 import kanjiStory from './kanji-story.json' with { type: 'json' };
 import memoryHook from './memory-hook.json' with { type: 'json' };
 import paraphraseQuestion from './paraphrase-question.json' with { type: 'json' };
+import readSign from './read-sign.json' with { type: 'json' };
 import recognizeHandwriting from './recognize-handwriting.json' with { type: 'json' };
 import transcribeReading from './transcribe-reading.json' with { type: 'json' };
 import weeklyNotes from './weekly-notes.json' with { type: 'json' };
@@ -49,6 +50,7 @@ export const FIXTURES: Readonly<Record<TaskName, { fixtures: readonly Fixture[] 
   explainSentence,
   memoryHook,
   kanjiStory,
+  readSign,
   paraphraseQuestion,
   assessLevel,
 };

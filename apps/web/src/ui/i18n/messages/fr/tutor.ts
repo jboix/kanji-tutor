@@ -17,6 +17,8 @@ export const tutor = {
   whenAgo: { one: 'il y a {n} jour', other: 'il y a {n} jours' },
   capture: 'Leçons scannées',
   captureDetail: 'Le tuteur lit vos polycopiés',
+  wild: 'Sur le vif',
+  wildDetail: 'Un panneau ou un menu photographié : les kanji que vous connaissez',
   compose: 'Écrire une phrase',
   composeDetail: 'Le tuteur la lit, dit ce qui marche et une chose à essayer',
   composeOff: 'Le tuteur vérifie ce que vous écrivez',
