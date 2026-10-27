@@ -19,6 +19,7 @@ import { PhotoSheet } from '../../ui/photo-sheet.tsx';
 import { PillButton } from '../../ui/pill-button.tsx';
 import { Screen } from '../../ui/screen.tsx';
 import { TutorChip, TutorNext, useTutor } from '../../ui/tutor.tsx';
+import { TapText } from '../../ui/word-tap.tsx';
 import { ChoiceActions } from './drill-choices.tsx';
 import styles from './handout.module.css';
 import { HandoutStem } from './handout-stem.tsx';
@@ -36,6 +37,18 @@ const TYPE_LABELS: Readonly<Record<HandoutQuestion['type'], PlainKey>> = {
   free: 'capture.typeFree',
 };
 
+/** Japanese only: no Latin letters, so the whole line can be read word by word. */
+const allJapanese = (text: string) => !/[A-Za-z]/.test(text);
+
+/** The printed instruction, its words tappable with furigana when it is all Japanese. */
+function Instruction({ question }: { question: HandoutQuestion }) {
+  const t = useT();
+  const text = question.instruction;
+  if (!text) return t(TYPE_LABELS[question.type]);
+  if (!allJapanese(text)) return <JaRuns text={text} />;
+  return <TapText text={text} id={`handout:${question.id}:instruction`} />;
+}
+
 /** The question's number as printed, else its place on the page. */
 const numberOf = (q: HandoutQuestion) => q.number ?? q.id.split('-')[1] ?? '';
 
@@ -51,10 +64,33 @@ function useHandoutTutor(question: HandoutQuestion) {
   return useTutor(options);
 }
 
+interface PageProps {
+  lessonId: string;
+  page: number;
+  onClose: () => void;
+}
+
+/**
+ * The page in a sheet, loaded as it opens: an answer saves the lesson again, and Safari can no
+ * longer read a photo loaded before that.
+ */
+function PageSheet({ lessonId, page: index, onClose }: PageProps) {
+  const t = useT();
+  const page = useHandoutPage(lessonId, index);
+  if (!page) return null;
+  return (
+    <PhotoSheet
+      photo={page.photo}
+      text={page.lines.map((line) => line.text).join('\n')}
+      label={t('read.pageOfHandout', { n: index + 1 })}
+      onClose={onClose}
+    />
+  );
+}
+
 /** "From your handout · page 3, question 4" and "See the page". */
 function Source({ lessonId, question }: { lessonId: string; question: HandoutQuestion }) {
   const t = useT();
-  const page = useHandoutPage(lessonId, question.page);
   const [open, setOpen] = useState(false);
   const n = question.page + 1;
   return (
@@ -64,12 +100,7 @@ function Source({ lessonId, question }: { lessonId: string; question: HandoutQue
         {t('read.seePage')}
       </button>
       {open && (
-        <PhotoSheet
-          photo={page?.photo}
-          text={page?.lines.map((line) => line.text).join('\n')}
-          label={t('read.pageOfHandout', { n })}
-          onClose={() => setOpen(false)}
-        />
+        <PageSheet lessonId={lessonId} page={question.page} onClose={() => setOpen(false)} />
       )}
     </div>
   );
@@ -237,11 +268,7 @@ export function HandoutScreen({ card, topBar, onDone }: HandoutScreenProps) {
     <Screen topBar={topBar} footer={footer} gap={22} enter={false}>
       <Source lessonId={lessonId} question={question} />
       <p className={styles.prompt}>
-        {question.instruction ? (
-          <JaRuns text={question.instruction} />
-        ) : (
-          t(TYPE_LABELS[question.type])
-        )}
+        <Instruction question={question} />
       </p>
       <HandoutStem
         question={question}

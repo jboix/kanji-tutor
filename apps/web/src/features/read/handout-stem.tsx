@@ -1,11 +1,13 @@
 /**
  * A handout question's sentence: its blank (printed ＿＿) drawn as a gap until answered, then
  * filled with the tutor's answer in the line, green when the learner had it right. A stem with
- * no blank, or several, stays as printed.
+ * no blank, or several, stays as printed. Its words open the word sheet and take furigana as
+ * everywhere (the dictionary's readings, not the tutor's).
  */
 import type { HandoutQuestion } from '../../domain/scan-types.ts';
 import { cx } from '../../ui/cx.ts';
 import { useT } from '../../ui/i18n/i18n.tsx';
+import { TapText } from '../../ui/word-tap.tsx';
 import styles from './handout.module.css';
 
 const BLANK = /[＿_]+/;
@@ -30,13 +32,13 @@ export function HandoutStem({ question, answered, right }: StemProps) {
   if (!around) {
     return (
       <p lang="ja" className={styles.stem}>
-        {question.stem}
+        <TapText text={question.stem} id={`handout:${question.id}`} />
       </p>
     );
   }
   return (
     <p lang="ja" className={styles.stem}>
-      {around.before}
+      {around.before && <TapText text={around.before} id={`handout:${question.id}:before`} />}
       {answered ? (
         <span className={cx(styles.filled, right && styles.right)} data-fill="">
           {question.answer}
@@ -46,7 +48,7 @@ export function HandoutStem({ question, answered, right }: StemProps) {
           <span className="visually-hidden">{t('questions.blank')}</span>
         </span>
       )}
-      {around.after}
+      {around.after && <TapText text={around.after} id={`handout:${question.id}:after`} />}
     </p>
   );
 }

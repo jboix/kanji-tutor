@@ -127,7 +127,13 @@ test('a handout question is answered, then the tutor’s answer shows as the tut
   await page.getByRole('link', { name: /^Practise this lesson/ }).click();
   await expect(page).toHaveURL(/\/read\?scan=/);
   await toHandoutQuestion(page);
-  await expect(page.locator('p:has([data-blank])', { hasText: '雨が降り' })).toBeVisible();
+  const stem = page.locator('p:has([data-blank])', { hasText: '雨が降り' });
+  await expect(stem).toBeVisible();
+  const line = page.locator('p:has([data-blank])');
+  // Its words open the word sheet and take furigana like any sentence's.
+  await expect(stem.getByRole('button', { name: '雨', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Show furigana on known words' }).click();
+  await expect(line.locator('ruby[data-reading="あめ"]')).toBeVisible();
   await expect(page.getByText(/so it looks about to rain/)).toHaveCount(0);
   await page.getByRole('button', { name: 'そう' }).click();
   await expect(page.getByText('Right', { exact: true })).toBeVisible();
@@ -137,5 +143,11 @@ test('a handout question is answered, then the tutor’s answer shows as the tut
   await expect(tutor).toContainText('looks about to rain');
   await shot(page, 'practice');
   await page.getByRole('button', { name: 'See the page' }).click();
-  await expect(page.getByRole('dialog', { name: 'Page 3 of your handout' })).toBeVisible();
+  const sheet = page.getByRole('dialog', { name: 'Page 3 of your handout' });
+  await expect(sheet).toBeVisible();
+  await sheet.getByRole('button', { name: 'Close', exact: true }).click();
+  const card = page.locator('[data-card]');
+  const before = await card.getAttribute('data-sentence');
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
+  await expect(card).not.toHaveAttribute('data-sentence', before ?? '');
 });

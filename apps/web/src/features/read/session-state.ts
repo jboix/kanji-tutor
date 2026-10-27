@@ -73,10 +73,13 @@ function advance(state: SessionState, at: number): SessionState {
   };
 }
 
-/** A drill or question card was finished: keep its result and move to the next card. */
+/** An exercise card is one answered as a whole: a drill, question, passage or handout question. */
+const isExercise = (card: SessionCard | undefined) =>
+  Boolean(card?.drill || card?.question || card?.passage || card?.handout);
+
+/** An exercise card was finished: keep its result and move to the next card. */
 function drilled(state: SessionState, result: DrillResult, at: number): SessionState {
-  const card = state.cards?.[state.index];
-  if (!(card?.drill || card?.question || card?.passage)) return state;
+  if (!isExercise(state.cards?.[state.index])) return state;
   return {
     ...state,
     index: state.index + 1,

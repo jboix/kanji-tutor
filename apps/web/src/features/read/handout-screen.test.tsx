@@ -6,6 +6,7 @@ import { createMemoryRepos } from '../../test/memory-repos.ts';
 import { fakeServices, renderWithServices } from '../../test/render.tsx';
 import { HandoutScreen } from './handout-screen.tsx';
 import { splitBlank } from './handout-stem.tsx';
+import { INITIAL, sessionReducer } from './session-state.ts';
 
 const CHOOSE: HandoutQuestion = {
   id: '0-4',
@@ -118,5 +119,27 @@ describe('a handout question', () => {
     fireEvent.click(await screen.findByRole('button', { name: 'Next' }));
     expect(onDone).toHaveBeenCalledWith({ kind: 'handout', right: true });
     expect((await repos.scans.get('scan1'))?.practised['question:0-8']).toBeDefined();
+  });
+
+  it('moves the session to the next card on Next, its result kept', () => {
+    const card = (question: HandoutQuestion): SessionCard => ({
+      sentence: {
+        id: `h:${question.id}`,
+        text: question.stem,
+        source: 'capture',
+        tokens: [],
+        wordIds: [],
+        verified: true,
+      },
+      targets: [],
+      reason: 'drill',
+      handout: question,
+      scan: { lessonId: 'scan-1', key: question.id },
+    });
+    const cards = [card(CHOOSE), card(FREE)];
+    const loaded = sessionReducer(INITIAL, { type: 'loaded', cards, at: 1 });
+    const result = { kind: 'handout' as const, right: true };
+    const after = sessionReducer(loaded, { type: 'drilled', result, at: 2 });
+    expect(after).toMatchObject({ index: 1, drills: [{ kind: 'handout', right: true, card: 0 }] });
   });
 });
