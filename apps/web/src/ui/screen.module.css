@@ -12,14 +12,6 @@
   background: var(--paper);
 }
 
-/* Installed, there are no browser bars: the frame takes the whole screen. iOS can report a
-   dynamic height short of it there, leaving a strip under the bottom bar. */
-@media (display-mode: standalone) {
-  .frame {
-    height: var(--vvh, 100lvh);
-  }
-}
-
 .body {
   flex: 1;
   overflow-y: auto;

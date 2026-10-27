@@ -50,7 +50,13 @@ export default defineConfig({
     },
     // Opt-in: WebKit as an iPhone, for the checks a real phone would otherwise need.
     ...(process.env.PW_WEBKIT
-      ? [{ name: 'iphone-webkit', testMatch: /iphone\.spec\.ts/, use: { ...devices['iPhone 13'] } }]
+      ? [
+          {
+            name: 'iphone-webkit',
+            testMatch: /(iphone|bars)\.spec\.ts/,
+            use: { ...devices['iPhone 13'] },
+          },
+        ]
       : []),
   ],
   // The mock build goes to its own folder, so `dist/` only ever holds a real build: a preview of

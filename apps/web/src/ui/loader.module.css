@@ -5,7 +5,7 @@
   flex: 1;
   align-items: center;
   justify-content: center;
-  min-height: 50vh;
+  min-height: 50dvh;
   padding: 0 var(--gutter);
   animation: appear 200ms ease-out;
 }
