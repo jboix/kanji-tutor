@@ -1,6 +1,8 @@
 /**
- * `/units/:id/episode`: the unit's episode, a short chat in which the cast lives its theme, with
- * Play, the translations on request, ふ for furigana on every word, and the tutor floating in reach. Offline, like the unit.
+ * `/units/:id/episode`: the unit's episode, a short chat in which the cast lives its theme. Its
+ * footer plays it line by line (the current line highlighted and followed, the track to go back
+ * or ahead), shows the translations and holds the tutor's Ask; ふ puts furigana on every word.
+ * Offline, like the unit.
  */
 import { useMemo, useState } from 'react';
 import { useParams } from 'react-router';
@@ -10,24 +12,23 @@ import { unitById } from '../../domain/themes/index.ts';
 import type { Unit } from '../../domain/themes/types.ts';
 import { BackButton } from '../../ui/back-button.tsx';
 import { CastStack } from '../../ui/cast-portrait.tsx';
-import { Chip, ChipRow } from '../../ui/chip.tsx';
-import { PlayDialogue } from '../../ui/dialogue.tsx';
 import { AllFuriganaContext, useFuriganaToggle } from '../../ui/furigana-mode.tsx';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { IconButton } from '../../ui/icon-button.tsx';
 import { Ja } from '../../ui/ja.tsx';
+import { PlayerBar, useLinePlayer } from '../../ui/line-player.tsx';
 import { Loader } from '../../ui/loader.tsx';
 import { paths } from '../../ui/paths.ts';
 import { Screen } from '../../ui/screen.tsx';
 import { TopBar } from '../../ui/top-bar.tsx';
-import { TutorFloat, useTutor } from '../../ui/tutor.tsx';
+import { TutorButton, useTutor } from '../../ui/tutor.tsx';
 import { useContentLanguage } from '../../ui/use-content-language.ts';
 import styles from './episode.module.css';
 import { EpisodeChat } from './episode-chat.tsx';
 import { useEpisode } from './use-episode.ts';
 
-/** The tutor on the whole conversation, each line with its speaker. */
-function EpisodeTutor({ episode, title }: { episode: Episode; title: string }) {
+/** The tutor on the whole conversation. */
+function useEpisodeTutor(episode: Episode, title: string) {
   const t = useT();
   const { language } = useContentLanguage();
   const options = useMemo(() => {
@@ -40,41 +41,52 @@ function EpisodeTutor({ episode, title }: { episode: Episode; title: string }) {
       starters: [t('dialogues.tutorExplain'), t('units.episodeTutorSpeech')],
     };
   }, [episode, language, title, t]);
-  const tutor = useTutor(options);
-  if (!tutor) return null;
+  return useTutor(options);
+}
+
+function Head({ episode, unit, title }: { episode: Episode; unit: Unit; title: string }) {
   return (
-    <>
-      <TutorFloat tutor={tutor} />
-      {tutor.sheet}
-    </>
+    <header className={styles.head}>
+      <CastStack who={episode.cast} size={40} />
+      <div className={styles.titles}>
+        <h1 className={styles.title}>{title}</h1>
+        <p className={styles.unit}>
+          <Ja>{unit.titleJa}</Ja>
+        </p>
+      </div>
+    </header>
   );
 }
 
-function Shown({ episode, unit }: { episode: Episode; unit: Unit }) {
-  const t = useT();
+function Shown({
+  episode,
+  unit,
+  topBar,
+}: {
+  episode: Episode;
+  unit: Unit;
+  topBar: React.ReactNode;
+}) {
   const { language } = useContentLanguage();
   const [translated, setTranslated] = useState(false);
   const title = dialogueText(episode.title, language).value;
+  const player = useLinePlayer(useMemo(() => episode.lines.map((line) => line.ja), [episode]));
+  const tutor = useEpisodeTutor(episode, title);
+  const footer = (
+    <PlayerBar
+      player={player}
+      total={episode.lines.length}
+      translated={translated}
+      onTranslate={() => setTranslated((was) => !was)}
+      start={tutor && <TutorButton tutor={tutor} />}
+    />
+  );
   return (
-    <>
-      <header className={styles.head}>
-        <CastStack who={episode.cast} size={40} />
-        <div className={styles.titles}>
-          <h1 className={styles.title}>{title}</h1>
-          <p className={styles.unit}>
-            <Ja>{unit.titleJa}</Ja>
-          </p>
-        </div>
-      </header>
-      <ChipRow>
-        <PlayDialogue lines={episode.lines.map((line) => line.ja)} />
-        <Chip aria-pressed={translated} onClick={() => setTranslated((was) => !was)}>
-          {t('dialogues.showTranslation')}
-        </Chip>
-      </ChipRow>
-      <EpisodeChat episode={episode} translated={translated} />
-      <EpisodeTutor episode={episode} title={title} />
-    </>
+    <Screen topBar={topBar} footer={footer}>
+      <Head episode={episode} unit={unit} title={title} />
+      <EpisodeChat episode={episode} translated={translated} current={player.current} />
+      {tutor?.sheet}
+    </Screen>
   );
 }
 
@@ -91,17 +103,21 @@ export function EpisodeScreen() {
       ふ
     </IconButton>
   );
-  const body =
-    episode === undefined ? (
-      <Loader />
-    ) : episode && unit ? (
-      <Shown episode={episode} unit={unit} />
-    ) : (
-      <p className={styles.unit}>{t('units.episodeMissing')}</p>
+  const topBar = <TopBar start={back} end={furigana} />;
+  if (episode && unit) {
+    return (
+      <AllFuriganaContext value={all}>
+        <Shown episode={episode} unit={unit} topBar={topBar} />
+      </AllFuriganaContext>
     );
+  }
   return (
-    <Screen topBar={<TopBar start={back} end={furigana} />}>
-      <AllFuriganaContext value={all}>{body}</AllFuriganaContext>
+    <Screen topBar={topBar}>
+      {episode === undefined ? (
+        <Loader />
+      ) : (
+        <p className={styles.unit}>{t('units.episodeMissing')}</p>
+      )}
     </Screen>
   );
 }

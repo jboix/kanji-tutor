@@ -38,7 +38,7 @@ describe('a unit episode', () => {
     const english = FIRST?.lines[0]?.tr.en ?? '';
     await screen.findByRole('list', { name: /^Chat: / });
     expect(screen.queryByText(english)).toBeNull();
-    await userEvent.click(screen.getByRole('button', { name: 'Show translation' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Show translations' }));
     expect(screen.getByText(english)).toBeTruthy();
   });
 

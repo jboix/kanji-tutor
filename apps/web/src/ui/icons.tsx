@@ -312,6 +312,20 @@ export const RefreshIcon = () => (
     <path d="M19 4.5V8h-3.5" />
   </Svg>
 );
+/** Pause what is playing: two bars. */
+export const PauseIcon = ({ size = 24 }: Sized) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <rect x="7" y="6" width="3.5" height="12" rx="1.2" />
+    <rect x="13.5" y="6" width="3.5" height="12" rx="1.2" />
+  </svg>
+);
+/** Translations shown or hidden: an A beside a 文. */
+export const TranslateIcon = () => (
+  <Svg>
+    <path d="M3 18l4-10 4 10M4.6 14.5h4.8" />
+    <path d="M13 6.5h8M17 4.5v2M14.5 6.5c.6 3.6 2.6 6.4 6 8M19.5 6.5c-.6 3.6-2.6 6.4-6 8" />
+  </Svg>
+);
 /** Stop what is playing: a rounded square. */
 export const StopIcon = () => (
   <Svg>

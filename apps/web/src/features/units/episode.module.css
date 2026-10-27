@@ -37,6 +37,7 @@
   border-radius: 22px;
   background: var(--paper-raised);
   box-shadow: var(--shadow-card);
+  transition: box-shadow 160ms ease-out;
 }
 
 .bubble[data-first] {
@@ -52,6 +53,12 @@
 .message[data-mine] .bubble[data-first] {
   border-top-left-radius: 22px;
   border-top-right-radius: 6px;
+}
+
+/* The line being read aloud: a ring of accent round its bubble, mine or not. */
+.message[data-current] .bubble,
+.message[data-mine][data-current] .bubble {
+  box-shadow: 0 0 0 2px var(--accent);
 }
 
 .name {
