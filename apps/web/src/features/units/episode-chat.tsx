@@ -1,6 +1,6 @@
 /**
  * An episode as a chat: the learner's companion (the episode's first cast member) on the right in
- * tonal bubbles, the others on the left beside their portrait, each run of lines under its
+ * tonal bubbles, the others on the left, each beside their portrait, each run of lines under its
  * speaker's name (a screen reader hears the name on every line). Every line is Japanese to tap
  * word by word, with furigana as the learner's settings say, and its translation under it when
  * shown. Written for the app: nothing here is the tutor's.
@@ -40,9 +40,7 @@ function Message({ episode, index, translated }: MessageProps) {
   const first = episode.lines[index - 1]?.by !== line.by;
   return (
     <li className={styles.message} data-mine={mine ? '' : undefined}>
-      {!mine && (
-        <span className={styles.face}>{first && <Portrait who={line.by} size={32} />}</span>
-      )}
+      <span className={styles.face}>{first && <Portrait who={line.by} size={32} />}</span>
       <div className={styles.bubble} data-first={first ? '' : undefined}>
         <span className={first ? styles.name : 'visually-hidden'} data-who={line.by}>
           {nameOf(line.by)}

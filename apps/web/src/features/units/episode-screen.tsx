@@ -1,6 +1,6 @@
 /**
  * `/units/:id/episode`: the unit's episode, a short chat in which the cast lives its theme, with
- * Play, the translations on request and the tutor floating in reach. Offline, like the unit.
+ * Play, the translations on request, ふ for furigana on every word, and the tutor floating in reach. Offline, like the unit.
  */
 import { useMemo, useState } from 'react';
 import { useParams } from 'react-router';
@@ -12,7 +12,9 @@ import { BackButton } from '../../ui/back-button.tsx';
 import { CastStack } from '../../ui/cast-portrait.tsx';
 import { Chip, ChipRow } from '../../ui/chip.tsx';
 import { PlayDialogue } from '../../ui/dialogue.tsx';
+import { AllFuriganaContext, useFuriganaToggle } from '../../ui/furigana-mode.tsx';
 import { useT } from '../../ui/i18n/i18n.tsx';
+import { IconButton } from '../../ui/icon-button.tsx';
 import { Ja } from '../../ui/ja.tsx';
 import { Loader } from '../../ui/loader.tsx';
 import { paths } from '../../ui/paths.ts';
@@ -82,7 +84,13 @@ export function EpisodeScreen() {
   const { id = '' } = useParams();
   const unit = unitById(id);
   const episode = useEpisode(id);
+  const [all, toggle] = useFuriganaToggle();
   const back = <BackButton parent={unit ? paths.unit(id) : paths.units} label={t('common.back')} />;
+  const furigana = (
+    <IconButton aria-label={t('read.furiganaAll')} aria-pressed={all} muted glyph onClick={toggle}>
+      ふ
+    </IconButton>
+  );
   const body =
     episode === undefined ? (
       <Loader />
@@ -91,5 +99,9 @@ export function EpisodeScreen() {
     ) : (
       <p className={styles.unit}>{t('units.episodeMissing')}</p>
     );
-  return <Screen topBar={<TopBar start={back} />}>{body}</Screen>;
+  return (
+    <Screen topBar={<TopBar start={back} end={furigana} />}>
+      <AllFuriganaContext value={all}>{body}</AllFuriganaContext>
+    </Screen>
+  );
 }

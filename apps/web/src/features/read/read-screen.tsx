@@ -12,7 +12,7 @@ import type { SessionCard } from '../../domain/session-types.ts';
 import type { AnswerMode } from '../../domain/types.ts';
 import { BackButton } from '../../ui/back-button.tsx';
 import { ExerciseChips } from '../../ui/exercise-help.tsx';
-import { AllFuriganaContext } from '../../ui/furigana-mode.tsx';
+import { AllFuriganaContext, useFuriganaToggle } from '../../ui/furigana-mode.tsx';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { IconButton } from '../../ui/icon-button.tsx';
 import { CloseIcon } from '../../ui/icons.tsx';
@@ -87,16 +87,6 @@ function useExplainFirst(): boolean {
     void repos.settings.get().then((settings) => setOn(settings.explainFirst !== false));
   }, [repos]);
   return on;
-}
-
-/** Furigana on known words too (R4); starts from the setting, toggled with ふ. */
-function useAllFurigana(): [boolean, () => void] {
-  const { repos } = useServices();
-  const [all, setAll] = useState(false);
-  useEffect(() => {
-    void repos.settings.get().then((settings) => setAll(settings.furigana === 'all'));
-  }, [repos]);
-  return [all, () => setAll((on) => !on)];
 }
 
 function ReadTopBar(props: {
@@ -255,7 +245,7 @@ function CardChips({ state }: { state: SessionControls['state'] }) {
 }
 
 function Session({ controls }: { controls: SessionControls }) {
-  const [all, toggle] = useAllFurigana();
+  const [all, toggle] = useFuriganaToggle();
   const explainFirst = useExplainFirst();
   const [voice, setVoice] = useState(false);
   const { state } = controls;

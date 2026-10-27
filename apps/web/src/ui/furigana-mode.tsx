@@ -1,13 +1,24 @@
 /**
  * The session's ふ toggle (R4, R12): furigana on known words too. The read screen provides it
  * around everything the session shows, so the intro and teaching cards, exercises and sheets
- * follow it, not only the sentence. Outside a session it is off.
+ * follow it, not only the sentence. A unit's episode has its own ふ; elsewhere it is off.
  */
-import { createContext, use } from 'react';
+import { createContext, use, useEffect, useState } from 'react';
 import type { Token } from '../domain/types.ts';
 import { hasKanji } from './furigana.ts';
+import { useServices } from './services.tsx';
 
 export const AllFuriganaContext = createContext(false);
+
+/** The ふ toggle's state: it starts from the furigana setting ("all words" turns it on). */
+export function useFuriganaToggle(): [boolean, () => void] {
+  const { repos } = useServices();
+  const [all, setAll] = useState(false);
+  useEffect(() => {
+    void repos.settings.get().then((settings) => setAll(settings.furigana === 'all'));
+  }, [repos]);
+  return [all, () => setAll((on) => !on)];
+}
 
 /** True while ふ is on. */
 export function useAllFurigana(): boolean {

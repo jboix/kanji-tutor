@@ -35,6 +35,13 @@
   scroll-padding-bottom: 56px;
 }
 
+/* A floating Ask (the tutor over a long page): the page ends clear of it, its 52px and the 28px
+   under it plus some air, so the last line can scroll out from under the button. */
+.frame:has([data-tutor-float]) .body {
+  padding-bottom: calc(var(--control) + 44px);
+  scroll-padding-bottom: calc(var(--control) + 44px);
+}
+
 .body::-webkit-scrollbar {
   display: none;
 }

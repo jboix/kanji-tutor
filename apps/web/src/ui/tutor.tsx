@@ -101,13 +101,17 @@ export function TutorCard({ tutor }: { tutor: Tutor }) {
   );
 }
 
-/** "Ask", floating over a long page so the tutor stays in reach while it scrolls. */
+/**
+ * "Ask", floating over a long page so the tutor stays in reach while it scrolls; the screen leaves
+ * room for it at the end of the page (screen.module.css).
+ */
 export function TutorFloat({ tutor }: { tutor: Tutor }) {
   const t = useT();
   return (
     <button
       type="button"
       className={styles.float}
+      data-tutor-float=""
       aria-label={t('ui.tutorOpen', { about: tutor.topic.about })}
       onClick={() => tutor.open()}
     >
