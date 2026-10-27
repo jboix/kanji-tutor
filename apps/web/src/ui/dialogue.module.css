@@ -1,6 +1,6 @@
-/* A grammar dialogue (dialogue.tsx): ruled rows on paper, one per line, each speaker's initial
-   on a cast disc, the grammar form underlined in indigo like a target. App data, not the tutor: no
-   tint of --ai anywhere, and no chat bubbles. */
+/* A grammar dialogue (dialogue.tsx): ruled rows on paper, one per line, each speaker's portrait
+   or initial on a disc, the grammar form underlined in indigo like a target. App data, not the
+   tutor: no tint of --ai anywhere. The drill turns the rows into chat bubbles (drill.module.css). */
 .lines {
   display: flex;
   flex-direction: column;
@@ -64,6 +64,13 @@ button.line:focus-visible {
 
 .other {
   background: var(--disc-yuki);
+}
+
+/* A cast member's portrait, in the initial's place. */
+.face {
+  display: inline-flex;
+  flex: none;
+  margin-top: 2px;
 }
 
 .ja {

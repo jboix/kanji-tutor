@@ -1,0 +1,92 @@
+/* The cast's portraits: sumi lines (--portrait-ink) on each one's disc; in a stack each after
+   the first overlaps by 8px, ringed in the ground colour of where it sits (--stack-ring). */
+
+.disc {
+  display: flex;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+}
+
+.disc[data-who="yuki"] {
+  --disc: var(--disc-yuki);
+  background: var(--disc-yuki);
+}
+
+.disc[data-who="ken"] {
+  --disc: var(--disc-ken);
+  background: var(--disc-ken);
+}
+
+.disc[data-who="mori"] {
+  --disc: var(--disc-mori);
+  background: var(--disc-mori);
+}
+
+.line,
+.straps {
+  fill: none;
+  stroke: var(--portrait-ink);
+  stroke-linecap: round;
+}
+
+.line {
+  stroke-width: 1.5;
+}
+
+.straps {
+  stroke-width: 1.2;
+}
+
+.face {
+  fill: var(--disc);
+  stroke: var(--portrait-ink);
+  stroke-width: 1.5;
+}
+
+.ink {
+  fill: var(--portrait-ink);
+}
+
+.clip {
+  fill: var(--yuki-clip);
+}
+
+.eyes {
+  fill: none;
+  stroke: var(--portrait-ink);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+}
+
+.glasses {
+  fill: none;
+  stroke: var(--portrait-ink);
+  stroke-width: 1.2;
+}
+
+.hair {
+  fill: var(--mori-hair);
+  stroke: var(--portrait-ink);
+  stroke-width: 1.3;
+  stroke-linejoin: round;
+}
+
+.stack {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.stack > .disc + .disc {
+  margin-left: -8px;
+  box-shadow: 0 0 0 2px var(--stack-ring, var(--paper));
+}
+
+/* Portraits with the names beside them: "Yuki and Ken". */
+.named {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-size: var(--text-sm);
+}

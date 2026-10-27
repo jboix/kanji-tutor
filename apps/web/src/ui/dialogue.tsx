@@ -1,10 +1,11 @@
 /**
  * A grammar dialogue as the intro card, the grammar page and the "complete the line" drill show
- * it: each line with its speaker's initial on a cast disc, the grammar form underlined in
+ * it: each line with its speaker's portrait (the cast) or initial on a disc, the grammar form underlined in
  * indigo, and its translation under it. Static content written for the app, so nothing here
  * looks like the tutor. The Japanese shows as written: no hand-written readings.
  */
 import { useEffect, useId, useRef, useState } from 'react';
+import { castOf } from '../domain/cast.ts';
 import {
   type Dialogue,
   type DialogueLine,
@@ -13,6 +14,7 @@ import {
 } from '../domain/dialogues/index.ts';
 import { PATTERN_BLANK } from '../domain/drills/index.ts';
 import { canSpeak, speak, stopSpeaking } from '../lang/speech.ts';
+import { Portrait } from './cast-portrait.tsx';
 import { Chip } from './chip.tsx';
 import { cx } from './cx.ts';
 import styles from './dialogue.module.css';
@@ -67,14 +69,21 @@ function LineText({ line, look }: { line: DialogueLine; look: FocusLook }) {
   );
 }
 
-/** The speaker's initial on a cast disc, the two speakers on different discs. */
+/** The speaker's portrait when they are one of the cast, else their initial on a disc. */
 function Speaker({ name, by }: { name: string; by: 0 | 1 }) {
   const t = useT();
+  const cast = castOf(name);
   return (
     <>
-      <span className={cx(styles.chip, by === 1 && styles.other)} aria-hidden="true">
-        {name.charAt(0)}
-      </span>
+      {cast ? (
+        <span className={styles.face}>
+          <Portrait who={cast.id} size={32} />
+        </span>
+      ) : (
+        <span className={cx(styles.chip, by === 1 && styles.other)} aria-hidden="true">
+          {name.charAt(0)}
+        </span>
+      )}
       <span className="visually-hidden">{t('dialogues.speaker', { name })}</span>
     </>
   );

@@ -40,6 +40,7 @@ export const units = {
   detailReview: 'Une révision variée de la leçon',
   sectionDone: 'Fait',
   sectionAgain: 'Encore',
+  withCast: 'Avec {names}',
   contents: 'Dans cette unité',
   belowLevel: 'Cette unité est en dessous de votre niveau.',
   markDone: 'Marquer comme terminée',

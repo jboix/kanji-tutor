@@ -1,3 +1,5 @@
+/* Home's extras beside the main layout: the kanji wall tile, the cast in the header and in Next up. */
+
 /* The bars, and the kanji wall beside them as a tonal tile. */
 .panelBody {
   display: flex;
@@ -29,4 +31,31 @@
 .wallLink:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+/* The greeting with the cast at its right. */
+.greetRow {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* "Next up · unit 4" with the unit's cast at the right. */
+.kickerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 0 -10px;
+  --stack-ring: var(--hero);
+}
+
+.kickerRow > p {
+  margin: 0;
+}
+
+.kickerRow > span {
+  color: var(--hero-muted);
 }

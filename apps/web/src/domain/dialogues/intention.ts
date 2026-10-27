@@ -247,7 +247,7 @@ export const INTENTION_DIALOGUES: readonly GrammarDialogues[] = [
         id: 'tsumori-weekend',
         setting: 'friends',
         register: 'plain',
-        speakers: ['ユイ', 'ケン'],
+        speakers: ['ユキ', 'ケン'],
         lines: [
           {
             by: 0,

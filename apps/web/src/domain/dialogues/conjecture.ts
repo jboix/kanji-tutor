@@ -106,7 +106,7 @@ export const CONJECTURE_DIALOGUES: readonly GrammarDialogues[] = [
         id: 'mitai-umbrellas',
         setting: 'friends',
         register: 'plain',
-        speakers: ['ユイ', 'ケン'],
+        speakers: ['ユキ', 'ケン'],
         lines: [
           {
             by: 0,

@@ -14,7 +14,9 @@ import { PlayIcon } from '../../ui/icons.tsx';
 import { Ja } from '../../ui/ja.tsx';
 import { SECTION_NAME } from '../../ui/lesson-sections.ts';
 import { paths } from '../../ui/paths.ts';
+import { UnitCast } from '../../ui/unit-cast.tsx';
 import styles from './today.module.css';
+import extras from './today-extras.module.css';
 
 /** About five minutes a part (L6, S3). */
 const PART_MINUTES = 5;
@@ -90,7 +92,10 @@ export function NextUp({ unit }: { unit: UnitView }) {
       aria-label={t('today.nextUpLabel')}
       data-current-unit={unit.unit.id}
     >
-      <p className={styles.kicker}>{t('today.nextUp', { order: unit.unit.order })}</p>
+      <div className={extras.kickerRow}>
+        <p className={styles.kicker}>{t('today.nextUp', { order: unit.unit.order })}</p>
+        <UnitCast unit={unit.unit} />
+      </div>
       <div className={styles.unitHead}>
         <Link to={paths.unit(unit.unit.id)} className={styles.unitTitle}>
           <Ja>{unit.unit.titleJa}</Ja>

@@ -10,7 +10,7 @@ export const APPEARANCE_DIALOGUES: readonly GrammarDialogues[] = [
         id: 'sou-look-rain',
         setting: 'friends',
         register: 'plain',
-        speakers: ['ユイ', 'ケン'],
+        speakers: ['ユキ', 'ケン'],
         lines: [
           {
             by: 0,
@@ -36,9 +36,9 @@ export const APPEARANCE_DIALOGUES: readonly GrammarDialogues[] = [
           line: 0,
           distractors: ['降るそう', '降ったそう', '降るつもり'],
           why: {
-            en: 'Yui is looking at the dark sky herself (見て), so the stem form 降りそう: it looks like it will rain. 降るそう, after the plain form, would pass on what she heard.',
-            fr: 'Yui regarde elle-même le ciel sombre (見て), donc la forme en radical 降りそう : on dirait qu’il va pleuvoir. 降るそう, après la forme neutre, rapporterait ce qu’elle a entendu.',
-            es: 'Yui mira ella misma el cielo oscuro (見て), así que la forma con la raíz 降りそう: parece que va a llover. 降るそう, tras la forma simple, transmitiría lo que ha oído.',
+            en: 'Yuki is looking at the dark sky herself (見て), so the stem form 降りそう: it looks like it will rain. 降るそう, after the plain form, would pass on what she heard.',
+            fr: 'Yuki regarde elle-même le ciel sombre (見て), donc la forme en radical 降りそう : on dirait qu’il va pleuvoir. 降るそう, après la forme neutre, rapporterait ce qu’elle a entendu.',
+            es: 'Yuki mira ella misma el cielo oscuro (見て), así que la forma con la raíz 降りそう: parece que va a llover. 降るそう, tras la forma simple, transmitiría lo que ha oído.',
           },
         },
       },
@@ -238,7 +238,7 @@ export const APPEARANCE_DIALOGUES: readonly GrammarDialogues[] = [
         id: 'rashii-ramen',
         setting: 'friends',
         register: 'plain',
-        speakers: ['ケン', 'ユイ'],
+        speakers: ['ケン', 'ユキ'],
         lines: [
           {
             by: 0,

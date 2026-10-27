@@ -10,7 +10,7 @@ export const DECISION_DIALOGUES: readonly GrammarDialogues[] = [
         id: 'koto-ni-suru-walk',
         setting: 'friends',
         register: 'plain',
-        speakers: ['ユイ', 'ケン'],
+        speakers: ['ユキ', 'ケン'],
         lines: [
           {
             by: 0,

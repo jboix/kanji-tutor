@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router';
+import { CAST } from '../../domain/cast.ts';
 import type { TodayOverview } from '../../domain/services/index.ts';
 import { BackupReminder } from '../../ui/backup-reminder.tsx';
 import { BottomNav } from '../../ui/bottom-nav.tsx';
+import { CastStack } from '../../ui/cast-portrait.tsx';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { InstallBanner } from '../../ui/install-banner.tsx';
 import { ListRow } from '../../ui/list-row.tsx';
@@ -15,6 +17,7 @@ import { PlacementRows } from './placement-row.tsx';
 import styles from './today.module.css';
 import { ClassSection } from './today-class.tsx';
 import { dateLine, greeting } from './today-copy.ts';
+import extras from './today-extras.module.css';
 import { KnownSection, UnitsSection } from './today-known.tsx';
 import { LevelUpRow } from './today-lesson.tsx';
 import { NextUp } from './today-next.tsx';
@@ -64,9 +67,12 @@ function Notice() {
 function TodayHeader({ now }: { now: number }) {
   return (
     <header className={styles.header}>
-      <h1 lang="ja" className={styles.title}>
-        {greeting(now)}
-      </h1>
+      <div className={extras.greetRow}>
+        <h1 lang="ja" className={styles.title}>
+          {greeting(now)}
+        </h1>
+        <CastStack who={CAST.map((member) => member.id)} size={28} />
+      </div>
       <span className={styles.date} lang="ja">
         {dateLine(now)}
       </span>

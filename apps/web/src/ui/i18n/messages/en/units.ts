@@ -38,6 +38,7 @@ export const units = {
   detailReview: 'A mixed review of the lesson',
   sectionDone: 'Done',
   sectionAgain: 'Again',
+  withCast: 'With {names}',
   contents: 'In this unit',
   belowLevel: 'This unit is below your level.',
   markDone: 'Mark as done',

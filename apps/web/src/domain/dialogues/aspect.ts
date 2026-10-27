@@ -10,7 +10,7 @@ export const ASPECT_DIALOGUES: readonly GrammarDialogues[] = [
         id: 'ta-bakari-phone',
         setting: 'friends',
         register: 'plain',
-        speakers: ['ユイ', 'ケン'],
+        speakers: ['ユキ', 'ケン'],
         lines: [
           {
             by: 0,
@@ -202,7 +202,7 @@ export const ASPECT_DIALOGUES: readonly GrammarDialogues[] = [
         id: 'te-shimau-cake',
         setting: 'friends',
         register: 'plain',
-        speakers: ['ユイ', 'ケン'],
+        speakers: ['ユキ', 'ケン'],
         lines: [
           {
             by: 0,
@@ -237,9 +237,9 @@ export const ASPECT_DIALOGUES: readonly GrammarDialogues[] = [
           line: 1,
           distractors: ['食べておいた', '食べてみた', '食べてあげた'],
           why: {
-            en: 'Ken apologises (ごめん) and Yui is upset: he did something he regrets, so てしまった. ておいた would be something done on purpose, to prepare.',
-            fr: 'Ken s’excuse (ごめん) et Yui est fâchée : il a fait quelque chose qu’il regrette, donc てしまった. ておいた serait une action faite exprès, pour préparer quelque chose.',
-            es: 'Ken pide perdón (ごめん) y Yui se enfada: hizo algo de lo que se arrepiente, así que てしまった. ておいた sería algo hecho a propósito, para preparar algo.',
+            en: 'Ken apologises (ごめん) and Yuki is upset: he did something he regrets, so てしまった. ておいた would be something done on purpose, to prepare.',
+            fr: 'Ken s’excuse (ごめん) et Yuki est fâchée : il a fait quelque chose qu’il regrette, donc てしまった. ておいた serait une action faite exprès, pour préparer quelque chose.',
+            es: 'Ken pide perdón (ごめん) y Yuki se enfada: hizo algo de lo que se arrepiente, así que てしまった. ておいた sería algo hecho a propósito, para preparar algo.',
           },
         },
       },
@@ -298,7 +298,7 @@ export const ASPECT_DIALOGUES: readonly GrammarDialogues[] = [
         id: 'te-oku-party',
         setting: 'friends',
         register: 'plain',
-        speakers: ['ユイ', 'ケン'],
+        speakers: ['ユキ', 'ケン'],
         lines: [
           {
             by: 0,

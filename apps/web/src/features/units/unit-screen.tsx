@@ -20,6 +20,7 @@ import { Screen } from '../../ui/screen.tsx';
 import { SectionHeader } from '../../ui/section-label.tsx';
 import { useServices } from '../../ui/services.tsx';
 import { TopBar } from '../../ui/top-bar.tsx';
+import { UnitCast } from '../../ui/unit-cast.tsx';
 import { useContentLanguage } from '../../ui/use-content-language.ts';
 import { TapText } from '../../ui/word-tap.tsx';
 import { UnitFooter } from './unit-footer.tsx';
@@ -102,7 +103,7 @@ function ReviewActions({ view, onChange }: { view: UnitView; onChange: () => voi
   );
 }
 
-/** The unit's title, what it holds and is about, and its summary (Lesson page). */
+/** The unit's title, what it holds and is about, who it meets, and its summary (Lesson page). */
 function Header({ view, english }: { view: UnitView; english: boolean }) {
   const t = useT();
   const { unit } = view;
@@ -118,6 +119,7 @@ function Header({ view, english }: { view: UnitView; english: boolean }) {
           {unit.theme}
           <EnMark english={english} />
         </p>
+        <UnitCast unit={unit} lead={(names) => t('units.withCast', { names })} />
       </div>
       <p className={styles.muted}>{unit.summary}</p>
     </header>

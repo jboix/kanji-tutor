@@ -16,7 +16,7 @@ import { ProgressLine } from '../../ui/progress-line.tsx';
 import { useServices } from '../../ui/services.tsx';
 import styles from './today.module.css';
 import { missLead, whenLine } from './today-copy.ts';
-import wall from './today-wall.module.css';
+import wall from './today-extras.module.css';
 
 /** The level's counts, read after the overview so they never hold up the first paint (N10). */
 function useLevelProgress(): LevelProgress | undefined {
