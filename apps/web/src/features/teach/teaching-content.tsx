@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { EnMark } from '../../ui/en-mark.tsx';
-import { ExternalLink } from '../../ui/external-link.tsx';
-import { jishoKanjiUrl } from '../../ui/external-links.ts';
+import { KanjiLinks } from '../../ui/external-link.tsx';
 import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
 import { Ja } from '../../ui/ja.tsx';
 import { SectionLabel } from '../../ui/section-label.tsx';
@@ -27,7 +26,7 @@ function PartsLine({ parts }: { parts: readonly Part[] }) {
   );
 }
 
-/** A kanji with its meanings and parts; with readings, a Jisho link too (R9). The hint (L2) has
+/** A kanji with its meanings and parts; with readings, links to Jisho and Wiktionary too (R9). The hint (L2) has
  * none, since an outside dictionary shows the readings it hides. */
 function KanjiRow({ kanji, readings }: { kanji: KanjiCard; readings: boolean }) {
   const t = useT();
@@ -37,14 +36,6 @@ function KanjiRow({ kanji, readings }: { kanji: KanjiCard; readings: boolean }) 
         <span lang="ja" className={styles.kanjiChar}>
           {kanji.char}
         </span>
-        {readings && (
-          <ExternalLink
-            site="jisho"
-            href={jishoKanjiUrl(kanji.char)}
-            subject={kanji.char}
-            compact
-          />
-        )}
       </span>
       <p className={styles.kanjiLine}>{kanji.meanings.join(', ') || t('teach.noMeaning')}</p>
       <PartsLine parts={kanji.parts} />
@@ -59,6 +50,11 @@ function KanjiRow({ kanji, readings }: { kanji: KanjiCard; readings: boolean }) 
           <span className={styles.muted}>{t('teach.otherReadings')} </span>
           <Ja>{kanji.otherReadings.join('、')}</Ja>
         </p>
+      )}
+      {readings && (
+        <div className={styles.kanjiLinks}>
+          <KanjiLinks char={kanji.char} />
+        </div>
       )}
     </li>
   );

@@ -1,6 +1,12 @@
 import type { ReactNode } from 'react';
 import styles from './external-link.module.css';
-import { type ExternalSite, SITE_NAMES, tatoebaSentenceUrl } from './external-links.ts';
+import {
+  type ExternalSite,
+  jishoKanjiUrl,
+  SITE_NAMES,
+  tatoebaSentenceUrl,
+  wiktionaryKanjiUrl,
+} from './external-links.ts';
 import { useI18n, useT } from './i18n/i18n.tsx';
 import { ExternalIcon } from './icons.tsx';
 import { useOnline } from './use-online.ts';
@@ -11,15 +17,13 @@ export interface ExternalLinkProps {
   href: string;
   /** What is looked up, for the label: "Open 待 on Jisho (new tab)". */
   subject?: string;
-  /** Only the arrow, for a dense row; the label still names the site. */
-  compact?: boolean;
 }
 
 /**
  * A link to an outside reference (R9) in a new tab, with no referrer. Offline it is muted and
  * says it needs a connection; it stays a link, since the connection may come back.
  */
-export function ExternalLink({ site, href, subject, compact = false }: ExternalLinkProps) {
+export function ExternalLink({ site, href, subject }: ExternalLinkProps) {
   const t = useT();
   const online = useOnline();
   const name = SITE_NAMES[site];
@@ -37,9 +41,9 @@ export function ExternalLink({ site, href, subject, compact = false }: ExternalL
       className={online ? styles.link : styles.offline}
       data-site={site}
     >
-      {!compact && <span lang="en">{name}</span>}
+      <span lang="en">{name}</span>
       <ExternalIcon />
-      {!online && !compact && <span className={styles.note}>{t('ui.externalNeedsNet')}</span>}
+      {!online && <span className={styles.note}>{t('ui.externalNeedsNet')}</span>}
     </a>
   );
 }
@@ -47,6 +51,21 @@ export function ExternalLink({ site, href, subject, compact = false }: ExternalL
 /** A quiet row of outside links: "Jisho ↗ Wiktionary ↗". */
 export function ExternalLinks({ children }: { children: ReactNode }) {
   return <div className={styles.row}>{children}</div>;
+}
+
+/** A kanji on Jisho and on Wiktionary: "Jisho ↗ Wiktionary ↗". */
+export function KanjiLinks({ char, subject = true }: { char: string; subject?: boolean }) {
+  const what = subject ? char : undefined;
+  return (
+    <ExternalLinks>
+      <ExternalLink site="jisho" href={jishoKanjiUrl(char)} {...(what ? { subject: what } : {})} />
+      <ExternalLink
+        site="wiktionary"
+        href={wiktionaryKanjiUrl(char)}
+        {...(what ? { subject: what } : {})}
+      />
+    </ExternalLinks>
+  );
 }
 
 /** "Sentence from Tatoeba ↗" for a pack sentence that came from Tatoeba; nothing otherwise. */

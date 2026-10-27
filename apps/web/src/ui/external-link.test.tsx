@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { ExternalLink, ExternalLinks, SentenceSource } from './external-link.tsx';
+import { ExternalLink, ExternalLinks, KanjiLinks, SentenceSource } from './external-link.tsx';
 import { jishoKanjiUrl } from './external-links.ts';
 
 afterEach(() => vi.restoreAllMocks());
@@ -16,10 +16,17 @@ describe('ExternalLink (R9)', () => {
     expect(link.querySelector('svg')).toBeTruthy();
   });
 
-  it('names what it looks up, and shows only the arrow when compact', () => {
-    render(<ExternalLink site="jisho" href={jishoKanjiUrl('待')} subject="待" compact />);
-    const link = screen.getByRole('link', { name: 'Open 待 on Jisho (new tab)' });
-    expect(link.textContent).toBe('');
+  it('names what it looks up', () => {
+    render(<ExternalLink site="jisho" href={jishoKanjiUrl('待')} subject="待" />);
+    expect(screen.getByRole('link', { name: 'Open 待 on Jisho (new tab)' })).toBeTruthy();
+  });
+
+  it('links a kanji to Jisho and to Wiktionary', () => {
+    render(<KanjiLinks char="待" />);
+    const jisho = screen.getByRole('link', { name: 'Open 待 on Jisho (new tab)' });
+    expect(jisho.getAttribute('href')).toBe(jishoKanjiUrl('待'));
+    const wiktionary = screen.getByRole('link', { name: 'Open 待 on Wiktionary (new tab)' });
+    expect(wiktionary.getAttribute('href')).toBe('https://en.wiktionary.org/wiki/%E5%BE%85');
   });
 
   it('says it needs a connection when offline', () => {

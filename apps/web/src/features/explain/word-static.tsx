@@ -4,8 +4,8 @@ import { glossesIn, translationIn } from '../../domain/localized.ts';
 import type { KanjiWithParts } from '../../domain/services/index.ts';
 import type { Sentence, Word } from '../../domain/types.ts';
 import { EnMark } from '../../ui/en-mark.tsx';
-import { ExternalLink, ExternalLinks } from '../../ui/external-link.tsx';
-import { jishoKanjiUrl, jishoWordUrl } from '../../ui/external-links.ts';
+import { ExternalLink, ExternalLinks, KanjiLinks } from '../../ui/external-link.tsx';
+import { jishoWordUrl } from '../../ui/external-links.ts';
 import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
 import { Ja } from '../../ui/ja.tsx';
 import { PeekLink } from '../../ui/peek-link.tsx';
@@ -92,8 +92,8 @@ export function KanjiParts({ kanji }: { kanji: readonly KanjiWithParts[] }) {
             <div className={styles.kanjiText}>
               <p className={styles.kanjiLine}>{k.meanings.join(', ') || t('explain.noMeaning')}</p>
               <Parts kanji={k} />
+              <KanjiLinks char={k.char} />
             </div>
-            <ExternalLink site="jisho" href={jishoKanjiUrl(k.char)} subject={k.char} compact />
           </li>
         ))}
       </ul>

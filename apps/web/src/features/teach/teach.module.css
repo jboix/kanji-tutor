@@ -73,6 +73,11 @@
   align-items: flex-start;
 }
 
+.kanjiLinks {
+  grid-column: 2;
+  margin: -6px 0 -10px;
+}
+
 .kanjiChar {
   font-family: var(--font-ja);
   font-size: 34px;
