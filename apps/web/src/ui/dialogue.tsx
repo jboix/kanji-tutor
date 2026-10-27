@@ -21,7 +21,7 @@ import styles from './dialogue.module.css';
 import { EnMark } from './en-mark.tsx';
 import { useT } from './i18n/i18n.tsx';
 import type { PlainKey } from './i18n/types.ts';
-import { SpeakerIcon } from './icons.tsx';
+import { SpeakerIcon, StopIcon } from './icons.tsx';
 import { useContentLanguage } from './use-content-language.ts';
 
 /**
@@ -177,13 +177,10 @@ export function DialogueLines({ dialogue, lookOf, translated }: DialogueLinesPro
   );
 }
 
-/**
- * "Play": the lines read one after the other with the device's Japanese voice (R7). Hidden when
- * the app may not speak; leaving the screen stops it.
- */
-export function PlayDialogue({ lines }: { lines: readonly string[] }) {
-  const t = useT();
+/** The lines spoken one after the other; `stop` cuts in at once, and so does leaving the screen. */
+function usePlayLines(lines: readonly string[]) {
   const run = useRef(0);
+  const [playing, setPlaying] = useState(false);
   useEffect(
     () => () => {
       run.current += 1;
@@ -191,16 +188,37 @@ export function PlayDialogue({ lines }: { lines: readonly string[] }) {
     },
     [],
   );
-  if (!canSpeak()) return null;
+  const stop = () => {
+    run.current += 1;
+    stopSpeaking();
+    setPlaying(false);
+  };
   const play = async () => {
     run.current += 1;
     const mine = run.current;
+    setPlaying(true);
     for (const line of lines) {
       if (run.current !== mine) return;
       await speak(line);
     }
+    if (run.current === mine) setPlaying(false);
   };
-  return (
+  return { playing, play, stop };
+}
+
+/**
+ * "Play": the lines read one after the other with the device's Japanese voice (R7); while it
+ * plays the chip reads "Stop" and stops it at once. Hidden when the app may not speak.
+ */
+export function PlayDialogue({ lines }: { lines: readonly string[] }) {
+  const t = useT();
+  const { playing, play, stop } = usePlayLines(lines);
+  if (!canSpeak()) return null;
+  return playing ? (
+    <Chip icon={<StopIcon />} aria-label={t('dialogues.stopLabel')} onClick={stop}>
+      {t('dialogues.stop')}
+    </Chip>
+  ) : (
     <Chip icon={<SpeakerIcon />} aria-label={t('dialogues.playLabel')} onClick={() => void play()}>
       {t('dialogues.play')}
     </Chip>

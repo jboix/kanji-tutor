@@ -312,6 +312,12 @@ export const RefreshIcon = () => (
     <path d="M19 4.5V8h-3.5" />
   </Svg>
 );
+/** Stop what is playing: a rounded square. */
+export const StopIcon = () => (
+  <Svg>
+    <rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor" />
+  </Svg>
+);
 /** In the wild: a signboard on its post. */
 export const SignIcon = () => (
   <Svg>

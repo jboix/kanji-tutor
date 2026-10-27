@@ -6,6 +6,8 @@ export const dialogues = {
   speaker: '{name}:',
   play: 'Play',
   playLabel: 'Play the conversation',
+  stop: 'Stop',
+  stopLabel: 'Stop the conversation',
   showTranslation: 'Show translation',
   settingFriends: 'Friends',
   settingFamily: 'Family',

@@ -8,6 +8,8 @@ export const dialogues = {
   speaker: '{name}:',
   play: 'Escuchar',
   playLabel: 'Escuchar la conversación',
+  stop: 'Parar',
+  stopLabel: 'Parar la conversación',
   showTranslation: 'Ver la traducción',
   settingFriends: 'Entre amigos',
   settingFamily: 'En familia',
