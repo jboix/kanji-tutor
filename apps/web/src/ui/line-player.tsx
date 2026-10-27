@@ -86,16 +86,32 @@ export interface PlayerBarProps {
   onTranslate: () => void;
   /** The tutor's Ask, at the row's start. */
   start?: ReactNode;
-  /** Under the row: the way on, when the conversation leads somewhere (a lesson's Start). */
-  below?: ReactNode;
+  /** At the row's end, taking the room left: the way on (a lesson's Start). */
+  action?: ReactNode;
 }
 
-/** The track: one step per line, "3 / 8" beside it. */
+/** Play or Pause, at the track's start as on any player. */
+function PlayButton({ player }: { player: LinePlayer }) {
+  const t = useT();
+  return (
+    <button
+      type="button"
+      className={styles.play}
+      aria-label={t(player.playing ? 'ui.playerPause' : 'ui.playerPlay')}
+      onClick={player.playing ? player.pause : player.play}
+    >
+      {player.playing ? <PauseIcon size={22} /> : <PlayIcon size={22} />}
+    </button>
+  );
+}
+
+/** The track: Play, one step per line, "3 / 8" beside it. */
 function Track({ player, total }: Pick<PlayerBarProps, 'player' | 'total'>) {
   const t = useT();
   const at = player.current ?? 0;
   return (
     <div className={styles.track}>
+      <PlayButton player={player} />
       <input
         type="range"
         min={0}
@@ -113,9 +129,9 @@ function Track({ player, total }: Pick<PlayerBarProps, 'player' | 'total'>) {
   );
 }
 
-/** The sticky footer: the track over Ask, the translations and Play or Pause. */
+/** The sticky footer: Play and the track, over Ask, the translations and the way on. */
 export function PlayerBar(props: PlayerBarProps) {
-  const { player, total, translated, onTranslate, start, below } = props;
+  const { player, total, translated, onTranslate, start, action } = props;
   const t = useT();
   const speaks = canSpeak();
   return (
@@ -132,19 +148,8 @@ export function PlayerBar(props: PlayerBarProps) {
         >
           <TranslateIcon />
         </button>
-        {speaks && (
-          <button
-            type="button"
-            className={styles.play}
-            aria-label={t(player.playing ? 'ui.playerPause' : 'ui.playerPlay')}
-            onClick={player.playing ? player.pause : player.play}
-          >
-            {player.playing ? <PauseIcon size={26} /> : <PlayIcon size={26} />}
-            <span>{t(player.playing ? 'ui.playerPauseShort' : 'ui.playerPlayShort')}</span>
-          </button>
-        )}
+        {action}
       </div>
-      {below}
     </div>
   );
 }

@@ -51,11 +51,22 @@ function Header({ unit }: { unit: Unit }) {
   );
 }
 
-function StartButton({ first, onStart }: Pick<LessonIntroSlotProps, 'first' | 'onStart'>) {
+interface StartButtonProps extends Pick<LessonIntroSlotProps, 'first' | 'onStart'> {
+  /** In the player's row, taking the room left beside Ask; else the footer's whole width. */
+  grow?: boolean;
+}
+
+function StartButton({ first, onStart, grow }: StartButtonProps) {
   const t = useT();
+  const fit = grow ? { grow: 1 } : { block: true };
   return (
-    <PillButton block arrow onClick={onStart}>
-      {t('units.introStart', { section: first })}
+    <PillButton
+      {...fit}
+      arrow
+      aria-label={t('units.introStart', { section: first })}
+      onClick={onStart}
+    >
+      {t('units.introStartShort')}
     </PillButton>
   );
 }
@@ -81,7 +92,7 @@ function Conversation({ episode, unit, topBar, first, onStart }: ConversationPro
       translated={translated}
       onTranslate={() => setTranslated((was) => !was)}
       start={tutor && <TutorButton tutor={tutor} />}
-      below={<StartButton first={first} onStart={onStart} />}
+      action={<StartButton first={first} onStart={onStart} grow />}
     />
   );
   return (

@@ -23,8 +23,6 @@ export const ui = {
   playerTranslation: 'Afficher les traductions',
   playerPlay: 'Écouter la conversation depuis cette réplique',
   playerPause: 'Pause',
-  playerPlayShort: 'Écouter',
-  playerPauseShort: 'Pause',
   startTitle: 'Et maintenant ?',
   startLesson: 'Continuer la leçon',
   startLessonLine: '{section}, partie {part}',

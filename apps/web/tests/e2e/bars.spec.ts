@@ -15,6 +15,13 @@ async function barFits(page: Page, name: string) {
     const bar = frame?.lastElementChild?.getBoundingClientRect();
     return {
       height: window.innerHeight,
+      width: window.innerWidth,
+      right: Math.max(
+        ...[...(frame?.lastElementChild?.querySelectorAll('*') ?? [])].map(
+          (el) => el.getBoundingClientRect().right,
+        ),
+        0,
+      ),
       frame: frame?.getBoundingClientRect().bottom ?? Number.NaN,
       bar: bar?.bottom ?? Number.NaN,
       barTop: bar?.top ?? Number.NaN,
@@ -25,6 +32,9 @@ async function barFits(page: Page, name: string) {
   expect(fit.frame, `${name}: the frame ends on screen`).toBeLessThanOrEqual(fit.height + 0.5);
   expect(fit.bar, `${name}: the bar ends on screen`).toBeLessThanOrEqual(fit.height + 0.5);
   expect(fit.barTop, `${name}: the bar starts on screen`).toBeLessThan(fit.height);
+  expect(fit.right, `${name}: nothing in the bar runs off the side`).toBeLessThanOrEqual(
+    fit.width + 0.5,
+  );
 }
 
 test('every bottom bar sits wholly on the screen', async ({ page }) => {

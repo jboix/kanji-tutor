@@ -21,8 +21,6 @@ export const ui = {
   playerTranslation: 'Show translations',
   playerPlay: 'Play the conversation from this line',
   playerPause: 'Pause',
-  playerPlayShort: 'Play',
-  playerPauseShort: 'Pause',
   startTitle: 'What now?',
   startLesson: 'Continue the lesson',
   startLessonLine: '{section}, part {part}',

@@ -71,5 +71,6 @@ export const units = {
   introConversation: 'D’abord, la conversation',
   introConversationLine:
     'Les mots et la grammaire de la leçon, en situation. Lisez-la ou écoutez-la, puis commencez.',
+  introStartShort: 'Commencer',
   introStart: 'Commencer : {section}',
 } satisfies Messages['units'];

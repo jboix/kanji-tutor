@@ -68,5 +68,6 @@ export const units = {
   tutorGrammar: 'How do the grammar points of this unit fit together?',
   introConversation: 'First, the conversation',
   introConversationLine: "The lesson's words and grammar, in use. Read it or play it, then start.",
+  introStartShort: 'Start',
   introStart: 'Start: {section}',
 } as const;
