@@ -126,7 +126,7 @@ test('no listening without a Japanese voice', async ({ page }) => {
   }
 });
 
-test('a grammar page practises its point inline, with the full session one tap away', async ({
+test('a grammar page practises its point inline, then offers the full session', async ({
   page,
 }) => {
   await onboard(page);
@@ -136,6 +136,7 @@ test('a grammar page practises its point inline, with the full session one tap a
   await expect(first).toBeVisible();
   const total = Number((await first.textContent())?.at(-1));
   await expect(page.locator('input:focus')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'A full session on this point' })).toHaveCount(0);
   for (let at = 1; at <= total; at++) {
     await expect(practice.getByText(`Drill ${at} of ${total}`)).toBeVisible();
     await practice.getByRole('button', { name: "I don't know" }).click();
@@ -144,7 +145,7 @@ test('a grammar page practises its point inline, with the full session one tap a
   }
   await expect(practice.getByText(`0 of ${total} right.`)).toBeVisible();
   await expect(page).toHaveURL(/\/grammar\/desu$/);
-  const full = page.getByRole('link', { name: 'A full session on this point' });
+  const full = practice.getByRole('link', { name: 'A full session on this point' });
   await expect(full).toHaveAttribute('href', '/read?grammar=desu');
 });
 

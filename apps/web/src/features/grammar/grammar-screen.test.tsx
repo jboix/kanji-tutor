@@ -74,11 +74,9 @@ describe('grammar page (G4)', () => {
     expect(link.getAttribute('href')).toBe('/grammar/te-wa-ikenai');
   });
 
-  it('says unseen points are not met yet and links practice', async () => {
+  it('says unseen points are not met yet', async () => {
     await open('/grammar/te-mo-ii');
     expect(await screen.findByText('Not met in a session yet')).toBeTruthy();
-    const practise = screen.getByRole('link', { name: 'A full session on this point' });
-    expect(practise.getAttribute('href')).toBe('/read?grammar=te-mo-ii');
   });
 
   it('puts the tutor under the pattern and floating over the page, opening on the point', async () => {

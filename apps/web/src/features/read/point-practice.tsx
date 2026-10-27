@@ -1,7 +1,7 @@
 /**
  * "Practise this point" on a grammar page (S5, the `pointPractice` slot): the point's drills one
  * after another on the page, each answered and recorded as in a session, then plain counts and
- * "Practise again". The first drill does not take the focus, so the keyboard stays shut until
+ * "Practise again" beside a full session on the point (alone when it has no drills). The first drill does not take the focus, so the keyboard stays shut until
  * the learner starts.
  */
 import { type ReactNode, useEffect, useState } from 'react';
@@ -9,7 +9,8 @@ import { pointPractice } from '../../domain/services/index.ts';
 import type { SessionCard } from '../../domain/session-types.ts';
 import { canListen } from '../../lang/speech.ts';
 import { useT } from '../../ui/i18n/i18n.tsx';
-import { PillButton } from '../../ui/pill-button.tsx';
+import { paths } from '../../ui/paths.ts';
+import { PillButton, PillLink } from '../../ui/pill-button.tsx';
 import { useServices } from '../../ui/services.tsx';
 import type { PointPracticeSlotProps } from '../../ui/slots.tsx';
 import { DrillCard } from './drill-screen.tsx';
@@ -42,20 +43,36 @@ const inline = (body: ReactNode, footer: ReactNode) => (
   </div>
 );
 
-function Finished({ results, onAgain }: { results: DrillResult[]; onAgain: () => void }) {
+function FullSession({ grammarId }: { grammarId: string }) {
+  const t = useT();
+  return (
+    <PillLink to={paths.grammarSession(grammarId)} block>
+      {t('grammar.practise')}
+    </PillLink>
+  );
+}
+
+interface FinishedProps {
+  grammarId: string;
+  results: DrillResult[];
+  onAgain: () => void;
+}
+
+function Finished({ grammarId, results, onAgain }: FinishedProps) {
   const t = useT();
   const right = results.filter((r) => r.right).length;
   return (
     <div className={styles.inline} data-practice-done="">
       <p className={styles.text}>{t('grammar.inlineDone', { right, total: results.length })}</p>
-      <PillButton variant="secondary" onClick={onAgain}>
+      <FullSession grammarId={grammarId} />
+      <PillButton variant="secondary" block onClick={onAgain}>
         {t('grammar.inlineAgain')}
       </PillButton>
     </div>
   );
 }
 
-/** The set (see the module comment); a muted line while it is chosen, nothing without drills. */
+/** The set (see the module comment); a muted line while it is chosen. */
 export function PointPractice({ grammarId }: PointPracticeSlotProps) {
   const t = useT();
   const [round, setRound] = useState(0);
@@ -68,7 +85,8 @@ export function PointPractice({ grammarId }: PointPracticeSlotProps) {
     setRound((n) => n + 1);
   };
   if (at >= cards.length) {
-    return cards.length > 0 ? <Finished results={results} onAgain={again} /> : null;
+    if (cards.length === 0) return <FullSession grammarId={grammarId} />;
+    return <Finished grammarId={grammarId} results={results} onAgain={again} />;
   }
   const card = cards[at];
   const last = at + 1 >= cards.length;

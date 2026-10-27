@@ -2,6 +2,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { grammarRepos } from '../../test/grammar-fixtures.ts';
 import { fakeServices, renderWithServices } from '../../test/render.tsx';
+import { PeekProvider } from '../../ui/peek-link.tsx';
 import { GrammarIntro } from './grammar-intro.tsx';
 
 describe('grammar intro card (G4)', () => {
@@ -38,6 +39,27 @@ describe('grammar intro card (G4)', () => {
     expect(screen.queryByRole('button', { name: 'Got it' })).toBeNull();
     expect(screen.queryByText('“May I take a photo?”')).toBeNull();
     expect(screen.getByRole('link', { name: 'More about this' })).toBeTruthy();
+  });
+
+  it('has no "More about this" on the point’s own page, which it would only open again', () => {
+    renderWithServices(<GrammarIntro grammarId="te-mo-ii" onDone={() => undefined} compact />, {
+      path: '/grammar/te-mo-ii',
+    });
+    expect(screen.getByRole('region', { name: 'About 〜てもいい' })).toBeTruthy();
+    expect(screen.queryByRole('link', { name: 'More about this' })).toBeNull();
+  });
+
+  it('opens "More about this" in a sheet inside a session, the exercise kept', () => {
+    const pagePeek = ({ id }: { id: string }) => <p>page of {id}</p>;
+    renderWithServices(
+      <PeekProvider>
+        <GrammarIntro grammarId="te-mo-ii" onDone={() => undefined} compact />
+      </PeekProvider>,
+      { slots: { pagePeek } },
+    );
+    fireEvent.click(screen.getByRole('link', { name: 'More about this' }));
+    expect(screen.getByText('page of te-mo-ii')).toBeTruthy();
+    expect(screen.getByRole('region', { name: 'About 〜てもいい' })).toBeTruthy();
   });
 
   it('calls onDone at once for an id outside the catalogue', async () => {

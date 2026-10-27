@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router';
+import { useLocation } from 'react-router';
 import { localPoint } from '../../domain/content-language.ts';
 import type { FunctionWord, GrammarEntry } from '../../domain/grammar/index.ts';
 import { EnMark } from '../../ui/en-mark.tsx';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { paths } from '../../ui/paths.ts';
+import { PeekLink } from '../../ui/peek-link.tsx';
 import { PillButton } from '../../ui/pill-button.tsx';
 import { SectionLabel } from '../../ui/section-label.tsx';
 import type { GrammarIntroSlotProps } from '../../ui/slots.tsx';
@@ -24,6 +25,21 @@ import { Uses } from './uses.tsx';
 
 /** Examples shown on the intro card (G4: "two examples"). */
 const INTRO_EXAMPLES = 2;
+
+/**
+ * "More about this": the point's page, in a sheet inside a session so the exercise stays where
+ * it was. Nothing on the page itself (its drills, or its intro), which it would only open again.
+ */
+function MoreAbout({ entry }: { entry: Point }) {
+  const t = useT();
+  const { pathname } = useLocation();
+  if (pathname === paths.grammar(entry.id)) return null;
+  return (
+    <PeekLink kind="grammar" id={entry.id} label={entry.pattern} className={styles.link}>
+      {t('grammar.moreAbout')}
+    </PeekLink>
+  );
+}
 
 /** Formation, two pack examples and, when it has one, a conversation, for a catalogue point. */
 function PointBody({ entry }: { entry: GrammarEntry }) {
@@ -78,9 +94,7 @@ function IntroCard({ entry: source, onDone }: { entry: Point; onDone: () => void
               {t('grammar.gotIt')}
             </PillButton>
           </TutorNext>
-          <Link to={paths.grammar(entry.id)} className={styles.link}>
-            {t('grammar.moreAbout')}
-          </Link>
+          <MoreAbout entry={entry} />
         </div>
       </StickyActions>
     </section>
@@ -108,9 +122,7 @@ function AboutCard({ entry: source }: { entry: Point }) {
       <p className={styles.prose}>
         <JaRuns text={entry.explanation} />
       </p>
-      <Link to={paths.grammar(entry.id)} className={styles.link}>
-        {t('grammar.moreAbout')}
-      </Link>
+      <MoreAbout entry={entry} />
     </section>
   );
 }

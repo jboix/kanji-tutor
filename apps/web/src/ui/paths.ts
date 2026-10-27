@@ -46,6 +46,8 @@ export const paths = {
   /** Every catalogue grammar point by level and family (P3). */
   grammarIndex: '/grammar',
   grammar: (id: string) => `/grammar/${encodeURIComponent(id)}`,
+  /** A session on one grammar point (G3). */
+  grammarSession: (id: string) => `/read?${new URLSearchParams({ grammar: id }).toString()}`,
   onboarding: '/welcome',
   /** Log in from the welcome: bring progress from another device (cloud saves). */
   logIn: '/log-in',

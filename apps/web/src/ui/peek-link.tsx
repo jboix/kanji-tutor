@@ -11,6 +11,11 @@ export function PeekProvider({ children }: { children: ReactNode }) {
   return <PeekContext value>{children}</PeekContext>;
 }
 
+/** Inside a session, where a page opens in a sheet and starting another session would nest one. */
+export function useInSession(): boolean {
+  return use(PeekContext);
+}
+
 export interface PeekLinkProps {
   kind: 'grammar' | 'kanji';
   /** The grammar id or the kanji. */

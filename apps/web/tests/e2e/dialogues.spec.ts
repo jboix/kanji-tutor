@@ -31,7 +31,8 @@ test('the intro card keeps its content and adds a conversation, Got it still in 
   await page.goto('/grammar/koto-ni-naru?intro=1');
   const intro = page.getByRole('region', { name: 'New grammar: 〜ことになる' });
   await expect(intro.getByText('it has been decided that')).toBeVisible();
-  await expect(intro.getByRole('link', { name: 'More about this' })).toBeVisible();
+  // Got it opens the page here, so there is no "More about this" to open it again.
+  await expect(intro.getByRole('link', { name: 'More about this' })).toHaveCount(0);
   await expect(intro.getByRole('button', { name: 'Got it' })).toBeInViewport();
   await expect(intro.locator('[data-tutor]')).toBeInViewport();
 

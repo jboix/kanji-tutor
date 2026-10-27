@@ -9,7 +9,7 @@ import type { MessageKey } from '../../ui/i18n/types.ts';
 import { Ja } from '../../ui/ja.tsx';
 import { ListRow } from '../../ui/list-row.tsx';
 import { paths } from '../../ui/paths.ts';
-import { PillLink } from '../../ui/pill-button.tsx';
+import { useInSession } from '../../ui/peek-link.tsx';
 import { SectionLabel } from '../../ui/section-label.tsx';
 import { useSlot } from '../../ui/slots.tsx';
 import { TutorCard, TutorFloat } from '../../ui/tutor.tsx';
@@ -137,11 +137,15 @@ function Explanation({ text, english }: { text: string; english: boolean }) {
   );
 }
 
-/** "Practise this point" (S5): the point's drills on the page, when the read feature is wired. */
+/**
+ * "Practise this point" (S5): the point's drills on the page, when the read feature is wired, a
+ * full session on it after them. None over a session, which would start one inside it.
+ */
 function Practice({ grammarId }: { grammarId: string }) {
   const t = useT();
   const Slot = useSlot('pointPractice');
-  if (!Slot) return null;
+  const inSession = useInSession();
+  if (!Slot || inSession) return null;
   return (
     <Section label={t('grammar.practiseInline')}>
       <Slot key={grammarId} grammarId={grammarId} />
@@ -177,7 +181,6 @@ export function GrammarPage({
   const t = useT();
   const lookup = useContentLanguage();
   const { value: entry, english: fallback } = localPoint(lookup, source);
-  const practise = `${paths.read}?${new URLSearchParams({ grammar: entry.id }).toString()}`;
   return (
     <>
       <Hero entry={entry} english={fallback} />
@@ -194,9 +197,6 @@ export function GrammarPage({
       )}
       <Related entry={entry} lookup={lookup} />
       <Practice grammarId={entry.id} />
-      <PillLink to={practise} block variant="secondary">
-        {t('grammar.practise')}
-      </PillLink>
     </>
   );
 }
