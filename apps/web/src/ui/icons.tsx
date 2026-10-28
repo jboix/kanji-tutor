@@ -132,6 +132,14 @@ export const ShareIcon = ({ size = 16 }: Sized) => (
     <path d="M8 11H6.5c-.8 0-1.5.7-1.5 1.5v6c0 .8.7 1.5 1.5 1.5h11c.8 0 1.5-.7 1.5-1.5v-6c0-.8-.7-1.5-1.5-1.5H16" />
   </Svg>
 );
+/** Delete: a bin. */
+export const TrashIcon = () => (
+  <Svg>
+    <path d="M4 7h16M10 11v6M14 11v6" />
+    <path d="M6 7l1 12a1.5 1.5 0 0 0 1.5 1.5h7A1.5 1.5 0 0 0 17 19l1-12" />
+    <path d="M9 7V4.5h6V7" />
+  </Svg>
+);
 /** Add (IA3): a plus. */
 export const PlusIcon = () => (
   <Svg>

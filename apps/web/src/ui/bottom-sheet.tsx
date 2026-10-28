@@ -36,7 +36,7 @@ function OpenSheet({ onClose, label, header, context, closeLabel, children }: Bo
   useFocusTrap(sheet, true, onClose);
   useSheetDrag(sheet, onClose);
   return (
-    <div className={styles.overlay}>
+    <div className={cx(styles.overlay, context === undefined && styles.dim)}>
       <button type="button" className={styles.scrim} tabIndex={-1} aria-hidden onClick={onClose} />
       {context !== undefined && <div className={styles.context}>{context}</div>}
       <div
@@ -70,4 +70,9 @@ export function SheetHeading({ word, children }: { word: ReactNode; children?: R
       {children !== undefined && <div className={styles.gloss}>{children}</div>}
     </>
   );
+}
+
+/** A plain heading for a sheet that is not about a word, e.g. a menu's lesson title. */
+export function SheetTitle({ children }: { children: ReactNode }) {
+  return <h2 className={styles.title}>{children}</h2>;
 }

@@ -13,7 +13,8 @@
   --paper-soft: #e9e6df; /* chips, input pills, segmented control, callouts */
   --paper-raised: #ffffff; /* cards, sheets, the drawing canvas */
   --bar: #ffffff; /* the bottom bar and fixed action rows */
-  --scrim: #d6d3cc; /* behind bottom sheets */
+  --scrim: #d6d3cc; /* behind a sheet about a word in a sentence, which hides the screen */
+  --scrim-dim: rgb(28 29 31 / 34%); /* behind other sheets: the screen stays in view, dimmed */
 
   /* Ink */
   --ink: #1c1d1f; /* primary text */
@@ -135,6 +136,7 @@
     --paper-raised: #303030;
     --bar: #282828;
     --scrim: #0a0a0a;
+    --scrim-dim: rgb(0 0 0 / 60%);
     --ink: #e2e2e2;
     --ink-muted: #ababab;
     --ink-faint: #a3a3a3;
@@ -210,6 +212,7 @@
   --paper-raised: #303030;
   --bar: #282828;
   --scrim: #0a0a0a;
+  --scrim-dim: rgb(0 0 0 / 60%);
   --ink: #e2e2e2;
   --ink-muted: #ababab;
   --ink-faint: #a3a3a3;

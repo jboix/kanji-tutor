@@ -152,7 +152,7 @@ export function LessonPage({ model, commitTitle }: LessonPageProps) {
   const [renaming, setRenaming] = useState(false);
   const { lesson } = model;
   const back = <BackButton parent={paths.capture} label={t('common.back')} />;
-  const menu = <LessonMenu id={lesson.id} onRename={() => setRenaming(true)} />;
+  const menu = <LessonMenu id={lesson.id} title={model.title} onRename={() => setRenaming(true)} />;
   const date = format.date(lesson.createdAt, { weekday: 'long', day: 'numeric', month: 'long' });
   const pages = t('capture.pages', { n: lesson.pages.length });
   return (

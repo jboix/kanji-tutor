@@ -10,6 +10,11 @@
   color: var(--ink);
 }
 
+/* Without a sentence to focus on, the screen behind stays in view, dimmed. */
+.dim {
+  background: var(--scrim-dim);
+}
+
 .scrim {
   position: absolute;
   inset: 0;
@@ -98,6 +103,12 @@
   flex-direction: column;
   gap: 4px;
   min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 600;
 }
 
 .word {

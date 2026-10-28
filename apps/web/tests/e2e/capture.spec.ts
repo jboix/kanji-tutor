@@ -91,6 +91,14 @@ test('three handout pages become one scanned lesson', async ({ page }) => {
   await expect(page.getByRole('dialog', { name: 'Page 1' }).getByRole('img')).toBeVisible();
   await page.keyboard.press('Escape');
   await shot(page, 'lesson');
+  // The ⋯ menu: the lesson's title over its actions, each a row with its icon.
+  await page.getByRole('button', { name: /^More: / }).click();
+  const menu = page.getByRole('dialog', { name: /^More: / });
+  await expect(menu.getByRole('heading', { name: 'Weather week' })).toBeVisible();
+  await expect(menu.getByRole('listitem')).toHaveCount(3);
+  await expect(menu.getByRole('link', { name: 'Add pages' })).toBeVisible();
+  await shot(page, 'menu');
+  await page.keyboard.press('Escape');
 
   await page.goto('/capture');
   const card = page.getByRole('link', { name: /Weather week/ });
