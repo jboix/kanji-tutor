@@ -31,7 +31,8 @@ async function readUntilDrill() {
 describe('drills in the read screen', () => {
   it('shows a lookalike drill after a sentence, records a wrong choice, then moves on', async () => {
     const repos = await drillRepos();
-    await repos.reviews.add(swap);
+    // Three days before the real clock: the session counts the swaps of the last two weeks.
+    await repos.reviews.add({ ...swap, at: Date.now() - 3 * 86_400_000 });
     renderWithServices(<ReadScreen />, {
       services: fakeServices({ repos }),
       path: '/read?drills=1',
