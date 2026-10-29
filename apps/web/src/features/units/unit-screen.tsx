@@ -17,7 +17,7 @@ import { paths } from '../../ui/paths.ts';
 import { PillButton } from '../../ui/pill-button.tsx';
 import { PractisedProgress } from '../../ui/practised-progress.tsx';
 import { Screen } from '../../ui/screen.tsx';
-import { SectionHeader } from '../../ui/section-label.tsx';
+import { SectionHeader, SectionLabel } from '../../ui/section-label.tsx';
 import { useServices } from '../../ui/services.tsx';
 import { TopBar } from '../../ui/top-bar.tsx';
 import { UnitCast } from '../../ui/unit-cast.tsx';
@@ -47,16 +47,15 @@ function Progress({ view }: { view: UnitView }) {
   );
 }
 
-/** The unit's words and grammar, with how many are known beside the title, as detail. */
-function Contents({ view }: { view: UnitView }) {
+/** The unit's words, each with its reading under it, in a grid. */
+function Words({ view }: { view: UnitView }) {
   const t = useT();
-  const lookup = useContentLanguage();
   return (
-    <section className={styles.contents} aria-label={t('units.contents')}>
-      <SectionHeader title={t('units.contents')} meta={progressLine(t, view)} />
+    <div className={styles.group}>
+      <SectionLabel as="h3">{t('units.stepWords')}</SectionLabel>
       <ul className={styles.words}>
         {view.unit.words.map((word) => (
-          <li key={word.written}>
+          <li key={word.written} className={styles.word}>
             <TapText text={word.written} id={`unit-word:${word.written}`} word />
             {word.reading !== word.written && (
               <span lang="ja" className={styles.reading}>
@@ -66,20 +65,45 @@ function Contents({ view }: { view: UnitView }) {
           </li>
         ))}
       </ul>
-      <ul className={styles.words}>
+    </div>
+  );
+}
+
+/** The unit's grammar points, one per row: the pattern, its meaning under it. */
+function Grammar({ view }: { view: UnitView }) {
+  const t = useT();
+  const lookup = useContentLanguage();
+  return (
+    <div className={styles.group}>
+      <SectionLabel as="h3">{t('units.stepGrammar')}</SectionLabel>
+      <ul className={styles.points}>
         {unitGrammar(view.unit).map((source) => {
           const { value: entry, english } = localGrammar(lookup, source);
           return (
             <li key={entry.id}>
-              <Link to={paths.grammar(entry.id)} className={styles.link}>
+              <Link to={paths.grammar(entry.id)} className={styles.point}>
                 <Ja>{entry.pattern}</Ja>
-              </Link>{' '}
-              <span className={styles.muted}>{entry.meaning}</span>
-              <EnMark english={english} />
+                <span className={styles.meaning}>
+                  {entry.meaning}
+                  <EnMark english={english} />
+                </span>
+              </Link>
             </li>
           );
         })}
       </ul>
+    </div>
+  );
+}
+
+/** The unit's words, then its grammar, with how many are known beside the title. */
+function Contents({ view }: { view: UnitView }) {
+  const t = useT();
+  return (
+    <section className={styles.contents} aria-label={t('units.contents')}>
+      <SectionHeader title={t('units.contents')} meta={progressLine(t, view)} />
+      <Words view={view} />
+      <Grammar view={view} />
     </section>
   );
 }

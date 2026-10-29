@@ -203,19 +203,74 @@
   font-size: 12px;
 }
 
-.words {
+/* Words and grammar, each under its own label, apart from each other. */
+.group {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px 14px;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 6px;
+}
+
+.group + .group {
+  margin-top: 12px;
+}
+
+/* The words in a grid: each written large, its reading under it. */
+.words {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+  gap: 12px 16px;
   margin: 0;
   padding: 0;
   list-style: none;
-  font-size: var(--text-md);
+}
+
+.word {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 20px;
+  line-height: 1.3;
 }
 
 .reading {
-  margin-inline-start: 4px;
   font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+/* The grammar points, one per row between rules: the pattern large, its meaning under it. */
+.points {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.points > li + li {
+  border-top: 1px solid var(--rule);
+}
+
+.point {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 0;
+  color: var(--accent);
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.point:hover {
+  color: var(--link-hover);
+}
+
+.points > li:first-child > .point {
+  padding-top: 0;
+}
+
+.meaning {
+  font-size: var(--text-md);
+  font-weight: 400;
   color: var(--ink-muted);
 }
 
@@ -235,15 +290,4 @@
   margin: 0 0 8px;
   font-size: var(--text-sm);
   color: var(--ink-muted);
-}
-
-.link {
-  color: var(--accent);
-  font-size: var(--text-md);
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.link:hover {
-  color: var(--link-hover);
 }

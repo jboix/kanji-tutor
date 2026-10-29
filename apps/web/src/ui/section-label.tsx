@@ -2,7 +2,13 @@ import type { ReactNode } from 'react';
 import styles from './section-label.module.css';
 
 /** Small caps-style label, e.g. "YOU'LL START WITH". Write it in sentence case; CSS uppercases. */
-export function SectionLabel({ children, as = 'div' }: { children: ReactNode; as?: 'div' | 'h2' }) {
+export function SectionLabel({
+  children,
+  as = 'div',
+}: {
+  children: ReactNode;
+  as?: 'div' | 'h2' | 'h3';
+}) {
   const Tag = as;
   return <Tag className={styles.label}>{children}</Tag>;
 }
