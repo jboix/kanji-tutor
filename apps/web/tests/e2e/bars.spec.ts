@@ -1,4 +1,5 @@
 import { beginMix, importKnown, onboard } from './helpers.ts';
+import { card } from './lesson-play.ts';
 import { expect, type Page, test } from './test.ts';
 
 /**
@@ -57,4 +58,18 @@ test('every bottom bar sits wholly on the screen', async ({ page }) => {
   await page.goto('/units/family/episode');
   await expect(page.getByRole('button', { name: /^Play/ })).toBeVisible();
   await barFits(page, 'episode: player');
+});
+
+test('a short intro card keeps its Got it at the bottom of the screen', async ({ page }) => {
+  await onboard(page);
+  await page.goto('/units/i-am-a-student');
+  await page.getByRole('button', { name: /^文法/ }).click();
+  await expect(card(page)).toHaveAttribute('data-card', 'grammar-intro');
+  await page.waitForTimeout(400);
+  const gap = await page.evaluate(() => {
+    const bar = document.querySelector('[data-sticky-actions]')?.getBoundingClientRect();
+    return window.innerHeight - (bar?.bottom ?? 0);
+  });
+  await page.screenshot({ path: test.info().outputPath('grammar-intro.png') });
+  expect(gap, 'the bar reaches the bottom of the screen').toBeLessThanOrEqual(1);
 });

@@ -51,6 +51,12 @@
   flex-shrink: 0;
 }
 
+/* A card that ends with its sticky action ("Got it") fills the screen, so on a short card the
+   action still sits at the bottom instead of under the card's last line. */
+.body > :has(> [data-sticky-actions]:last-child) {
+  flex-grow: 1;
+}
+
 /* Under a top bar (read.html): 24px top, 16px bottom before the action bar. */
 .underBar {
   padding-top: var(--screen-top, 24px);
