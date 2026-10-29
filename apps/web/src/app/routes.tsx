@@ -14,6 +14,7 @@ const today = async () => (await import('../features/today/today-screen.tsx')).T
 const kanji = async () => (await import('../features/kanji/kanji-screen.tsx')).KanjiScreen;
 const units = () => import('../features/units/index.ts');
 const grammar = async () => (await import('../features/grammar/grammar-screen.tsx')).GrammarScreen;
+const guides = async () => (await import('../features/guides/guides-screen.tsx')).GuidesScreen;
 const settings = () => import('../features/settings/settings-screen.tsx');
 const settingsSection = () => import('../features/settings/settings-section-screen.tsx');
 
@@ -67,6 +68,8 @@ const GATED: RouteObject[] = [
   ),
   screen(paths.grammarIndex, grammar),
   screen('/grammar/:id', grammar),
+  screen(paths.guides, guides),
+  screen('/guides/:id', guides),
   screen('*', today),
 ];
 

@@ -17,8 +17,8 @@ export function useInSession(): boolean {
 }
 
 export interface PeekLinkProps {
-  kind: 'grammar' | 'kanji';
-  /** The grammar id or the kanji. */
+  kind: 'grammar' | 'kanji' | 'guide';
+  /** The grammar id, the kanji or the guide id. */
   id: string;
   /** The sheet's name, e.g. the pattern or the kanji. */
   label: string;
@@ -27,12 +27,18 @@ export interface PeekLinkProps {
   children: ReactNode;
 }
 
+const HREF: Record<PeekLinkProps['kind'], (id: string) => string> = {
+  grammar: paths.grammar,
+  kanji: paths.kanjiDetail,
+  guide: paths.guide,
+};
+
 function href(kind: PeekLinkProps['kind'], id: string): string {
-  return kind === 'grammar' ? paths.grammar(id) : paths.kanjiDetail(id);
+  return HREF[kind](id);
 }
 
 /**
- * A link to a grammar or kanji page. Inside a session it opens the page in a sheet, so closing
+ * A link to a grammar, kanji or guide page. Inside a session it opens the page in a sheet, so closing
  * it returns to the exercise as it was; elsewhere it is a plain link.
  */
 export function PeekLink({ kind, id, label, className, lang, children }: PeekLinkProps) {

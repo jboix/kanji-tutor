@@ -11,6 +11,7 @@ import { exercises } from './exercises.ts';
 import { explain } from './explain.ts';
 import { grammar } from './grammar.ts';
 import { grammarFamily } from './grammar-family.ts';
+import { guides } from './guides.ts';
 import { handwrite } from './handwrite.ts';
 import { importScreen } from './import-screen.ts';
 import { kanji } from './kanji.ts';
@@ -64,6 +65,7 @@ export const es = {
   handwrite,
   grammar,
   grammarFamily,
+  guides,
   kanji,
   units,
   placement,

@@ -27,10 +27,15 @@ const kanjiPeek = lazySlot(
   async () => (await import('../features/kanji/kanji-screen.tsx')).KanjiPeek,
 );
 
+const GuidePeek = lazySlot(
+  async () => (await import('../features/guides/guides-screen.tsx')).GuidePeek,
+);
+
 const GrammarPeek = grammarPeek;
 const KanjiPeek = kanjiPeek;
 
 function PagePeek({ kind, id }: PagePeekSlotProps) {
+  if (kind === 'guide') return <GuidePeek id={id} />;
   return kind === 'grammar' ? <GrammarPeek id={id} /> : <KanjiPeek char={id} />;
 }
 

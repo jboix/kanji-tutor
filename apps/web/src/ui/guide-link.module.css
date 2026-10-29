@@ -1,0 +1,16 @@
+.link {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 10px;
+  min-height: var(--tap);
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.link [lang="ja"] {
+  font-family: var(--font-ja);
+  font-weight: 400;
+}

@@ -163,8 +163,8 @@ export interface GrammarIntroSlotProps {
 
 /** A grammar or kanji page shown in a sheet over a session, so the session keeps its place (R14). */
 export interface PagePeekSlotProps {
-  kind: 'grammar' | 'kanji';
-  /** The grammar id or the kanji. */
+  kind: 'grammar' | 'kanji' | 'guide';
+  /** The grammar id, the kanji or the guide id. */
   id: string;
 }
 

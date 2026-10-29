@@ -9,6 +9,7 @@ import {
   BrushIcon,
   GrammarIcon,
   KanjiIcon,
+  ListIcon,
   NoteIcon,
 } from '../../ui/icons.tsx';
 import { ListRow } from '../../ui/list-row.tsx';
@@ -47,6 +48,12 @@ const TILES: Tile[] = [
     title: 'learn.grammar',
     icon: <GrammarIcon />,
     detail: (t) => t('learn.grammarDetail'),
+  },
+  {
+    to: paths.guides,
+    title: 'guides.tile',
+    icon: <ListIcon />,
+    detail: (t) => t('guides.tileDetail'),
   },
   {
     to: paths.learned,

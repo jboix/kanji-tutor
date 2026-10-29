@@ -4,6 +4,7 @@ import type { GrammarEntry } from '../../domain/grammar/index.ts';
 import { EnMark } from '../../ui/en-mark.tsx';
 import { ExternalLink, ExternalLinks } from '../../ui/external-link.tsx';
 import { jishoGrammarUrl } from '../../ui/external-links.ts';
+import { GuideLink } from '../../ui/guide-link.tsx';
 import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
 import type { MessageKey } from '../../ui/i18n/types.ts';
 import { Ja } from '../../ui/ja.tsx';
@@ -185,6 +186,7 @@ export function GrammarPage({
     <>
       <Hero entry={entry} english={fallback} />
       <PageTutor entry={entry} floating={floating} />
+      <GuideLink grammarId={entry.id} />
       {isFunctionWord(entry) ? (
         <>
           <Explanation text={entry.explanation} english={fallback} />

@@ -49,6 +49,9 @@ export const paths = {
   grammarIndex: '/grammar',
   grammar: (id: string) => `/grammar/${encodeURIComponent(id)}`,
   /** A session on one grammar point (G3). */
+  /** The guides (verb groups, the て-form, keigo…), from Learn and from grammar intros. */
+  guides: '/guides',
+  guide: (id: string) => `/guides/${encodeURIComponent(id)}`,
   grammarSession: (id: string) => `/read?${new URLSearchParams({ grammar: id }).toString()}`,
   onboarding: '/welcome',
   /** Log in from the welcome: bring progress from another device (cloud saves). */
