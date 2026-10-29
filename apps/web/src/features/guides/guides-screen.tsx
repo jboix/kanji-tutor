@@ -44,7 +44,14 @@ export function GuidesScreen() {
   const t = useT();
   const back = <BackButton parent={id ? paths.guides : paths.learn} label={t('guides.back')} />;
   return (
-    <Screen topBar={<TopBar start={back} title={id ? undefined : t('guides.title')} />}>
+    <Screen
+      topBar={
+        <TopBar
+          start={back}
+          {...(id ? { section: t('guides.title') } : { title: t('guides.title') })}
+        />
+      }
+    >
       {id ? <Detail id={id} /> : <GuideIndex />}
     </Screen>
   );

@@ -50,7 +50,14 @@ export function GrammarScreen() {
   );
   return (
     // The index's name sits in the bar; a point's page keeps the pattern as its own heading.
-    <Screen topBar={<TopBar start={back} title={id ? undefined : t('grammar.title')} />}>
+    <Screen
+      topBar={
+        <TopBar
+          start={back}
+          {...(id ? { section: t('grammar.title') } : { title: t('grammar.title') })}
+        />
+      }
+    >
       {id ? <Detail id={id} /> : <GrammarIndex />}
     </Screen>
   );

@@ -4,7 +4,8 @@
   justify-content: space-between;
   gap: 10px;
   flex-shrink: 0;
-  padding: max(8px, calc(env(safe-area-inset-top) + 2px)) 14px 0;
+  /* The icons' glyphs, not their 44px tap targets, line up with the content's gutter. */
+  padding: max(8px, calc(env(safe-area-inset-top) + 2px)) max(0px, calc(var(--gutter) - 16px)) 0;
 }
 
 .side {
@@ -16,13 +17,6 @@
   flex-shrink: 0;
 }
 
-/* Back, and close to the last screen with the bottom bar once two or more pages deep. */
-.backs {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-
 .center {
   display: flex;
   flex: 1;
@@ -30,6 +24,16 @@
   min-width: 0;
   font-size: var(--text-sm);
   color: var(--ink-muted);
+}
+
+/* A detail page's list, centred between back and the end's buttons. */
+.section {
+  overflow: hidden;
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 /* A screen's name in the bar: the heading, beside the back button. */
