@@ -159,7 +159,7 @@ export const ui = {
   skipGrammarIntros: 'No explicar primero la gramática nueva',
   skipKanjiIntros: 'No explicar primero los kanji nuevos',
   skipIntrosNote:
-    'A partir de ahora, una etiqueta «Nuevo» en el ejercicio abre la explicación. Desmarca la casilla, aquí o bajo una de esas etiquetas, o vuelve a activarla en Ajustes › Sesiones.',
+    'Pasarás directamente a los ejercicios; toca la etiqueta «Nuevo» de uno para saber más. ¿Has cambiado de idea? Desmarca esta casilla, o vuelve a activarla en Ajustes › Sesiones.',
   showMeaning: 'Ver el significado',
   externalOpen: 'Abrir en {site} (pestaña nueva)',
   externalOpenWhat: 'Abrir {what} en {site} (pestaña nueva)',

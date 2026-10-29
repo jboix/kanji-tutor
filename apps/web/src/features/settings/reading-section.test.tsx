@@ -44,7 +44,7 @@ describe('Reading settings', () => {
     const saved = await repos.settings.get();
     expect(saved.explainGrammar).toBe(false);
     expect(saved.explainKanji).toBeUndefined();
-    expect(screen.getByText(/A “New grammar” chip on the exercise opens/)).toBeTruthy();
+    expect(screen.getByText(/Tap its “New grammar” chip/)).toBeTruthy();
   });
 
   it('starts both from the former single setting', async () => {

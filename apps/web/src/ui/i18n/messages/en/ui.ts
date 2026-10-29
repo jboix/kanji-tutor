@@ -146,7 +146,7 @@ export const ui = {
   skipGrammarIntros: 'Don’t explain new grammar first',
   skipKanjiIntros: 'Don’t explain new kanji first',
   skipIntrosNote:
-    'From now on, a “New” chip on the exercise opens the explanation instead. Untick the box, here or under one of those chips, or turn it back on in Settings › Sessions.',
+    'You’ll go straight to the exercises; tap the “New” chip on one to read about it. Changed your mind? Untick this box, or turn it back on in Settings › Sessions.',
   showMeaning: 'Show meaning',
   externalOpen: 'Open on {site} (new tab)',
   externalOpenWhat: 'Open {what} on {site} (new tab)',

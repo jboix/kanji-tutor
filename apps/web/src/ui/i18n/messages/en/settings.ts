@@ -95,10 +95,10 @@ export const settings = {
   sessionLengthHint: 'About this long, by the time estimate, with only a few new words at a time.',
   explainGrammar: 'Explain new grammar first',
   explainGrammarHint:
-    'Off: no intro card before a new grammar point. A “New grammar” chip on the exercise opens the same explanation instead.',
+    'When off, you go straight to the exercise. Tap its “New grammar” chip to read the explanation.',
   explainKanji: 'Explain new kanji first',
   explainKanjiHint:
-    'Off: no intro card before a new word and its kanji. A “New” chip on the exercise opens the same explanation instead.',
+    'When off, you go straight to the exercise. Tap its “New” chip to read about the word and its kanji.',
   explainFirstOn: 'On',
   explainFirstOff: 'Off',
   sounds: 'Sound',

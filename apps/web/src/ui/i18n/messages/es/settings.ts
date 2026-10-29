@@ -78,10 +78,10 @@ export const settings = {
     'Más o menos este tiempo, según la estimación, con solo unas pocas palabras nuevas a la vez.',
   explainGrammar: 'Explicar primero la gramática nueva',
   explainGrammarHint:
-    'No: sin tarjeta antes de un punto de gramática nuevo. Una etiqueta «Gramática nueva» en el ejercicio abre la misma explicación.',
+    'Desactivado, pasas directamente al ejercicio. Toca su etiqueta «Gramática nueva» para leer la explicación.',
   explainKanji: 'Explicar primero los kanji nuevos',
   explainKanjiHint:
-    'No: sin tarjeta antes de una palabra nueva y sus kanji. Una etiqueta «Nuevo» en el ejercicio abre la misma explicación.',
+    'Desactivado, pasas directamente al ejercicio. Toca su etiqueta «Nuevo» para conocer la palabra y sus kanji.',
   explainFirstOn: 'Sí',
   explainFirstOff: 'No',
   sounds: 'Sonido',

@@ -78,10 +78,10 @@ export const settings = {
     'À peu près cette durée, selon l’estimation, avec seulement quelques mots nouveaux à la fois.',
   explainGrammar: 'Expliquer d’abord la grammaire nouvelle',
   explainGrammarHint:
-    'Non : pas de fiche avant un point de grammaire nouveau. Une pastille « Grammaire nouvelle » sur l’exercice ouvre la même explication.',
+    'Désactivé, vous passez directement à l’exercice. Touchez sa pastille « Grammaire nouvelle » pour lire l’explication.',
   explainKanji: 'Expliquer d’abord les kanji nouveaux',
   explainKanjiHint:
-    'Non : pas de fiche avant un mot nouveau et ses kanji. Une pastille « Nouveau » sur l’exercice ouvre la même explication.',
+    'Désactivé, vous passez directement à l’exercice. Touchez sa pastille « Nouveau » pour découvrir le mot et ses kanji.',
   explainFirstOn: 'Oui',
   explainFirstOff: 'Non',
   sounds: 'Son',

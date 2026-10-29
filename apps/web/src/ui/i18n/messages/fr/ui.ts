@@ -159,7 +159,7 @@ export const ui = {
   skipGrammarIntros: 'Ne plus expliquer d’abord la grammaire nouvelle',
   skipKanjiIntros: 'Ne plus expliquer d’abord les kanji nouveaux',
   skipIntrosNote:
-    'Désormais, une pastille « Nouveau » sur l’exercice ouvre l’explication. Décochez la case, ici ou sous l’une de ces pastilles, ou réactivez-la dans Réglages › Séances.',
+    'Vous passerez directement aux exercices ; touchez la pastille « Nouveau » de l’un d’eux pour en savoir plus. Vous changez d’avis ? Décochez cette case, ou réactivez l’option dans Réglages › Séances.',
   showMeaning: 'Voir le sens',
   externalOpen: 'Ouvrir sur {site} (nouvel onglet)',
   externalOpenWhat: 'Ouvrir {what} sur {site} (nouvel onglet)',

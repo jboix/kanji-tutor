@@ -6,7 +6,7 @@ export const guides = {
   tile: 'Guides',
   tileDetail: 'Groupes de verbes, forme en て, keigo, conjugaison',
   intro:
-    'Des références à consulter pendant votre apprentissage. Chaque leçon qui en a besoin y renvoie.',
+    'Les règles des formes verbales, des adjectifs et du keigo, en tableaux à consulter quand vous voulez.',
   back: 'Retour',
   missing: 'Il n’y a pas de guide nommé {id}.',
   levelTag: 'N{level}',
@@ -25,37 +25,37 @@ export const guides = {
   'verb-groups': 'Groupes de verbes',
   'verb-groupsDetail': 'À quel groupe appartient un verbe, et comment le savoir',
   'verb-groupsLead':
-    'Tous les verbes sauf deux appartiennent au groupe 1 ou au groupe 2, et le groupe décide de leur conjugaison. Au dictionnaire, tout verbe se termine par un son en u.',
+    'Les verbes japonais se répartissent en trois groupes, et le groupe vous dit comment le verbe change. Le groupe 3 ne compte que deux verbes : tout se joue donc entre le groupe 1 et le groupe 2. À la forme du dictionnaire, tout verbe se termine par un son en u.',
   godanTitle: 'Groupe 1 · 五段 (verbes en う)',
   godanText:
-    'Le dernier kana se déplace le long de sa ligne du tableau des kana : 書か・書き・書く・書け・書こ. Devant ます il prend le son en i (書きます), devant ない le son en a (書かない).',
+    'Le dernier kana parcourt sa ligne : 書か・書き・書く・書け・書こ. Devant ます il prend le son en i (書きます), devant ない le son en a (書かない).',
   ichidanTitle: 'Groupe 2 · 一段 (verbes en る)',
   ichidanText:
-    'Ils se terminent en -iru ou -eru, et る tombe tout simplement : 食べる → 食べます, 食べない.',
+    'Ils se terminent en -iru ou -eru. On enlève る et on ajoute la terminaison : 食べる → 食べます, 食べない.',
   irregularTitle: 'Groupe 3 · irréguliers',
   irregularText:
-    'Seulement する et 来る (くる), avec tout nom + する (勉強する). Apprenez leurs formes par cœur.',
+    'Seulement する et 来る (くる), plus tout nom + する, comme 勉強する. Leurs formes valent la peine d’être apprises par cœur.',
   tellTitle: 'Comment le savoir',
   tellText:
-    'Ne finit pas par る : groupe 1. Finit par る après un son en a, u ou o (分かる, 作る, 乗る) : groupe 1. Finit en -iru ou -eru : en général groupe 2, mais quelques verbes courants sont du groupe 1 :',
+    'Ne finit pas par る : groupe 1. Finit par る après un son en a, u ou o (分かる, 作る, 乗る) : groupe 1. Finit en -iru ou -eru : en général groupe 2, mais attention à ces verbes courants du groupe 1 :',
 
   'plain-polite': 'Forme du dictionnaire et forme polie',
   'plain-politeDetail': '辞書形 et ます形, et quand employer chacune',
   'plain-politeLead':
-    'Chaque verbe a une forme neutre (la forme du dictionnaire, 辞書形, et ses dérivées) et une forme polie en ます. Elles ont le même sens ; la forme polie s’emploie avec les personnes dont on n’est pas proche.',
+    'Chaque verbe a une forme neutre, celle du dictionnaire (辞書形), et une forme polie en ます. Elles veulent dire la même chose ; on emploie la forme polie avec les gens dont on n’est pas proche.',
   pairsTitle: 'Les quatre paires',
   pairsText: 'Présent et passé, affirmatif et négatif, la forme neutre à côté de la forme polie :',
   whenTitle: 'Quand on emploie la forme neutre',
   whenText:
-    'Entre amis et en famille, dans les journaux intimes et les articles, et à l’intérieur d’une phrase : devant 〜と思います, 〜ことができます, 〜前に ou un nom (読む本), le verbe reste à la forme neutre, même dans une phrase polie.',
+    'Entre amis et en famille, dans les journaux intimes et les articles. Et à l’intérieur d’une phrase : devant 〜と思います, 〜ことができます, 〜前に ou un nom (読む本), le verbe reste neutre même quand la phrase est polie.',
 
   'te-form': 'La forme en て et la forme en た',
   'te-formDetail': 'Les changements de son, en un seul tableau',
   'te-formLead':
-    'La forme en て relie des actions (〜て、〜), sert à demander (〜てください) et forme 〜ている. La forme en た est le passé neutre. Les deux changent de la même façon : た et だ suivent て et で.',
+    'La forme en て sert à enchaîner des actions (〜て、〜), à demander quelque chose (〜てください) et à former 〜ている. La forme en た est le passé neutre. Les deux changent de la même façon : remplacez て par た, et で par だ.',
   rulesTitle: 'Groupe 1, selon le dernier kana',
   rulesText:
-    'Récitez-le comme une comptine : う・つ・る → って, む・ぶ・ぬ → んで, く → いて, ぐ → いで, す → して.',
+    'Le plus simple est de le réciter comme une comptine : う・つ・る → って, む・ぶ・ぬ → んで, く → いて, ぐ → いで, す → して.',
   othersTitle: 'Groupe 2, irréguliers, et 行く',
   othersText:
     'Le groupe 2 remplace simplement る par て. する et 来る sont irréguliers, et 行く est le seul verbe en く qui prend って.',
@@ -63,13 +63,13 @@ export const guides = {
   adjectives: 'Formes des adjectifs',
   adjectivesDetail: 'Adjectifs en い et en な, forme neutre et forme polie',
   adjectivesLead:
-    'Les adjectifs en い se conjuguent eux-mêmes : leur い change. Les adjectifs en な fonctionnent comme des noms : c’est ce qui les suit qui change.',
+    'Les adjectifs en い changent leur propre terminaison. Les adjectifs en な ne bougent pas, comme des noms : c’est le mot qui suit qui change.',
   iTitle: 'Adjectifs en い',
   iText:
     'い devient くない, かった, くなかった, くて. いい est irrégulier : ses formes viennent de よい (よくない, よかった).',
   naTitle: 'Adjectifs en な',
   naText:
-    'L’adjectif ne change pas ; だ, じゃない, だった et で le suivent. Devant un nom, il prend な : 静かな部屋.',
+    'L’adjectif ne change pas ; だ, じゃない, だった ou で vient après. Devant un nom, ajoutez な : 静かな部屋.',
   rowPresent: 'Présent',
   rowNegative: 'Négatif',
   rowPast: 'Passé',
@@ -79,12 +79,12 @@ export const guides = {
   conjugation: 'Tableau de conjugaison',
   conjugationDetail: 'N’importe quel verbe, à toutes les formes',
   conjugationLead:
-    'Choisissez un verbe, ou tapez n’importe quel verbe à la forme du dictionnaire, pour le voir à toutes les formes. Le niveau indique quand chaque forme est enseignée.',
+    'Choisissez un verbe, ou tapez n’importe quel verbe à la forme du dictionnaire, pour voir toutes ses formes. L’étiquette à côté de chaque forme est le niveau du JLPT où on la rencontre.',
   pickVerb: 'Un verbe',
   typeVerb: 'N’importe quel verbe',
   typeVerbPlaceholder: 'Forme du dictionnaire, par ex. 遊ぶ ou あそぶ',
   notAVerb:
-    '{text} n’est pas un verbe que nous connaissons. Tapez sa forme du dictionnaire, comme 泳ぐ.',
+    'Nous ne connaissons pas le verbe {text}. Essayez sa forme du dictionnaire, comme 泳ぐ.',
   groupOf: 'Groupe {n}',
   formDict: 'Forme du dictionnaire',
   formMasu: 'Polie',
@@ -104,13 +104,13 @@ export const guides = {
   keigo: 'Keigo',
   keigoDetail: 'Langage poli, respectueux et humble',
   keigoLead:
-    'Le keigo a trois niveaux. 丁寧語 est le です et le ます polis. 尊敬語 élève la personne dont vous parlez, pour ce qu’elle fait. 謙譲語 vous abaisse, pour ce que vous faites pour elle.',
+    'Le keigo a trois registres. 丁寧語, ce sont les です et ます polis que vous utilisez déjà. 尊敬語 élève l’autre personne, pour ce qu’elle fait. 謙譲語 vous abaisse, pour ce que vous faites pour elle.',
   verbsTitle: 'Les verbes qui ont leurs propres mots',
   verbsText: 'Les verbes les plus courants deviennent un tout autre mot :',
   patternsTitle: 'Les tournures pour les autres verbes',
-  patternsText: 'La plupart des verbes suivent plutôt une tournure :',
+  patternsText: 'Les autres verbes suivent une tournure :',
   patternoNiNaru: 'Respectueux, pour ce qu’ils font',
-  patternreru: 'Respectueux, plus léger : la forme passive',
+  patternreru: 'Respectueux, plus léger : identique à la forme passive',
   patternoSuru: 'Humble, pour ce que vous faites pour eux',
   patterngoSuru: 'Humble, avec un nom en する',
   sentencesTitle: 'Dans des phrases',
