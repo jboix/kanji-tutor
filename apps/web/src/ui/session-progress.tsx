@@ -10,7 +10,7 @@ export interface SessionProgressProps {
   total: number;
   /** What is done and left; when given, the bar opens it on a press (R13). */
   outline?: SessionOutline | undefined;
-  /** Where the session is, over the bar: the lesson and its section, or the kind of round. */
+  /** Where the session is (shown by `SessionPlace`), for the bar's name. */
   where?: { label: string; content: ReactNode } | undefined;
 }
 
@@ -97,8 +97,17 @@ function useDismiss(open: boolean, close: () => void, root: React.RefObject<HTML
   }, [open, close, root]);
 }
 
+/** Where the session is, between ✕ and ふ: the lesson and its section, or the kind of round. */
+export function SessionPlace({ where }: { where: NonNullable<SessionProgressProps['where']> }) {
+  return (
+    <span className={styles.where} aria-hidden>
+      {where.content}
+    </span>
+  );
+}
+
 /**
- * Where the session is (read.html top bar): one dash per card for short sessions, a continuous
+ * Where the session is (read.html top bar, under the buttons): one dash per card for short sessions, a continuous
  * bar for long ones, and the count. A press shows a small panel of what is done and left (R13).
  */
 export function SessionProgress({ current, total, outline, where }: SessionProgressProps) {
@@ -109,7 +118,7 @@ export function SessionProgress({ current, total, outline, where }: SessionProgr
   useDismiss(open, () => setOpen(false), root);
   const number = Math.min(current + 1, total);
   const label = t('ui.sentenceOf', { current: number, total });
-  // The visible text first, as it reads: the caption, then the count.
+  // As it reads: the place over the bar, then the count.
   const shown = where ? `${where.label} ${number}/${total}` : `${number}/${total}`;
   return (
     <span ref={root} className={styles.root}>
@@ -122,13 +131,9 @@ export function SessionProgress({ current, total, outline, where }: SessionProgr
         disabled={!outline}
         onClick={() => setOpen((was) => !was)}
       >
-        {/* The space keeps the text as it is named: "Daily mix 1/7", not "Daily mix1/7". */}
-        {where && <span className={styles.where}>{where.content} </span>}
-        <span className={styles.line}>
-          <Bar current={current} total={total} />
-          <span className={styles.count} aria-hidden>
-            {number}/{total}
-          </span>
+        <Bar current={current} total={total} />
+        <span className={styles.count} aria-hidden>
+          {number}/{total}
         </span>
       </button>
       {open && outline && <Panel outline={outline} id={id} />}

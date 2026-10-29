@@ -20,7 +20,7 @@ import { CloseIcon } from '../../ui/icons.tsx';
 import { paths } from '../../ui/paths.ts';
 import { PeekProvider } from '../../ui/peek-link.tsx';
 import { Screen } from '../../ui/screen.tsx';
-import { SessionProgress } from '../../ui/session-progress.tsx';
+import { SessionPlace, SessionProgress } from '../../ui/session-progress.tsx';
 import { useSlot } from '../../ui/slots.tsx';
 import { TopBar } from '../../ui/top-bar.tsx';
 import { DrillScreen } from './drill-screen.tsx';
@@ -104,7 +104,8 @@ function ReadTopBar(props: {
   return (
     <TopBar
       start={<SessionClose />}
-      center={
+      center={props.where && <SessionPlace where={props.where} />}
+      below={
         <SessionProgress
           current={props.index}
           total={props.total}

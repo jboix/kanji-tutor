@@ -1,11 +1,20 @@
 .bar {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   justify-content: space-between;
-  gap: 10px;
+  gap: 0 10px;
   flex-shrink: 0;
   /* The icons' glyphs, not their 44px tap targets, line up with the content's gutter. */
   padding: max(8px, calc(env(safe-area-inset-top) + 2px)) max(0px, calc(var(--gutter) - 16px)) 0;
+}
+
+/* The second row: as wide as the content, under the buttons. */
+.below {
+  display: flex;
+  flex-basis: 100%;
+  min-width: 0;
+  padding: 0 var(--gutter);
 }
 
 .side {
@@ -54,6 +63,7 @@
   padding-top: calc(env(safe-area-inset-top) + 2px);
 }
 
-:global(:root[data-keyboard="open"]) .center {
+:global(:root[data-keyboard="open"]) .center,
+:global(:root[data-keyboard="open"]) .below {
   visibility: hidden;
 }

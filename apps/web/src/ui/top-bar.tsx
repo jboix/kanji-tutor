@@ -15,6 +15,8 @@ export interface TopBarProps {
   title?: ReactNode;
   /** The name of the list a detail page belongs to ("Guides"), centred, in place of `center`. */
   section?: ReactNode;
+  /** A second row across the whole width, under the buttons: a session's progress. */
+  below?: ReactNode;
 }
 
 /** A plain back (not a session's close, which passes its own icon) earns close at the end. */
@@ -35,7 +37,7 @@ function End({ end, close }: { end: ReactNode; close: boolean }) {
 }
 
 /** The screen top bar from read/voice/compose/handwrite.html: 44px slots either side. */
-export function TopBar({ start, center, end, title, section }: TopBarProps) {
+export function TopBar({ start, center, end, title, section, below }: TopBarProps) {
   const close = isBack(start);
   if (title !== undefined) {
     return (
@@ -53,6 +55,7 @@ export function TopBar({ start, center, end, title, section }: TopBarProps) {
         {section === undefined ? center : <span className={styles.section}>{section}</span>}
       </div>
       <End end={end} close={close} />
+      {below !== undefined && <div className={styles.below}>{below}</div>}
     </header>
   );
 }
