@@ -26,6 +26,16 @@ export const afterPlain: Matcher = alt(
   prev({ pos: 'auxiliary', surface: ['た', 'だ', 'ない', 'たい'] }),
 );
 
+/**
+ * Zero-width: a whole clause ends here, plain or polite (行くが, 高いが, 学生ですが, いませんが).
+ * A stem never does: いかが split as いか (行く) + が is not one.
+ */
+export const afterClause: Matcher = alt(
+  prev({ pos: 'verb', plain: true }),
+  prev({ pos: 'adjective', plain: true }),
+  prev({ pos: 'auxiliary', surface: ['た', 'だ', 'ない', 'たい', 'です', 'ます', 'ん'] }),
+);
+
 /** Zero-width: the token before is a verb in its dictionary form. */
 export const afterDict: Matcher = prev({ pos: 'verb', plain: true });
 

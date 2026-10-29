@@ -18,6 +18,7 @@ import {
   text,
   tok,
 } from './dsl.ts';
+import { GRAMMAR_CATALOGUE } from './index.ts';
 import type { GrammarEntry } from './types.ts';
 
 /** Hand-built tokens in the pack's shape: [surface, base, pos]. */
@@ -127,5 +128,27 @@ describe('detection', () => {
       level: ENTRY.level,
       exampleSentenceIds: [],
     });
+  });
+
+  it('takes が as "but" only after a whole clause, never inside いかが', () => {
+    const gaBut = GRAMMAR_CATALOGUE.find((entry) => entry.id === 'ga-but');
+    // いかがですか, read by the tokenizer as いか (行く) + が.
+    const split = tokens(
+      ['いか', 'いく', 'verb'],
+      ['が', 'が', 'particle'],
+      ['です', 'です', 'auxiliary'],
+      ['か', 'か', 'particle'],
+    );
+    // 兄はいませんが, 妹がいます.
+    const clause = tokens(
+      ['兄', '兄', 'noun'],
+      ['は', 'は', 'particle'],
+      ['い', 'いる', 'verb'],
+      ['ませ', 'ます', 'auxiliary'],
+      ['ん', 'ん', 'auxiliary'],
+      ['が', 'が', 'particle'],
+    );
+    expect(gaBut && detectEntry(gaBut, split)).toBeUndefined();
+    expect(gaBut && detectEntry(gaBut, clause)?.from).toBe(6);
   });
 });

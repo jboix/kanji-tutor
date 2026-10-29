@@ -316,6 +316,36 @@ describe('clozeDrill', () => {
     ).toBeUndefined();
   });
 
+  it('blanks only whole tokens: が inside いかが is not the pattern が', () => {
+    const word = (surface: string, pos: string, start: number) => ({
+      surface,
+      reading: surface,
+      base: surface,
+      pos,
+      start,
+    });
+    const ikaga: Sentence = {
+      ...S.waiting,
+      id: 'ikaga',
+      text: 'いかがですか。',
+      tokens: [
+        word('いかが', 'noun', 0),
+        word('です', 'auxiliary', 3),
+        word('か', 'particle', 5),
+        word('。', 'symbol', 6),
+      ],
+    };
+    const ga = [point('が', '〜が'), ...points];
+    const drill = clozeDrill({
+      points: ga,
+      prefer: ['が'],
+      sentences: [ikaga],
+      levels: allKnown,
+      seed: 'd',
+    });
+    expect(drill?.grammarId).not.toBe('が');
+  });
+
   it('prefers planned points and tagged sentences', () => {
     const tagged: Sentence = { ...S.waiting, id: 'tagged', grammarIds: ['ている'] };
     const drill = clozeDrill({

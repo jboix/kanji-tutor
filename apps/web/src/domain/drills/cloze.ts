@@ -27,9 +27,23 @@ export function patternText(pattern: string): string {
   return /[〜~～]/u.test(text) ? '' : text;
 }
 
+/**
+ * Where the sentence writes the pattern out as whole tokens, or -1: が inside いかが, or the
+ * end of a longer word, is not the pattern.
+ */
+function spanOf(sentence: Sentence, text: string): number {
+  const starts = new Set(sentence.tokens.map((t) => t.start));
+  const ends = new Set(sentence.tokens.map((t) => t.start + t.surface.length));
+  let at = sentence.text.indexOf(text);
+  while (at >= 0 && !(starts.has(at) && ends.has(at + text.length))) {
+    at = sentence.text.indexOf(text, at + 1);
+  }
+  return at;
+}
+
 /** A sentence that writes the pattern out and has no unknown word: the pattern is the target. */
 function carries(sentence: Sentence, text: string, levels: WordLevels): boolean {
-  return sentence.text.includes(text) && unknownTokens(sentence, levels).length === 0;
+  return spanOf(sentence, text) >= 0 && unknownTokens(sentence, levels).length === 0;
 }
 
 function choicesFor(point: GrammarPoint, input: ClozeInput, sentence: Sentence) {
@@ -47,7 +61,7 @@ function drillFor(point: GrammarPoint, input: ClozeInput, sentence: Sentence) {
   const text = patternText(point.pattern);
   const choices = choicesFor(point, input, sentence);
   if (choices.length < 2) return undefined;
-  const start = sentence.text.indexOf(text);
+  const start = spanOf(sentence, text);
   const drill: ClozeDrill = {
     kind: 'cloze',
     sentence,

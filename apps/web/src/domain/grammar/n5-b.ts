@@ -1,5 +1,6 @@
 /** N5 grammar, part B: permission, time, reasons, contrast, comparison, lists and amounts. */
 import {
+  afterClause,
   afterDict,
   afterNoun,
   afterPast,
@@ -164,7 +165,7 @@ export const N5_B: readonly GrammarEntry[] = [
     explanation:
       'が after a full sentence joins it to the next one with "but". It can also soften a lead-in before a request or a question.',
     cloze: ['が'],
-    rule: seq(afterPred, tok({ surface: 'が', pos: 'particle' })),
+    rule: seq(afterClause, tok({ surface: 'が', pos: 'particle' })),
   },
   {
     id: 'kedo',
