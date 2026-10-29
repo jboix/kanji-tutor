@@ -15,6 +15,7 @@ import type { SessionCard } from '../../domain/session-types.ts';
 import { BottomNav } from '../../ui/bottom-nav.tsx';
 import { cx } from '../../ui/cx.ts';
 import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
+import { BackIcon } from '../../ui/icons.tsx';
 import { Ja } from '../../ui/ja.tsx';
 import { SECTION_NAME } from '../../ui/lesson-sections.ts';
 import { paths } from '../../ui/paths.ts';
@@ -222,33 +223,39 @@ export function SessionEnd(props: SessionEndProps) {
   const actions = { missed, unit, lesson, again, at: at.actions };
   return (
     <Screen footer={<EndFooter {...actions} />} gap={22}>
+      {unit && <BackToUnit unit={unit} />}
+      {scan && <BackToLesson scan={scan} />}
       <DoneHeader minutes={minutes} />
       <Counts counts={endCounts(sentences, tally)} />
       {met && <NewToday shown={shown} rest={rest} at={at.news} />}
       {met && <LookAgain missed={missed} at={at.again} />}
-      {unit && <BackToUnit unit={unit} />}
-      {scan && <BackToLesson scan={scan} />}
     </Screen>
   );
 }
 
-/** A unit practice keeps its way back to the unit (T3), under the lists. */
+/** A small pill back to where the session came from, at the top, there from the start. */
+function ReturnPill({ to, children }: { to: string; children: string }) {
+  return (
+    <Link to={to} replace className={end.return}>
+      <BackIcon />
+      {children}
+    </Link>
+  );
+}
+
+/** A unit practice keeps its way back to the unit (T3). */
 function BackToUnit({ unit }: { unit: string }) {
   const t = useT();
-  return (
-    <PillLink to={paths.unit(unit)} replace variant="secondary">
-      {t('read.backToUnit')}
-    </PillLink>
-  );
+  return <ReturnPill to={paths.unit(unit)}>{t('read.backToUnit')}</ReturnPill>;
 }
 
 /** A scanned lesson's practice goes back to its lesson page. */
 function BackToLesson({ scan }: { scan: string }) {
   const t = useT();
   return (
-    <PillLink to={`${paths.capture}?id=${encodeURIComponent(scan)}`} replace variant="secondary">
+    <ReturnPill to={`${paths.capture}?id=${encodeURIComponent(scan)}`}>
       {t('read.backToLesson')}
-    </PillLink>
+    </ReturnPill>
   );
 }
 

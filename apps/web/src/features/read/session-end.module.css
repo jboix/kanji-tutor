@@ -334,3 +334,28 @@
     animation: none;
   }
 }
+
+/* Back to the unit or the scanned lesson: a small soft pill at the top, not animated. */
+.return {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px 0 10px;
+  border-radius: var(--radius-pill);
+  background: var(--paper-soft);
+  color: var(--ink);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.return:active {
+  background: color-mix(in srgb, var(--ink) 8%, var(--paper-soft));
+}
+
+.return svg {
+  width: 16px;
+  height: 16px;
+}

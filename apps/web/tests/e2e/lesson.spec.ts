@@ -80,7 +80,11 @@ test('a unit lesson, section by section, then every section done', async ({ page
     expect(seen, type).toContain(type);
   }
 
-  await page.getByRole('link', { name: 'Back to the unit' }).click();
+  // The way back sits at the top, there before the counts rise in.
+  const back = page.getByRole('link', { name: 'Back to the unit' });
+  await expect(back).toBeInViewport();
+  await page.screenshot({ path: test.info().outputPath('session-end.png') });
+  await back.click();
   await expect(page).toHaveURL(/\/units\/i-am-a-student$/);
   for (const row of await rows.all()) await expect(row).toContainText('Done');
 });
