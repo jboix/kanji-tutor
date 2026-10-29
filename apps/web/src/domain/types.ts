@@ -402,11 +402,18 @@ export interface Settings {
   /** About how long a session or lesson takes, in minutes (L6); absent means 5. */
   sessionMinutes?: SessionMinutes;
   /**
-   * "Explain new things first" (L7): new words and grammar get an intro card before their first
-   * exercise. When false, the exercise shows a "New" chip that opens the same intro in a sheet.
-   * Absent means on.
+   * The former "Explain new things first" (L7), for both new words and grammar. Kept so the two
+   * settings that replaced it start from its value (`explainsGrammar`, `explainsKanji`).
    */
   explainFirst?: boolean;
+  /**
+   * "Explain new grammar first" (L7): a new grammar point gets an intro card before its first
+   * exercise. When false, the exercise shows a "New grammar" chip that opens the same intro in a
+   * sheet. Absent follows `explainFirst`, then on.
+   */
+  explainGrammar?: boolean;
+  /** "Explain new kanji first" (L7): the same for a new word and its kanji. */
+  explainKanji?: boolean;
   /**
    * When the tutor runs (A13): only when asked (absent or 'on-ask', the default), or also to
    * explain each wrong answer automatically ('auto-mistakes'). Skips are never explained.

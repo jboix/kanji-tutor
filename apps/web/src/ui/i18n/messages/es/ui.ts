@@ -156,6 +156,10 @@ export const ui = {
   packLoading: 'Instalando los significados en {language}',
   packFailed: 'El paquete de idioma no se cargó. Revisa la conexión e inténtalo de nuevo.',
   packInstalled: 'Los significados y las traducciones en {language} están instalados.',
+  skipGrammarIntros: 'No explicar primero la gramática nueva',
+  skipKanjiIntros: 'No explicar primero los kanji nuevos',
+  skipIntrosNote:
+    'A partir de ahora, una etiqueta «Nuevo» en el ejercicio abre la explicación. Desmarca la casilla, aquí o bajo una de esas etiquetas, o vuelve a activarla en Ajustes › Sesiones.',
   showMeaning: 'Ver el significado',
   externalOpen: 'Abrir en {site} (pestaña nueva)',
   externalOpenWhat: 'Abrir {what} en {site} (pestaña nueva)',

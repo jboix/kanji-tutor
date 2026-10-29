@@ -204,6 +204,8 @@ const settings = z.object({
   writeKanji: z.enum(['draw', 'type']).exactOptional(),
   sessionMinutes: z.union([z.literal(5), z.literal(10), z.literal(15)]).exactOptional(),
   explainFirst: z.boolean().exactOptional(),
+  explainGrammar: z.boolean().exactOptional(),
+  explainKanji: z.boolean().exactOptional(),
   tutor: z.enum(['on-ask', 'auto-mistakes']).exactOptional(),
   immersion: z.enum(['auto', 'native', 'mixed', 'japanese']).exactOptional(),
   practice: z.enum(['mix', 'lesson', 'reading', 'grammar', 'kanji']).exactOptional(),

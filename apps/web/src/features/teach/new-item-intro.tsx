@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { answerSpan } from '../../domain/services/index.ts';
+import { ExplainToggle } from '../../ui/explain-new.tsx';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { PillButton } from '../../ui/pill-button.tsx';
 import { SectionLabel } from '../../ui/section-label.tsx';
@@ -89,6 +90,7 @@ function IntroCard({ card, target, onDone }: IntroSlotProps) {
         readings
         hook={<MemoryHookView teaching={teaching} sentence={card.sentence.text} />}
       />
+      <ExplainToggle kind="kanji" />
       <StickyActions>
         <TutorNext tutor={tutor}>
           <PillButton block onClick={gotIt}>

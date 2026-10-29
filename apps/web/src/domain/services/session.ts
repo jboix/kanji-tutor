@@ -7,6 +7,7 @@
 import { loadContentLanguage } from '../content-language.ts';
 import { explanationLanguageOf } from '../defaults.ts';
 import { DEFAULT_DRILL_SHARE } from '../drills/index.ts';
+import { explainsGrammar } from '../explain-new.ts';
 import { isoWeek } from '../ids.ts';
 import { type MixQuestionsOptions, makeQuestions, makeSessionQuestions } from '../questions/mix.ts';
 import type { Repos } from '../repos.ts';
@@ -149,7 +150,7 @@ interface MixInput {
   sentences: SessionCard['sentence'][];
   recent: string[];
   mix: SessionMix | undefined;
-  /** "Explain new things first" (L7): grammar intro cards, else a chip on the exercise. */
+  /** "Explain new grammar first" (L7): grammar intro cards, else a chip on the exercise. */
   explainFirst: boolean;
 }
 
@@ -384,7 +385,7 @@ async function buildReading(repos: Repos, options: BuildSessionOptions) {
   if (focus) return selectCards({ ...select, size });
   const cards = selectCards({ ...select, size: size * 2 });
   const kept = (await capped(repos, cards, pool, size)).map((c) => finish(c, false));
-  const explainFirst = settings.explainFirst !== false;
+  const explainFirst = explainsGrammar(settings);
   const mixed = await mixSession(repos, kept, {
     options,
     pool,

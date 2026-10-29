@@ -3,6 +3,7 @@ import { useLocation } from 'react-router';
 import { localPoint } from '../../domain/content-language.ts';
 import type { FunctionWord, GrammarEntry } from '../../domain/grammar/index.ts';
 import { EnMark } from '../../ui/en-mark.tsx';
+import { ExplainToggle } from '../../ui/explain-new.tsx';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { paths } from '../../ui/paths.ts';
 import { PeekLink } from '../../ui/peek-link.tsx';
@@ -87,6 +88,7 @@ function IntroCard({ entry: source, onDone }: { entry: Point; onDone: () => void
         <EnMark english={english} />
       </p>
       {isFunctionWord(entry) ? <WordBody word={entry} /> : <PointBody entry={entry} />}
+      <ExplainToggle kind="grammar" />
       <StickyActions>
         <div className={styles.actions}>
           <TutorNext tutor={tutor}>

@@ -48,16 +48,18 @@ export interface NewChipsProps {
   /** The target being read, on a reading card. */
   target?: Target | undefined;
   answered?: boolean;
+  /** The new grammar points to chip: the card's own, and any whose intro was passed over. */
+  grammar?: readonly string[] | undefined;
 }
 
-export function NewChips({ card, target, answered = false }: NewChipsProps) {
+export function NewChips({ card, target, answered = false, grammar }: NewChipsProps) {
   const WordChip = useSlot('newWordChip');
   return (
     <>
       {WordChip && target && (
         <WordChip key={target.itemId} card={card} target={target} answered={answered} />
       )}
-      {(card.newGrammar ?? []).map((id) => (
+      {(grammar ?? card.newGrammar ?? []).map((id) => (
         <GrammarChip key={id} grammarId={id} />
       ))}
     </>

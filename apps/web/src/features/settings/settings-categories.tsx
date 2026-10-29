@@ -1,5 +1,6 @@
 /** The Settings categories (IA5): each a sub-screen with the sections it groups. */
 import type { ReactNode } from 'react';
+import { type ExplainSettings, explainsGrammar, explainsKanji } from '../../domain/explain-new.ts';
 import { DEFAULT_SESSION_MINUTES } from '../../domain/services/index.ts';
 import type { Settings } from '../../domain/types.ts';
 import type { PlainKey, Translate } from '../../ui/i18n/types.ts';
@@ -64,13 +65,20 @@ const THEME: Record<Settings['theme'], PlainKey> = {
   dark: 'settings.themeDark',
 };
 
+/** Both explained first, neither, or the one that is. */
+function explainDetail(settings: ExplainSettings): PlainKey {
+  const grammar = explainsGrammar(settings);
+  const kanji = explainsKanji(settings);
+  if (grammar && kanji) return 'settings.catExplainFirst';
+  if (grammar) return 'settings.catExplainGrammar';
+  return kanji ? 'settings.catExplainKanji' : 'settings.catSkipFirst';
+}
+
 function sessionsDetail(t: Translate, settings: Settings | undefined): string {
   const minutes = t('settings.sessionMinutes', {
     n: settings?.sessionMinutes ?? DEFAULT_SESSION_MINUTES,
   });
-  const explain =
-    settings?.explainFirst === false ? 'settings.catSkipFirst' : 'settings.catExplainFirst';
-  return t('settings.catSessionsLine', { minutes, explain: t(explain) });
+  return t('settings.catSessionsLine', { minutes, explain: t(explainDetail(settings ?? {})) });
 }
 
 /** "Dark", or "Dark · Sound off" once sound is off. */

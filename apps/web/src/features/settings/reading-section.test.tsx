@@ -34,15 +34,27 @@ describe('Reading settings', () => {
     expect((await repos.settings.get()).sessionMinutes).toBe(15);
   });
 
-  it('turns "Explain new things first" off, on by default (L7)', async () => {
+  it('turns "Explain new grammar first" off on its own, on by default (L7)', async () => {
     const repos = setup();
-    const group = await screen.findByRole('group', { name: 'Explain new things first' });
-    expect(within(group).getByLabelText('On')).toHaveProperty('checked', true);
-    await userEvent.click(within(group).getByLabelText('Off'));
-    expect((await repos.settings.get()).explainFirst).toBe(false);
-    expect(
-      screen.getByText(/A "New" chip on the exercise opens the same explanation/),
-    ).toBeTruthy();
+    const grammar = await screen.findByRole('group', { name: 'Explain new grammar first' });
+    const kanji = screen.getByRole('group', { name: 'Explain new kanji first' });
+    expect(within(grammar).getByLabelText('On')).toHaveProperty('checked', true);
+    expect(within(kanji).getByLabelText('On')).toHaveProperty('checked', true);
+    await userEvent.click(within(grammar).getByLabelText('Off'));
+    const saved = await repos.settings.get();
+    expect(saved.explainGrammar).toBe(false);
+    expect(saved.explainKanji).toBeUndefined();
+    expect(screen.getByText(/A “New grammar” chip on the exercise opens/)).toBeTruthy();
+  });
+
+  it('starts both from the former single setting', async () => {
+    const repos = createMemoryRepos();
+    await repos.settings.patch({ explainFirst: false });
+    renderSettingsSection('sessions', { services: fakeServices({ repos }) });
+    const grammar = await screen.findByRole('group', { name: 'Explain new grammar first' });
+    const kanji = screen.getByRole('group', { name: 'Explain new kanji first' });
+    expect(within(grammar).getByLabelText('Off')).toHaveProperty('checked', true);
+    expect(within(kanji).getByLabelText('Off')).toHaveProperty('checked', true);
   });
 
   it('switches "Write the kanji" from drawn to typed, drawn by default', async () => {

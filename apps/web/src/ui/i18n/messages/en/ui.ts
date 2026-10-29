@@ -143,6 +143,10 @@ export const ui = {
   packLoading: 'Installing the meanings in {language}',
   packFailed: 'The language pack did not load. Check the connection and try again.',
   packInstalled: 'Meanings and translations in {language} are installed.',
+  skipGrammarIntros: 'Don’t explain new grammar first',
+  skipKanjiIntros: 'Don’t explain new kanji first',
+  skipIntrosNote:
+    'From now on, a “New” chip on the exercise opens the explanation instead. Untick the box, here or under one of those chips, or turn it back on in Settings › Sessions.',
   showMeaning: 'Show meaning',
   externalOpen: 'Open on {site} (new tab)',
   externalOpenWhat: 'Open {what} on {site} (new tab)',

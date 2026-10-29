@@ -76,11 +76,14 @@ export const settings = {
   sessionMinutes: '{n} min',
   sessionLengthHint:
     'À peu près cette durée, selon l’estimation, avec seulement quelques mots nouveaux à la fois.',
-  explainFirst: 'Expliquer d’abord les nouveautés',
+  explainGrammar: 'Expliquer d’abord la grammaire nouvelle',
+  explainGrammarHint:
+    'Non : pas de fiche avant un point de grammaire nouveau. Une pastille « Grammaire nouvelle » sur l’exercice ouvre la même explication.',
+  explainKanji: 'Expliquer d’abord les kanji nouveaux',
+  explainKanjiHint:
+    'Non : pas de fiche avant un mot nouveau et ses kanji. Une pastille « Nouveau » sur l’exercice ouvre la même explication.',
   explainFirstOn: 'Oui',
   explainFirstOff: 'Non',
-  explainFirstHint:
-    'Non : pas de fiche d’introduction. Une pastille « Nouveau » sur l’exercice ouvre la même explication.',
   sounds: 'Son',
   soundHint:
     'Les tons des réponses et le japonais lu à voix haute. Désactivé, l’app reste silencieuse : les boutons haut-parleur disparaissent et les séances n’ont plus d’écoute.',
@@ -194,6 +197,8 @@ export const settings = {
   catSessionsLine: '{minutes} · {explain}',
   catExplainFirst: 'expliquer d’abord les nouveautés',
   catSkipFirst: 'nouveautés sur une pastille',
+  catExplainGrammar: 'expliquer d’abord la grammaire',
+  catExplainKanji: 'expliquer d’abord les kanji',
   catTutor: 'Tuteur IA',
   catTutorDetail: 'Clé, modèle, façon d’expliquer, usage',
   catLanguage: 'Langue',

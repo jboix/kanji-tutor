@@ -1,4 +1,5 @@
 import { useId, useState } from 'react';
+import { explainsGrammar, explainsKanji } from '../../domain/explain-new.ts';
 import { DEFAULT_SESSION_MINUTES } from '../../domain/services/index.ts';
 import type { FuriganaMode, SessionMinutes, Settings } from '../../domain/types.ts';
 import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
@@ -79,16 +80,23 @@ function LengthField({ settings, onPatch }: Props) {
   );
 }
 
-/** Intro cards before new words and grammar (L7), and the default furigana (R4). */
+/** Intro cards before new grammar and before new words and their kanji (L7), and the default furigana (R4). */
 function TeachingChoices({ settings, onPatch }: Props) {
   return (
     <>
       <ChoiceField
-        name="settings.explainFirst"
-        hintKey="settings.explainFirstHint"
+        name="settings.explainGrammar"
+        hintKey="settings.explainGrammarHint"
         options={ON_OFF}
-        value={settings.explainFirst === false ? 'off' : 'on'}
-        onChange={(value) => onPatch({ explainFirst: value === 'on' })}
+        value={explainsGrammar(settings) ? 'on' : 'off'}
+        onChange={(value) => onPatch({ explainGrammar: value === 'on' })}
+      />
+      <ChoiceField
+        name="settings.explainKanji"
+        hintKey="settings.explainKanjiHint"
+        options={ON_OFF}
+        value={explainsKanji(settings) ? 'on' : 'off'}
+        onChange={(value) => onPatch({ explainKanji: value === 'on' })}
       />
       <ChoiceField
         name="settings.furigana"

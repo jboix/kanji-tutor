@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { answerSpan } from '../../domain/services/index.ts';
 import { BottomSheet } from '../../ui/bottom-sheet.tsx';
 import { Chip } from '../../ui/chip.tsx';
+import { ExplainToggle } from '../../ui/explain-new.tsx';
 import { useI18n } from '../../ui/i18n/i18n.tsx';
 import { Ja } from '../../ui/ja.tsx';
 import { RuledSentence } from '../../ui/ruled-sentence.tsx';
@@ -68,6 +69,7 @@ export function NewWordChip(props: NewWordChipSlotProps) {
       >
         <div className={styles.card}>
           <Body {...props} />
+          <ExplainToggle kind="kanji" />
         </div>
       </BottomSheet>
     </>

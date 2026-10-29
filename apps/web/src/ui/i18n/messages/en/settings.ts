@@ -8,6 +8,8 @@ export const settings = {
   catSessionsLine: '{minutes} · {explain}',
   catExplainFirst: 'explain new things first',
   catSkipFirst: 'new things on a chip',
+  catExplainGrammar: 'explain new grammar first',
+  catExplainKanji: 'explain new kanji first',
   catTutor: 'AI tutor',
   catTutorDetail: 'Key, model, how it explains, use',
   catLanguage: 'Language',
@@ -91,11 +93,14 @@ export const settings = {
   sessionLength: 'Session length',
   sessionMinutes: '{n} min',
   sessionLengthHint: 'About this long, by the time estimate, with only a few new words at a time.',
-  explainFirst: 'Explain new things first',
+  explainGrammar: 'Explain new grammar first',
+  explainGrammarHint:
+    'Off: no intro card before a new grammar point. A “New grammar” chip on the exercise opens the same explanation instead.',
+  explainKanji: 'Explain new kanji first',
+  explainKanjiHint:
+    'Off: no intro card before a new word and its kanji. A “New” chip on the exercise opens the same explanation instead.',
   explainFirstOn: 'On',
   explainFirstOff: 'Off',
-  explainFirstHint:
-    'Off: no intro cards. A "New" chip on the exercise opens the same explanation instead.',
   sounds: 'Sound',
   soundHint:
     'Answer tones and spoken Japanese. Off, the app makes no sound: the speaker buttons hide and sessions leave out listening.',

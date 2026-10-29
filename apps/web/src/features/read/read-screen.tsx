@@ -1,4 +1,4 @@
-import { type ReactNode, useCallback, useEffect, useState } from 'react';
+import { type ReactNode, useCallback, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router';
 import { MAX_DRILL_SHARE } from '../../domain/drills/index.ts';
 import {
@@ -12,6 +12,7 @@ import type { SessionCard } from '../../domain/session-types.ts';
 import type { AnswerMode } from '../../domain/types.ts';
 import { BackButton } from '../../ui/back-button.tsx';
 import { ExerciseChips } from '../../ui/exercise-help.tsx';
+import { ExplainNewContext } from '../../ui/explain-new.tsx';
 import { AllFuriganaContext, useFuriganaToggle } from '../../ui/furigana-mode.tsx';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { IconButton } from '../../ui/icon-button.tsx';
@@ -19,21 +20,21 @@ import { CloseIcon } from '../../ui/icons.tsx';
 import { paths } from '../../ui/paths.ts';
 import { PeekProvider } from '../../ui/peek-link.tsx';
 import { Screen } from '../../ui/screen.tsx';
-import { useServices } from '../../ui/services.tsx';
 import { SessionProgress } from '../../ui/session-progress.tsx';
 import { useSlot } from '../../ui/slots.tsx';
 import { TopBar } from '../../ui/top-bar.tsx';
 import { DrillScreen } from './drill-screen.tsx';
+import { type SessionExplain, useOnArrival, useSessionExplain } from './explain-session.ts';
 import { GrammarIntroScreen } from './grammar-intro-screen.tsx';
 import { HandoutScreen } from './handout-screen.tsx';
 import { useLessonOpening } from './lesson-opening.tsx';
-import { NewChips } from './new-chips.tsx';
 import { QuestionCardScreen } from './question-screen.tsx';
 import styles from './read.module.css';
 import { AnswerActions, NextActions } from './read-actions.tsx';
 import { againPlan } from './session-again.ts';
 import { CopyModeContext, useCopyMode } from './session-copy.tsx';
 import { EmptySession, SessionEnd } from './session-end.tsx';
+import { CardChips, SkipIntro, useSkippedGrammar } from './session-intros.tsx';
 import { roundOf } from './session-round.ts';
 import { current, currentCard, lastStep } from './session-state.ts';
 import { SessionView } from './session-view.tsx';
@@ -79,16 +80,6 @@ function mixRequest(params: URLSearchParams): SessionRequest {
   if (params.get('cards') === 'kanji') return { kanjiCards: true };
   const mix = { ...drills, ...questions, ...readOnly, ...lesson, ...(grammar ? { grammar } : {}) };
   return kanji && reading ? { focus: { kanji, reading }, ...mix } : mix;
-}
-
-/** "Explain new things first" (L7); on until the setting says otherwise. */
-function useExplainFirst(): boolean {
-  const { repos } = useServices();
-  const [on, setOn] = useState(true);
-  useEffect(() => {
-    void repos.settings.get().then((settings) => setOn(settings.explainFirst !== false));
-  }, [repos]);
-  return on;
 }
 
 /** The session's close: back to where it was opened from, or Today. */
@@ -250,26 +241,44 @@ function SessionTopBar(props: {
   return <ReadTopBar index={index} total={total} outline={outline} {...props} />;
 }
 
-/** With explanations skipped, the current card's "New" chips for its help bar (L7). */
-function CardChips({ state }: { state: SessionControls['state'] }) {
-  const card = currentCard(state);
-  if (!card) return null;
-  const answered = state.answered !== undefined;
-  const key = `${state.index}:${state.step}`;
-  return <NewChips key={key} card={card} target={current(state)?.target} answered={answered} />;
+interface SessionProps {
+  controls: SessionControls;
+  where: SessionWhere;
+  explain: SessionExplain;
 }
 
-function Session({ controls, where }: { controls: SessionControls; where: SessionWhere }) {
-  const [all, toggle] = useFuriganaToggle();
-  const explainFirst = useExplainFirst();
+/**
+ * What the current card shows: a grammar intro passed over, an exercise card, or the sentence
+ * (behind a word's intro when it is explained first), with its "New" chips.
+ */
+function useCardBody({ controls, explain }: SessionProps, topBar: ReactNode, all: boolean) {
   const [voice, setVoice] = useState(false);
+  const { state } = controls;
+  const key = `${state.index}:${state.step}`;
+  const kanjiFirst = useOnArrival(key, explain.on.kanji);
+  const skipGrammar = useOnArrival(key, explain.started.grammar && !explain.on.grammar);
+  const skipped = useSkippedGrammar(state, controls.finishIntro);
+  const card = currentCard(state);
+  const reading = { controls, topBar, all, voice, onVoice: setVoice, explainFirst: kanjiFirst };
+  const intro = card?.grammarIntro;
+  const body =
+    intro && skipGrammar ? (
+      <SkipIntro onSkip={() => skipped.skip(intro)} />
+    ) : (
+      (card && exerciseScreen(card, topBar, controls)) || <Reading {...reading} />
+    );
+  const chips = <CardChips state={state} words={!kanjiFirst} grammar={skipped.ids} />;
+  return { body, chips };
+}
+
+function Session(props: SessionProps) {
+  const { controls, where, explain } = props;
+  const [all, toggle] = useFuriganaToggle();
   const { state } = controls;
   useGradeSound(state.answered?.grade);
   const topBar = <SessionTopBar state={state} where={where} all={all} onToggle={toggle} />;
   const card = currentCard(state);
-  const reading = { controls, topBar, all, voice, onVoice: setVoice, explainFirst };
-  const body = (card && exerciseScreen(card, topBar, controls)) || <Reading {...reading} />;
-  const chips = explainFirst ? null : <CardChips state={state} />;
+  const { body, chips } = useCardBody(props, topBar, all);
   // The card's type, sentence level and sentence, for tests: the level gate (G3), the retry.
   return (
     <div
@@ -281,7 +290,9 @@ function Session({ controls, where }: { controls: SessionControls; where: Sessio
     >
       {/* ふ reaches every view of the card: intro, exercise, sheets (R12). */}
       <AllFuriganaContext value={all}>
-        <ExerciseChips value={chips}>{body}</ExerciseChips>
+        <ExplainNewContext value={explain}>
+          <ExerciseChips value={chips}>{body}</ExerciseChips>
+        </ExplainNewContext>
       </AllFuriganaContext>
     </div>
   );
@@ -336,10 +347,12 @@ function lessonPart(request: SessionRequest) {
 /** The session with its copy in the immersion mode (M3). */
 function ImmersedSession({ controls, where }: { controls: SessionControls; where: SessionWhere }) {
   const mode = useCopyMode();
+  const explain = useSessionExplain();
+  if (!explain) return <EmptySession loading />;
   return (
     <CopyModeContext value={mode}>
       <PeekProvider>
-        <Session controls={controls} where={where} />
+        <Session controls={controls} where={where} explain={explain} />
       </PeekProvider>
     </CopyModeContext>
   );
