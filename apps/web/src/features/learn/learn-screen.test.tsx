@@ -24,7 +24,7 @@ describe('LearnScreen (IA4)', () => {
     expect(screen.getByRole('heading', { name: 'Learn' })).toBeTruthy();
     const href = (name: RegExp) => screen.getByRole('link', { name }).getAttribute('href');
     expect(href(/^Lessons/)).toBe('/units');
-    expect(href(/^Kanji/)).toBe('/kanji');
+    expect(href(/^Kanji/)).toBe('/kanji/wall');
     expect(href(/^Grammar/)).toBe('/grammar');
     expect(href(/^What you've learned/)).toBe('/learned');
     expect(href(/^Notes/)).toBe('/notes');

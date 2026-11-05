@@ -18,7 +18,6 @@ function render(repos: Repos, path: string, slots = {}, language: UiLanguage = '
   });
   return renderWithServices(
     <Routes>
-      <Route path="/kanji" element={<KanjiScreen />} />
       <Route path="/kanji/:char" element={<KanjiScreen />} />
       <Route path="/read" element={<p>read page</p>} />
     </Routes>,
@@ -120,35 +119,6 @@ describe('KanjiScreen detail', () => {
   });
 });
 
-describe('KanjiScreen index', () => {
-  it('suggests words from romaji and shows the kanji of the picked word (I1)', async () => {
-    const repos = await readingRepos();
-    render(repos, '/kanji');
-    const input = await screen.findByLabelText('Look up a kanji or a reading');
-    await userEvent.type(input, 'gakuse');
-    expect((input as HTMLInputElement).value).toBe('がくせ');
-    await userEvent.click(await screen.findByRole('button', { name: '学生' }));
-    expect(screen.getByText(/student/)).toBeTruthy();
-    expect(screen.getByRole('link', { name: '学' }).getAttribute('href')).toBe('/kanji/%E5%AD%A6');
-  });
-
-  it('opens a typed kanji on Enter and lists this week’s kanji', async () => {
-    const repos = await readingRepos();
-    await track(repos, [[W.eki, 1]]);
-    render(repos, '/kanji');
-    expect(await screen.findByRole('link', { name: '駅' })).toBeTruthy();
-    expect(screen.getByRole('link', { name: /Draw a kanji/ }).getAttribute('href')).toBe(
-      '/handwrite',
-    );
-    await userEvent.type(screen.getByLabelText('Look up a kanji or a reading'), '生{Enter}');
-    expect(await screen.findByRole('heading', { name: '生' })).toBeTruthy();
-    expect(screen.getByText('Not in your words yet')).toBeTruthy();
-    expect(screen.getByText(/Dictionary readings:/).textContent).toContain(
-      'セイ · ショウ · い・きる',
-    );
-  });
-});
-
 describe('KanjiScreen in French and Spanish (N7b, N9)', () => {
   it('shows the kanji page in French', async () => {
     render(await seiRepos(), '/kanji/生', {}, 'fr');
@@ -156,33 +126,6 @@ describe('KanjiScreen in French and Spanish (N7b, N9)', () => {
     expect(screen.getByText('Connu depuis Minna 第1課')).toBeTruthy();
     expect(screen.getByRole('region', { name: 'Votre lecture' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Lire 5 phrases avec ショウ' })).toBeTruthy();
-  });
-
-  it('shows the index in Spanish and marks an English gloss', async () => {
-    const repos = await readingRepos();
-    render(repos, '/kanji', {}, 'es');
-    expect(await screen.findByRole('region', { name: 'Esta semana' })).toBeTruthy();
-    const input = screen.getByLabelText('Buscar un kanji o una lectura');
-    await userEvent.type(input, 'gakuse');
-    await userEvent.click(await screen.findByRole('button', { name: '学生' }));
-    const line = screen.getByText(/student/);
-    expect(line.textContent).toContain('(en)');
-    expect(within(line).getByRole('note', { name: 'en inglés' })).toBeTruthy();
-  });
-
-  it('shows a Spanish gloss from the language pack, unmarked', async () => {
-    const base = await readingRepos();
-    const prefix = base.dictionary.wordsByReadingPrefix.bind(base.dictionary);
-    const withSpanish = async (kana: string, limit: number) =>
-      (await prefix(kana, limit)).map((w) => ({ ...w, glossesByLang: { es: ['estudiante'] } }));
-    const repos = {
-      ...base,
-      dictionary: { ...base.dictionary, wordsByReadingPrefix: withSpanish },
-    };
-    render(repos, '/kanji', {}, 'es');
-    await userEvent.type(await screen.findByLabelText('Buscar un kanji o una lectura'), 'gakuse');
-    await userEvent.click(await screen.findByRole('button', { name: '学生' }));
-    expect(screen.getByText(/estudiante/).textContent).not.toContain('(en)');
   });
 
   describe('the tutor on a kanji page', () => {

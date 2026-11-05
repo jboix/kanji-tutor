@@ -34,10 +34,10 @@ test('the reading loop and kanji pages work after an offline reload', async ({ p
   await page.goto(`/kanji/${encodeURIComponent('生')}`);
   await expect(page.getByRole('heading', { name: '生' })).toBeVisible();
   await page.goto('/kanji');
-  await expect(page.getByRole('heading', { name: '漢字' })).toBeVisible();
-  // Dictionary lookup (I1) needs no network: romaji turns into kana and finds words.
+  await expect(page.getByRole('heading', { name: 'Kanji wall' })).toBeVisible();
+  // Searching the wall by reading (I1) needs no network: romaji turns into kana and finds kanji.
   await page
     .getByRole('textbox', { name: 'Look up a kanji or a reading' })
     .pressSequentially('eki');
-  await expect(page.getByRole('button', { name: /駅/ }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: /^駅: / })).toBeVisible();
 });

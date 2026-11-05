@@ -27,7 +27,8 @@ const GATED: RouteObject[] = [
   screen(paths.start, async () => (await import('../features/start/start-screen.tsx')).StartScreen),
   screen(paths.plan, async () => (await import('../features/today/plan-screen.tsx')).PlanScreen),
   screen(paths.read, async () => (await import('../features/read/read-screen.tsx')).ReadScreen),
-  screen(paths.kanji, kanji),
+  // The kanji index became the wall: Learn's Kanji and old links open it.
+  { path: paths.kanji, element: <Navigate to={paths.kanjiWall()} replace /> },
   screen(
     paths.kanjiWall(),
     async () => (await import('../features/kanji/kanji-wall-screen.tsx')).KanjiWallScreen,

@@ -34,7 +34,7 @@ export interface LearnedGroup {
   entries: LearnedEntry[];
 }
 
-const LIST_LEVELS = [5, 4, 3] as const;
+export const LIST_LEVELS = [5, 4, 3] as const;
 export type ListLevel = (typeof LIST_LEVELS)[number];
 
 /** The state shown for a knowledge level; undefined (untracked) is not started. */
@@ -97,7 +97,7 @@ export async function learnedWords(repos: Repos): Promise<LearnedGroup[]> {
 }
 
 /** A kanji's level: the best level among its readings (K3). */
-async function kanjiLevels(repos: Repos): Promise<Map<string, KnowledgeLevel>> {
+export async function kanjiLevels(repos: Repos): Promise<Map<string, KnowledgeLevel>> {
   const levels = new Map<string, KnowledgeLevel>();
   for (const row of await repos.kanjiReadings.all()) {
     levels.set(row.kanji, Math.max(levels.get(row.kanji) ?? 0, row.level) as KnowledgeLevel);

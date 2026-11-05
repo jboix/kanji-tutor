@@ -72,4 +72,52 @@ describe('the kanji wall screen', () => {
     const all = within(glimpse).getByRole('link', { name: /^All \d+$/ });
     expect(all.getAttribute('href')).toBe('/kanji/wall?at=%E6%97%A5&level=5');
   });
+
+  it('finds kanji by a reading typed in romaji, across levels, and opens the one match', async () => {
+    const user = userEvent.setup();
+    render(await withReadings());
+    await screen.findByRole('link', { name: '日: You read it' });
+    const field = screen.getByRole('textbox', { name: 'Look up a kanji or a reading' });
+    await user.type(field, 'eki');
+    expect((field as HTMLInputElement).value).toBe('えき');
+    const found = await screen.findByRole('region', { name: 'Kanji found' });
+    expect(within(found).getByRole('link', { name: '駅: Not yet' })).toBeTruthy();
+    expect(screen.queryByRole('radio', { name: 'N5' })).toBeNull();
+    await user.type(field, '{Enter}');
+    expect(await screen.findByRole('heading', { name: '駅' })).toBeTruthy();
+  });
+
+  it('opens a kanji typed as itself, even one off the lists', async () => {
+    const user = userEvent.setup();
+    render(await withReadings());
+    await screen.findByRole('link', { name: '日: You read it' });
+    await user.type(screen.getByRole('textbox', { name: 'Look up a kanji or a reading' }), '鬱');
+    expect(await screen.findByRole('link', { name: 'Open 鬱' })).toBeTruthy();
+  });
+
+  it('says when no kanji reads the query', async () => {
+    const user = userEvent.setup();
+    render(await withReadings());
+    await screen.findByRole('link', { name: '日: You read it' });
+    await user.type(screen.getByRole('textbox', { name: 'Look up a kanji or a reading' }), 'ゑゑ');
+    expect(await screen.findByText('No kanji from N5 to N3 reads ゑゑ.')).toBeTruthy();
+  });
+
+  it('keeps the tiles to one state', async () => {
+    const user = userEvent.setup();
+    render(await withReadings());
+    await screen.findByRole('link', { name: '日: You read it' });
+    await user.click(screen.getByRole('button', { name: 'Learning' }));
+    const list = screen.getByRole('list');
+    expect(
+      within(list)
+        .getAllByRole('link')
+        .map((l) => l.getAttribute('aria-label')),
+    ).toEqual(['一: Learning']);
+    expect(screen.getByRole('button', { name: 'Learning' }).getAttribute('aria-pressed')).toBe(
+      'true',
+    );
+    await user.click(screen.getByRole('button', { name: 'All' }));
+    expect(screen.getByRole('link', { name: '国: Not yet' })).toBeTruthy();
+  });
 });

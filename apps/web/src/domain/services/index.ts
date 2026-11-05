@@ -66,6 +66,12 @@ export {
 export { type KanjiPart, type KanjiWithParts, kanjiIn, kanjiWithParts } from './kanji-parts.ts';
 export { type StoryMaterial, storyMaterial } from './kanji-story.ts';
 export { type KanjiWall, kanjiWall, type WallTile, wallAround } from './kanji-wall.ts';
+export {
+  filterTiles,
+  readingMatch,
+  searchWall,
+  type WallFilter,
+} from './kanji-wall-search.ts';
 export { type LastTime, lastTime } from './last-time.ts';
 export {
   type LearnedEntry,

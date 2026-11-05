@@ -35,7 +35,7 @@ const TILES: Tile[] = [
       facts?.unit ? t('learn.lessonsAt', facts.unit) : t('learn.lessonsDetail'),
   },
   {
-    to: paths.kanji,
+    to: paths.kanjiWall(),
     title: 'learn.kanji',
     icon: <KanjiIcon />,
     detail: (t, facts) =>

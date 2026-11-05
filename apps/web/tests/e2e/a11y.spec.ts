@@ -6,7 +6,6 @@ import { expect, type Page, test } from './test.ts';
 const SCREENS = [
   '/',
   '/read',
-  '/kanji',
   '/kanji/生',
   '/kanji/wall',
   '/wild',

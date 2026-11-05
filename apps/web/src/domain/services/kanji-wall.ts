@@ -5,8 +5,8 @@
  */
 import { hasKanji } from '../kana.ts';
 import type { Repos } from '../repos.ts';
-import type { KnowledgeLevel, LearnerLevel } from '../types.ts';
-import { kanjiList, type LearnedState, stateOf } from './learned.ts';
+import type { LearnerLevel } from '../types.ts';
+import { kanjiLevels, kanjiList, type LearnedState, stateOf } from './learned.ts';
 import { learnerLevelOf } from './learner-level.ts';
 import { currentUnitView } from './units.ts';
 
@@ -22,14 +22,6 @@ export interface KanjiWall {
   known: number;
   /** The kanji the learner is on: the first not yet read in the current unit's words. */
   current?: string;
-}
-
-async function kanjiLevels(repos: Repos): Promise<Map<string, KnowledgeLevel>> {
-  const levels = new Map<string, KnowledgeLevel>();
-  for (const row of await repos.kanjiReadings.all()) {
-    levels.set(row.kanji, Math.max(levels.get(row.kanji) ?? 0, row.level) as KnowledgeLevel);
-  }
-  return levels;
 }
 
 /** The first kanji of the current unit's words that is on the wall and not yet read. */
