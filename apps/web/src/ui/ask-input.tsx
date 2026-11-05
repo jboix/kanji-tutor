@@ -27,7 +27,8 @@ const FREE_TEXT = {
 
 /**
  * The question pill of the Ask box (A4, C6): free text, in English or Japanese. The あ switch
- * turns romaji into kana as it is typed, and kanji spellings for the kana pop up above it.
+ * turns romaji typed after it into kana (what was typed before stays), and kanji spellings for
+ * the kana pop up above it.
  */
 export function AskInput({ label, placeholder, onSubmit, trailing }: AskInputProps) {
   const [value, setValue] = useState('');
@@ -35,9 +36,14 @@ export function AskInput({ label, placeholder, onSubmit, trailing }: AskInputPro
   const mode = kana ? 'hiragana' : 'off';
   const typing = useJapaneseTyping<HTMLInputElement>(value, setValue, mode);
   const id = useId();
+  // Turning the switch off settles the romaji left over (a final "n" becomes ん).
+  const toggle = (on: boolean) => {
+    if (!on) setValue(finalText(value, mode, typing.from));
+    setKana(on);
+  };
   const submit = (event: FormEvent) => {
     event.preventDefault();
-    const question = finalText(value, mode).trim();
+    const question = finalText(value, mode, typing.from).trim();
     if (question === '') return;
     onSubmit(question);
     setValue('');
@@ -60,7 +66,7 @@ export function AskInput({ label, placeholder, onSubmit, trailing }: AskInputPro
           {...FREE_TEXT}
         />
         <div className={pill.end}>
-          <KanaSwitch on={kana} onChange={setKana} />
+          <KanaSwitch on={kana} onChange={toggle} />
           {trailing}
         </div>
       </form>

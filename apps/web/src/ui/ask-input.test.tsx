@@ -35,6 +35,15 @@ describe('kanaEdit (C6)', () => {
     expect(finalText('hon', 'off')).toBe('hon');
   });
 
+  it('leaves the text before `from` as typed: the switch only changes what comes after it', () => {
+    expect(kanaEdit('what is watashi', 15, 'hiragana', 8)).toEqual({
+      text: 'what is わたし',
+      caret: 11,
+    });
+    expect(kanaEdit('why ka', 2, 'hiragana', 4)).toEqual({ text: 'why か', caret: 2 });
+    expect(finalText('is hon', 'hiragana', 3)).toBe('is ほん');
+  });
+
   it('cycles あ → ア → A → あ', () => {
     expect(nextKanaMode('hiragana')).toBe('katakana');
     expect(nextKanaMode('katakana')).toBe('off');
@@ -84,6 +93,22 @@ describe('AskInput (A4, C6)', () => {
     await userEvent.keyboard('{Escape}{Enter}');
     expect(onSubmit).toHaveBeenLastCalledWith('ほん');
     expect(field.value).toBe('');
+  });
+
+  it('turns only what is typed after the switch into kana, and back, so both can mix', async () => {
+    const { field, onSubmit } = await renderAsk();
+    await userEvent.type(field, 'what does ');
+    await kanaOn();
+    await userEvent.type(field, 'hon');
+    expect(field.value).toBe('what does ほn');
+    await kanaOn();
+    expect(field.value).toBe('what does ほん');
+    await userEvent.type(field, ' mean?');
+    expect(field.value).toBe('what does ほん mean?');
+    await kanaOn();
+    await userEvent.type(field, ' ka');
+    await userEvent.keyboard('{Escape}{Enter}');
+    expect(onSubmit).toHaveBeenLastCalledWith('what does ほん mean? か');
   });
 
   it('has no ア mode and no IME detection: those belong to the sentence field', async () => {

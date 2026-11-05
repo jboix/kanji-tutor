@@ -55,9 +55,13 @@ export function nextKanaMode(mode: TypingMode): KanaMode {
 const isScript = (mode: TypingMode): mode is KanaScript =>
   mode === 'hiragana' || mode === 'katakana';
 
-/** The text as sent: romaji left over (a trailing "n") becomes kana in the field's mode. */
-export function finalText(value: string, mode: TypingMode): string {
-  return isScript(mode) ? toKanaIn(value, mode, true) : value;
+/**
+ * The text as sent: romaji left over (a trailing "n") becomes kana in the field's mode, from
+ * `from` on (the text typed before the switch was turned on stays as typed).
+ */
+export function finalText(value: string, mode: TypingMode, from = 0): string {
+  if (!isScript(mode)) return value;
+  return value.slice(0, from) + toKanaIn(value.slice(from), mode, true);
 }
 
 /** Kana or kanji: what a Japanese keyboard types, and romaji never does. */
@@ -72,14 +76,32 @@ export function nativeInput(event: { inputType?: string; data?: string | null })
   return typed.includes(event.inputType ?? '') && JAPANESE.test(event.data ?? '');
 }
 
-/** Romaji on both sides of the caret as kana, and where the caret lands after it. */
+/**
+ * Romaji on both sides of the caret as kana, and where the caret lands after it. The text before
+ * `from` is left as typed: romaji written before the あ switch was turned on stays romaji.
+ */
 export function kanaEdit(
   raw: string,
   caret: number,
   script: KanaScript = 'hiragana',
+  from = 0,
 ): { text: string; caret: number } {
-  const before = toKanaIn(raw.slice(0, caret), script);
-  return { text: before + toKanaIn(raw.slice(caret), script), caret: before.length };
+  const at = Math.min(from, caret);
+  const before = raw.slice(0, at) + toKanaIn(raw.slice(at, caret), script);
+  const after = Math.max(from, caret);
+  const kept = raw.slice(caret, after);
+  return { text: before + kept + toKanaIn(raw.slice(after), script), caret: before.length };
+}
+
+/**
+ * Where kana starts: the switch only changes what is typed after it, so the text in the field
+ * when the mode last changed is kept as it was, while the field still starts with it.
+ */
+function useKanaFrom(value: string, mode: TypingMode): number {
+  const [fence, setFence] = useState({ mode, prefix: '' });
+  if (fence.mode !== mode) setFence({ mode, prefix: value });
+  const prefix = fence.mode === mode ? fence.prefix : value;
+  return value.startsWith(prefix) ? prefix.length : 0;
 }
 
 function selectionOf(field: Field): Selection {
@@ -219,6 +241,27 @@ export interface TypingOptions {
 
 const NO_CANDIDATES: KanjiCandidate[] = [];
 
+/**
+ * What a change in the field does: romaji after `from` turns into kana in a kana mode. Mid
+ * composition the IME owns the text: it is kept as typed and converted once committed.
+ */
+function useUpdate(
+  mode: TypingMode,
+  from: number,
+  busy: RefObject<boolean>,
+  place: (text: string, at: number) => void,
+) {
+  return useCallback(
+    (field: Field) => {
+      const at = selectionOf(field).start;
+      const convert = isScript(mode) && !busy.current;
+      const next = convert ? kanaEdit(field.value, at, mode, from) : undefined;
+      place(next?.text ?? field.value, next?.caret ?? at);
+    },
+    [mode, place, busy, from],
+  );
+}
+
 /** The field's handlers and ARIA, the candidates for its kana, their popup, and `pick`. */
 export function useJapaneseTyping<E extends Field>(
   value: string,
@@ -237,16 +280,8 @@ export function useJapaneseTyping<E extends Field>(
     },
     [caret, setValue, setSelection],
   );
-  // Mid-composition the IME owns the text: it is kept as typed and converted once committed.
-  const busy = composing.ref;
-  const update = useCallback(
-    (field: Field) => {
-      const at = selectionOf(field).start;
-      const next = isScript(mode) && !busy.current ? kanaEdit(field.value, at, mode) : undefined;
-      place(next?.text ?? field.value, next?.caret ?? at);
-    },
-    [mode, place, busy],
-  );
+  const from = useKanaFrom(value, mode);
+  const update = useUpdate(mode, from, composing.ref, place);
   const { found, settle } = useLookup(value, selection);
   // A Japanese keyboard, or its composition in progress, has its own candidates: none of ours.
   // Only the sentence field watches for one; the Ask box keeps its popup as it was.
@@ -255,7 +290,7 @@ export function useJapaneseTyping<E extends Field>(
   const pick = picker(value, place, settle, ref);
   const popup = useCandidatePopup(candidates, pick, found);
   const handlers = { ...useHandlers(composing, update, follow, options.onNative), ...popup.field };
-  return { ref, value, handlers, candidates, popup, pick };
+  return { ref, value, handlers, candidates, popup, pick, from };
 }
 
 /**
