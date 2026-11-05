@@ -147,6 +147,11 @@ describe('classOf', () => {
     expect(classOf('勉強する', ['vs-i'])).toBe('vs');
   });
 
+  it('does not read a verb into the ending of a word tagged as something else', () => {
+    expect(classOf('近く', ['n', 'adj-no', 'adv'], 'ちかく')).toBeUndefined();
+    expect(classOf('便利', ['adj-na', 'n'], 'べんり')).toBeUndefined();
+  });
+
   it('falls back to the ending, with the godan verbs in る that look ichidan', () => {
     expect(classOf('帰る')).toBe('v5');
     expect(classOf('知る')).toBe('v5');

@@ -191,10 +191,15 @@ export function conjugateAdjective(dict: string, cls: Conjugation, form: Adjecti
   return inflect(dict, cls, ADJECTIVE[form]);
 }
 
+/** A JMdict tag of a word that conjugates: a verb (not a する noun) or an い-adjective. */
+const conjugates = (tag: string) => /^(v[15kz]|vs-|adj-i)/u.test(tag);
+
 /**
  * How a word conjugates: from its JMdict part-of-speech tags when they say, else from its
  * ending (る after an i or e kana is ichidan, but 帰る, 入る and a few others are godan). A
- * kanji right before る (寝る, 見る) says nothing, so the reading's ending decides then.
+ * kanji right before る (寝る, 見る) says nothing, so the reading's ending decides then. A word
+ * tagged as neither a verb nor an い-adjective does not conjugate, whatever its ending: 近く is
+ * a noun and an adverb, not a godan verb.
  */
 export function classOf(
   dict: string,
@@ -203,6 +208,7 @@ export function classOf(
 ): Conjugation | undefined {
   const tagged = classOfPos(pos);
   if (tagged) return tagged;
+  if (pos?.length && !pos.some(conjugates)) return undefined;
   const kanjiRu = /\p{Script=Han}る$/u.test(dict);
   return (kanjiRu && reading ? classOfForm(reading) : undefined) ?? classOfForm(dict);
 }

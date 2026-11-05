@@ -61,7 +61,8 @@ function nounCues(base: CueWord, pos: readonly string[]): CueWord[] {
 
 /**
  * A word as cues: a verb or an い-adjective with its class, a noun without, and a noun that takes
- * する (勉強) as its する verb too (勉強する).
+ * する (勉強) as its する verb too (勉強する). A な or の adjective that is also a noun (便利, 近く)
+ * is a noun cue: it takes です as a noun does, and never conjugates as a verb.
  */
 export function cuesOf(word: Word): CueWord[] {
   const written = word.forms[0] ?? word.readings[0];
@@ -71,7 +72,7 @@ export function cuesOf(word: Word): CueWord[] {
   const base: CueWord = { written, reading, wordId: word.id };
   if (wordKind(word) === 'other') return nounCues(base, pos);
   const cls = classOf(written, pos, reading);
-  return cls ? [{ ...base, cls }] : [];
+  return cls ? [{ ...base, cls }] : nounCues(base, pos);
 }
 
 /** The words of the units at the learner's level or easier, as the units write them. */
