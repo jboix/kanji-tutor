@@ -68,7 +68,7 @@ export const FR_N5_A: ById<UnitText> = {
       'Les supérettes japonaises vendent des plats chauds, encaissent des factures et expédient des colis, jour et nuit.',
     sentences: [
       'Il y a une supérette près de chez moi.',
-      'Elle est ouverte la nuit aussi, c’est donc très pratique.',
+      'La supérette est ouverte la nuit aussi, c’est donc très pratique.',
       'Aujourd’hui, j’ai acheté un bento, un onigiri et une boisson.',
       'Le vendeur m’a demandé : « Je vous réchauffe le bento ? »',
       'J’ai répondu : « Oui, s’il vous plaît. »',

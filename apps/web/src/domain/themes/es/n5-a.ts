@@ -68,7 +68,7 @@ export const ES_N5_A: ById<UnitText> = {
       'Las tiendas de conveniencia japonesas venden comida caliente, cobran facturas y envían paquetes, de día y de noche.',
     sentences: [
       'Cerca de mi casa hay una tienda de conveniencia.',
-      'También abre de noche, así que es muy práctica.',
+      'La tienda de conveniencia también abre de noche, así que es muy práctica.',
       'Hoy compré un bento, una bola de arroz y una bebida.',
       'El dependiente preguntó: “¿Le caliento el bento?”.',
       'Yo dije: “Sí, por favor”.',

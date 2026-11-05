@@ -251,7 +251,7 @@ export const N5_A: readonly Unit[] = [
         },
         {
           ja: 'コンビニは夜もあいているので、とても便利です。',
-          en: 'It is open at night too, so it is very convenient.',
+          en: 'The convenience store is open at night too, so it is very convenient.',
         },
         {
           ja: '今日は弁当とおにぎりと飲み物を買いました。',
