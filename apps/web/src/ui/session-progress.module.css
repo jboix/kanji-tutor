@@ -1,13 +1,18 @@
 /* The whole bar is one button around thin marks (R13), under the top bar's buttons, as wide as
-   the content (W-read). Where the session is sits in the row above, between ✕ and ふ. */
+   the content (W-read). Where the session is sits in the row above, between ✕ and ふ. The
+   marks take a 28px row, but the button is a full 44px target: it reaches down into the space
+   above the content, and a negative margin gives that space back, so nothing moves. */
 .progress {
+  --row: 28px;
+
   display: flex;
   flex: 1;
   align-items: center;
   min-width: 0;
   gap: 10px;
-  min-height: 28px;
-  padding: 0;
+  min-height: var(--tap);
+  margin-bottom: calc(var(--row) - var(--tap));
+  padding: 0 0 calc(var(--tap) - var(--row));
   border: 0;
   border-radius: 8px;
   background: none;
