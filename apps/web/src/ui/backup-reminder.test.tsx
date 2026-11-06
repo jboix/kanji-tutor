@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DEFAULT_SETTINGS } from '../domain/defaults.ts';
 import type { Item, Settings } from '../domain/types.ts';
+import { fakeCloud } from '../test/fake-cloud.ts';
 import { translator } from '../test/i18n.ts';
 import { createMemoryRepos } from '../test/memory-repos.ts';
 import { fakeServices, renderWithServices } from '../test/render.tsx';
@@ -62,7 +63,7 @@ const item: Item = {
   updatedAt: 1,
 };
 
-async function setup(settings: Partial<Settings>) {
+async function setup(settings: Partial<Settings>, cloud?: ReturnType<typeof fakeCloud>) {
   const repos = createMemoryRepos({ settings: { ...base, ...settings } });
   await repos.items.put(item);
   await repos.reviews.add({
@@ -78,6 +79,7 @@ async function setup(settings: Partial<Settings>) {
   const services = fakeServices({
     repos,
     backup: { exportJson, importJson: async () => ({ ok: true }), eraseAll: async () => undefined },
+    ...(cloud ? { cloud } : {}),
   });
   renderWithServices(<BackupReminder now={() => NOW} />, { services });
   return { repos, exportJson };
@@ -114,6 +116,13 @@ describe('BackupReminder', () => {
     await userEvent.click(await screen.findByRole('button', { name: 'Later' }));
     expect((await repos.settings.get()).backupReminderSnoozedUntil).toBe(NOW + 7 * DAY);
     await waitFor(() => expect(screen.queryByLabelText('Backup reminder')).toBeNull());
+  });
+
+  it('renders nothing while cloud saves are on, however old the last file is', async () => {
+    const { repos } = await setup({ lastBackupAt: NOW - 34 * DAY }, fakeCloud({ signedIn: true }));
+    await repos.settings.get();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(screen.queryByLabelText('Backup reminder')).toBeNull();
   });
 
   it('renders nothing when the backup is recent', async () => {

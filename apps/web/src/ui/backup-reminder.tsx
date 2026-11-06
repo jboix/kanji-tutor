@@ -6,6 +6,7 @@ import { Chip } from './chip.tsx';
 import { useT } from './i18n/i18n.tsx';
 import type { Translate } from './i18n/types.ts';
 import { type Services, useServices } from './services.tsx';
+import { useCloud } from './use-cloud.ts';
 
 const DAY_MS = 86_400_000;
 
@@ -109,13 +110,16 @@ export function useBackupReminderShown(): boolean {
 }
 
 /**
- * A quiet, dismissible line suggesting a backup when one is due (N5). Renders nothing otherwise.
- * "Export now" downloads the file directly; "Later" hides it for a week.
+ * A quiet, dismissible line suggesting a backup when one is due (N5). Renders nothing otherwise,
+ * and nothing while cloud saves are on: the cloud keeps the save, a file adds nothing. "Export
+ * now" downloads the file directly; "Later" hides it for a week.
  */
 export function BackupReminder({ now = Date.now }: { now?: () => number }) {
   const { settings, dataSince, exportNow, later } = useReminder(now);
+  const { state: cloud } = useCloud();
   const t = useT();
-  const due = settings !== undefined && needsBackupReminder(settings, now(), dataSince);
+  const due =
+    settings !== undefined && !cloud.signedIn && needsBackupReminder(settings, now(), dataSince);
   // Before the paint, so the install banner hides in the same frame: never two banners at once.
   useLayoutEffect(() => {
     setShown(due);
