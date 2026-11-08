@@ -125,6 +125,26 @@ describe('BackupReminder', () => {
     expect(screen.queryByLabelText('Backup reminder')).toBeNull();
   });
 
+  it('warns while the cloud save is failing, and tries again on "Try again"', async () => {
+    const cloud = fakeCloud({ signedIn: true, status: 'failed' });
+    await setup({ lastBackupAt: NOW - DAY }, cloud);
+    const warning = await screen.findByRole('status', { name: 'Cloud save warning' });
+    expect(warning.textContent).toContain('only on this device');
+    expect(screen.queryByLabelText('Backup reminder')).toBeNull();
+    await userEvent.click(screen.getByRole('button', { name: 'Try again' }));
+    expect(cloud.saveNow).toHaveBeenCalledOnce();
+    expect(screen.getByRole('link', { name: 'Details' }).getAttribute('href')).toBe(
+      '/settings/cloud',
+    );
+  });
+
+  it('gives no warning while the cloud save is only offline or waiting', async () => {
+    const { repos } = await setup({}, fakeCloud({ signedIn: true, status: 'offline' }));
+    await repos.settings.get();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(screen.queryByRole('status')).toBeNull();
+  });
+
   it('renders nothing when the backup is recent', async () => {
     const { repos } = await setup({ lastBackupAt: NOW - DAY });
     await repos.settings.get();

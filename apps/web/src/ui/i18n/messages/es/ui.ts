@@ -57,6 +57,12 @@ export const ui = {
   },
   backupExport: 'Exportar',
   backupLater: 'Más tarde',
+  cloudFailedLabel: 'Aviso de guardado en la nube',
+  cloudFailedHead: 'Sin guardar en la nube.',
+  cloudFailedBody:
+    'El último guardado en la nube falló, así que por ahora tu progreso solo está en este dispositivo. Se vuelve a intentar solo.',
+  cloudFailedRetry: 'Reintentar',
+  cloudFailedDetails: 'Detalles',
   installLabel: 'Instalar la app',
   installLead: 'Añade Kanji Tutor a tu pantalla de inicio y se abrirá como una app.',
   installNotNow: 'Ahora no',

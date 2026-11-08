@@ -55,6 +55,12 @@ export const ui = {
   },
   backupExport: 'Export now',
   backupLater: 'Later',
+  cloudFailedLabel: 'Cloud save warning',
+  cloudFailedHead: 'Not saved online.',
+  cloudFailedBody:
+    'The last cloud save failed, so your progress is only on this device for now. It tries again by itself.',
+  cloudFailedRetry: 'Try again',
+  cloudFailedDetails: 'Details',
   installLabel: 'Install the app',
   installLead: 'Add Kanji Tutor to your home screen, and it opens like an app.',
   installNotNow: 'Not now',

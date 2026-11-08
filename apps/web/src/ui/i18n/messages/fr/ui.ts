@@ -57,6 +57,12 @@ export const ui = {
   },
   backupExport: 'Exporter',
   backupLater: 'Plus tard',
+  cloudFailedLabel: 'Alerte de sauvegarde en ligne',
+  cloudFailedHead: 'Pas sauvegardé en ligne.',
+  cloudFailedBody:
+    'La dernière sauvegarde en ligne a échoué : pour l’instant, vos progrès ne sont que sur cet appareil. L’app réessaie d’elle-même.',
+  cloudFailedRetry: 'Réessayer',
+  cloudFailedDetails: 'Détails',
   installLabel: 'Installer l’app',
   installLead: 'Ajoutez Kanji Tutor à votre écran d’accueil : il s’ouvre comme une app.',
   installNotNow: 'Pas maintenant',

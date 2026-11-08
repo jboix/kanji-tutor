@@ -58,6 +58,10 @@
   --miss-ink: #7a1626; /* text on the miss card */
   --on-miss: #ffffff; /* the cross on its circle */
   --miss-shadow: rgb(179 36 58 / 0.18);
+  /* A warning (the cloud save failing): amber, never the correction crimson. */
+  --warn: #b7791f;
+  --warn-surface: #fbf0d9;
+  --warn-ink: #5c3d00;
 
   /* Home's "Next up" card: a soft indigo tint, its Continue the screen's filled button */
   --hero: #e6eef7;
@@ -169,6 +173,9 @@
     --miss-ink: #f6c6ce;
     --on-miss: #1e1e1e;
     --miss-shadow: rgb(0 0 0 / 0.35);
+    --warn: #e0a84a;
+    --warn-surface: #352c1c;
+    --warn-ink: #f5dba6;
     --hero: #283039;
     --on-hero: #e2e2e2;
     --hero-muted: #ababab;
@@ -245,6 +252,9 @@
   --miss-ink: #f6c6ce;
   --on-miss: #1e1e1e;
   --miss-shadow: rgb(0 0 0 / 0.35);
+  --warn: #e0a84a;
+  --warn-surface: #352c1c;
+  --warn-ink: #f5dba6;
   --hero: #283039;
   --on-hero: #e2e2e2;
   --hero-muted: #ababab;

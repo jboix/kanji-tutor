@@ -1,0 +1,31 @@
+/* A warning, not a quiet line: the amber card says the save is not reaching the cloud. Amber,
+   not crimson: the crimson is for corrections and the tutor. */
+.warning {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  padding: 12px 12px 12px var(--gutter);
+  border-radius: var(--radius-card);
+  background: var(--warn-surface);
+  border-left: 4px solid var(--warn);
+}
+
+.text {
+  flex: 1 1 200px;
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--warn-ink);
+}
+
+.head {
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
