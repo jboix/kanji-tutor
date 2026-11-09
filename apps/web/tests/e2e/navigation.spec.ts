@@ -66,7 +66,7 @@ test('each Learn tile opens its screen, and Back returns to Learn', async ({ pag
   await expect(page.getByRole('heading', { name: 'Learn', level: 1 })).toBeVisible();
   const tiles: [RegExp, RegExp][] = [
     [/^Lessons/, /\/units$/],
-    [/^Kanji/, /\/kanji$/],
+    [/^Kanji/, /\/kanji\/wall$/],
     [/^Grammar/, /\/grammar$/],
     [/^What you've learned/, /\/learned$/],
     [/^Notes/, /\/notes$/],
