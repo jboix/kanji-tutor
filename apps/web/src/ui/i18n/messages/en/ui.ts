@@ -40,6 +40,8 @@ export const ui = {
   updateCurrent: 'You have {current}',
   updateHint: 'Takes a few seconds. Your progress and settings stay.',
   updateHide: 'Not now, hide this',
+  updateMore: { one: '{n} more', other: '{n} more' },
+  updateLess: 'Show less',
   updateLater: 'Later',
   updateNow: 'Update now',
   updateNextOpen: 'It installs by itself next time you open the app',

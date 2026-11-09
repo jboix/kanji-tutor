@@ -78,7 +78,7 @@ export function watchForUpdates(target: Document = document, now = Date.now): vo
 export interface NewVersion {
   /** Unknown when `version.json` could not be read. */
   version?: string | undefined;
-  /** Up to three lines on what is new. */
+  /** The lines on what is new, newest first; the card shows three, the rest behind "more". */
   notes: readonly string[];
 }
 

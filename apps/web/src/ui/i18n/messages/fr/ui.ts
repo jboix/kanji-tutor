@@ -42,6 +42,8 @@ export const ui = {
   updateCurrent: 'Tu as {current}',
   updateHint: 'Quelques secondes. Ta progression et tes réglages restent.',
   updateHide: 'Pas maintenant, masquer',
+  updateMore: { one: '{n} de plus', other: '{n} de plus' },
+  updateLess: 'Moins',
   updateLater: 'Plus tard',
   updateNow: 'Mettre à jour',
   updateNextOpen: 'Elle s’installe d’elle-même à la prochaine ouverture de l’app',

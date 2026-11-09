@@ -78,6 +78,32 @@
   line-height: 1.5;
 }
 
+/* "2 more" under the notes: a quiet text button, its 44px target past the text. */
+.more {
+  position: relative;
+  align-self: flex-start;
+  margin: -4px 0 0 18px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.more::before {
+  content: "";
+  position: absolute;
+  inset: -12px -8px;
+}
+
+.more:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .actions {
   display: flex;
   gap: 10px;

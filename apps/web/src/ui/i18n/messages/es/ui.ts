@@ -42,6 +42,8 @@ export const ui = {
   updateCurrent: 'Tienes la {current}',
   updateHint: 'Tarda unos segundos. Tu progreso y tus ajustes se quedan.',
   updateHide: 'Ahora no, ocultar',
+  updateMore: { one: '{n} más', other: '{n} más' },
+  updateLess: 'Menos',
   updateLater: 'Más tarde',
   updateNow: 'Actualizar',
   updateNextOpen: 'Se instala sola la próxima vez que abras la app',

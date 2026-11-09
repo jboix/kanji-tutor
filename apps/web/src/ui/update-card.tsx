@@ -3,6 +3,7 @@
  * Update now. On Home, Later (or ✕) hides it until a newer version comes; Settings keeps it.
  * Updating says so, then the page reloads by itself.
  */
+import { useState } from 'react';
 import {
   type AppUpdate,
   applyUpdate,
@@ -52,6 +53,37 @@ function Updating({ next }: { next: NewVersion }) {
   );
 }
 
+/** Lines on the card before "more". */
+const SHOWN = 3;
+
+/** What the version brings: three lines, and the rest behind "N more" (and back with "Less"). */
+function Notes({ notes }: { notes: readonly string[] }) {
+  const t = useT();
+  const [open, setOpen] = useState(false);
+  if (notes.length === 0) return null;
+  const rest = notes.length - SHOWN;
+  const shown = open || rest <= 0 ? notes : notes.slice(0, SHOWN);
+  return (
+    <>
+      <ul className={styles.notes}>
+        {shown.map((note) => (
+          <li key={note}>{note}</li>
+        ))}
+      </ul>
+      {rest > 0 && (
+        <button
+          type="button"
+          className={styles.more}
+          aria-expanded={open}
+          onClick={() => setOpen(!open)}
+        >
+          {open ? t('ui.updateLess') : t('ui.updateMore', { n: rest })}
+        </button>
+      )}
+    </>
+  );
+}
+
 function HomeOffer({ next }: { next: NewVersion }) {
   const t = useT();
   const line = next.version
@@ -71,13 +103,7 @@ function HomeOffer({ next }: { next: NewVersion }) {
           <CloseIcon />
         </button>
       </div>
-      {next.notes.length > 0 && (
-        <ul className={styles.notes}>
-          {next.notes.map((note) => (
-            <li key={note}>{note}</li>
-          ))}
-        </ul>
-      )}
+      <Notes notes={next.notes} />
       <p className={styles.line}>{t('ui.updateHint')}</p>
       <div className={styles.actions}>
         <PillButton variant="secondary" grow={1} onClick={() => dismissUpdate(next)}>

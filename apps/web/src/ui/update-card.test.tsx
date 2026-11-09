@@ -43,6 +43,23 @@ describe('the new version card (N1e)', () => {
     expect(screen.queryByRole('button')).toBeNull();
   });
 
+  it('shows three lines, and the rest behind "more"', async () => {
+    const notes = ['One', 'Two', 'Three', 'Four', 'Five'];
+    await offer({ version: '1.5.0', notes });
+    render(<UpdateCard place="home" />);
+    const lines = () =>
+      within(card())
+        .getAllByRole('listitem')
+        .map((li) => li.textContent);
+    expect(lines()).toEqual(['One', 'Two', 'Three']);
+    const more = screen.getByRole('button', { name: '2 more' });
+    expect(more.getAttribute('aria-expanded')).toBe('false');
+    await userEvent.click(more);
+    expect(lines()).toEqual(notes);
+    await userEvent.click(screen.getByRole('button', { name: 'Show less' }));
+    expect(lines()).toEqual(['One', 'Two', 'Three']);
+  });
+
   it('hides on Home after Later, until a newer version, and Settings keeps it', async () => {
     await offer();
     render(

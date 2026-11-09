@@ -1,14 +1,15 @@
 /**
- * Vite plugin that writes `version.json` into the build: the version and up to three lines on
- * what is new, taken from the `feat` commits since the previous release tag. The running app
+ * Vite plugin that writes `version.json` into the build: the version and the lines on what is
+ * new, taken from the `feat` commits since the previous release tag (the card shows three, the
+ * rest behind "more"). The running app
  * fetches it when a new version is waiting, to say which one and what it brings. The file is
  * not precached, so it always comes from the server.
  */
 import { execSync } from 'node:child_process';
 import type { Plugin } from 'vite';
 
-/** Lines shown on the card, at most. */
-const MAX_LINES = 3;
+/** Lines kept in the file, at most: a safety cap, far above a release's features. */
+const MAX_LINES = 30;
 
 const FEAT = /^feat(\([^)]*\))?: (.+)$/;
 

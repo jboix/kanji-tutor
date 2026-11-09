@@ -15,9 +15,11 @@ describe('the lines on what is new', () => {
     ]);
   });
 
-  it('keeps three at most, newest first', () => {
+  it('keeps them all, newest first, up to a safety cap of 30', () => {
     const subjects = ['feat: one', 'feat: two', 'feat: three', 'feat: four'];
-    expect(featureLines(subjects)).toEqual(['One', 'Two', 'Three']);
+    expect(featureLines(subjects)).toEqual(['One', 'Two', 'Three', 'Four']);
+    const many = Array.from({ length: 40 }, (_, i) => `feat: line ${i}`);
+    expect(featureLines(many)).toHaveLength(30);
   });
 
   it('has nothing to say without feat commits', () => {
