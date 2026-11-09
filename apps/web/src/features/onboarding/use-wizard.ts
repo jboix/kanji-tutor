@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router';
 import type { OnboardingKnown, Settings } from '../../domain/types.ts';
 import {
   isEmptyChoice,
@@ -112,7 +111,7 @@ function markedOf(done: ImportSummary): OnboardingKnown['marked'] {
 /**
  * Marking what you know (K6). The class step marks Minna's earlier lessons and a
  * pasted list on Next; false if it failed. The JLPT lists the start implies (N4 means N5 is
- * known) are marked at Start reading, which waits for the dictionary. Marking twice adds nothing
+ * known) are marked at Start, which waits for the dictionary. Marking twice adds nothing
  * twice (P2).
  */
 function useKnownStep(saved: OnboardingKnown | undefined, patch: PatchSettings) {
@@ -141,13 +140,22 @@ function useKnownStep(saved: OnboardingKnown | undefined, patch: PatchSettings) 
   return { phase, onClass, atStart };
 }
 
-/** Start reading: marks the lists the start implies, then the wizard is done. */
-function useFinish(patch: PatchSettings, markLists: () => Promise<boolean>) {
-  const navigate = useNavigate();
+/**
+ * Start (the summary's last button): marks the lists the start implies, then the wizard is done. Where the learner
+ * goes next (Today, or the level test when they chose to find their level) is handed to the
+ * onboarding screen, which leaves once the settings say onboarded: navigating from here would
+ * race its own redirect to Today.
+ */
+function useFinish(
+  patch: PatchSettings,
+  start: StartChoice,
+  markLists: () => Promise<boolean>,
+  onLeave: (to: string) => void,
+) {
   return async () => {
     if (!(await markLists())) return;
+    onLeave(start === 'find' ? paths.placement : paths.today);
     await patch({ onboarded: true, onboardingStep: '' });
-    await navigate(paths.today, { replace: true });
   };
 }
 
@@ -168,7 +176,12 @@ export interface Wizard {
 }
 
 /** The wizard's state and moves (P5): selecting only selects; Next, Back and Skip move. */
-export function useWizard(settings: Settings, initial: StepId, patch: PatchSettings): Wizard {
+export function useWizard(
+  settings: Settings,
+  initial: StepId,
+  patch: PatchSettings,
+  onLeave: (to: string) => void = () => undefined,
+): Wizard {
   const nav = useStepNav(initial, patch);
   const known = useKnownStep(settings.onboardingKnown, patch);
   const [draft, setDraftState] = useState(() => initialDraft(settings));
@@ -184,7 +197,7 @@ export function useWizard(settings: Settings, initial: StepId, patch: PatchSetti
   };
   return {
     ...{ step, direction: nav.direction, returning, draft, setDraft, next, jump },
-    finish: useFinish(patch, () => known.atStart(draft.start)),
+    finish: useFinish(patch, draft.start, () => known.atStart(draft.start), onLeave),
     importPhase: known.phase,
     known: settings.onboardingKnown,
     back: () => go(stepBefore(step), 'back'),

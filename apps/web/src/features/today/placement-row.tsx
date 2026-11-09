@@ -8,6 +8,21 @@ import { paths } from '../../ui/paths.ts';
 import { useServices } from '../../ui/services.tsx';
 import home from './home.module.css';
 
+/** A raised card link with a title, a line under it and a chevron, like Find my level. */
+export function HomeCard({ to, title, line }: { to: string; title: string; line: string }) {
+  return (
+    <Link to={to} className={home.level}>
+      <span className={home.levelText}>
+        <span className={home.levelTitle}>{title}</span>
+        <span className={home.levelLine}>{line}</span>
+      </span>
+      <span className={home.chevron} aria-hidden="true">
+        <ChevronIcon />
+      </span>
+    </Link>
+  );
+}
+
 /**
  * The learner's level (A11): "Find my level" as a card, always within reach, and "Your reviews
  * suggest N4" when 30 days of reviews point elsewhere. Neither changes the level.
@@ -28,15 +43,11 @@ export function PlacementRows({ now }: { now: number }) {
   if (!found) return null;
   return (
     <>
-      <Link to={paths.placement} className={home.level}>
-        <span className={home.levelText}>
-          <span className={home.levelTitle}>{t('today.findLevel')}</span>
-          <span className={home.levelLine}>{t('today.findLevelDetail')}</span>
-        </span>
-        <span className={home.chevron} aria-hidden="true">
-          <ChevronIcon />
-        </span>
-      </Link>
+      <HomeCard
+        to={paths.placement}
+        title={t('today.findLevel')}
+        line={t('today.findLevelDetail')}
+      />
       {found.suggested && (
         <ListRow
           to={paths.settingsSection('words')}

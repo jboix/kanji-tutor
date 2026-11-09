@@ -85,7 +85,7 @@ test('the full wizard: N4 with lists, a class, a tested key, a change, then Toda
   await expect(main.getByText('Studying N3, level N3')).toBeVisible();
   await expect(main.getByText(/JLPT N5, N4: marked as known when you start reading/)).toBeVisible();
 
-  await page.getByRole('button', { name: 'Start reading' }).click({ timeout: 30_000 });
+  await page.getByRole('button', { name: 'Start', exact: true }).click({ timeout: 30_000 });
   await expect(page).toHaveURL(/\/$/, { timeout: 30_000 });
   await page.goto('/welcome');
   await expect(page).toHaveURL(/\/$/);

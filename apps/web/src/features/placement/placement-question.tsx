@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react';
 import type { PlacementQuestion } from '../../domain/placement/index.ts';
 import type { ChoiceQuestion, QuestionKind } from '../../domain/questions/index.ts';
 import { questionHelpCard } from '../../ui/exercise-cards.ts';
@@ -53,17 +52,16 @@ function Body({ item }: { item: PlacementQuestion }) {
 
 /**
  * The help bar (U6) for placement's sentence questions: meaning and explanation of the stem as
- * shown, never the answer. 読解 keeps its own layout and only the skip.
+ * shown, never the answer. 読解 has none.
  */
-function PlacementHelp({ item, skip }: { item: PlacementQuestion; skip: ReactNode }) {
-  if (item.kind === 'comprehension') return skip;
+function PlacementHelp({ item }: { item: PlacementQuestion }) {
+  if (item.kind === 'comprehension') return null;
   const { question } = item;
   return (
     <ExerciseHelp
       question={question}
       explain={questionHelpCard(question, undefined, false)}
       answered={false}
-      skip={skip}
     />
   );
 }
@@ -108,7 +106,8 @@ export function PlacementQuestionView({ item, index, total, busy, onChoose }: Pr
           </button>
         ))}
       </div>
-      <PlacementHelp item={item} skip={skip} />
+      {skip}
+      <PlacementHelp item={item} />
     </section>
   );
 }

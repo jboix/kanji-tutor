@@ -187,7 +187,7 @@ function Reading({ controls, topBar, all, voice, onVoice, explainFirst }: Readin
   if (!now) return null;
   if (Intro) {
     return (
-      <Screen topBar={topBar} gap={22} enter={false}>
+      <Screen topBar={topBar} gap={22} enter="quick">
         <Intro
           key={`${state.index}:${state.step}`}
           card={now.card}
@@ -199,7 +199,7 @@ function Reading({ controls, topBar, all, voice, onVoice, explainFirst }: Readin
   }
   const footer = <Footer controls={controls} voice={voice} onVoice={onVoice} />;
   return (
-    <Screen topBar={topBar} footer={footer} gap={22} enter={false}>
+    <Screen topBar={topBar} footer={footer} gap={22} enter="quick">
       <SessionView
         card={now.card}
         step={state.step}

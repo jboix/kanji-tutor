@@ -90,11 +90,13 @@ export interface WizardProps {
   initial: StepId;
   install: InstallState;
   onInstall: () => void;
+  /** Where to go once the wizard is done: Today, or the level test. */
+  onLeave?: (to: string) => void;
 }
 
 /** The welcome wizard (P5): one step at a time, sliding in, with Back, Next and Skip. */
-export function Wizard({ settings, patch, initial, install, onInstall }: WizardProps) {
-  const wizard = useWizard(settings, initial, patch);
+export function Wizard({ settings, patch, initial, install, onInstall, onLeave }: WizardProps) {
+  const wizard = useWizard(settings, initial, patch, onLeave);
   const body = useRef<HTMLDivElement>(null);
   const area = useRef<HTMLDivElement>(null);
   useStepFocus(body, wizard.step);

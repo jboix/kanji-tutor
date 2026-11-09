@@ -70,6 +70,7 @@ async function setup(options: Setup = {}): Promise<{ repos: Repos; packs: Packs 
         <MemoryRouter initialEntries={[options.path ?? paths.onboarding]}>
           <Routes>
             <Route path={paths.onboarding} element={<OnboardingScreen />} />
+            <Route path={paths.placement} element={<p>Placement page</p>} />
             <Route
               path={paths.today}
               element={
@@ -171,11 +172,11 @@ describe('welcome wizard (P5)', () => {
     expect(lesson.parentElement?.textContent).toBe('Tobira 第4課');
     expect(summary.getByText('Key saved in this browser')).toBeTruthy();
     expect(summary.getByText('Sounds off, furigana on all words')).toBeTruthy();
-    expect(button('Start reading')).toHaveProperty('disabled', true);
+    expect(button('Start')).toHaveProperty('disabled', true);
     packs.finish();
-    await waitFor(() => expect(button('Start reading')).toHaveProperty('disabled', false));
+    await waitFor(() => expect(button('Start')).toHaveProperty('disabled', false));
     expect(screen.getByText('Dictionary loaded: everything works offline.')).toBeTruthy();
-    await userEvent.click(button('Start reading'));
+    await userEvent.click(button('Start'));
     expect(await screen.findByText('Today page')).toBeTruthy();
     expect(await repos.settings.get()).toMatchObject({ onboarded: true, onboardingStep: '' });
     expect((await repos.items.get(`word:${W.eki.id}`))?.level).toBe(3);
@@ -189,6 +190,34 @@ describe('welcome wizard (P5)', () => {
     expect(document.activeElement).toBe(title);
     await userEvent.click(button('Back'));
     expect(await heading('Kanji Tutor')).toBeTruthy();
+  });
+
+  it('offers Find my level first, chosen for a new learner, starting at N5', async () => {
+    const { repos } = await setup({ settings: { onboardingStep: 'start' }, installed: true });
+    await heading('Which one can you read?');
+    const find = screen.getByRole('radio', { name: /Find my level/ });
+    expect(screen.getAllByRole('radio')[0]).toBe(find);
+    expect(find).toHaveProperty('checked', true);
+    expect(screen.getByText(/Skip it if you know yours/)).toBeTruthy();
+    await next();
+    expect((await repos.settings.get()).learnerLevel).toBe(5);
+  });
+
+  it('opens the level test after Start when Find my level was kept', async () => {
+    await setup({ settings: { onboardingStep: 'start' }, installed: true });
+    await heading('Which one can you read?');
+    await next();
+    await heading('Do you follow a class?');
+    await next();
+    await heading('Meet your tutor');
+    await userEvent.click(button('Skip'));
+    await heading('How sessions feel');
+    await next();
+    await heading('Your choices');
+    expect(screen.getByText('Finding my level after setup')).toBeTruthy();
+    await waitFor(() => expect(button('Start')).toHaveProperty('disabled', false));
+    await userEvent.click(button('Start'));
+    expect(await screen.findByText('Placement page')).toBeTruthy();
   });
 
   it('starts from zero: None marks nothing, and the key can be skipped', async () => {
@@ -391,7 +420,7 @@ describe('PackGate', () => {
   it('sends the learner to the summary, which waits for the packs, when they are missing', async () => {
     await setup({ settings: { onboarded: true }, path: paths.today });
     expect(await heading('Your choices')).toBeTruthy();
-    expect(button('Start reading')).toHaveProperty('disabled', true);
+    expect(button('Start')).toHaveProperty('disabled', true);
     expect(screen.queryByText('Today page')).toBeNull();
   });
 });

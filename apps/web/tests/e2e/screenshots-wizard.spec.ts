@@ -54,7 +54,7 @@ test('wizard: every step', async ({ page }) => {
     await step.leave(page);
   }
   await expect(stepHeading(page, 'Your choices')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Start reading' })).toBeEnabled({
+  await expect(page.getByRole('button', { name: 'Start', exact: true })).toBeEnabled({
     timeout: 30_000,
   });
   await shot(page, 'wizard-summary');

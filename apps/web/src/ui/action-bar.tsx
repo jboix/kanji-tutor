@@ -1,9 +1,20 @@
-import type { ReactNode } from 'react';
+import { createContext, type ReactNode, use } from 'react';
 import styles from './action-bar.module.css';
+
+/**
+ * What a screen adds under whichever answer its bar holds, e.g. a drill's "I don't know" under its
+ * choices or its typed field: one place for it, whatever the answer looks like.
+ */
+export const ActionBarEnd = createContext<ReactNode>(null);
 
 /** The fixed bottom row (read/compose/capture.html): the bar colour, a hairline, 12px 16px. */
 export function ActionBar({ children }: { children: ReactNode }) {
-  return <div className={styles.bar}>{children}</div>;
+  return (
+    <div className={styles.bar}>
+      {children}
+      {use(ActionBarEnd)}
+    </div>
+  );
 }
 
 /** Buttons side by side; children grow equally unless wrapped in `<ActionFixed>`. */

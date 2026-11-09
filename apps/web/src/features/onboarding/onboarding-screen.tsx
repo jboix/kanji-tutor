@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Navigate } from 'react-router';
 import { paths } from '../../ui/paths.ts';
 import { resumeStep } from './steps.ts';
@@ -7,14 +8,16 @@ import { Wizard } from './wizard.tsx';
 
 /**
  * First run (P5): the welcome, then the wizard, resumed at the saved step. Someone already
- * onboarded goes straight to Today; Settings → About can run the wizard again.
+ * onboarded goes straight to Today; Settings → About can run the wizard again. At the end the
+ * wizard says where to go next (Today, or the level test), and the screen goes there.
  */
 export function OnboardingScreen() {
   const { settings, patch } = useWizardSettings();
   const [install, runInstall] = usePackInstall();
+  const [after, setAfter] = useState<string>(paths.today);
   if (!settings || install.phase === 'checking') return null;
   const installed = install.phase === 'done';
-  if (settings.onboarded && installed) return <Navigate to={paths.today} replace />;
+  if (settings.onboarded && installed) return <Navigate to={after} replace />;
   // Onboarded once, but the packs are gone (storage cleared): the summary waits for them.
   const initial = settings.onboarded ? 'summary' : resumeStep(settings.onboardingStep);
   return (
@@ -24,6 +27,7 @@ export function OnboardingScreen() {
       initial={initial}
       install={install}
       onInstall={() => void runInstall()}
+      onLeave={setAfter}
     />
   );
 }

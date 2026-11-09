@@ -12,7 +12,7 @@ import {
 } from '../../domain/drills/index.ts';
 import type { SessionCard } from '../../domain/session-types.ts';
 import type { ItemId } from '../../domain/types.ts';
-import { ActionBar } from '../../ui/action-bar.tsx';
+import { ActionBar, ActionBarEnd } from '../../ui/action-bar.tsx';
 import { blankHelpCard } from '../../ui/exercise-cards.ts';
 import { ExerciseHelp } from '../../ui/exercise-help.tsx';
 import { useI18n, useT } from '../../ui/i18n/i18n.tsx';
@@ -114,7 +114,7 @@ function helpSentence(drill: Drill, answered: boolean) {
   return hidden && !answered ? undefined : drill.sentence;
 }
 
-/** The help bar (U6): meaning and explanation for sentence drills, "I don't know" for all. */
+/** The help bar (U6): meaning and explanation for sentence drills. */
 function DrillHelp({ drill, controls }: { drill: Drill; controls: DrillControls }) {
   const sentence = helpSentence(drill, controls.answered);
   const range = blankOf(drill);
@@ -126,7 +126,6 @@ function DrillHelp({ drill, controls }: { drill: Drill; controls: DrillControls 
       answered={controls.answered}
       meaningOnAnswer={drill.kind !== 'build'}
       meaningFirst={drill.kind === 'cloze'}
-      skip={<SkipButton onSkip={controls.skip} />}
     />
   );
 }
@@ -295,7 +294,10 @@ export function DrillCard({ drill: given, card, onDone, nextLabel, layout }: Dri
   const footer = controls.answered ? (
     <NextFooter drill={drill} controls={controls} nextLabel={nextLabel} />
   ) : (
-    <AnswerFooter drill={drill} controls={controls} order={order} />
+    // "I don't know" under the answer, choices or typed alike (L4).
+    <ActionBarEnd value={<SkipButton onSkip={controls.skip} />}>
+      <AnswerFooter drill={drill} controls={controls} order={order} />
+    </ActionBarEnd>
   );
   const body = (
     <>
@@ -323,7 +325,7 @@ export interface DrillScreenProps {
 /** One drill card as a session screen. */
 export function DrillScreen({ drill, card, topBar, onDone }: DrillScreenProps) {
   const layout = (body: ReactNode, footer: ReactNode) => (
-    <Screen topBar={topBar} footer={footer} gap={22} enter={false}>
+    <Screen topBar={topBar} footer={footer} gap={22} enter="quick">
       {body}
     </Screen>
   );

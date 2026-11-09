@@ -4,7 +4,7 @@
 export interface OnboardingKnown {
   /** What Next marked; absent until it marked something. */
   marked?: { words: number; already: number; missing: number };
-  /** Lists the start implies but a Skip left unmarked: marked at Start reading. */
+  /** Lists the start implies but a Skip left unmarked: marked at Start. */
   pending: ('n5' | 'n4')[];
 }
 

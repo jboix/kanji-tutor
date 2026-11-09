@@ -28,7 +28,8 @@ const FREE_TEXT = {
 /**
  * The question pill of the Ask box (A4, C6): free text, in English or Japanese. The あ switch
  * turns romaji typed after it into kana (what was typed before stays), and kanji spellings for
- * the kana pop up above it.
+ * the kana pop up above it. A question mixes English and Japanese, so the field keeps the UI font
+ * whatever the switch: flipping it changes what is typed, never how the line looks.
  */
 export function AskInput({ label, placeholder, onSubmit, trailing }: AskInputProps) {
   const [value, setValue] = useState('');
@@ -60,8 +61,7 @@ export function AskInput({ label, placeholder, onSubmit, trailing }: AskInputPro
           id={id}
           value={value}
           {...typing.handlers}
-          className={cx(pill.input, kana && pill.kana)}
-          lang={kana ? 'ja' : undefined}
+          className={pill.input}
           placeholder={placeholder}
           {...FREE_TEXT}
         />

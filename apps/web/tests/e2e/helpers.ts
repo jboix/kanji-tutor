@@ -50,8 +50,8 @@ export async function onboard(page: Page, start = /I'm starting from zero/): Pro
   await page.getByRole('button', { name: 'Skip', exact: true }).click();
   await expect(stepHeading(page, 'How sessions feel')).toBeVisible();
   await nextStep(page, 'Your choices');
-  // Start reading opens once the dictionary is in.
-  await page.getByRole('button', { name: 'Start reading' }).click({ timeout: 30_000 });
+  // Start opens once the dictionary is in.
+  await page.getByRole('button', { name: 'Start', exact: true }).click({ timeout: 30_000 });
   await expect(page).toHaveURL(/\/$/, { timeout: 30_000 });
 }
 

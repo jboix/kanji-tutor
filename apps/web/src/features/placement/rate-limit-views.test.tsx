@@ -27,9 +27,7 @@ async function askAfterPlacement() {
   await user.click(screen.getByRole('button', { name: 'Start' }));
   for (let n = 1; n <= 15; n += 1) {
     const card = await screen.findByRole('region', { name: `Question ${n} of about 15` });
-    const buttons = card.querySelectorAll('button');
-    const skip = buttons[buttons.length - 1];
-    if (skip) await user.click(skip);
+    await user.click(within(card).getByRole('button', { name: "I don't know" }));
   }
   await user.click(await screen.findByRole('button', { name: 'Skip' }));
   await user.click(await screen.findByRole('button', { name: /^Ask the tutor to assess, / }));

@@ -52,7 +52,8 @@ describe('wizard steps', () => {
   });
 
   it('reads the start a level stands for', () => {
-    expect(startOf(undefined)).toBe('zero');
+    expect(startOf(undefined)).toBe('find');
+    expect(startOf(5)).toBe('zero');
     expect(startOf(4)).toBe('n4');
     expect(startOf(3)).toBe('n3');
   });

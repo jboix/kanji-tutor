@@ -27,7 +27,7 @@ export function GrammarIntroScreen({ grammarId, topBar, onDone }: GrammarIntroSc
   }, [Intro, onDone]);
   if (!Intro) return null;
   return (
-    <Screen topBar={topBar} gap={22} enter={false}>
+    <Screen topBar={topBar} gap={22} enter="quick">
       <Intro grammarId={grammarId} onDone={done} />
     </Screen>
   );

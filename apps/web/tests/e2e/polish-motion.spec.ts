@@ -59,18 +59,26 @@ test("a screen's sections fade in top to bottom, and settle within 850ms", async
   expect(Math.max(...ends)).toBeLessThanOrEqual(0.85);
 });
 
-test('no entrance with reduced motion, nor on a session card', async ({ page }) => {
+test('a session card eases in at once, settled within 400ms, and nothing moves with reduced motion', async ({
+  page,
+}) => {
   await onboard(page);
   await importKnown(page);
   await page.goto('/');
   await beginMix(page);
   await answerField(page);
   const card = await page.evaluate(() =>
-    [...document.querySelectorAll('[data-screen-body] > *')].map(
-      (el) => getComputedStyle(el).animationName,
-    ),
+    [...document.querySelectorAll('[data-screen-body] > *')].map((el) => {
+      const style = getComputedStyle(el);
+      return {
+        name: style.animationName,
+        end: Number.parseFloat(style.animationDelay) + Number.parseFloat(style.animationDuration),
+      };
+    }),
   );
-  expect(card.includes('enter')).toBe(false);
+  expect(card.length).toBeGreaterThan(0);
+  expect(card.every((t) => t.name === 'enter-quick')).toBe(true);
+  expect(Math.max(...card.map((t) => t.end))).toBeLessThanOrEqual(0.4);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/learn');
   await expect(page.getByRole('heading', { name: 'Learn', level: 1 })).toBeVisible();

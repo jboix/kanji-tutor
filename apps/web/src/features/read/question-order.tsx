@@ -200,7 +200,6 @@ function OrderHelp({ question, controls, sentence }: BodyProps) {
       explain={helpFor(question, sentence, answered)}
       answered={answered}
       meaningOnAnswer
-      skip={<SkipButton onSkip={controls.skip} />}
     />
   );
 }
@@ -236,6 +235,7 @@ function Unsolved({ question, controls, sentence }: BodyProps) {
         <PillButton disabled={!full} onClick={() => controls.choose(slots[question.star] ?? -1)}>
           {t('questions.check')}
         </PillButton>
+        <SkipButton onSkip={controls.skip} />
       </StickyActions>
       <OrderHelp question={question} controls={controls} sentence={sentence} />
     </>

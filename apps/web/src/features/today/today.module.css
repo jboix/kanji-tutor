@@ -382,3 +382,11 @@ a.small:hover {
 .change:hover {
   color: var(--link-hover);
 }
+
+/* Mark what you know and Find my level: raised cards, as far apart as the cards around them
+   (the screen's 14px gap). */
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}

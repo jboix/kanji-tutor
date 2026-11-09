@@ -253,7 +253,7 @@ export function ComprehensionView({ set, onDone, layout = stacked }: Comprehensi
 /** A passage card in the reading session (T6), under the session's top bar. */
 export function PassageScreen(props: ComprehensionViewProps & { topBar: ReactNode }) {
   const layout: PassageLayout = (body, footer) => (
-    <Screen topBar={props.topBar} footer={footer} gap={22} enter={false}>
+    <Screen topBar={props.topBar} footer={footer} gap={22} enter="quick">
       {body}
     </Screen>
   );

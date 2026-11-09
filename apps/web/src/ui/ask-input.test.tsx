@@ -128,6 +128,8 @@ describe('AskInput (A4, C6)', () => {
     await kanaOn();
     await userEvent.type(field, 'korehagakusei');
     expect(field.value).toBe('これはがくせい');
+    // The field keeps the UI font with the switch on: no Japanese styling on a mixed line.
+    expect(field.hasAttribute('lang')).toBe(false);
     const popup = await screen.findByRole('listbox', { name: 'Kanji for これはがくせい' });
     const phrase = await screen.findByRole('option', { name: 'これは学生' });
     expect(popup.contains(phrase)).toBe(true);

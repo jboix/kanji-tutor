@@ -7,13 +7,12 @@ import { BottomNav } from '../../ui/bottom-nav.tsx';
 import { CastStack } from '../../ui/cast-portrait.tsx';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { InstallBanner } from '../../ui/install-banner.tsx';
-import { ListRow } from '../../ui/list-row.tsx';
 import { Loader } from '../../ui/loader.tsx';
 import { paths } from '../../ui/paths.ts';
 import { PillLink } from '../../ui/pill-button.tsx';
 import { Screen } from '../../ui/screen.tsx';
 import { UpdateCard } from '../../ui/update-card.tsx';
-import { PlacementRows } from './placement-row.tsx';
+import { HomeCard, PlacementRows } from './placement-row.tsx';
 import styles from './today.module.css';
 import { ClassSection } from './today-class.tsx';
 import { dateLine, greeting } from './today-copy.ts';
@@ -116,7 +115,7 @@ function TodayBody({ overview, session, now, onChange }: TodayBodyProps) {
       <Practice session={session} />
       {home && <KnownSection known={home.known} />}
       {home && <UnitsSection units={home.units} currentId={home.currentId} />}
-      <div>
+      <div className={styles.cards}>
         {overview.trackedWords === 0 && <MarkRow />}
         <PlacementRows now={now} />
       </div>
@@ -130,11 +129,7 @@ function TodayBody({ overview, session, now, onChange }: TodayBodyProps) {
 /** A learner who tracks nothing yet is still offered the import (P1). */
 function MarkRow() {
   const t = useT();
-  return (
-    <ListRow to={paths.knownImport} detail={t('today.markDetail')}>
-      {t('today.mark')}
-    </ListRow>
-  );
+  return <HomeCard to={paths.knownImport} title={t('today.mark')} line={t('today.markDetail')} />;
 }
 
 /** A brand-new learner: nothing is known yet, so no sentence is i+1. */

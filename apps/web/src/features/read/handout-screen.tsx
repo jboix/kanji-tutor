@@ -265,7 +265,7 @@ export function HandoutScreen({ card, topBar, onDone }: HandoutScreenProps) {
     <AnswerFooter question={question} controls={controls} />
   );
   return (
-    <Screen topBar={topBar} footer={footer} gap={22} enter={false}>
+    <Screen topBar={topBar} footer={footer} gap={22} enter="quick">
       <Source lessonId={lessonId} question={question} />
       <p className={styles.prompt}>
         <Instruction question={question} />

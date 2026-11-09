@@ -12,21 +12,32 @@ export type StepId = (typeof STEPS)[number];
 /** The numbered steps: all but the welcome. */
 export const NUMBERED = STEPS.length - 1;
 
-/** Where the learner starts (P1, P4): from zero, or studying N5, N4 or N3. */
-export type StartChoice = 'zero' | 'n5' | 'n4' | 'n3';
+/**
+ * Where the learner starts (P1, P4): the level test after setup ("find"), from zero, or studying
+ * N5, N4 or N3. Finding the level starts at N5 until the test sets it.
+ */
+export type StartChoice = 'find' | 'zero' | 'n5' | 'n4' | 'n3';
 
-export const START_LEVEL: Record<StartChoice, LearnerLevel> = { zero: 5, n5: 5, n4: 4, n3: 3 };
+export const START_LEVEL: Record<StartChoice, LearnerLevel> = {
+  find: 5,
+  zero: 5,
+  n5: 5,
+  n4: 4,
+  n3: 3,
+};
 
 /** The lists a start stands for: N4 means N5 is known, N3 means N5 and N4 are. */
 export const START_LISTS: Record<StartChoice, readonly JlptList[]> = {
+  find: [],
   zero: [],
   n5: [],
   n4: ['n5'],
   n3: ['n5', 'n4'],
 };
 
-/** The start a stored level stands for; N5 reads as "from zero". */
+/** The start a stored level stands for: none yet offers the level test; N5 reads as "from zero". */
 export function startOf(level: LearnerLevel | undefined): StartChoice {
+  if (level === undefined) return 'find';
   if (level === 4) return 'n4';
   if (level === 3) return 'n3';
   return 'zero';

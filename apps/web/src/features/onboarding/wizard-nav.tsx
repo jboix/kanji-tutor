@@ -18,7 +18,7 @@ interface Props {
   hasKey: boolean;
 }
 
-/** Whether Next (or Start reading) can be pressed on this step. */
+/** Whether Next (or Start) can be pressed on this step. */
 function canGoOn({ wizard, install, waiting }: Props): boolean {
   if (wizard.step === 'summary') return install.phase === 'done';
   if (wizard.step === 'class') return !waiting && wizard.importPhase.phase !== 'running';

@@ -7,7 +7,7 @@ export const onboarding = {
   navLabel: 'Étapes d’accueil',
   backgroundLoading: 'Chargement du dictionnaire, pour que tout marche hors ligne',
   tryAgain: 'Réessayer',
-  startReading: 'Commencer à lire',
+  startReading: 'Commencer',
   backToSummary: 'Retour au récapitulatif',
   skipAiHint: 'Tout fonctionne sans clé, sauf le tuteur.',
   kanaNeeded: 'Kanji Tutor suppose que vous lisez déjà les hiragana et les katakana.',
@@ -20,7 +20,10 @@ export const onboarding = {
   dictionaryFailed: 'Le dictionnaire ne s’est pas chargé. Vérifiez la connexion.',
   startHeading: 'Laquelle savez-vous lire ?',
   startLead:
-    'Choisissez la phrase la plus difficile que vous lisez sans aide. Les nouveaux mots viennent de ce niveau.',
+    'Pas sûr ? Trouvez votre niveau. Sinon, choisissez la phrase la plus difficile que vous lisez sans aide : les nouveaux mots viennent de ce niveau.',
+  startFind: 'Trouver mon niveau',
+  startFindHint:
+    'Une quinzaine de courtes questions une fois la configuration finie, puis un niveau. Si vous connaissez le vôtre, choisissez-le ci-dessous.',
   startZero: 'Je pars de zéro',
   startZeroHint:
     'Rien n’est marqué comme connu. Les sessions commencent par des mots N5 dans des phrases courtes.',
@@ -66,6 +69,7 @@ export const onboarding = {
   rowClass: 'Votre cours',
   rowAi: 'Tuteur IA',
   rowFeel: 'Ressenti des sessions',
+  summaryFind: 'Trouver mon niveau après la configuration',
   summaryZero: 'Départ de zéro',
   summaryN5: 'Étude du N5',
   summaryN4: 'Étude du N4',

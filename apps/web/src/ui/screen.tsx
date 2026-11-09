@@ -15,10 +15,17 @@ export interface ScreenProps {
   /** Body top padding under a top bar; 24px by default (compose.html 16, handwrite.html 18). */
   top?: number;
   /**
-   * The sections' entrance, on unless false: a session's cards turn it off, so answering
-   * never waits on it. A child can opt out alone with `data-enter="off"`.
+   * The sections' entrance: the screen's staggered one unless false. `'quick'` is a session
+   * card's: each card's sections, and what an answer reveals, ease in at once, so going through
+   * exercises is smooth and answering never waits. A child can opt out alone with
+   * `data-enter="off"`.
    */
-  enter?: boolean;
+  enter?: boolean | 'quick';
+}
+
+function enterAttr(enter: boolean | 'quick'): string | undefined {
+  if (enter === 'quick') return 'quick';
+  return enter ? undefined : 'off';
 }
 
 /**
@@ -39,7 +46,7 @@ export function Screen({ children, footer, topBar, gap, top, enter = true }: Scr
         className={cx(styles.body, topBar !== undefined && styles.underBar)}
         style={vars}
         data-screen-body=""
-        data-enter={enter ? undefined : 'off'}
+        data-enter={enterAttr(enter)}
       >
         {children}
       </main>

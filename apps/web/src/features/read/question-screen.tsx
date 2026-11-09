@@ -58,10 +58,10 @@ export function QuestionScreen({ question, card, topBar, onDone }: QuestionScree
   const { answer } = controls;
   useGradeSound(answer?.grade);
   const done = () => onDone({ kind: question.kind, right: answer?.grade.verdict === 'correct' });
-  // Before the answer, "I don't know" sits in the help bar under the question (U6).
+  // Before the answer, "I don't know" sits under the options (or Check), in the card.
   const footer = answer && <NextFooter question={question} onNext={done} />;
   return (
-    <Screen topBar={topBar} footer={footer} gap={22} enter={false}>
+    <Screen topBar={topBar} footer={footer} gap={22} enter="quick">
       <QuestionHeader question={question} />
       {question.kind === 'sentence-order' ? (
         <OrderBody question={question} controls={controls} sentence={card?.sentence} />

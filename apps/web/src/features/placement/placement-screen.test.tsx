@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { createAiClient } from '../../ai/client.ts';
@@ -15,8 +15,10 @@ async function answerAll(pick: 'skip' | 'first') {
   await user.click(screen.getByRole('button', { name: 'Start' }));
   for (let n = 1; n <= 15; n += 1) {
     const card = await screen.findByRole('region', { name: `Question ${n} of about 15` });
-    const buttons = card.querySelectorAll('button');
-    const target = pick === 'skip' ? buttons[buttons.length - 1] : buttons[0];
+    const target =
+      pick === 'skip'
+        ? within(card).getByRole('button', { name: "I don't know" })
+        : card.querySelector('button');
     if (target) await user.click(target);
   }
   return user;
@@ -27,6 +29,14 @@ function render(repos: Repos, ai = fakeAi()) {
 }
 
 describe('Find my level (A11)', () => {
+  it('offers Cancel under Start, back to Home, and no back arrow before it starts', async () => {
+    render(await fixtureRepos());
+    const cancel = await screen.findByRole('link', { name: 'Cancel' });
+    expect(cancel.getAttribute('href')).toBe('/');
+    expect(screen.queryByRole('link', { name: 'Back' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Back' })).toBeNull();
+  });
+
   it('runs 15 questions from N5 and proposes a level with notes, without a key', async () => {
     const repos = await fixtureRepos();
     const ai = fakeAi({

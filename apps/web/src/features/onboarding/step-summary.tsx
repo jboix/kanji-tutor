@@ -13,6 +13,7 @@ import { START_LISTS, type StartChoice, type StepId } from './steps.ts';
 import styles from './wizard.module.css';
 
 const START_TEXT = {
+  find: 'onboarding.summaryFind',
   zero: 'onboarding.summaryZero',
   n5: 'onboarding.summaryN5',
   n4: 'onboarding.summaryN4',
@@ -40,7 +41,10 @@ interface Row {
 
 function rows(t: Translate, { wizard, settings }: StepProps): Row[] {
   const start = t(START_TEXT[wizard.draft.start]);
-  const level = t('onboarding.summaryLevel', { start, level: learnerLevelOf(settings) });
+  const level =
+    wizard.draft.start === 'find'
+      ? start
+      : t('onboarding.summaryLevel', { start, level: learnerLevelOf(settings) });
   const lesson = settings.currentLesson ? (
     <span>
       <JaRuns text={settings.currentLesson} />

@@ -56,7 +56,7 @@ export function ChoiceStem({ question, answered, sentence }: StemProps) {
   );
 }
 
-/** A J1–J4 question: sentence, options, the help bar (U6), then the explanations. */
+/** A J1–J4 question: sentence, options with "I don't know" under them, the help bar (U6), then the explanations. */
 export function ChoiceBody({
   question,
   controls,
@@ -77,13 +77,13 @@ export function ChoiceBody({
         onChoose={controls.choose}
         words={question.kind !== 'kanji-reading'}
       />
+      {!answered && <SkipButton onSkip={controls.skip} />}
       <ExerciseHelp
         sentence={sentence}
         question={question}
         explain={questionHelpCard(question, sentence, answered)}
         answered={answered}
         meaningOnAnswer
-        skip={<SkipButton onSkip={controls.skip} />}
       />
       {answer && <AnswerLine question={question} answer={answer} />}
       {answer && <OptionNotes question={question} />}

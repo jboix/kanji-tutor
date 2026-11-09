@@ -14,6 +14,7 @@ const SAMPLES: readonly { value: StartChoice; sample: string }[] = [
 ];
 
 const TAG = {
+  find: 'onboarding.startFind',
   zero: 'onboarding.startZero',
   n5: 'onboarding.startN5',
   n4: 'onboarding.startN4',
@@ -21,14 +22,24 @@ const TAG = {
 } as const;
 
 const HINT = {
+  find: 'onboarding.startFindHint',
   zero: 'onboarding.startZeroHint',
   n5: 'onboarding.startN5Hint',
   n4: 'onboarding.startN4Hint',
   n3: 'onboarding.startN3Hint',
 } as const;
 
+/** First, not knowing: a few questions after setup find the level. */
+function findOption(t: ReturnType<typeof useT>): CardOption<StartChoice> {
+  return {
+    value: 'find',
+    title: <span className={styles.sampleTag}>{t(TAG.find)}</span>,
+    hint: t(HINT.find),
+  };
+}
+
 function options(t: ReturnType<typeof useT>): readonly CardOption<StartChoice>[] {
-  return SAMPLES.map(({ value, sample }) => ({
+  const known = SAMPLES.map(({ value, sample }) => ({
     value,
     title: (
       <span className={styles.sample}>
@@ -40,10 +51,12 @@ function options(t: ReturnType<typeof useT>): readonly CardOption<StartChoice>[]
     ),
     hint: t(HINT[value]),
   }));
+  return [findOption(t), ...known];
 }
 
 /**
- * Where you start (P1, P4): the hardest sentence you can read sets the level on Next.
+ * Where you start (P1, P4): Find my level first, for a learner unsure of theirs (the test opens
+ * once setup is done); else the hardest sentence you can read sets the level on Next.
  * From zero, the kana note shows before anything is asked (P8).
  */
 export function StepStart({ wizard }: Pick<StepProps, 'wizard'>) {
