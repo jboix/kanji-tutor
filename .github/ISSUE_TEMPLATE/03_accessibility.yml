@@ -1,7 +1,7 @@
 name: ♿ Accessibility barrier
 description: Something in the app you cannot see, reach, hear or use
-title: "♿ <TITLE>"
-labels: ["accessibility"]
+title: '♿ <TITLE>'
+labels: ['accessibility']
 body:
   - type: textarea
     id: barrier

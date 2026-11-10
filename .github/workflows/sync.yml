@@ -70,7 +70,7 @@ jobs:
       - name: Install dependencies
         env:
           CI: true
-          HUSKY: "0"
+          HUSKY: '0'
         run: bun install --frozen-lockfile
 
       # Every gate, as for a release; it ends with `sync:build`, the bundle the image copies.
