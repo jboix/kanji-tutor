@@ -11,16 +11,16 @@ services:
     volumes:
       - sync-data:/data
     expose:
-      - "3000"
+      - '3000'
   caddy:
     image: caddy:2-alpine
     restart: unless-stopped
     depends_on:
       - sync
     ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
     environment:
       SYNC_DOMAIN: ${SYNC_DOMAIN}
     volumes:

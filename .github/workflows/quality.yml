@@ -39,7 +39,7 @@ jobs:
       - name: Install dependencies
         env:
           CI: true
-          HUSKY: "0"
+          HUSKY: '0'
         run: bun install --frozen-lockfile
 
       - name: Typecheck
@@ -91,7 +91,7 @@ jobs:
       - name: Install dependencies
         env:
           CI: true
-          HUSKY: "0"
+          HUSKY: '0'
         run: bun install --frozen-lockfile
 
       - name: Playwright browsers
@@ -130,7 +130,7 @@ jobs:
       - name: Install dependencies
         env:
           CI: true
-          HUSKY: "0"
+          HUSKY: '0'
         run: bun install --frozen-lockfile
 
       - name: Commit messages

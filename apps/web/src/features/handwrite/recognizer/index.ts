@@ -8,7 +8,7 @@ import { classify, type Reference } from './classify.ts';
 import { extractFeatures, momentNormalize, type Pattern } from './geometry.ts';
 import { decodePatterns, type PatternTable } from './patterns.ts';
 
-export type { Pattern, Point, Stroke } from './geometry.ts';
+export type { Pattern, Stroke } from './geometry.ts';
 
 export interface Candidate {
   char: string;

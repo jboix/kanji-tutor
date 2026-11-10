@@ -8,6 +8,7 @@ import type { PagePeekSlotProps, Slots } from '../ui/slots.tsx';
  */
 function lazySlot<P extends object>(load: () => Promise<ComponentType<P>>): ComponentType<P> {
   const Loaded = lazy(async () => ({ default: await load() }));
+  // biome-ignore lint/correctness/noComponentHookFactories: built once per slot at module load, never during render
   return function LazySlot(props: P) {
     return (
       <Suspense fallback={null}>
