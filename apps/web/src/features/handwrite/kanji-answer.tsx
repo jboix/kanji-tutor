@@ -1,4 +1,4 @@
-import { useReducer, useState } from 'react';
+import { useMemo, useReducer, useState } from 'react';
 import { cx } from '../../ui/cx.ts';
 import { useT } from '../../ui/i18n/i18n.tsx';
 import { PillButton } from '../../ui/pill-button.tsx';
@@ -6,6 +6,7 @@ import type { KanjiDrawSlotProps } from '../../ui/slots.tsx';
 import { DrawingPad } from './drawing-pad.tsx';
 import styles from './handwrite.module.css';
 import { EMPTY_INK, inkReducer } from './ink.ts';
+import { isLastToDraw, type KanjiSteps, leaveOpen, nextToDraw, startSteps } from './kanji-steps.ts';
 import type { Recognizer, Stroke } from './recognizer/index.ts';
 import { StatusLine } from './status-line.tsx';
 import { useRecognizer } from './use-recognition.ts';
@@ -23,60 +24,120 @@ export function readDrawing(recognizer: Recognizer, strokes: readonly Stroke[], 
   return ranked[0]?.char ?? '？';
 }
 
-/** A box per kanji: the ones drawn show how they were read, the current one is ringed. */
-function Boxes({ kanji, drawn }: { kanji: readonly string[]; drawn: readonly string[] }) {
+interface BoxProps {
+  n: number;
+  shown: string;
+  current: boolean;
+  onOpen: () => void;
+}
+
+/** One kanji's box: ringed while open, and once drawn a button that opens it again. */
+function Box({ n, shown, current, onOpen }: BoxProps) {
   const t = useT();
-  const label = t('handwrite.kanjiOf', { n: drawn.length + 1, total: kanji.length });
-  const boxes = kanji.map((char, i) => ({ id: `${i}${char}`, i, shown: drawn[i] ?? '' }));
+  if (current || shown === '') {
+    return (
+      <li
+        className={cx(styles.box, current && styles.boxCurrent)}
+        aria-current={current || undefined}
+      >
+        <span lang="ja">{shown}</span>
+      </li>
+    );
+  }
   return (
-    <ol className={styles.boxes} aria-label={label}>
-      {boxes.map(({ id, i, shown }) => (
-        <li
+    <li>
+      <button
+        type="button"
+        className={cx(styles.box, styles.boxDone)}
+        aria-label={t('handwrite.redrawKanji', { n, char: shown })}
+        onClick={onOpen}
+      >
+        <span lang="ja">{shown}</span>
+      </button>
+    </li>
+  );
+}
+
+interface BoxesProps {
+  kanji: readonly string[];
+  steps: KanjiSteps;
+  live: string;
+  onOpen: (i: number) => void;
+}
+
+/** A box per kanji: drawn ones show how they read and open again on a tap. */
+function Boxes({ kanji, steps, live, onOpen }: BoxesProps) {
+  const t = useT();
+  const total = kanji.length;
+  const boxes = kanji.map((char, i) => ({ id: `${i}${char}`, i }));
+  return (
+    <ol className={styles.boxes} aria-label={t('handwrite.kanjiOf', { n: steps.at + 1, total })}>
+      {boxes.map(({ id, i }) => (
+        <Box
           key={id}
-          lang="ja"
-          className={cx(
-            styles.box,
-            i < drawn.length && styles.boxDone,
-            i === drawn.length && styles.boxCurrent,
-          )}
-        >
-          {shown}
-        </li>
+          n={i + 1}
+          shown={i === steps.at ? live : (steps.read[i] ?? '')}
+          current={i === steps.at}
+          onOpen={() => onOpen(i)}
+        />
       ))}
     </ol>
   );
 }
 
-function Note({ status }: { status: 'loading' | 'ready' | 'failed' }) {
+/** What the drawing on the pad reads as, while drawing, or why nothing reads yet. */
+function Note({ status, live }: { status: 'loading' | 'ready' | 'failed'; live: string }) {
   const t = useT();
   if (status === 'loading') return <StatusLine>{t('handwrite.recognizerLoading')}</StatusLine>;
   if (status === 'failed') return <StatusLine>{t('handwrite.recognizerFailed')}</StatusLine>;
-  return null;
+  if (live === '') return null;
+  return (
+    <StatusLine>
+      {t('handwrite.readsAs')} <span lang="ja">{live}</span>
+    </StatusLine>
+  );
+}
+
+/** The word's kanji, each with its strokes kept: leaving one reads it, any can be opened again. */
+function useKanjiDrawing(kanji: readonly string[], onAnswer: (answer: string) => void) {
+  const [ink, dispatch] = useReducer(inkReducer, EMPTY_INK);
+  const [steps, setSteps] = useState(() => startSteps(kanji.length));
+  const { status, recognizer } = useRecognizer();
+  const meant = kanji[steps.at] ?? '';
+  const live = useMemo(
+    () => (recognizer && ink.strokes.length > 0 ? readDrawing(recognizer, ink.strokes, meant) : ''),
+    [recognizer, ink.strokes, meant],
+  );
+  const open = (left: KanjiSteps, i: number) => {
+    dispatch({ type: 'load', strokes: left.strokes[i] ?? [] });
+    setSteps({ ...left, at: i });
+  };
+  const left = () => leaveOpen(steps, ink.strokes, live);
+  const next = () => {
+    if (live === '') return;
+    const i = nextToDraw(left());
+    if (i === undefined) onAnswer(left().read.join(''));
+    else open(left(), i);
+  };
+  const reopen = (i: number) => i !== steps.at && open(left(), i);
+  return { ink, dispatch, steps, status, live, next, reopen };
 }
 
 /**
  * "Write the kanji" (the `kanjiDraw` slot): the word's kanji drawn one after the other on the
- * pad, each read offline as it is left, and the whole handed back after the last.
+ * pad. What the drawing reads as shows while drawing, a kanji drawn before opens again from its
+ * box, and the whole is handed back after the last.
  */
 export function KanjiAnswer({ kanji, onAnswer }: KanjiDrawSlotProps) {
-  const [ink, dispatch] = useReducer(inkReducer, EMPTY_INK);
-  const [drawn, setDrawn] = useState<string[]>([]);
-  const { status, recognizer } = useRecognizer();
+  const { ink, dispatch, steps, status, live, next, reopen } = useKanjiDrawing(kanji, onAnswer);
   const t = useT();
-  const last = drawn.length + 1 >= kanji.length;
-  const next = () => {
-    if (!recognizer || ink.strokes.length === 0) return;
-    const all = [...drawn, readDrawing(recognizer, ink.strokes, kanji[drawn.length] ?? '')];
-    dispatch({ type: 'clear' });
-    if (all.length >= kanji.length) onAnswer(all.join(''));
-    else setDrawn(all);
-  };
+  const last = isLastToDraw(steps);
   return (
     <div className={styles.answer}>
-      {kanji.length > 1 && <Boxes kanji={kanji} drawn={drawn} />}
+      {kanji.length > 1 && <Boxes kanji={kanji} steps={steps} live={live} onOpen={reopen} />}
       <DrawingPad ink={ink} dispatch={dispatch} compact />
-      <Note status={status} />
-      <PillButton block disabled={!recognizer || ink.strokes.length === 0} onClick={next}>
+      <Note status={status} live={live} />
+      <PillButton block disabled={live === ''} onClick={next}>
         {t(last ? 'exercises.check' : 'handwrite.nextKanji')}
       </PillButton>
     </div>

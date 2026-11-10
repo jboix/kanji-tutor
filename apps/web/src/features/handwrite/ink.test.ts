@@ -84,4 +84,15 @@ describe('ink reducer', () => {
     expect(drawn.strokes).toHaveLength(1);
     expect(run([{ type: 'clear' }], drawn)).toEqual(EMPTY_INK);
   });
+
+  it('load puts back the strokes of a kanji drawn before, ready for undo and more strokes', () => {
+    const before = run([...line(1), ...line(2)]).strokes;
+    const loaded = run([
+      ...line(9),
+      { type: 'down', point: [0, 0] },
+      { type: 'load', strokes: before },
+    ]);
+    expect(loaded).toEqual({ strokes: before });
+    expect(run([{ type: 'undo' }], loaded).strokes).toEqual(before.slice(0, 1));
+  });
 });

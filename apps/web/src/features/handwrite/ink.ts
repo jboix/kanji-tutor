@@ -14,7 +14,8 @@ export type InkAction =
   | { type: 'up' }
   | { type: 'cancel' }
   | { type: 'undo' }
-  | { type: 'clear' };
+  | { type: 'clear' }
+  | { type: 'load'; strokes: readonly Stroke[] };
 
 export const EMPTY_INK: Ink = { strokes: [] };
 
@@ -23,7 +24,10 @@ function finish(ink: Ink): Ink {
   return { strokes: [...ink.strokes, ink.current] };
 }
 
-/** Next ink: down starts a stroke, up finishes it, undo drops the last one, clear empties. */
+/**
+ * Next ink: down starts a stroke, up finishes it, undo drops the last one, clear empties, load
+ * puts back the strokes of a kanji drawn before.
+ */
 export function inkReducer(ink: Ink, action: InkAction): Ink {
   switch (action.type) {
     case 'down':
@@ -38,6 +42,8 @@ export function inkReducer(ink: Ink, action: InkAction): Ink {
       return { strokes: ink.current ? ink.strokes : ink.strokes.slice(0, -1) };
     case 'clear':
       return EMPTY_INK;
+    case 'load':
+      return { strokes: action.strokes };
   }
 }
 

@@ -38,6 +38,8 @@ export const handwrite = {
   strokes: { one: '{n} trait', other: '{n} traits' },
   kanjiOf: 'Kanji {n} sur {total}',
   nextKanji: 'Kanji suivant',
+  readsAs: 'Reconnu comme',
+  redrawKanji: 'Kanji {n}, reconnu comme {char}. Le redessiner',
   clear: 'Effacer le dessin',
   undo: 'Annuler le dernier trait',
   noKey: 'Ajoutez une clé Gemini dans les {settings} pour {task}.',

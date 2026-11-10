@@ -49,4 +49,26 @@ describe('KanjiAnswer · Write the kanji', { timeout: 60_000 }, () => {
     await userEvent.click(screen.getByRole('button', { name: 'Check' }));
     expect(onAnswer).toHaveBeenCalledWith('山人');
   });
+
+  it('shows what each drawing reads as, and opens a kanji drawn before to draw it again', async () => {
+    const onAnswer = vi.fn();
+    renderWithServices(<KanjiAnswer kanji={['山', '口']} onAnswer={onAnswer} />);
+    draw(SAMPLES.人 ?? []);
+    const reads = await screen.findByText('Reads as', {}, { timeout: 30_000 });
+    expect(reads.textContent).toBe('Reads as 人');
+    await userEvent.click(screen.getByRole('button', { name: 'Next kanji' }));
+    draw(SAMPLES.口 ?? []);
+    // The last kanji shows its reading before Check, too.
+    await vi.waitFor(() => expect(screen.getByRole('status').textContent).toBe('Reads as 口'));
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Kanji 1, read as 人. Draw it again' }),
+    );
+    expect(screen.getByRole('list', { name: 'Kanji 1 of 2' })).toBeTruthy();
+    expect(screen.getByRole('status').textContent).toBe('Reads as 人');
+    await userEvent.click(screen.getByRole('button', { name: 'Clear drawing' }));
+    draw(SAMPLES.山 ?? []);
+    await vi.waitFor(() => expect(screen.getByRole('status').textContent).toBe('Reads as 山'));
+    await userEvent.click(screen.getByRole('button', { name: 'Check' }));
+    expect(onAnswer).toHaveBeenCalledWith('山口');
+  });
 });
