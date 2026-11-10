@@ -1,9 +1,9 @@
 import type { CloudPort } from '../domain/cloud.ts';
-import { Chip } from './chip.tsx';
+import { ActionRow } from './action-bar.tsx';
 import styles from './cloud-save-warning.module.css';
 import { useT } from './i18n/i18n.tsx';
 import { paths } from './paths.ts';
-import { PillLink } from './pill-button.tsx';
+import { PillButton, PillLink } from './pill-button.tsx';
 
 /**
  * A warning while cloud saves are on but the last save failed: progress stays on this device and
@@ -18,12 +18,14 @@ export function CloudSaveWarning({ cloud }: { cloud: CloudPort }) {
       <p className={styles.text}>
         <strong className={styles.head}>{t('ui.cloudFailedHead')}</strong> {t('ui.cloudFailedBody')}
       </p>
-      <div className={styles.actions}>
-        <Chip onClick={() => void cloud.saveNow()}>{t('ui.cloudFailedRetry')}</Chip>
+      <ActionRow>
+        <PillButton variant="secondary" onClick={() => void cloud.saveNow()}>
+          {t('ui.cloudFailedRetry')}
+        </PillButton>
         <PillLink variant="secondary" to={paths.settingsSection('cloud')}>
           {t('ui.cloudFailedDetails')}
         </PillLink>
-      </div>
+      </ActionRow>
     </aside>
   );
 }

@@ -1,19 +1,17 @@
 /* A warning, not a quiet line: the amber card says the save is not reaching the cloud. Amber,
-   not crimson: the crimson is for corrections and the tutor. */
+   not crimson: the crimson is for corrections and the tutor. A card like the others on Today:
+   tinted, rounded and raised, with no edge of its own. */
 .warning {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px 12px;
-  padding: 12px 12px 12px var(--gutter);
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px var(--gutter) var(--gutter);
   border-radius: var(--radius-card);
   background: var(--warn-surface);
-  border-left: 4px solid var(--warn);
+  box-shadow: var(--shadow-card);
 }
 
 .text {
-  flex: 1 1 200px;
   margin: 0;
   font-size: var(--text-sm);
   line-height: 1.5;
@@ -22,10 +20,4 @@
 
 .head {
   font-weight: 600;
-}
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
 }
