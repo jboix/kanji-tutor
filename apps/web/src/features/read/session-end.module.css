@@ -1,6 +1,7 @@
 /* The session end (W-end, C-end). Its parts rise in one after another (~3 s in all, as in
-   the mockup): the check pops in, its stroke draws itself and one soft ring goes out. CSS only,
-   and under reduced motion everything simply shows. No burst, no confetti (no gamification). */
+   the mockup): the mark pops in (the check's stroke draws itself) and one soft ring goes out.
+   CSS only, and under reduced motion everything simply shows. No burst, no confetti (no
+   gamification). */
 
 .header {
   display: flex;
@@ -20,6 +21,8 @@
   border-radius: var(--radius-pill);
   background: var(--ok);
   color: var(--on-ok);
+  /* The ring's colour, which follows the mark's. */
+  --ring: var(--ok);
   animation:
     end-pop 500ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both,
     end-ring 1s ease-out 400ms both;
@@ -33,30 +36,61 @@
   stroke-linejoin: round;
 }
 
+/* From half right: a thumb up, tonal like what is current. Green stays a right answer's. */
+.up {
+  background: var(--tonal);
+  color: var(--on-tonal);
+  --ring: var(--accent);
+}
+
+/* Under half right: a thumb down in the warning amber, never the correction crimson. */
+.down {
+  background: var(--warn-surface);
+  color: var(--warn-ink);
+  --ring: var(--warn);
+}
+
+.up svg,
+.down svg {
+  width: 50px;
+  height: 50px;
+  stroke-width: 2;
+}
+
 .check {
   stroke-dasharray: 26;
   stroke-dashoffset: 0;
   animation: end-draw 400ms ease-out 300ms both;
 }
 
+/* お疲れさまでした: a quiet line under the mark, not the screen's headline. */
 .title {
-  margin: 6px 0 0;
+  margin: 2px 0 0;
   font-family: var(--font-ja);
-  font-size: 30px;
+  font-size: 19px;
   font-weight: 600;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .title rt {
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 400;
   color: var(--ink-muted);
 }
 
 .subtitle {
-  margin: -10px 0 0;
+  margin: -8px 0 0;
   font-size: 14px;
   color: var(--ink-muted);
+}
+
+/* Under half right: what would help, said plainly in ink, under the counts. */
+.advice {
+  margin: -8px 0 0;
+  font-size: var(--text-md);
+  line-height: 1.5;
+  text-align: center;
+  text-wrap: balance;
 }
 
 /* The three counts on the soft fill, ruled apart. */
@@ -306,11 +340,11 @@
 
 @keyframes end-ring {
   0% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 40%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--ring) 40%, transparent);
   }
 
   100% {
-    box-shadow: 0 0 0 26px color-mix(in srgb, var(--ok) 0%, transparent);
+    box-shadow: 0 0 0 26px color-mix(in srgb, var(--ring) 0%, transparent);
   }
 }
 

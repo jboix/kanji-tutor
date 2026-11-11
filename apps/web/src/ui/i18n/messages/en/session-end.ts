@@ -4,6 +4,7 @@ export const sessionEnd = {
     one: 'Session done · about {n} minute',
     other: 'Session done · about {n} minutes',
   },
+  redo: 'Fewer than half right. It would be good to do these again.',
   counts: 'Counts',
   sentences: { one: 'sentence', other: 'sentences' },
   exercises: { one: 'exercise', other: 'exercises' },

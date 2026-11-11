@@ -1,5 +1,5 @@
 /**
- * What the session end shows of the session: its three counts, what to look at again, the
+ * What the session end shows of the session: its mark, its three counts, what to look at again, the
  * retry round of only those, its length, and what it met first. Pure, apart from the types.
  */
 import type { MetFirst, MetFirstInput } from '../../domain/services/index.ts';
@@ -82,6 +82,19 @@ export function endCounts(sentences: number, tally: SessionTally): EndCounts {
   const label: CountLabel =
     drills.length === 0 ? 'sentences' : sentences === 0 ? 'exercises' : 'both';
   return { label, done: sentences + drills.length, right, again };
+}
+
+/** How the session went, for the mark at its end. */
+export type EndMark = 'check' | 'up' | 'down';
+
+/**
+ * The mark for the answers given: the check when four in five or more were right, a thumb up
+ * from half, a thumb down under half. A session with nothing to answer gets the check.
+ */
+export function endMark({ right, again }: Pick<EndCounts, 'right' | 'again'>): EndMark {
+  const answers = right + again;
+  if (answers === 0 || right * 5 >= answers * 4) return 'check';
+  return right * 2 >= answers ? 'up' : 'down';
 }
 
 const MINUTE = 60_000;

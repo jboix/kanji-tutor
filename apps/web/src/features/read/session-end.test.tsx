@@ -104,7 +104,34 @@ describe('SessionEnd', () => {
       .getAllByRole('listitem')
       .map((li) => li.textContent);
     expect(items).toEqual(['4 sentences', '4 read right', '0 to look at again']);
-    expect(document.querySelector('[data-done-mark]')?.getAttribute('aria-hidden')).toBe('true');
+    const mark = document.querySelector('[data-done-mark]');
+    expect(mark?.getAttribute('aria-hidden')).toBe('true');
+    expect(mark?.getAttribute('data-done-mark')).toBe('check');
+    expect(screen.queryByText(/^Fewer than half right/)).toBeNull();
+  });
+
+  it('marks a session half right with a thumb up, and says nothing more', async () => {
+    const miss = (card: number) => answer(card, { verdict: 'wrong', given: 'x' });
+    await end({ results: [RIGHT[0] as Answered, RIGHT[1] as Answered, miss(2), miss(3)] });
+    expect(document.querySelector('[data-done-mark]')?.getAttribute('data-done-mark')).toBe('up');
+    expect(screen.queryByText(/^Fewer than half right/)).toBeNull();
+  });
+
+  it('under half right, shows a thumb down and suggests doing it again, holding nothing back', async () => {
+    const results = [0, 1, 2, 3].map((card) => answer(card, { verdict: 'wrong', given: 'x' }));
+    await end({ results });
+    const mark = document.querySelector('[data-done-mark]');
+    expect(mark?.getAttribute('data-done-mark')).toBe('down');
+    expect(mark?.getAttribute('aria-hidden')).toBe('true');
+    expect(
+      screen.getByText('Fewer than half right. It would be good to do these again.'),
+    ).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Retry 4 missed' })).toHaveProperty(
+      'disabled',
+      false,
+    );
+    expect(screen.getByRole('button', { name: 'Next session' })).toHaveProperty('disabled', false);
+    expect(screen.getByRole('link', { name: 'Home' })).toBeTruthy();
   });
 
   it('with nothing missed, has no list to look at again and no Retry', async () => {

@@ -5,6 +5,7 @@ import type { Grade, Word } from '../../domain/types.ts';
 import { S, W } from '../../test/reading-fixtures.ts';
 import {
   endCounts,
+  endMark,
   metInput,
   missedOf,
   retryCards,
@@ -114,6 +115,21 @@ describe('endCounts', () => {
       drills: [...drills, { kind: 'cloze', right: true }],
     });
     expect(only).toEqual({ label: 'exercises', done: 2, right: 1, again: 1 });
+  });
+});
+
+describe('endMark', () => {
+  it('is the check from four in five right, and when there was nothing to answer', () => {
+    expect(endMark({ right: 10, again: 0 })).toBe('check');
+    expect(endMark({ right: 8, again: 2 })).toBe('check');
+    expect(endMark({ right: 0, again: 0 })).toBe('check');
+  });
+
+  it('is a thumb up from half right, and a thumb down under half', () => {
+    expect(endMark({ right: 79, again: 21 })).toBe('up');
+    expect(endMark({ right: 1, again: 1 })).toBe('up');
+    expect(endMark({ right: 49, again: 51 })).toBe('down');
+    expect(endMark({ right: 0, again: 3 })).toBe('down');
   });
 });
 

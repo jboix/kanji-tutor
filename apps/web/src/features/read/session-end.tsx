@@ -27,9 +27,10 @@ import styles from './read.module.css';
 import { type AgainPlan, useAgain, useRetry } from './session-again.ts';
 import end from './session-end.module.css';
 import { LookAgain } from './session-end-missed.tsx';
-import { Counts, DoneHeader, delay, NewToday } from './session-end-parts.tsx';
+import { Counts, DoneHeader, delay, NewToday, RedoAdvice } from './session-end-parts.tsx';
 import {
   endCounts,
+  endMark,
   type Missed,
   metInput,
   missedOf,
@@ -207,9 +208,11 @@ function timeline(newShown: boolean) {
 }
 
 /**
- * End of a session (W-end, C-end): the check, お疲れさまでした, three plain counts,
- * what was new, what to look at again, then Retry and the next session. No praise, no score (no
- * gamification); Today is one tap away in the bottom bar.
+ * End of a session (W-end, C-end): a mark for how the answers went (the check, a thumb up, or
+ * a thumb down), お疲れさまでした, three plain counts, under half right a line that suggests
+ * doing them again, what was new, what to look at again, then Retry and the next session. No praise, no score (no
+ * gamification), and nothing is held back whatever the mark: the learner decides what comes
+ * next. Today is one tap away in the bottom bar.
  */
 export function SessionEnd(props: SessionEndProps) {
   const { cards, results, drills = [], startedAt, unit, scan, lesson, again } = props;
@@ -220,13 +223,16 @@ export function SessionEnd(props: SessionEndProps) {
   const sentences = cards.filter((card) => card.reason !== 'drill').length;
   const { shown, rest } = splitMet(met ?? []);
   const at = timeline(shown.length > 0);
+  const counts = endCounts(sentences, tally);
+  const mark = endMark(counts);
   const actions = { missed, unit, lesson, again, at: at.actions };
   return (
     <Screen footer={<EndFooter {...actions} />} gap={22}>
       {unit && <BackToUnit unit={unit} />}
       {scan && <BackToLesson scan={scan} />}
-      <DoneHeader minutes={minutes} />
-      <Counts counts={endCounts(sentences, tally)} />
+      <DoneHeader minutes={minutes} mark={mark} />
+      <Counts counts={counts} />
+      <RedoAdvice mark={mark} />
       {met && <NewToday shown={shown} rest={rest} at={at.news} />}
       {met && <LookAgain missed={missed} at={at.again} />}
     </Screen>

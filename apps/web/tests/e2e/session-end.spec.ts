@@ -5,9 +5,9 @@ import { card, playCard, playSession, sessionDone } from './lesson-play.ts';
 import { expect, type Page, test } from './test.ts';
 
 /**
- * The session's end (W-end): the check, お疲れさまでした, three counts, what was new,
- * what to look at again, then Retry N missed and Next session. Retry plays only the missed cards
- * and ends on its own; with nothing missed there is no list and no Retry.
+ * The session's end (W-end): the mark for how it went, お疲れさまでした, three counts, what was
+ * new, what to look at again, then Retry N missed and Next session. Retry plays only the missed
+ * cards and ends on its own; with nothing missed there is no list and no Retry.
  */
 const KANJI = `kanji=${encodeURIComponent('待')}&reading=${encodeURIComponent('ま.つ')}`;
 const FOCUS = `/read?${KANJI}`;
@@ -37,7 +37,7 @@ async function playToEnd(page: Page, path: string) {
   await expect(sessionDone(page)).toBeVisible();
 }
 
-test('the end shows the check, the counts, the misses and both actions', async ({ page }) => {
+test('the end shows the mark, the counts, the misses and both actions', async ({ page }) => {
   await playToEnd(page, FOCUS);
   const title = page.getByRole('heading', { level: 1 });
   await expect(title).toHaveAccessibleName('お疲れさまでした');
@@ -47,7 +47,13 @@ test('the end shows the check, the counts, the misses and both actions', async (
   await expect(counts).toHaveCount(3);
   await expect(counts.nth(1)).toHaveText(/^0 (read right|right)$/);
   await expect(lookAgain(page)).toBeVisible();
-  await expect(page.locator('[data-done-mark]')).toHaveAttribute('aria-hidden', 'true');
+  // Nothing was right: a thumb down and a suggestion, with every way on still open.
+  const mark = page.locator('[data-done-mark]');
+  await expect(mark).toHaveAttribute('aria-hidden', 'true');
+  await expect(mark).toHaveAttribute('data-done-mark', 'down');
+  await expect(
+    page.getByText('Fewer than half right. It would be good to do these again.'),
+  ).toBeVisible();
   await expect(page.locator('main')).not.toContainText(/great|amazing|well done|congrat|!/i);
   await expect(page.getByRole('link', { name: 'Back to Home' })).toHaveCount(0);
 
@@ -131,6 +137,7 @@ test('with nothing missed, there is no list to look at again and no Retry', asyn
     );
   }
   await expect(sessionDone(page)).toBeVisible();
+  await expect(page.locator('[data-done-mark]')).toHaveAttribute('data-done-mark', 'check');
   await expect(lookAgain(page)).toHaveCount(0);
   await expect(retryButton(page)).toHaveCount(0);
   const counts = page.getByRole('list', { name: 'Counts' }).getByRole('listitem');
