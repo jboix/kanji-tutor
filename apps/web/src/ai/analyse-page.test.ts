@@ -82,24 +82,55 @@ describe('analysePage over the mock provider', () => {
     const reply = {
       kind: 'reading',
       title: 'T',
-      lines: [
-        { text: ' 12 ', unsure: false },
-        { text: ' 雨です。 ', unsure: false },
+      blocks: [
+        { kind: 'text', lines: [{ text: ' 12 ', unsure: false }], questions: [] },
+        { kind: 'instruction', lines: [{ text: ' 雨です。 ', unsure: false }], questions: [] },
+        // An exercise with no question is only its printed lines.
+        { kind: 'exercise', lines: [{ text: '晴れです。', unsure: true }], questions: [] },
+        // What cannot be imported keeps every printed line, Japanese or not.
+        { kind: 'unsupported', lines: [{ text: '①＿＿　②＿＿', unsure: false }], questions: [] },
       ],
       kanji: [],
       words: [],
       grammar: [],
-      questions: [],
       readings: [],
     };
     const parsed = parseReply(pageAnalysisSchema, JSON.stringify(reply));
     if (!parsed.ok) throw new Error('did not parse');
     const done = await finalizePageAnalysis(parsed.value, undefined, fakeVerifier());
-    expect(done.lines).toEqual([{ text: '雨です。', unsure: false }]);
+    expect(done.blocks).toEqual([
+      { kind: 'instruction' },
+      { kind: 'text' },
+      { kind: 'unsupported' },
+    ]);
+    expect(done.lines).toEqual([
+      { text: '雨です。', unsure: false, role: 'instruction', block: 0 },
+      { text: '晴れです。', unsure: true, role: 'content', block: 1 },
+      { text: '①＿＿　②＿＿', unsure: false, role: 'content', block: 2 },
+    ]);
+  });
+
+  it('gives a handout in its printed order: instruction, exercise, and what cannot be imported', async () => {
+    const { blocks, lines, questions } = await page(3);
+    expect(blocks.slice(0, 6).map((block) => block.kind)).toEqual([
+      'instruction',
+      'exercise',
+      'instruction',
+      'exercise',
+      'instruction',
+      'unsupported',
+    ]);
+    expect(blocks[5]?.reason).toMatch(/pictures/);
+    expect(blocks.filter((block) => block.kind === 'unsupported')).toHaveLength(2);
+    expect(lines.filter((line) => line.block === 5).map((line) => line.text)).toEqual([
+      '①＿＿＿＿　②＿＿＿＿　③＿＿＿＿',
+    ]);
+    expect(questions.map((question) => question.block)).toEqual([1, 1, 3, 3, 7, 9, 11, 14]);
+    expect(lines.filter((line) => line.role === 'instruction')).toHaveLength(7);
   });
 
   it('rejects an unknown page kind', () => {
-    const reply = { kind: 'poster', title: '', lines: [], kanji: [], words: [], grammar: [] };
+    const reply = { kind: 'poster', title: '', blocks: [], kanji: [], words: [], grammar: [] };
     expect(parseReply(pageAnalysisSchema, JSON.stringify(reply)).ok).toBe(false);
   });
 });

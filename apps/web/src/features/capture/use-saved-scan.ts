@@ -1,7 +1,7 @@
 /**
  * A saved scanned lesson, from storage only, so it opens offline. A capture converted into a
  * lesson, or a lesson matched an older way, is matched again when it opens. Its title, a page's
- * kind and a misread line are edited in place.
+ * kind, a misread line and what is kept of it are edited in place.
  */
 import { useCallback, useEffect, useState } from 'react';
 import type { Repos } from '../../domain/repos.ts';
@@ -13,6 +13,7 @@ import {
   rematchScan,
   renameScan,
   type ScanItemView,
+  withKept,
   withPageKind,
 } from '../../domain/services/index.ts';
 import type { Lang } from '../../lang/types.ts';
@@ -93,13 +94,21 @@ function useLoaded(id: string) {
     },
     [repos],
   );
-  return { state, data, store };
+  // What is kept changes no item's description: the lesson shows at once, then is stored.
+  const keep = useCallback(
+    (lesson: ScannedLesson) => {
+      setData((now) => now && { ...now, lesson });
+      void repos.scans.put(lesson);
+    },
+    [repos],
+  );
+  return { state, data, store, keep };
 }
 
 /** The saved lesson `id` as a review model, once loaded. */
 export function useSavedScan(id: string) {
   const { repos, lang } = useServices();
-  const { state, data, store } = useLoaded(id);
+  const { state, data, store, keep } = useLoaded(id);
   const [title, setTitle] = useState<string>();
   if (!data) return { state, model: undefined, commitTitle: () => undefined };
   const { lesson } = data;
@@ -112,6 +121,7 @@ export function useSavedScan(id: string) {
       void store({ ...withPageKind(lesson, page, kind), updatedAt: Date.now() }),
     check: unchecked(lesson),
     fixLine: async (at, text) => store(await withLine(repos, lang, lesson, at, text)),
+    setKept: (keys, kept) => keep({ ...withKept(lesson, keys, kept), updatedAt: Date.now() }),
   };
   const commitTitle = () => {
     if (title === undefined) return;

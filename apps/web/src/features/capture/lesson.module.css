@@ -51,45 +51,6 @@
   line-height: 1.5;
 }
 
-.photos {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.photos::-webkit-scrollbar {
-  display: none;
-}
-
-.photo {
-  flex-shrink: 0;
-  width: 64px;
-  height: 84px;
-  padding: 0;
-  overflow: hidden;
-  border: 0;
-  border-radius: 10px;
-  background: var(--paper-raised);
-  box-shadow:
-    var(--shadow-card),
-    inset 0 0 0 1px var(--rule);
-  cursor: pointer;
-}
-
-.photo:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.photo > * {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  font-size: 7px;
-}
-
 .pillText {
   display: inline-flex;
   align-items: baseline;
@@ -103,12 +64,6 @@
 .pillText [data-sub] {
   font-size: var(--text-sm);
   font-weight: 400;
-}
-
-.section {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
 }
 
 .lines {

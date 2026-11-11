@@ -119,7 +119,7 @@ describe('DraftEditor (C6)', () => {
     const field = await renderDraft();
     await userEvent.type(field, 'がくせい');
     expect(screen.getByRole('button', { name: /^Japanese keyboard in use/ })).toBeTruthy();
-    expect(JSON.parse(sessionStorage.getItem('kanji-tutor:compose-typing') ?? '{}')).toEqual({
+    expect(JSON.parse(sessionStorage.getItem('kanji-tutor:typing') ?? '{}')).toEqual({
       mode: 'native',
       chosen: false,
     });

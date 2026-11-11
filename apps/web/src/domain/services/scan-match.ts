@@ -6,7 +6,9 @@
  * text, older captures). A page the tutor listed no kanji for (an exercise handout, a reading)
  * offers the kanji in its lines the learner cannot read yet, up to a level above theirs. What
  * our data does not know is kept, marked by a missing
- * `ref`, with the tutor's gloss and its reading as checked.
+ * `ref`, with the tutor's gloss and its reading as checked. A kanji or a detected grammar point
+ * that only exercise instructions use (正しいものを選びなさい) is marked `instruction`: the page
+ * does not teach it.
  */
 
 import { GRAMMAR_CATALOGUE } from '../grammar/catalogue.ts';
@@ -15,7 +17,7 @@ import { FUNCTION_WORDS } from '../grammar/function-words.ts';
 import type { GrammarEntry, GrammarFamily } from '../grammar/types.ts';
 import { hasKanji, toKanaFold } from '../kana.ts';
 import type { Repos } from '../repos.ts';
-import type { ScanItem, ScanReading } from '../scan-types.ts';
+import type { LineRole, ScanItem, ScanReading } from '../scan-types.ts';
 import { FUNCTION_POS, KNOWN_LEVEL } from '../selector.ts';
 import type { LearnerLevel, Token, Word } from '../types.ts';
 import { scanItemKey } from './scans.ts';
@@ -38,11 +40,17 @@ export const NOTHING_LISTED: ListedItems = { kanji: [], words: [], grammar: [] }
 
 const listedOf = (page: MatchPage) => page.listed ?? NOTHING_LISTED;
 
+/** A line as matching reads it: its tokens, and its role when the tutor gave one. */
+export interface MatchLine {
+  tokens: readonly Token[];
+  role?: LineRole | undefined;
+}
+
 /** One page as matching reads it: its lines' tokens and the tutor's lists. */
 export interface MatchPage {
   /** Index of the page in its lesson. */
   page: number;
-  lines: readonly { tokens: readonly Token[] }[];
+  lines: readonly MatchLine[];
   /** What the tutor listed from the page; absent when the tutor did not read it. */
   listed?: ListedItems | undefined;
 }
@@ -83,15 +91,32 @@ export function matchPattern(printed: string, used: ReadonlySet<string> = new Se
   return found.find((p) => used.has(p.id)) ?? found[0];
 }
 
-/** Catalogue points the detectors find in the pages, with the first page each is on. */
-function detected(pages: readonly MatchPage[]): Map<string, number> {
-  const found = new Map<string, number>();
+interface Detected {
+  /** The first page the point is on. */
+  page: number;
+  /** Every line that uses it is an exercise instruction. */
+  instruction: boolean;
+}
+
+/** Catalogue points the detectors find in the pages (see {@link Detected}). */
+function detected(pages: readonly MatchPage[]): Map<string, Detected> {
+  const found = new Map<string, Detected>();
   const matches = pages.flatMap((page) =>
     page.lines.flatMap((line) =>
-      detectEntries(GRAMMAR_CATALOGUE, line.tokens).map((m) => [m.id, page.page] as const),
+      detectEntries(GRAMMAR_CATALOGUE, line.tokens).map((m) => ({
+        id: m.id,
+        page: page.page,
+        instruction: line.role === 'instruction',
+      })),
     ),
   );
-  for (const [id, page] of matches) if (!found.has(id)) found.set(id, page);
+  for (const { id, page, instruction } of matches) {
+    const first = found.get(id);
+    found.set(
+      id,
+      first ? { ...first, instruction: first.instruction && instruction } : { page, instruction },
+    );
+  }
   return found;
 }
 
@@ -123,10 +148,11 @@ function grammarItems(pages: readonly MatchPage[], level: LearnerLevel): ScanIte
   const found = detected(pages);
   const used = new Set(found.keys());
   const listed = pages.flatMap((page) => tutorGrammar(page, used));
-  const text = [...found].flatMap(([id, page]): ScanItem[] => {
+  const text = [...found].flatMap(([id, { page, instruction }]): ScanItem[] => {
     const entry = GRAMMAR_CATALOGUE.find((e) => e.id === id);
     if (!(entry && worthListing(entry, level))) return [];
-    return [{ kind: 'grammar', text: entry.pattern, ref: id, page, from: 'text' }];
+    const item: ScanItem = { kind: 'grammar', text: entry.pattern, ref: id, page, from: 'text' };
+    return [instruction ? { ...item, instruction } : item];
   });
   return [...listed, ...text];
 }
@@ -134,15 +160,32 @@ function grammarItems(pages: readonly MatchPage[], level: LearnerLevel): ScanIte
 /** Kanji offered from one page's lines, at most. */
 const TEXT_KANJI = 8;
 
+function kanjiIn(lines: readonly MatchLine[]): Set<string> {
+  const surfaces = lines.flatMap((line) => line.tokens.map((t) => t.surface));
+  return new Set([...surfaces.join('')].filter(hasKanji));
+}
+
+/** The kanji of a page's lines: what it teaches or asks first, then what only instructions use. */
+function lineKanji(page: MatchPage): { chars: string[]; aside: ReadonlySet<string> } {
+  const taught = kanjiIn(page.lines.filter((line) => line.role !== 'instruction'));
+  const told = kanjiIn(page.lines.filter((line) => line.role === 'instruction'));
+  const aside = [...told].filter((char) => !taught.has(char));
+  return { chars: [...taught, ...aside], aside: new Set(aside) };
+}
+
+function kanjiItem(char: string, page: MatchPage, aside: ReadonlySet<string>): ScanItem {
+  const item: ScanItem = { kind: 'kanji', text: char, page: page.page, from: 'text' };
+  return aside.has(char) ? { ...item, instruction: true } : item;
+}
+
 /** The kanji in a page's lines the learner cannot read yet, within reach of their level. */
 async function textKanji(repos: Repos, page: MatchPage, reach: Reach): Promise<ScanItem[]> {
-  const surfaces = page.lines.flatMap((line) => line.tokens.map((t) => t.surface));
-  const chars = [...new Set([...surfaces.join('')].filter(hasKanji))];
+  const { chars, aside } = lineKanji(page);
   const found = await repos.dictionary.kanjiMany(chars.filter((c) => !reach.known.has(c)));
   return found
     .flatMap((k) => (k && (k.jlpt ?? 0) >= reach.lowest ? [k.char] : []))
     .slice(0, TEXT_KANJI)
-    .map((char) => ({ kind: 'kanji', text: char, ref: char, page: page.page, from: 'text' }));
+    .map((char) => ({ ...kanjiItem(char, page, aside), ref: char }));
 }
 
 interface Reach {
@@ -162,8 +205,9 @@ async function kanjiItems(repos: Repos, page: MatchPage, reach: Reach): Promise<
   if (listedOf(page).kanji.length === 0) return textKanji(repos, page, reach);
   const listed = listedOf(page).kanji.filter((k) => [...k.text.trim()].length === 1);
   const found = await repos.dictionary.kanjiMany(listed.map((k) => k.text.trim()));
+  const { aside } = lineKanji(page);
   return listed.map((k, i) => {
-    const item: ScanItem = { kind: 'kanji', text: k.text.trim(), page: page.page, from: 'tutor' };
+    const item: ScanItem = { ...kanjiItem(k.text.trim(), page, aside), from: 'tutor' };
     if (found[i]) item.ref = found[i].char;
     else if (k.meaning) item.meaning = k.meaning;
     return item;
@@ -230,10 +274,20 @@ async function addedWords(repos: Repos, ids: readonly string[], page: number) {
   );
 }
 
-/** Each item once, by kind and ref (or text), kept where it was first found. */
+const taught = ({ instruction: _instruction, ...item }: ScanItem): ScanItem => item;
+
+/**
+ * Each item once, by kind and ref (or text), kept where it was first found; one that another
+ * page teaches is no longer only an instruction's.
+ */
 function unique(items: readonly ScanItem[]): ScanItem[] {
   const seen = new Map<string, ScanItem>();
-  for (const item of items) if (!seen.has(scanItemKey(item))) seen.set(scanItemKey(item), item);
+  for (const item of items) {
+    const key = scanItemKey(item);
+    const first = seen.get(key);
+    if (!first) seen.set(key, item);
+    else if (first.instruction && !item.instruction) seen.set(key, taught(first));
+  }
   return [...seen.values()];
 }
 

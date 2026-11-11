@@ -59,12 +59,15 @@ function sectionOf(params: URLSearchParams): { section?: LessonSection; part?: n
  * `/read?unit=vending-machine` practises a unit (T3); `&passage=1` asks its passage questions.
  * `/read?grammar=te-mo-ii` practises one grammar point (the grammar page's "Practise this").
  * `/read?unit=…&section=grammar&part=1` is one part of a unit lesson's section (S3).
- * `/read?scan=<id>` practises a scanned lesson, apart from the daily mix.
+ * `/read?scan=<id>` practises a scanned lesson, apart from the daily mix; `&exercise=2.3` only
+ * one of its exercises.
  */
 function useRequest(): SessionRequest {
   const [params] = useSearchParams();
   const scan = params.get('scan');
-  return scan ? { scan } : mixRequest(params);
+  const exercise = params.get('exercise');
+  if (scan) return exercise ? { scan, exercise } : { scan };
+  return mixRequest(params);
 }
 
 /** Every request but a scanned lesson's (see `useRequest`). */

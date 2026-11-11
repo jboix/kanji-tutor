@@ -35,6 +35,8 @@ export interface ScanItemView {
   page: number;
   /** For a grammar point: pack sentences at the learner's level that use it, up to 99. */
   sentences?: number;
+  /** Found only in exercise instructions (`ScanItem.instruction`). */
+  instruction?: true;
 }
 
 /** Sentences counted for a grammar point, at most. */
@@ -86,6 +88,7 @@ function base(item: ScanItem): ScanItemView {
   };
   if (item.reading) view.reading = item.reading.reading;
   if (item.meaning) view.meaning = item.meaning;
+  if (item.instruction) view.instruction = true;
   return view;
 }
 

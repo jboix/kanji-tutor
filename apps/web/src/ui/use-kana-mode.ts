@@ -1,12 +1,12 @@
 /**
- * The sentence field's typing mode (C6), kept for the app session. A Japanese
+ * How Japanese is typed in a sentence field (C6), kept for the app session. A Japanese
  * keyboard typing in the field switches ours off (`native`), so its own conversion is never
  * hindered; a press on the switch turns ours back on, and that choice then holds for the session.
  */
 import { useCallback, useState } from 'react';
-import type { KanaMode, TypingMode } from '../../ui/use-japanese-typing.ts';
+import type { KanaMode, TypingMode } from './use-japanese-typing.ts';
 
-const KEY = 'kanji-tutor:compose-typing';
+const KEY = 'kanji-tutor:typing';
 
 interface Saved {
   mode: TypingMode;

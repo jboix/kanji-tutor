@@ -1,11 +1,11 @@
 /**
  * One scanned lesson (scans/Lesson), like a unit's page: its title (renamed in place), when it
- * was scanned and its pages, each photo a tap from full size; its items practised with when it
- * was last practised; its parts; the pages' text, a line a tap from the tutor's explanation.
+ * was scanned; its items practised with when it was last practised; its parts; then its pages as
+ * they are printed, each photo a tap from full size, a line a tap from the tutor's explanation.
  * The footer holds the tutor beside "Practise this lesson", both in reach without scrolling.
  */
 import { useId, useState } from 'react';
-import type { ScannedLesson, ScanPage } from '../../domain/scan-types.ts';
+import type { ScannedLesson } from '../../domain/scan-types.ts';
 import { scanPracticeMinutes, scanProgress } from '../../domain/services/index.ts';
 import { ActionBar } from '../../ui/action-bar.tsx';
 import { BackButton } from '../../ui/back-button.tsx';
@@ -14,17 +14,15 @@ import { IconButton } from '../../ui/icon-button.tsx';
 import { PenIcon } from '../../ui/icons.tsx';
 import { JaRuns } from '../../ui/ja-runs.tsx';
 import { paths } from '../../ui/paths.ts';
-import { PhotoSheet } from '../../ui/photo-sheet.tsx';
 import { PillButton, PillLink } from '../../ui/pill-button.tsx';
 import { PractisedProgress } from '../../ui/practised-progress.tsx';
 import { Screen } from '../../ui/screen.tsx';
 import { TopBar } from '../../ui/top-bar.tsx';
 import { TutorNext } from '../../ui/tutor.tsx';
 import styles from './lesson.module.css';
-import { LessonLines } from './lesson-lines.tsx';
 import { LessonMenu } from './lesson-menu.tsx';
+import { LessonPages } from './lesson-pages.tsx';
 import { LessonParts } from './lesson-parts.tsx';
-import { PageThumb } from './page-grid.tsx';
 import { useLessonTutor } from './scan-tutor.ts';
 import type { ReviewModel } from './use-draft-review.ts';
 
@@ -75,33 +73,6 @@ function Title(props: {
         {t('capture.saveName')}
       </PillButton>
     </form>
-  );
-}
-
-function Photo({ page, n }: { page: ScanPage; n: number }) {
-  const t = useT();
-  const [open, setOpen] = useState(false);
-  const label = t('capture.seePhoto', { n });
-  const text = page.lines.map((line) => line.text).join('\n');
-  return (
-    <>
-      <button
-        type="button"
-        className={styles.photo}
-        aria-label={label}
-        onClick={() => setOpen(true)}
-      >
-        <PageThumb photo={page.photo} text={text} label="" />
-      </button>
-      {open && (
-        <PhotoSheet
-          photo={page.photo}
-          text={text}
-          label={t('capture.pageN', { n })}
-          onClose={() => setOpen(false)}
-        />
-      )}
-    </>
   );
 }
 
@@ -166,14 +137,9 @@ export function LessonPage({ model, commitTitle }: LessonPageProps) {
         <Title model={model} renaming={renaming} onRename={setRenaming} commit={commitTitle} />
         <p className={styles.muted}>{t('capture.scannedMeta', { date, pages })}</p>
       </header>
-      <div className={styles.photos}>
-        {lesson.pages.map((page, i) => (
-          <Photo key={page.lines[0]?.sentenceId ?? `page-${i}`} page={page} n={i + 1} />
-        ))}
-      </div>
       <Progress lesson={lesson} />
-      <LessonParts lesson={lesson} views={model.views ?? []} />
-      <LessonLines model={model} />
+      <LessonParts model={model} />
+      <LessonPages model={model} />
     </Screen>
   );
 }

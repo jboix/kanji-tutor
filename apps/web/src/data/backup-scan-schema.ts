@@ -10,8 +10,25 @@ const reading = z.object({ surface: z.string(), reading: z.string(), verified: z
 const page = z.object({
   photo: photo.exactOptional(),
   kind: z.enum(['kanji-list', 'word-list', 'grammar', 'reading', 'handout', 'mixed']),
-  lines: z.array(z.object({ text: z.string(), verified: z.boolean(), sentenceId: z.string() })),
+  lines: z.array(
+    z.object({
+      text: z.string(),
+      verified: z.boolean(),
+      sentenceId: z.string(),
+      role: z.literal('instruction').exactOptional(),
+    }),
+  ),
   read: z.literal(true).exactOptional(),
+  blocks: z
+    .array(
+      z.object({
+        kind: z.enum(['heading', 'instruction', 'exercise', 'unsupported', 'text', 'list']),
+        lines: z.array(z.number()),
+        questions: z.array(z.string()).exactOptional(),
+        reason: z.string().exactOptional(),
+      }),
+    )
+    .exactOptional(),
 });
 
 const item = z.object({
@@ -22,6 +39,7 @@ const item = z.object({
   from: z.enum(['tutor', 'text']),
   meaning: z.string().exactOptional(),
   reading: reading.exactOptional(),
+  instruction: z.literal(true).exactOptional(),
 });
 
 const question = z.object({
@@ -53,6 +71,7 @@ export const scanSchema = z.object({
   items: z.array(item),
   questions: z.array(question),
   practised: z.record(z.string(), z.number()),
+  dropped: z.array(z.string()).exactOptional(),
   addedItemIds: z.array(itemIdSchema).exactOptional(),
   unmatched: z.literal(true).exactOptional(),
   matchVersion: z.number().exactOptional(),

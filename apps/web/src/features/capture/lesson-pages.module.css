@@ -1,0 +1,237 @@
+/* A scanned lesson's pages as printed: blocks in order, exercises where they are. */
+
+.hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pageHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: var(--tap);
+  border-bottom: 1px solid var(--rule);
+}
+
+.photoButton {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+  min-width: var(--tap);
+  min-height: var(--tap);
+  padding: 0 2px;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.photoButton:focus-visible,
+.seePhoto:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.photoThumb {
+  display: block;
+  width: 26px;
+  height: 34px;
+  overflow: hidden;
+  border-radius: 5px;
+  background: var(--paper-raised);
+  box-shadow: inset 0 0 0 1px var(--rule);
+}
+
+.photoThumb > * {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  font-size: 4px;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+}
+
+/* A title printed on the page. */
+.heading button {
+  font-size: 19px;
+  font-weight: 600;
+}
+
+/* What the page tells the learner to do, as printed, over its exercise. */
+.instruction button {
+  padding-top: 2px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.blockLabel {
+  padding: 0 12px;
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.note {
+  margin: 0;
+  padding: 0 12px;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+/* An exercise made into questions: as printed, and the way to its practice. */
+.exercise {
+  padding: 0 16px;
+  border-radius: var(--radius-card);
+  background: var(--paper-raised);
+  box-shadow: var(--shadow-card);
+}
+
+.questions {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.question {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  min-height: 52px;
+  padding: 8px 0 8px 28px;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* Answered right in this lesson: a plain check before the question. A state, not a tick box. */
+.done::before {
+  content: "";
+  position: absolute;
+  top: 18px;
+  left: 3px;
+  width: 13px;
+  height: 7px;
+  border-bottom: 2.5px solid var(--accent);
+  border-left: 2.5px solid var(--accent);
+  transform: rotate(-45deg);
+}
+
+.questionMain {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.stem {
+  font-family: var(--font-ja);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.choices {
+  font-family: var(--font-ja);
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+
+.state {
+  font-size: 12px;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+.leftOut .stem,
+.leftOut .choices {
+  color: var(--ink-faint);
+}
+
+.exerciseFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.exerciseFoot > :last-child {
+  height: var(--tap);
+  padding: 0 18px;
+  font-size: 14px;
+}
+
+.exerciseMeta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  color: var(--ink-muted);
+}
+
+/* An exercise the app has no kind of question for: its printed lines, and why. Never the
+   tutor's red: this is not a correction. */
+.cannot {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 4px 4px;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-card);
+  background: var(--paper-low);
+}
+
+.cannotChip {
+  align-self: flex-start;
+  margin-left: 12px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--warn-surface);
+  color: var(--warn-ink);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cannot button[lang] {
+  color: var(--ink-muted);
+  font-size: 17px;
+}
+
+.why {
+  margin: 0;
+  padding: 0 12px;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.seePhoto {
+  align-self: flex-start;
+  min-height: var(--tap);
+  padding: 0 12px;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}

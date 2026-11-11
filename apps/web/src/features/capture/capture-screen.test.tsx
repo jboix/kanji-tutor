@@ -20,14 +20,15 @@ vi.mock('../../ui/image.ts', async (load) => ({
   }),
 }));
 
-const empty = { kanji: [], words: [], grammar: [], questions: [], readings: [] };
+const empty = { blocks: [], kanji: [], words: [], grammar: [], questions: [], readings: [] };
 
 const PAGES: Record<number, PageAnalysis> = {
   1: {
     ...empty,
     kind: 'kanji-list',
     title: 'Weather and plans',
-    lines: [{ text: LINE_RAIN.text, unsure: true }],
+    blocks: [{ kind: 'list' }],
+    lines: [{ text: LINE_RAIN.text, unsure: true, role: 'content', block: 0 }],
     kanji: [
       { char: '雨', meaning: 'rain' },
       { char: '曇', meaning: 'cloudy' },
@@ -49,7 +50,15 @@ const PAGES: Record<number, PageAnalysis> = {
     ...empty,
     kind: 'handout',
     title: 'Exercises',
-    lines: [{ text: LINE_DESHOU.text, unsure: false }],
+    blocks: [
+      { kind: 'text' },
+      { kind: 'exercise' },
+      { kind: 'unsupported', reason: 'It needs the picture.' },
+    ],
+    lines: [
+      { text: LINE_DESHOU.text, unsure: false, role: 'content', block: 0 },
+      { text: '①＿＿　②＿＿', unsure: false, role: 'content', block: 2 },
+    ],
     questions: [
       {
         type: 'choose-form',
@@ -59,6 +68,7 @@ const PAGES: Record<number, PageAnalysis> = {
         answerVerified: true,
         explanation: 'The verb stem takes this ending.',
         readings: [],
+        block: 1,
       },
       {
         type: 'particle',
@@ -68,6 +78,7 @@ const PAGES: Record<number, PageAnalysis> = {
         answerVerified: true,
         explanation: 'The place of an action.',
         readings: [],
+        block: 1,
       },
     ],
   },
@@ -132,7 +143,11 @@ describe('new scan', () => {
     const pages = screen.getByRole('region', { name: 'The pages' });
     expect(within(pages).getByText('Kanji list')).toBeTruthy();
     expect(within(pages).getByText('Exercise handout')).toBeTruthy();
-    expect(within(pages).getByText('Page 2 · 1 grammar point, 2 questions')).toBeTruthy();
+    expect(
+      within(pages).getByText(
+        'Page 2 · 1 grammar point, 2 questions, 1 exercise can’t be imported',
+      ),
+    ).toBeTruthy();
     const kanji = screen.getByRole('region', { name: 'Kanji · 2' });
     expect(within(kanji).getByText(/cloudy · not in our lists/)).toBeTruthy();
     const words = screen.getByRole('region', { name: 'Words · 2' });
@@ -140,9 +155,37 @@ describe('new scan', () => {
     expect(within(words).getByText(/not in our lists · reading unverified/)).toBeTruthy();
     expect(screen.getByRole('region', { name: /^Grammar · / })).toBeTruthy();
     const exercises = screen.getByRole('region', { name: 'Exercises from page 2 · 2' });
-    expect(within(exercises).getByText('Choose the right form · 1 question')).toBeTruthy();
+    expect(within(exercises).getByText('1. 雨が降り＿＿です。')).toBeTruthy();
+    expect(within(exercises).getByText('Choose the right form')).toBeTruthy();
     // The tutor's answers and explanations stay hidden.
     expect(screen.queryByText('The verb stem takes this ending.')).toBeNull();
+  });
+
+  it('saves what is unticked as left out, one by one or a whole group', async () => {
+    const { repos } = await setup();
+    pick(photo('a.jpg'), photo('b.jpg'));
+    fireEvent.click(screen.getByRole('button', { name: /^Read 2 pages/ }));
+    const rain = await screen.findByRole('checkbox', { name: 'Practise 雨' });
+    expect(rain).toHaveProperty('checked', true);
+    // What is not in our lists cannot be practised: it has no tick.
+    expect(screen.queryByRole('checkbox', { name: 'Practise 曇' })).toBeNull();
+    fireEvent.click(rain);
+    expect(await screen.findByRole('region', { name: 'Kanji · 1 of 2' })).toBeTruthy();
+    const all = screen.getByRole('checkbox', { name: 'Practise all the exercises from page 2' });
+    fireEvent.click(all);
+    const exercises = await screen.findByRole('region', { name: 'Exercises from page 2 · 0 of 2' });
+    const first = within(exercises).getByRole('checkbox', { name: 'Practise question 1' });
+    expect(first).toHaveProperty('checked', false);
+    fireEvent.click(first);
+    await screen.findByRole('region', { name: 'Exercises from page 2 · 1 of 2' });
+    expect(all).toHaveProperty('indeterminate', true);
+    fireEvent.click(screen.getByRole('button', { name: 'Save the lesson' }));
+    expect(await screen.findByText(/^Scanned /)).toBeTruthy();
+    const [lesson] = await repos.scans.all();
+    expect(lesson?.dropped).toEqual(['kanji:雨', 'question:1-2']);
+    // Everything found is still on the lesson.
+    expect(lesson?.items.some((item) => item.text === '雨')).toBe(true);
+    expect(lesson?.questions).toHaveLength(2);
   });
 
   it('saves the lesson with the edited title, a changed kind and a checked line', async () => {
@@ -166,7 +209,37 @@ describe('new scan', () => {
     expect(lesson?.pages.map((p) => p.kind)).toEqual(['word-list', 'handout']);
     expect(lesson?.pages[0]?.lines[0]?.verified).toBe(true);
     expect(lesson?.questions.map((q) => q.answer)).toEqual(['そう', 'で']);
+    // The page keeps its printed order: the text, the exercise, what could not be imported.
+    expect(lesson?.pages[1]?.blocks).toEqual([
+      { kind: 'text', lines: [0] },
+      { kind: 'exercise', lines: [], questions: ['1-1', '1-2'] },
+      { kind: 'unsupported', lines: [1], reason: 'It needs the picture.' },
+    ]);
+    expect(lesson?.questions[0]).not.toHaveProperty('block');
     expect(await repos.sentences.get(lesson?.pages[0]?.lines[0]?.sentenceId ?? '')).toBeDefined();
+  });
+
+  it('leaves out the kinds unticked before reading, still listed in the review', async () => {
+    await setup();
+    pick(photo('a.jpg'), photo('b.jpg'));
+    const making = (await screen.findByText('Practise from these pages')).closest('fieldset');
+    const kinds = within(making as HTMLElement).getAllByRole('checkbox');
+    expect(kinds.map((kind) => (kind as HTMLInputElement).checked)).toEqual([
+      true,
+      true,
+      true,
+      true,
+    ]);
+    fireEvent.click(within(making as HTMLElement).getByRole('checkbox', { name: 'Kanji' }));
+    fireEvent.click(within(making as HTMLElement).getByRole('checkbox', { name: 'Exercises' }));
+    fireEvent.click(screen.getByRole('button', { name: /^Read 2 pages/ }));
+    const rain = await screen.findByRole('checkbox', { name: 'Practise 雨' });
+    expect(rain).toHaveProperty('checked', false);
+    expect(screen.getByRole('region', { name: 'Exercises from page 2 · 0 of 2' })).toBeTruthy();
+    expect(screen.getByRole('region', { name: 'Words · 2' })).toBeTruthy();
+    // The review still decides: a tick brings one back.
+    fireEvent.click(rain);
+    expect(await screen.findByRole('region', { name: 'Kanji · 2' })).toBeTruthy();
   });
 
   it('reads pasted text on the device, without AI', async () => {

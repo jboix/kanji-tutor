@@ -4,7 +4,7 @@
  * the tutor's since the handout prints none, with its explanation. A free answer is marked by the
  * learner against the tutor's. The tutor is in reach before and after the answer.
  */
-import { type ReactNode, useId, useMemo, useState } from 'react';
+import { type ReactNode, useMemo, useState } from 'react';
 import type { HandoutQuestion } from '../../domain/scan-types.ts';
 import type { SessionCard } from '../../domain/session-types.ts';
 import type { Grade } from '../../domain/types.ts';
@@ -22,10 +22,10 @@ import { TutorChip, TutorNext, useTutor } from '../../ui/tutor.tsx';
 import { TapText } from '../../ui/word-tap.tsx';
 import { ChoiceActions } from './drill-choices.tsx';
 import styles from './handout.module.css';
+import { TypedActions } from './handout-field.tsx';
 import { HandoutStem } from './handout-stem.tsx';
 import read from './read.module.css';
 import type { DrillResult } from './session-state.ts';
-import { SkipButton } from './skip-button.tsx';
 import { type HandoutControls, useHandout, useHandoutPage } from './use-handout.ts';
 
 const TYPE_LABELS: Readonly<Record<HandoutQuestion['type'], PlainKey>> = {
@@ -147,59 +147,6 @@ function Result({ grade }: { grade: Grade }) {
   );
 }
 
-/** A free answer, written before the tutor's shows. */
-function FreeField({ value, onChange }: { value: string; onChange: (value: string) => void }) {
-  const t = useT();
-  const id = useId();
-  return (
-    <div className={styles.field}>
-      <label htmlFor={id} className={read.muted}>
-        {t('read.yourAnswer')}
-      </label>
-      <textarea
-        id={id}
-        lang="ja"
-        rows={3}
-        className={styles.input}
-        value={value}
-        onChange={(event) => onChange(event.currentTarget.value)}
-      />
-    </div>
-  );
-}
-
-/** A typed answer and Check, or a free one and "Show the tutor's answer". */
-function TypedActions({ controls, free }: { controls: HandoutControls; free: boolean }) {
-  const t = useT();
-  const id = useId();
-  const [value, setValue] = useState('');
-  return (
-    <ActionBar>
-      {free ? (
-        <FreeField value={value} onChange={setValue} />
-      ) : (
-        <div className={styles.field}>
-          <label htmlFor={id} className="visually-hidden">
-            {t('read.yourAnswer')}
-          </label>
-          <input
-            id={id}
-            lang="ja"
-            className={styles.input}
-            value={value}
-            placeholder={t('read.yourAnswer')}
-            onChange={(event) => setValue(event.currentTarget.value)}
-          />
-        </div>
-      )}
-      <PillButton block disabled={!free && !value.trim()} onClick={() => controls.answer(value)}>
-        {free ? t('read.showTutorAnswer') : t('read.check')}
-      </PillButton>
-      {!free && <SkipButton onSkip={controls.skip} />}
-    </ActionBar>
-  );
-}
-
 /** "I had it right" and "Not quite", once the tutor's answer to a free question shows. */
 function MarkActions({ controls }: { controls: HandoutControls }) {
   const t = useT();
@@ -235,7 +182,7 @@ function AnswerFooter({
       />
     );
   }
-  return <TypedActions controls={controls} free={question.type === 'free'} />;
+  return <TypedActions type={question.type} controls={controls} />;
 }
 
 export interface HandoutScreenProps {

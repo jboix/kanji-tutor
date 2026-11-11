@@ -12,9 +12,9 @@ import { paths } from '../../ui/paths.ts';
 import { RateLimitNotice } from '../../ui/rate-limit-notice.tsx';
 import { SectionLabel } from '../../ui/section-label.tsx';
 import { useJapaneseTyping } from '../../ui/use-japanese-typing.ts';
+import { useKanaMode } from '../../ui/use-kana-mode.ts';
 import styles from './compose.module.css';
 import { errorCopy } from './compose-copy.ts';
-import { useKanaMode } from './use-kana-mode.ts';
 
 export interface DraftEditorProps {
   text: string;

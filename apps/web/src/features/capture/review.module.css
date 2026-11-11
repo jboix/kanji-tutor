@@ -34,8 +34,61 @@
   list-style: none;
 }
 
+.list > li {
+  border-bottom: 1px solid var(--rule);
+}
+
 .list > li:last-child {
   border-bottom: 0;
+}
+
+/* In a sheet the rows lie on the sheet itself: a card inside it would only show as a curved
+   line over the first row. */
+.flat .list {
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+/* A group's heading, and the tick for all of it at the end of the line. */
+.groupHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: var(--tap);
+}
+
+.all {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: var(--tap);
+  min-height: var(--tap);
+  padding-inline: 16px;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+/* In a sheet the tick for all lines up with the rows' edge. */
+.flat .all {
+  padding-inline: 16px 0;
+}
+
+/* 24px: a tick is a target of its own to axe, even inside its 44px label. */
+.keep {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+/* Where a row that cannot be practised has no tick. */
+.noKeep {
+  width: 24px;
 }
 
 .pageRow {
@@ -43,7 +96,6 @@
   align-items: center;
   gap: 12px;
   padding: 10px 0;
-  border-bottom: 1px solid var(--rule);
 }
 
 .pageThumb {
@@ -104,15 +156,30 @@
 
 .itemRow {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 12px;
   align-items: center;
+  min-height: var(--tap);
   padding: 10px 0;
-  border-bottom: 1px solid var(--rule);
+}
+
+label.itemRow {
+  cursor: pointer;
 }
 
 .kanjiRow {
-  grid-template-columns: 52px minmax(0, 1fr) auto;
+  grid-template-columns: auto 44px minmax(0, 1fr) auto;
+}
+
+/* Left out of the lesson: still listed, greyed, a tick away from coming back. */
+.left span {
+  color: var(--ink-faint);
+}
+
+.stem {
+  font-family: var(--font-ja);
+  font-size: 17px;
+  line-height: 1.5;
 }
 
 .kanjiChar {
@@ -164,14 +231,4 @@
 
 .not-started {
   color: var(--ink-faint);
-}
-
-.counts {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  margin: 0;
-  padding: 0;
-  font-size: var(--text-md);
-  list-style: none;
 }

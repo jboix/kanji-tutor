@@ -2,19 +2,24 @@
  * Turning read pages into a scanned lesson: the lines become sentences, the items are matched
  * against our data (`scan-match.ts`), and each handout question gets an id and the items it
  * practises. Pages can be added to an existing lesson; its own pages and items stay first.
+ * New items found only in exercise instructions start left out (`scan-choice.ts`).
  */
 
 import { GRAMMAR_CATALOGUE } from '../grammar/catalogue.ts';
 import { detectEntries } from '../grammar/detect.ts';
 import type { Repos } from '../repos.ts';
 import type {
+  BlockKind,
   HandoutQuestion,
+  LineRole,
   PageKind,
+  ScanBlock,
   ScanItem,
   ScannedLesson,
   ScanPage,
 } from '../scan-types.ts';
 import type { LearnerLevel, Sentence, Token } from '../types.ts';
+import { withStartingChoice } from './scan-choice.ts';
 import {
   type ListedItems,
   type MatchPage,
@@ -29,10 +34,22 @@ export interface LineDraft {
   text: string;
   verified: boolean;
   tokens: Token[];
+  /** What the tutor said the line is, when not the page's own content. */
+  role?: LineRole | undefined;
 }
 
 /** A handout question as the tutor read it, before it has an id. */
 export type QuestionDraft = Omit<HandoutQuestion, 'id' | 'page' | 'practises'>;
+
+/** A block of a page as the tutor read it: its lines and questions by their place in the draft. */
+export interface BlockDraft {
+  kind: BlockKind;
+  /** Indexes into the draft's `lines`. */
+  lines: number[];
+  /** Indexes into the draft's `questions`. */
+  questions: number[];
+  reason?: string | undefined;
+}
 
 /** One page as read: by the tutor from a photo, or pasted. */
 export interface PageDraft {
@@ -44,6 +61,8 @@ export interface PageDraft {
   questions: QuestionDraft[];
   /** The tutor's suggested title for the page. */
   title?: string | undefined;
+  /** The page in printed order; absent for pasted text. */
+  blocks?: BlockDraft[] | undefined;
 }
 
 export interface ScanBuildInput {
@@ -71,15 +90,27 @@ function sentenceOf(lesson: string, id: string, line: LineDraft, photo: boolean)
   return sentence;
 }
 
-function pageOf(draft: PageDraft, sentenceIds: readonly string[]): ScanPage {
+/** The id of the page's question `n` (from 0): "2-4" is the fourth of the third page. */
+const questionId = (page: number, n: number) => `${page}-${n + 1}`;
+
+function blockOf(draft: BlockDraft, page: number): ScanBlock {
+  const block: ScanBlock = { kind: draft.kind, lines: draft.lines };
+  if (draft.questions.length > 0) block.questions = draft.questions.map((n) => questionId(page, n));
+  if (draft.reason) block.reason = draft.reason;
+  return block;
+}
+
+function pageOf(draft: PageDraft, sentenceIds: readonly string[], index: number): ScanPage {
   const lines = draft.lines.map((line, i) => ({
     text: line.text,
     verified: line.verified,
     sentenceId: sentenceIds[i] ?? '',
+    ...(line.role ? { role: line.role } : {}),
   }));
   const page: ScanPage = { kind: draft.kind, lines };
   if (draft.photo) page.photo = draft.photo;
   if (draft.listed) page.read = true;
+  if (draft.blocks) page.blocks = draft.blocks.map((block) => blockOf(block, index));
   return page;
 }
 
@@ -108,7 +139,7 @@ function questionsOf(drafts: readonly PageDraft[], offset: number, items: readon
     draft.questions.map(
       (q, n): HandoutQuestion => ({
         ...q,
-        id: `${offset + p}-${n + 1}`,
+        id: questionId(offset + p, n),
         page: offset + p,
         practises: practisedBy(q, items),
       }),
@@ -146,12 +177,12 @@ export async function buildScan(repos: Repos, input: ScanBuildInput): Promise<Bu
   const items = mergedItems(base.items, found);
   const lesson: ScannedLesson = {
     ...titled(base, drafts),
-    pages: [...base.pages, ...drafts.map((draft, p) => pageOf(draft, ids[p] ?? []))],
+    pages: [...base.pages, ...drafts.map((draft, p) => pageOf(draft, ids[p] ?? [], offset + p))],
     items,
     questions: [...base.questions, ...questionsOf(drafts, offset, items)],
     matchVersion: SCAN_MATCH_VERSION,
   };
-  return { lesson, sentences };
+  return { lesson: withStartingChoice(lesson, base.items), sentences };
 }
 
 /** The tutor's lists of one stored page, from the lesson's items. */
@@ -167,7 +198,10 @@ async function storedPages(repos: Repos, lesson: ScannedLesson): Promise<MatchPa
   return Promise.all(
     lesson.pages.map(async (page, i) => {
       const sentences = await repos.sentences.getMany(page.lines.map((l) => l.sentenceId));
-      const lines = sentences.map((s) => ({ tokens: s?.tokens ?? [] }));
+      const lines = sentences.map((s, l) => ({
+        tokens: s?.tokens ?? [],
+        role: page.lines[l]?.role,
+      }));
       const listed = page.read ? listedOn(lesson, i) : undefined;
       return { page: i, lines, listed };
     }),
@@ -212,5 +246,5 @@ export async function rematchScan(
   const found = await matchScanItems(repos, pages, { level, wordIds: addedRefs(lesson, 'word') });
   const items = mergedItems(found, await addedGrammar(repos, addedRefs(lesson, 'grammar')));
   const { unmatched: _unmatched, ...rest } = lesson;
-  return { ...rest, items, matchVersion: SCAN_MATCH_VERSION };
+  return withStartingChoice({ ...rest, items, matchVersion: SCAN_MATCH_VERSION }, lesson.items);
 }

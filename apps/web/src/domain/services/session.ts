@@ -26,6 +26,7 @@ import { DAY_MS } from './items.ts';
 import { kanjiCardSession } from './kanji-cards.ts';
 import { buildLessonPart } from './lesson-session.ts';
 import { spanReadings, spanVariants } from './reading-check.ts';
+import { parseExercise } from './scan-pages.ts';
 import { scanSessionCards } from './scan-session.ts';
 import { trustedSentences } from './sentence-trust.ts';
 import { SESSION_EXERCISES, sessionExercises } from './session-exercises.ts';
@@ -82,6 +83,8 @@ export interface BuildSessionOptions {
   kanjiCards?: boolean;
   /** Practise a scanned lesson (`/read?scan=…`), apart from the daily mix: see `scanSessionCards`. */
   scan?: string;
+  /** With `scan`: one of its exercises only (`&exercise=2.3`, page and block). */
+  exercise?: string;
   /** With `unit`: the lesson's 練習 section (S3), the unit's practice without its passage. */
   practice?: boolean;
   /**
@@ -291,7 +294,8 @@ async function tailFor(repos: Repos, options: BuildSessionOptions) {
 
 async function scanSession(repos: Repos, scan: string, options: BuildSessionOptions) {
   const listening = (await options.listening) === true;
-  return scanSessionCards(repos, scan, { now: options.now, listening });
+  const exercise = parseExercise(options.exercise);
+  return scanSessionCards(repos, scan, { now: options.now, listening, exercise });
 }
 
 /** The sessions that are not a reading mix: kanji cards, a grammar point, a scanned lesson. */

@@ -88,14 +88,14 @@ describe('describeScanItems', () => {
 });
 
 describe('scanProgress', () => {
-  it('counts items in our lists and questions, per kind and handout page', async () => {
+  it('counts items in our lists and questions, per kind', async () => {
     const { lesson } = await setup();
     const fresh = scanProgress(lesson);
     expect(fresh.parts).toEqual([
-      { kind: 'kanji', done: 0, total: 2 },
-      { kind: 'word', done: 0, total: 2 },
-      { kind: 'grammar', done: 0, total: 2 },
-      { kind: 'questions', page: 2, done: 0, total: 2 },
+      { kind: 'kanji', done: 0, total: 2, left: 0 },
+      { kind: 'word', done: 0, total: 2, left: 0 },
+      { kind: 'grammar', done: 0, total: 2, left: 0 },
+      { kind: 'questions', done: 0, total: 2, left: 0 },
     ]);
     expect(fresh.total).toBe(8);
     expect(fresh.lastPractisedAt).toBeUndefined();

@@ -1,5 +1,5 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { HandoutQuestion, ScannedLesson } from '../../domain/scan-types.ts';
 import type { SessionCard } from '../../domain/session-types.ts';
 import { createMemoryRepos } from '../../test/memory-repos.ts';
@@ -33,6 +33,21 @@ const FREE: HandoutQuestion = {
   explanation: 'でしょう says what you expect.',
 };
 
+/** A reading to write: kana only. */
+const READING: HandoutQuestion = {
+  ...CHOOSE,
+  id: '0-5',
+  number: '5',
+  type: 'reading',
+  stem: '雨が降ります。',
+  target: '雨',
+  choices: [],
+  answer: 'あめ',
+};
+
+/** A form to write, with no choices printed. */
+const WRITE: HandoutQuestion = { ...CHOOSE, id: '0-6', number: '6', choices: [] };
+
 const LESSON: ScannedLesson = {
   id: 'scan1',
   createdAt: 1,
@@ -44,7 +59,7 @@ const LESSON: ScannedLesson = {
     { kind: 'handout', lines: [{ text: '雨が降り＿＿です。', verified: true, sentenceId: 's' }] },
   ],
   items: [],
-  questions: [CHOOSE, FREE],
+  questions: [CHOOSE, READING, WRITE, FREE],
   practised: {},
 };
 
@@ -85,6 +100,8 @@ describe('splitBlank', () => {
 });
 
 describe('a handout question', () => {
+  afterEach(() => sessionStorage.clear());
+
   it('says where it is printed and keeps the tutor’s answer hidden until answered', async () => {
     await show(CHOOSE);
     expect(screen.getByText('From your handout · page 1, question 4')).toBeTruthy();
@@ -108,6 +125,39 @@ describe('a handout question', () => {
     );
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
     expect(onDone).toHaveBeenCalledWith({ kind: 'handout', right: true });
+  });
+
+  it('turns romaji into hiragana as a reading is typed', async () => {
+    const { onDone } = await show(READING);
+    const field = screen.getByLabelText<HTMLInputElement>('Your answer');
+    fireEvent.change(field, { target: { value: 'ame' } });
+    expect(field.value).toBe('あめ');
+    fireEvent.click(screen.getByRole('button', { name: 'Send answer' }));
+    expect(await screen.findByText('Right')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    expect(onDone).toHaveBeenCalledWith({ kind: 'handout', right: true });
+  });
+
+  it('turns romaji into hiragana in a written answer, a last n included, with the あ switch', async () => {
+    await show({ ...WRITE, answer: 'そん' });
+    const field = screen.getByLabelText<HTMLInputElement>('Your answer');
+    expect(screen.getByRole('button', { name: 'Check' })).toHaveProperty('disabled', true);
+    fireEvent.change(field, { target: { value: 'son' } });
+    expect(field.value).toBe('そn');
+    expect(screen.getByRole('button', { name: 'Romaji turns into hiragana' })).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Check' }));
+    expect(await screen.findByText('Right')).toBeTruthy();
+  });
+
+  it('checks a written answer on Enter, and leaves romaji alone once the switch is off', async () => {
+    await show(WRITE);
+    const field = screen.getByLabelText<HTMLInputElement>('Your answer');
+    fireEvent.click(screen.getByRole('button', { name: 'Romaji turns into hiragana' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Romaji turns into katakana' }));
+    fireEvent.change(field, { target: { value: 'sou' } });
+    expect(field.value).toBe('sou');
+    fireEvent.submit(field);
+    expect(await screen.findByLabelText('Answer from the tutor')).toBeTruthy();
   });
 
   it('lets the learner mark a free answer once the tutor’s shows', async () => {

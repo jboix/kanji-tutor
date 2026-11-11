@@ -1,32 +1,35 @@
 /**
  * A scanned lesson's own progress, as plain counts: its items and handout questions practised
- * (answered right at least once in its practice) out of all of them, per kind, and per handout
- * page for the questions. Items not in our lists cannot be practised, so they do not count.
+ * (answered right at least once in its practice) out of those the learner keeps, per kind, the
+ * handouts' questions as one part. Items not in our lists cannot be practised, so they do not
+ * count; neither does what the learner left out, which `left` counts apart.
  */
 import type { ScannedLesson } from '../scan-types.ts';
+import { isKept } from './scan-choice.ts';
 import { SCAN_PRACTICE_CARDS } from './scan-practice.ts';
 import { questionKey, scanItemKey } from './scans.ts';
 
 export interface ScanPart {
   kind: 'kanji' | 'word' | 'grammar' | 'questions';
-  /** For the questions: the handout page they are printed on. */
-  page?: number;
   done: number;
   total: number;
+  /** Left out by the learner: listed in the part, not practised. */
+  left: number;
 }
 
 export interface ScanProgress {
   done: number;
   total: number;
-  /** Kanji, words, grammar, then the questions of each handout page; empty parts left out. */
+  /** Kanji, words, grammar, then the handouts' questions; parts with nothing kept are not here. */
   parts: ScanPart[];
   /** Epoch ms of the last right answer in this lesson's practice. */
   lastPractisedAt?: number;
 }
 
 function part(kind: ScanPart['kind'], keys: readonly string[], lesson: ScannedLesson): ScanPart {
-  const done = keys.filter((key) => lesson.practised[key] !== undefined).length;
-  return { kind, done, total: keys.length };
+  const kept = keys.filter((key) => isKept(lesson, key));
+  const done = kept.filter((key) => lesson.practised[key] !== undefined).length;
+  return { kind, done, total: kept.length, left: keys.length - kept.length };
 }
 
 function itemParts(lesson: ScannedLesson): ScanPart[] {
@@ -36,17 +39,21 @@ function itemParts(lesson: ScannedLesson): ScanPart[] {
   );
 }
 
-function questionParts(lesson: ScannedLesson): ScanPart[] {
-  const pages = [...new Set(lesson.questions.map((q) => q.page))].sort((a, b) => a - b);
-  return pages.map((page) => ({
-    ...part('questions', lesson.questions.filter((q) => q.page === page).map(questionKey), lesson),
-    page,
-  }));
+function questionPart(lesson: ScannedLesson): ScanPart {
+  return part('questions', lesson.questions.map(questionKey), lesson);
+}
+
+/**
+ * Every part of the lesson, those the learner left out whole included (`total` 0), so that
+ * they can be added back.
+ */
+export function scanParts(lesson: ScannedLesson): ScanPart[] {
+  return [...itemParts(lesson), questionPart(lesson)].filter((p) => p.total + p.left > 0);
 }
 
 /** The lesson's progress (see the module comment). */
 export function scanProgress(lesson: ScannedLesson): ScanProgress {
-  const parts = [...itemParts(lesson), ...questionParts(lesson)].filter((p) => p.total > 0);
+  const parts = scanParts(lesson).filter((p) => p.total > 0);
   const progress: ScanProgress = {
     done: parts.reduce((sum, p) => sum + p.done, 0),
     total: parts.reduce((sum, p) => sum + p.total, 0),

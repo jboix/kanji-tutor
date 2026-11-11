@@ -1,7 +1,8 @@
 /**
  * What the scan found (scans/Review): the suggested title to edit, the date, the pages with
  * their kind, the kanji, words and grammar they teach with level and state, and the handout's
- * exercises as counts. The tutor stays one tap away in the footer.
+ * exercises, each with a tick to keep it in the lesson or leave it out. The tutor stays one tap
+ * away in the footer.
  */
 import { type ReactNode, useId } from 'react';
 import { ActionBar } from '../../ui/action-bar.tsx';
@@ -71,8 +72,9 @@ export function ScanReview({ model, back, action }: ScanReviewProps) {
     >
       <TitleField model={model} />
       <ReviewPages model={model} />
-      {model.views ? <ReviewItems views={model.views} /> : null}
-      <ReviewExercises questions={model.lesson.questions} />
+      <p className={styles.lead}>{t('capture.chooseLead')}</p>
+      {model.views ? <ReviewItems views={model.views} model={model} /> : null}
+      <ReviewExercises model={model} />
     </Screen>
   );
 }

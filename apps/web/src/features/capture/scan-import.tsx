@@ -1,11 +1,12 @@
 /**
  * New scan (scans/Main): add every page of a handout, photographed or picked, or pasted; choose a
- * new scanned lesson or one to add to; then read them, one request per photo, the count shown
- * before anything is sent (A18). Picking a photo sends nothing.
+ * new scanned lesson or one to add to, and what to practise from the pages; then read them, one
+ * request per photo, the count shown before anything is sent (A18). Picking a photo sends nothing.
  */
 import { type ReactNode, useId, useState } from 'react';
 import { Link } from 'react-router';
 import type { ScannedLesson } from '../../domain/scan-types.ts';
+import { SCAN_CHOICE_KINDS } from '../../domain/services/index.ts';
 import { ActionBar, ActionHint } from '../../ui/action-bar.tsx';
 import { AiAction } from '../../ui/ai-action.tsx';
 import { AiBlockStatus, AiWriting } from '../../ui/ai-block.tsx';
@@ -23,7 +24,7 @@ import { useCloud } from '../../ui/use-cloud.ts';
 import styles from './capture.module.css';
 import { PageGrid, PickButtons, textPage, usePickers } from './page-grid.tsx';
 import type { ImportPage } from './read-pages.ts';
-import { problemMessage } from './scan-copy.ts';
+import { MAKE_LABELS, problemMessage } from './scan-copy.ts';
 import { useImportTutor } from './scan-tutor.ts';
 import type { ReadState, useScanImport } from './use-scan-import.ts';
 
@@ -124,6 +125,35 @@ function Destination({ scan }: { scan: Import }) {
   );
 }
 
+/**
+ * "Practise from these pages": the kinds to practise. The rest is found and listed all the same,
+ * left out, and the review after reading can change every choice.
+ */
+function Making({ scan }: { scan: Import }) {
+  const t = useT();
+  if (scan.pages.length === 0) return null;
+  return (
+    <fieldset className={styles.fieldset}>
+      <legend className={styles.legend}>
+        <SectionLabel>{t('capture.makeLegend')}</SectionLabel>
+      </legend>
+      <div className={styles.making}>
+        {SCAN_CHOICE_KINDS.map((kind) => (
+          <label key={kind} className={styles.radio}>
+            <input
+              type="checkbox"
+              checked={scan.make.includes(kind)}
+              onChange={() => scan.toggleMake(kind)}
+            />
+            {t(MAKE_LABELS[kind])}
+          </label>
+        ))}
+      </div>
+      <p className={styles.muted}>{t('capture.makeHint')}</p>
+    </fieldset>
+  );
+}
+
 /** Reading progress, or why the pages could not be read. */
 function ReadStatus({ state }: { state: ReadState }) {
   const t = useT();
@@ -216,6 +246,7 @@ export function ScanImport({ scan, adding }: { scan: Import; adding: boolean }) 
       <PickButtons onCamera={pickers.openCamera} onLibrary={pickers.openLibrary} />
       <PasteForm onText={(text) => scan.add([textPage(text)])} />
       <Destination scan={scan} />
+      <Making scan={scan} />
       <ReadStatus state={scan.state} />
     </Screen>
   );

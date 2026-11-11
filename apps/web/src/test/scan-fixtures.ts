@@ -170,3 +170,20 @@ export function packSentence(id: string, line: LineDraft, level: Sentence['level
     verified: true,
   };
 }
+
+/**
+ * The same handout read in its printed order: an instruction, the exercise it introduces, and
+ * an exercise that needs a picture, which cannot be imported.
+ */
+export const ORDERED_PAGE: PageDraft = {
+  ...HANDOUT_PAGE,
+  lines: [
+    { text: '正しいものを選びなさい。', verified: true, tokens: [], role: 'instruction' },
+    { text: '①＿＿　②＿＿', verified: true, tokens: [] },
+  ],
+  blocks: [
+    { kind: 'instruction', lines: [0], questions: [] },
+    { kind: 'exercise', lines: [], questions: [0, 1] },
+    { kind: 'unsupported', lines: [1], questions: [], reason: 'It needs the pictures.' },
+  ],
+};

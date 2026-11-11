@@ -1,10 +1,10 @@
 /**
- * The pages' text on a scanned lesson's page: tap a line, then ask the tutor to translate and
- * explain it (one request, A13); its readings come back checked (A8). Lines the tutor was unsure
- * of can be checked from here.
+ * The printed lines on a scanned lesson's page: tap a line, then ask the tutor to translate and
+ * explain it (one request, A13); its readings come back checked (A8).
  */
 import { useCallback, useState } from 'react';
 import type { AiClient } from '../../ai/types.ts';
+import type { BlockLine } from '../../domain/services/index.ts';
 import { AiAction } from '../../ui/ai-action.tsx';
 import { AiBlock, AiBlockStatus, AiWriting } from '../../ui/ai-block.tsx';
 import { cx } from '../../ui/cx.ts';
@@ -14,10 +14,7 @@ import { Ja } from '../../ui/ja.tsx';
 import { JaRuns } from '../../ui/ja-runs.tsx';
 import { RateLimitNotice } from '../../ui/rate-limit-notice.tsx';
 import { Reading } from '../../ui/reading.tsx';
-import { SectionLabel } from '../../ui/section-label.tsx';
 import styles from './lesson.module.css';
-import { CheckLines } from './review-pages.tsx';
-import type { ReviewModel } from './use-draft-review.ts';
 import { type LineNote, useLineNotes } from './use-line-notes.ts';
 
 type Ready = Extract<LineNote, { status: 'ready' }>;
@@ -81,7 +78,8 @@ interface LineRef {
   text: string;
 }
 
-function useSelectedLine(lesson: string | undefined) {
+/** The line tapped on a lesson's pages and the tutor's note on it. */
+export function useSelectedLine(lesson: string | undefined) {
   const { notes, explain, peek } = useLineNotes(lesson);
   const [selected, setSelected] = useState<LineRef>();
   const ask = (client: AiClient) => selected && void explain(client, selected.key, selected.text);
@@ -94,34 +92,37 @@ function useSelectedLine(lesson: string | undefined) {
   return { selected, select: setSelected, note, ask, peek: peekLine };
 }
 
-export function LessonLines({ model }: { model: ReviewModel }) {
-  const t = useT();
-  const { selected, select, note, ask, peek } = useSelectedLine(model.lesson.lesson);
+export type LineAsk = ReturnType<typeof useSelectedLine>;
+
+interface BlockLinesProps {
+  /** The page's index, which with a line's makes its key. */
+  page: number;
+  lines: readonly BlockLine[];
+  ask: LineAsk;
+}
+
+/** A block's lines as printed: tap one, then ask the tutor about it. */
+export function BlockLines({ page, lines, ask }: BlockLinesProps) {
   return (
-    <section aria-label={t('capture.linesHeading')} className={styles.section}>
-      <SectionLabel as="h2">{t('capture.linesHeading')}</SectionLabel>
-      <ul className={styles.lines}>
-        {model.lesson.pages.flatMap((page, p) =>
-          page.lines.map((line, l) => {
-            const key = `${p}.${l}`;
-            return (
-              <li key={key}>
-                <button
-                  type="button"
-                  lang="ja"
-                  aria-pressed={selected?.key === key}
-                  className={cx(styles.line, selected?.key === key && styles.lineOn)}
-                  onClick={() => select({ key, text: line.text })}
-                >
-                  {line.text}
-                </button>
-                {selected?.key === key && <LineNoteView note={note} ask={ask} peek={peek} />}
-              </li>
-            );
-          }),
-        )}
-      </ul>
-      <CheckLines model={model} />
-    </section>
+    <ul className={styles.lines}>
+      {lines.map((line) => {
+        const key = `${page}.${line.index}`;
+        const on = ask.selected?.key === key;
+        return (
+          <li key={key}>
+            <button
+              type="button"
+              lang="ja"
+              aria-pressed={on}
+              className={cx(styles.line, on && styles.lineOn)}
+              onClick={() => ask.select({ key, text: line.text })}
+            >
+              {line.text}
+            </button>
+            {on && <LineNoteView note={ask.note} ask={ask.ask} peek={ask.peek} />}
+          </li>
+        );
+      })}
+    </ul>
   );
 }

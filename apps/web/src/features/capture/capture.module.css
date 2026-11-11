@@ -266,6 +266,13 @@
   font-size: var(--text-md);
 }
 
+/* What to practise from the pages: four ticks, two to a line. */
+.making {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 12px;
+}
+
 .radio input {
   width: 20px;
   height: 20px;

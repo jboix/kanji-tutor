@@ -57,11 +57,15 @@ export interface SessionRequest {
   part?: number | undefined;
   /** Practise a scanned lesson (`?scan=…`), apart from the daily mix. */
   scan?: string | undefined;
+  /** With `scan`: one of its exercises only (`&exercise=2.3`). */
+  exercise?: string | undefined;
 }
 
 /** The session builder's options for a request: kanji cards, or a session's focus and mix. */
 function sessionOptions(request: SessionRequest): Omit<BuildSessionOptions, 'now'> {
-  if (request.scan) return { scan: request.scan };
+  if (request.scan) {
+    return { scan: request.scan, ...(request.exercise ? { exercise: request.exercise } : {}) };
+  }
   return request.kanjiCards ? { kanjiCards: true } : mixOptions(request);
 }
 

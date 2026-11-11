@@ -129,6 +129,7 @@ export {
   type ScanAnswerBase,
 } from './scan-answer.ts';
 export {
+  type BlockDraft,
   buildScan,
   type LineDraft,
   needsMatch,
@@ -138,12 +139,31 @@ export {
   type ScanBuildInput,
 } from './scan-build.ts';
 export {
+  isKept,
+  keptItems,
+  keptQuestions,
+  keysOfKinds,
+  SCAN_CHOICE_KINDS,
+  type ScanChoiceKind,
+  withKept,
+} from './scan-choice.ts';
+export {
   type ListedItem,
   type ListedItems,
   matchPattern,
   matchScanItems,
   NOTHING_LISTED,
 } from './scan-match.ts';
+export {
+  type BlockLine,
+  type BlockView,
+  type ExerciseRef,
+  exerciseParam,
+  type PageView,
+  parseExercise,
+  scanPages,
+  unsupportedCount,
+} from './scan-pages.ts';
 export {
   buildScanPractice,
   SCAN_PRACTICE_CARDS,
@@ -153,6 +173,7 @@ export {
 export {
   type ScanPart,
   type ScanProgress,
+  scanParts,
   scanPracticeMinutes,
   scanProgress,
   withPractised,

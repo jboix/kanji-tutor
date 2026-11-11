@@ -50,7 +50,29 @@
   gap: 6px;
 }
 
+/* The kanji popup is laid out against the field, above the kana typed. */
+.typing {
+  position: relative;
+}
+
+/* The field, and the あ switch at its end (at its top beside several lines). */
+.fieldRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fieldRow[data-top] {
+  align-items: flex-start;
+}
+
+.fieldRow[data-top] > button {
+  margin-top: 8px;
+}
+
 .input {
+  flex: 1;
+  min-width: 0;
   width: 100%;
   min-height: var(--control);
   box-sizing: border-box;

@@ -17,6 +17,9 @@ export const PAGE_KINDS: readonly PageKind[] = [
   'mixed',
 ];
 
+/** What a line is on its page, when it is not the page's own content. */
+export type LineRole = 'instruction';
+
 /** One printed Japanese line of a page, in reading order. */
 export interface ScanLine {
   text: string;
@@ -27,6 +30,29 @@ export interface ScanLine {
   verified: boolean;
   /** The line as a stored sentence (source `capture`), with its tokens. */
   sentenceId: string;
+  /**
+   * What the line is on its page, when the tutor said: an exercise's instruction
+   * (正しいものを選びなさい). Absent for what the page teaches or asks, and for older scans.
+   */
+  role?: LineRole;
+}
+
+/**
+ * What a run of a page's lines is, as printed: a title, what an exercise tells the learner to
+ * do, an exercise made into questions, an exercise the app has no question type for (it needs a
+ * picture, a table, sound, lines to draw), rows of kanji or words, or any other text.
+ */
+export type BlockKind = 'heading' | 'instruction' | 'exercise' | 'unsupported' | 'text' | 'list';
+
+/** One block of a page, in printed order. */
+export interface ScanBlock {
+  kind: BlockKind;
+  /** Its lines, as indexes into the page's `lines`. */
+  lines: number[];
+  /** For an exercise: the ids of its questions, in printed order. */
+  questions?: string[];
+  /** For an exercise that cannot be imported: why, as the tutor put it. */
+  reason?: string;
 }
 
 export interface ScanPage {
@@ -34,6 +60,11 @@ export interface ScanPage {
   photo?: Blob;
   kind: PageKind;
   lines: ScanLine[];
+  /**
+   * The page from top to bottom, as the tutor read it. Absent for pasted text and for scans
+   * made before pages kept their order: those show their lines, then their exercises.
+   */
+  blocks?: ScanBlock[];
   /** The tutor read the page and listed what it teaches; absent for pasted text. */
   read?: true;
 }
@@ -65,6 +96,11 @@ export interface ScanItem {
   meaning?: string;
   /** The tutor's reading of a word not in our lists, after `verifyReading`. */
   reading?: ScanReading;
+  /**
+   * Found only in exercise instructions, not in what the pages teach: it starts left out of the
+   * lesson (`ScannedLesson.dropped`) until the learner adds it.
+   */
+  instruction?: true;
 }
 
 /** The kinds of handout question the tutor tells apart. */
@@ -135,6 +171,11 @@ export interface ScannedLesson {
   questions: HandoutQuestion[];
   /** Practised keys (items and questions, see `scanItemKey`) → epoch ms of the last right answer. */
   practised: Record<string, number>;
+  /**
+   * Keys of the items and questions the learner left out of the lesson: still listed, never
+   * practised or counted. Absent when everything is kept, as in every older scan.
+   */
+  dropped?: string[];
   /** Items added to the week's lesson from a capture made before scanned lessons. */
   addedItemIds?: ItemId[];
   /**

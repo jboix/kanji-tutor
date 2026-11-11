@@ -1,7 +1,8 @@
 /**
  * The review of pages just read, before anything is saved: the lesson they make (matched against
  * the dictionary and catalogue), its items described, and the learner's edits: the title, a
- * page's kind, a line checked or fixed. Save stores the lesson and its lines.
+ * page's kind, a line checked or fixed, and what to keep of it. Save stores the lesson and its
+ * lines.
  */
 import { useCallback, useEffect, useState } from 'react';
 import type { PageKind, ScannedLesson } from '../../domain/scan-types.ts';
@@ -10,10 +11,12 @@ import {
   buildScan,
   describeScanItems,
   emptyScan,
+  keysOfKinds,
   learnerLevelOf,
   type PageDraft,
   type ScanItemView,
   saveScan,
+  withKept,
   withPageKind,
 } from '../../domain/services/index.ts';
 import { type Services, useServices } from '../../ui/services.tsx';
@@ -36,6 +39,33 @@ export interface ReviewModel {
   /** Lines to check; fixing one marks it checked. */
   check: CheckLine[];
   fixLine: (at: CheckLine, text: string) => Promise<void>;
+  /** Keeps these items or questions (by key) in the lesson's practice, or leaves them out. */
+  setKept: (keys: readonly string[], kept: boolean) => void;
+}
+
+/** The keys of the kinds not wanted (`ReadPages.skip`), among what the pages just read brought. */
+function skipped(lesson: ScannedLesson, offset: number, skip: ReadPages['skip']): string[] {
+  const items = lesson.items.filter((item) => item.page >= offset);
+  const questions = lesson.questions.filter((question) => question.page >= offset);
+  return keysOfKinds({ items, questions }, skip);
+}
+
+/** What the learner ticked or unticked in the review: key → kept. */
+type Choices = Readonly<Record<string, boolean>>;
+
+/** The lesson as built, with the learner's ticks over what starts kept or left out. */
+function chosen(lesson: ScannedLesson, choices: Choices): ScannedLesson {
+  const keys = (kept: boolean) => Object.keys(choices).filter((key) => choices[key] === kept);
+  return withKept(withKept(lesson, keys(true), true), keys(false), false);
+}
+
+/** The ticks, kept apart from the built lesson: it is built again when a line or a kind changes. */
+function useChoices() {
+  const [choices, setChoices] = useState<Choices>({});
+  const setKept = useCallback((keys: readonly string[], kept: boolean) => {
+    setChoices((now) => ({ ...now, ...Object.fromEntries(keys.map((key) => [key, kept])) }));
+  }, []);
+  return { choices, setKept };
 }
 
 async function built(services: Services, base: ScannedLesson, pages: readonly PageDraft[]) {
@@ -91,14 +121,17 @@ export function useDraftReview(read: ReadPages, now: number) {
   const services = useServices();
   const { offset, result, setKind, fixLine } = useBuilt(services, read, now);
   const [title, setTitle] = useState<string>();
-  const lesson = result?.scan.lesson;
+  const { choices, setKept } = useChoices();
+  const made =
+    result && withKept(result.scan.lesson, skipped(result.scan.lesson, offset, read.skip), false);
+  const lesson = made && chosen(made, choices);
   const name = title ?? lesson?.title ?? '';
   const save = useCallback(async () => {
-    if (!result) return undefined;
-    const scan = { ...result.scan, lesson: { ...result.scan.lesson, title: name } };
+    if (!(result && lesson)) return undefined;
+    const scan = { ...result.scan, lesson: { ...lesson, title: name } };
     await saveScan(services.repos, scan, Date.now());
     return scan.lesson.id;
-  }, [result, name, services.repos]);
+  }, [result, lesson, name, services.repos]);
   if (!(lesson && result)) return undefined;
   const check = toCheck(lesson, offset);
   const model: ReviewModel = {
@@ -109,6 +142,7 @@ export function useDraftReview(read: ReadPages, now: number) {
     setKind,
     check,
     fixLine,
+    setKept,
   };
   return { model, save };
 }

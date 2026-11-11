@@ -153,7 +153,8 @@ export const analysePage = task({
   prose: (raw) => [
     raw.title,
     ...raw.words.map((word) => word.meaning),
-    ...raw.questions.map((question) => question.explanation),
+    ...raw.blocks.flatMap((block) => block.questions.map((question) => question.explanation)),
+    ...raw.blocks.flatMap((block) => block.reason ?? []),
   ],
   prompt: analysePagePrompt,
   schema: pageAnalysisSchema,

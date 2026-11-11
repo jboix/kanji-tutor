@@ -1,10 +1,16 @@
 /**
  * Reading the pages of a scan: each photo is one request to the tutor (what the page is, its
- * lines, what it teaches, a handout's questions answered), and its lines are tokenized here;
+ * blocks in printed order, what it teaches, a handout's questions answered), and its lines are
+ * tokenized here;
  * pasted text is only tokenized, offline and without AI.
  */
 import type { AiClient, AnalysedQuestion, PageAnalysis } from '../../ai/types.ts';
-import type { PageDraft, QuestionDraft } from '../../domain/services/index.ts';
+import type {
+  BlockDraft,
+  LineDraft,
+  PageDraft,
+  QuestionDraft,
+} from '../../domain/services/index.ts';
 import type { Lang } from '../../lang/types.ts';
 import { prepareImage } from '../../ui/image.ts';
 import type { ReadProblem } from './scan-copy.ts';
@@ -28,7 +34,15 @@ async function tokenized(tokenize: Tokenize, text: string, verified: boolean) {
   return { text, verified, tokens: await tokenize(text) };
 }
 
-function questionDraft(q: AnalysedQuestion): QuestionDraft {
+type AnalysedLine = PageAnalysis['lines'][number];
+
+/** A line the tutor read, tokenized, an exercise's instruction marked as one. */
+async function readLine(tokenize: Tokenize, line: AnalysedLine): Promise<LineDraft> {
+  const draft = await tokenized(tokenize, line.text, !line.unsure);
+  return line.role === 'instruction' ? { ...draft, role: 'instruction' } : draft;
+}
+
+function questionDraft({ block: _block, ...q }: AnalysedQuestion): QuestionDraft {
   const readings = q.readings.map(({ surface, reading, verified }) => ({
     surface,
     reading,
@@ -37,15 +51,27 @@ function questionDraft(q: AnalysedQuestion): QuestionDraft {
   return { ...q, readings };
 }
 
+/** The indexes of the entries that belong to block `block`. */
+const inBlock = (entries: readonly { block: number }[], block: number) =>
+  entries.flatMap((entry, i) => (entry.block === block ? [i] : []));
+
+/** The page's blocks, in printed order, with the lines and questions of each by index. */
+function blockDrafts(analysis: PageAnalysis): BlockDraft[] {
+  return analysis.blocks.map((block, b) => ({
+    kind: block.kind,
+    lines: inBlock(analysis.lines, b),
+    questions: inBlock(analysis.questions, b),
+    reason: block.reason,
+  }));
+}
+
 /** The tutor's reading of a page as a page draft. */
 export async function pageFromAnalysis(
   tokenize: Tokenize,
   analysis: PageAnalysis,
   photo: Blob,
 ): Promise<PageDraft> {
-  const lines = await Promise.all(
-    analysis.lines.map((line) => tokenized(tokenize, line.text, !line.unsure)),
-  );
+  const lines = await Promise.all(analysis.lines.map((line) => readLine(tokenize, line)));
   const listed = {
     kanji: analysis.kanji.map((k) => ({ text: k.char, meaning: k.meaning })),
     words: analysis.words.map(({ written, meaning, reading }) => ({
@@ -56,7 +82,8 @@ export async function pageFromAnalysis(
     grammar: analysis.grammar.map((g) => ({ text: g.pattern, meaning: g.meaning })),
   };
   const questions = analysis.questions.map(questionDraft);
-  return { photo, kind: analysis.kind, lines, listed, questions, title: analysis.title };
+  const blocks = blockDrafts(analysis);
+  return { photo, kind: analysis.kind, lines, listed, questions, title: analysis.title, blocks };
 }
 
 /** Pasted text as a page draft: a reading passage the learner can change, read on the device. */

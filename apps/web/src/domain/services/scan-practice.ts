@@ -3,7 +3,8 @@
  * sentences and made into the usual cards, and the handout's own questions. A word is read in a
  * pack sentence that uses it (else alone) and its meaning checked; a kanji is read in a word
  * written with it, else on a kanji card; a grammar point gets its introduction when new and two
- * of its drills ("Practise this point"). Like a unit lesson, grammar comes first, then kanji,
+ * of its drills ("Practise this point"). Only what the learner keeps of the lesson is practised
+ * (`scan-choice.ts`). Like a unit lesson, grammar comes first, then kanji,
  * then words, then the handout's questions. While anything is left to practise, only that is
  * offered; once all of it is, everything comes back, least recently practised first. Answers go
  * through `scan-answer.ts`, which updates the same knowledge levels and FSRS cards as everywhere.
@@ -24,6 +25,8 @@ import { learnerLevelOf } from './learner-level.ts';
 import { gateSentences, type LevelGate, maxLevelFor, stretchLevel } from './level-gate.ts';
 import { pointPractice } from './point-practice.ts';
 import { spanReadings, spanVariants } from './reading-check.ts';
+import { isKept, keptItems, keptQuestions } from './scan-choice.ts';
+import { type ExerciseRef, exerciseQuestions } from './scan-pages.ts';
 import { questionKey, scanItemKey } from './scans.ts';
 import { trustedSentences } from './sentence-trust.ts';
 import { wordCard } from './unit-lesson.ts';
@@ -42,6 +45,8 @@ const POINT_CARDS = 2;
 
 export interface ScanPracticeOptions {
   now: number;
+  /** Practise one exercise only: its kept questions, in printed order, and nothing else. */
+  exercise?: ExerciseRef | undefined;
   /** The device has a Japanese voice, so listening exercises can be made (S4). */
   listening: boolean;
   size?: number;
@@ -160,12 +165,12 @@ interface Chosen {
   questions: readonly ScanCard[];
 }
 
-/** The lesson's items with a ref (ours), grammar first, and its questions. */
+/** The lesson's kept items with a ref (ours), grammar first, and its kept questions. */
 function everything(lesson: ScannedLesson): Chosen {
-  const ours = lesson.items.filter((item) => item.ref !== undefined);
+  const ours = keptItems(lesson).filter((item) => item.ref !== undefined);
   const byKind = [...ours].sort((a, b) => KIND_ORDER[a.kind] - KIND_ORDER[b.kind]);
   const items = byKind.map((item): Entry => ({ item, key: scanItemKey(item) }));
-  const questions = lesson.questions.map(
+  const questions = keptQuestions(lesson).map(
     (question): ScanCard => ({ kind: 'question', key: questionKey(question), question }),
   );
   return { items, questions };
@@ -208,15 +213,24 @@ async function contextFor(repos: Repos, lesson: ScannedLesson, options: ScanPrac
   return ctx;
 }
 
+/** One exercise's kept questions as cards, in printed order. */
+function exerciseCards(lesson: ScannedLesson, ref: ExerciseRef): ScanCard[] {
+  return exerciseQuestions(lesson, ref)
+    .filter((question) => isKept(lesson, questionKey(question)))
+    .map((question) => ({ kind: 'question', key: questionKey(question), question }));
+}
+
 /**
  * The practice of one scanned lesson (see the module comment): at most `size` cards (12 by
- * default): what is left to practise, or when nothing is, all of it again.
+ * default): what is left to practise, or when nothing is, all of it again. With `exercise`, that
+ * exercise's questions and nothing else.
  */
 export async function buildScanPractice(
   repos: Repos,
   lesson: ScannedLesson,
   options: ScanPracticeOptions,
 ): Promise<ScanCard[]> {
+  if (options.exercise) return exerciseCards(lesson, options.exercise);
   const size = options.size ?? SCAN_PRACTICE_CARDS;
   const ctx = await contextFor(repos, lesson, options);
   const all = everything(lesson);
