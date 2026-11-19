@@ -179,6 +179,11 @@ export const S = {
 } as const;
 
 export const NOW = Date.parse('2026-10-17T09:00:00Z');
+/**
+ * A `dueIn` for words that must stay out of a session. Screens read the real clock, not `NOW`,
+ * so a short delay from `NOW` would come due as the calendar moves on.
+ */
+export const NOT_DUE = 50 * 365 * 86_400_000;
 export const ALL_WORDS: readonly Word[] = Object.values(W);
 
 /** Memory repos over the fixture dictionary and sentences. */
@@ -233,6 +238,6 @@ export async function knowBasics(repos: Repos): Promise<void> {
       [W.hon, 3],
       [W.yomu, 3],
     ],
-    { dueIn: 30 * 86_400_000 },
+    { dueIn: NOT_DUE },
   );
 }

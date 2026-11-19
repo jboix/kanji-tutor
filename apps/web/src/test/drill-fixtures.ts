@@ -2,7 +2,7 @@
 import type { Repos } from '../domain/repos.ts';
 import { rebuildKanjiReadings } from '../domain/services/kanji-readings.ts';
 import type { Review, Sentence } from '../domain/types.ts';
-import { knowBasics, NOW, readingRepos, track, W } from './reading-fixtures.ts';
+import { knowBasics, NOT_DUE, NOW, readingRepos, track, W } from './reading-fixtures.ts';
 
 const DAY = 86_400_000;
 
@@ -34,7 +34,7 @@ export async function drillRepos(): Promise<Repos> {
   const repos = await readingRepos({ learnerLevel: 3, immersion: 'native' });
   await repos.sentences.put(teacher);
   await knowBasics(repos);
-  const later = { dueIn: 30 * DAY };
+  const later = { dueIn: NOT_DUE };
   await track(
     repos,
     [
