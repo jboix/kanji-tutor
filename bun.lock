@@ -47,7 +47,7 @@
         "react": "^19.3.0",
         "react-dom": "^19.3.0",
         "react-router": "^8.5.1",
-        "ts-fsrs": "^5.4.0",
+        "ts-fsrs": "^6.0.0",
         "wanakana": "^5.3.0",
         "zod": "^4.6.0",
       },
@@ -423,6 +423,8 @@
     "@octokit/request-error": ["@octokit/request-error@7.1.2", "", { "dependencies": { "@octokit/types": "^18.0.0" } }, "sha512-XZRuT3xZ84D3gYErI1DZvhJ33dCWVV6uzBtWkaBB4TvA/L6eOeTZodxLFVB44bBEEo3vEx7y00UfX1tBLrtLRg=="],
 
     "@octokit/types": ["@octokit/types@18.0.0", "", { "dependencies": { "@octokit/openapi-types": "^29.0.1" } }, "sha512-l6bAF43PNxkJp6g+W4PjoUSSkxHomXw2nOum5CTftJz1NlV3vu93NImgOYtLf6CbBUb5j+fiuzW0PPQ5JTSvZA=="],
+
+    "@open-spaced-repetition/srs-kit": ["@open-spaced-repetition/srs-kit@1.0.0", "", {}, "sha512-f++JAMpRw7Yh1U4JcHzTtVknJ1bYKz/4yejsus6TRl+ueGJpvexNBrOoqaeUWCgH/e1j046oiqjzy4Nf4RW/vw=="],
 
     "@oxc-parser/binding-android-arm-eabi": ["@oxc-parser/binding-android-arm-eabi@0.156.0", "", { "os": "android", "cpu": "arm" }, "sha512-RMq7DKNzEp1T51QKNLTn0NryNEt2IYfh7mZBlIdi2Ju52ltOEDMeIXv0XBpA6dL7j7ChjlcovtGcc1Jv4qMipg=="],
 
@@ -1856,7 +1858,7 @@
 
     "trough": ["trough@2.2.0", "", {}, "sha512-tmMpK00BjZiUyVyvrBK7knerNgmgvcV/KLVyuma/SC+TQN167GrMRciANTz09+k3zW8L8t60jWO1GpfkZdjTaw=="],
 
-    "ts-fsrs": ["ts-fsrs@5.4.2", "", {}, "sha512-z4qop4pzTcyTzuJ566d9EaX/4bZZzhYfeaPImfVr+xcYT65c5oBgFDijUhCE/D+C78eaolHIhKRZ04/RwF+v2g=="],
+    "ts-fsrs": ["ts-fsrs@6.0.0", "", { "dependencies": { "@open-spaced-repetition/srs-kit": "1.0.0" } }, "sha512-kX03GIEhXgBtUrgZuv7k7Aax8oYF3GCO0lASqJFw/8cvvI7qjE83J8IzFhHugux7//W0yquG7zidk3e9NRgEwg=="],
 
     "tsconfig-paths": ["tsconfig-paths@4.2.0", "", { "dependencies": { "json5": "^2.2.2", "minimist": "^1.2.6", "strip-bom": "^3.0.0" } }, "sha512-NoZ4roiN7LnbKn9QqE1amc9DJfzvZXxF4xDavcOWt1BPkdx+m+0gJuPM+S0vCe7zTJMYUP0R8pO2XMr+Y8oLIg=="],
 
