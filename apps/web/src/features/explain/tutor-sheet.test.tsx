@@ -81,6 +81,8 @@ describe('TutorSheet', () => {
     const answerQuestion = vi.fn(() => ok(ANSWER));
     render({ answerQuestion }, 'Why は?');
     expect(await screen.findByRole('note', { name: 'Answer' })).toBeTruthy();
+    // The answer shows before the effect that keeps the conversation has run.
+    await waitFor(() => expect(loadLastConversation()).toBeDefined());
     const last = loadLastConversation();
     expect(last?.topic).toEqual(TOPIC);
     expect(last?.turns).toEqual([{ question: 'Why は?', answer: ANSWER }]);
