@@ -1,6 +1,6 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createMemoryRepos } from '../../test/memory-repos.ts';
 import { fakeServices } from '../../test/render.tsx';
 import { renderSettingsSection } from '../../test/settings-section.tsx';
@@ -12,6 +12,10 @@ function setup(section: 'sessions' | 'tutor' = 'sessions') {
 }
 
 describe('Reading settings', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('sets the furigana default (R4)', async () => {
     const repos = setup();
     const group = await screen.findByRole('group', { name: 'Furigana' });
@@ -109,6 +113,8 @@ describe('Reading settings', () => {
   });
 
   it('sets the teacher model apart, with its dated price (A12)', async () => {
+    // The launch price ends with 2026: only the date is pinned, so the timers still run.
+    vi.useFakeTimers({ toFake: ['Date'], now: Date.parse('2026-11-01T09:00:00Z') });
     const repos = setup('tutor');
     const field = await screen.findByLabelText('Teacher model');
     expect(field).toHaveProperty('value', 'gemini-3.5-flash-lite');
