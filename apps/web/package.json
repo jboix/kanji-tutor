@@ -25,7 +25,7 @@
   "dependencies": {
     "@fontsource/figtree": "^5",
     "@fontsource/klee-one": "^5.3.1",
-    "@google/genai": "^2.32.0",
+    "@google/genai": "^3.2.0",
     "@simplewebauthn/browser": "^14.0.0",
     "dexie": "^4.4.7",
     "kuromoji": "^0.1.2",
