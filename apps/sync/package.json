@@ -12,8 +12,8 @@
   },
   "dependencies": {
     "@simplewebauthn/server": "^14.1.0",
-    "hono": "^4.13.18",
-    "nodemailer": "^10.5.0",
+    "hono": "^4.13.19",
+    "nodemailer": "^10.6.0",
     "zod": "^4.6.0"
   },
   "devDependencies": {
